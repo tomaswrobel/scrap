@@ -1,4 +1,4 @@
-# <div style="background: #4c97ff;padding: 10px;display: flex; align-items: center; color: white;"><img src="src/images/scrap.png" alt="Scrap" style="height: 1em;"></div>
+# <img src="src/images/scrap.png" alt="Scrap" height="1em">
 
 Welcome to the official repository of **Scrap** - the tool designed to simplify the transition from Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve into JavaScript, Scrap is here to help bridge the gap and make your learning journey smoother.
 
