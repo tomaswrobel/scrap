@@ -1,0 +1,84 @@
+$primary: #4c97ff;
+
+.paint {
+	display: grid;
+	padding: 20px;
+
+	grid-template-areas: 
+		"looks . controls"
+		"looks tools canvas"
+	;
+	gap: 20px;
+
+	grid-template-columns: 90px 40px 1fr;
+	grid-template-rows: 40px 1fr;
+
+	button {
+		all: unset;
+		padding: 5px;
+		border-radius: 5px;
+		display: flex;
+		cursor: pointer;
+		justify-content: center;
+		align-items: center;
+		aspect-ratio: 1;
+		color: #575E75;
+		
+		&.selected {
+			background-color: $primary;
+			color: white;
+
+			svg, img {
+				filter: brightness(0) invert(100%);
+			}
+		}
+	}
+}
+
+.tools,
+.controls {
+	display: flex;
+	gap: 10px;
+    font: 18px sans-serif;
+}
+
+.tools {
+	flex-direction: column;
+	grid-area: tools;
+}
+
+.controls {
+	grid-area: controls;
+	align-items: center;
+	align-content: center;
+}
+
+.canvas {
+    font-family: sans-serif;
+	grid-area: canvas;
+	display: grid;
+	align-content: center;
+	justify-content: center;
+	background: #d3d3d3;
+
+	canvas {
+		&:first-child {
+			background-image: url(../../images/checkboard.svg);
+		}
+		grid-area: 1 / 1 ;
+	}
+}
+
+input[type="color"] {
+	height: 100%;
+	width: 100%;
+}
+
+.looks {
+	grid-area: looks;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	overflow-y: auto;
+	gap: 20px;
+}

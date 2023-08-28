@@ -1,0 +1,279 @@
+$primary: #4c97ff;
+$background: #4c97ff66;
+$modes: (turbo, paced);
+
+@each $mode in $modes {
+	##{$mode} > .checkmark {
+		visibility: hidden;
+	}
+
+	iframe[data-mode="#{$mode}"] + ul ##{$mode} > .checkmark {
+		visibility: visible;
+	}
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.tab-content {
+	grid-area: tab-content;
+	margin-right: 5px;
+}
+
+.code {
+	white-space: pre-wrap;
+	tab-size: 4;
+
+	&:empty::after {
+		content: "Here you will see JavaScript code generated from your blocks.";
+	}
+}
+
+iframe {
+	grid-area: output;
+	border: 0;
+	margin-bottom: 5px;
+}
+
+#app > ul {
+	grid-area: nav;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	font: 15px sans-serif;
+	background-color: $primary;
+
+	.dropdown {
+		display: inline-block;
+	}
+
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: $primary;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+		z-index: 1;
+	}
+
+	.dropdown-content > * {
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		text-align: left;
+		color: white;
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.1);
+		}
+	}
+
+	.dropdown:hover .dropdown-content {
+		display: block;
+		z-index: 20000;
+	}
+}
+
+#app > ul > li {
+	float: left;
+
+	> a {
+		display: inline-block;
+		color: white;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+		&:not(:empty):hover {
+			background-color: rgba(0, 0, 0, 0.1);
+		}
+		&:empty {
+			background-image: url(../../images/scrap.png);
+			background-size: 90%;
+			background-repeat: no-repeat;
+			background-position: center;
+
+			&::after {
+				content: "SCRAP";
+				opacity: 0;
+			}
+		}
+	}
+}
+
+.name {
+	all: unset;
+
+	&.error {
+		color: red;
+	}
+}
+
+.stage {
+	grid-area: stage;
+	margin-bottom: 5px;
+	margin-left: 5px;
+
+	&.selected {
+		border: 2px solid $primary;
+
+		> .name {
+			background: $primary;
+			color: #fff;
+		}
+	}
+}
+
+#tabs {
+	grid-area: tabs;
+	display: flex;
+	align-items: end;
+	font-family: sans-serif;
+
+	button {
+		all: unset;
+		display: inline-block;
+		cursor: pointer;
+		border-radius: 16px 16px 0 0;
+		padding: 1px 16px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		position: relative;
+		margin-right: -8px;
+	}
+
+	button:not(.selected) {
+		background-color: #d9e3f2;
+		color: hsla(225, 15%, 40%, 0.75);
+		height: 70%;
+		z-index: 1;
+
+		&:hover {
+			background-color: #e5f0ff;
+		}
+	}
+
+	button.selected {
+		height: 80%;
+		z-index: 2;
+		color: $primary;
+		background-color: #fff;
+	}
+}
+
+#buttons {
+	grid-area: buttons;
+	display: flex;
+	gap: 5px;
+	align-items: center;
+
+	> a {
+		display: inline-flex;
+		justify-content: center;
+		align-content: center;
+
+		padding: 5px 7px;
+		border-radius: 5px;
+
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.1);
+		}
+
+		img {
+			width: 24px;
+			height: 24px;
+		}
+	}
+}
+
+#load {
+	display: none;
+}
+
+.sprites,
+iframe,
+.stage,
+.tab-content {
+	border-radius: 5px;
+	background: #fff;
+}
+
+.sprites {
+	grid-area: sprites;
+}
+
+label.file {
+	border: 1px dashed rgba(0, 0, 0, 0.1);
+	color: rgba(0, 0, 0, 0.25);
+	border-radius: 5px;
+	cursor: pointer;
+	height: 75px;
+	width: 75px;
+
+	font-size: 60px;
+	line-height: 75px;
+	text-align: center;
+
+	> input {
+		display: none;
+	}
+
+	&::before {
+		content: "+";
+	}
+}
+
+.name {
+	display: block;
+	text-align: center;
+	padding: 5px;
+	font-family: sans-serif;
+}
+
+body {
+	margin: 0;
+}
+
+#app {
+	height: 100vh;
+	width: 100vw;
+	display: grid;
+	grid-template-areas:
+		"nav nav nav"
+		"tabs buttons buttons"
+		"tab-content output output"
+		"tab-content sprites stage";
+	grid-template-columns: 1fr 380px 100px;
+	grid-template-rows: auto 40px auto 1fr;
+	background: $background;
+}
+
+#add {
+	grid-area: sprites;
+}
+
+.fab {
+	align-self: end;
+	justify-self: end;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	background: $primary;
+	border: 0;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	color: #fff;
+	font-size: 30px;
+	cursor: pointer;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+iframe,
+.stage {
+	margin-right: 5px;
+}
+
+.cm-editor {
+	height: 100%;
+}

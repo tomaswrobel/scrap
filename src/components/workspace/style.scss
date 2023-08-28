@@ -1,0 +1,64 @@
+.blockly {
+	&TreeLabel {
+		color: #575e75 !important;
+		font-size: 10px !important;
+	}
+
+	&TreeRow {
+		margin: 0;
+		padding: 6px 0;
+	}
+
+	&TreeSelected {
+		position: relative;
+		background-color: unset !important;
+
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: #e9eef2;
+			z-index: -2;
+		}
+	}
+
+	&ToolboxDiv {
+		padding-top: 0;
+	}
+
+	&Flyout,
+	&ToolboxDiv {
+		border-right: 1px solid rgba(0, 0, 0, 0.1);
+	}
+
+	&FlyoutButton {
+		cursor: pointer;
+	}
+
+	&FlyoutLabelText {
+		font-size: 20px !important;
+	}
+}
+
+.categoryBubble {
+	position: relative;
+	margin-bottom: 4px;
+	border: 0;
+	width: 17px;
+	height: 17px;
+
+	&::after {
+		all: inherit;
+		content: "";
+		position: absolute;
+		filter: brightness(0.6);
+		top: 0;
+		left: 0;
+		transform: scale(1.1);
+		transform-origin: center;
+		z-index: -1;
+	}
+}

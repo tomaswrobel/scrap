@@ -1,0 +1,53 @@
+$primary: #4c97ff;
+
+.sprites {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 4px;
+    gap: 4px;
+    overflow-y: auto;
+    align-content: baseline;
+}
+
+.sprite {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 2px solid hsla(0, 0%, 0%, 0.15);
+
+    > img {
+        display: block;
+        margin: auto;
+    }
+
+    .name {
+        font-size: 12px;
+        border-radius: 0 0 4px 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &.selected {
+        border-color: $primary;
+        background-color: #FFF;
+        color: #FFF;
+
+        > .name {
+            background-color: $primary;
+        }
+    }
+}
+
+.stage {
+    > img { 
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        width: 90%;
+        aspect-ratio: 480 / 360;
+        margin: auto;
+        display: block;
+        margin-top: 1em;
+    }
+}

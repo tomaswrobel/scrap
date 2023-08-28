@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Scrap</title>
+	</head>
+	<body>
+		<div id="app">
+			<iframe width="480" data-mode="paced" height="360" name="output" src="about:blank"></iframe>
+			<!-- Nav -->
+			<ul role="navigation">
+				<li>
+					<!-- Logo is injected here -->
+					<a href="/"></a>
+				</li>
+
+				<li class="dropdown">
+					<a href="javascript:void(0)">File</a>
+					<div class="dropdown-content">
+						<label>
+							Open
+							<input accept=".scrap" type="file" id="load">
+						</label>
+						<a href="javascript:void(0)" id="save">
+							Save
+						</a>
+						<a href="javascript:void(0)" id="html">
+							Export
+						</a>
+					</div>
+				</li>
+
+				<li class="dropdown">
+					<a href="javascript:void(0)">Mode</a>
+					<div class="dropdown-content">
+						<a href="javascript:void(0)" id="paced">
+							<span class="checkmark">&check;&nbsp;</span>
+							Paced
+						</a>
+						<a href="javascript:void(0)" id="turbo">
+							<span class="checkmark">&check;&nbsp;</span>
+							Turbo
+						</a>
+					</div>
+				</li>
+			</ul>
+
+			<!-- Tabs -->
+			<div id="tabs"></div>
+
+			<!-- Stage controls -->
+			<div id="buttons">
+				<a href="javascript:void(0)" id="play"><img src="src/images/flag.svg" alt="Play" /></a>
+				<a href="javascript:stop();" target="output"><img src="src/images/stop.svg" alt="Stop" /></a>
+			</div>
+
+			<!-- Sprite Bar -->
+			<div class="sprites"></div>
+			<button id="add" class="fab">+</button>
+
+			<!-- Stage -->
+			<div class="stage">
+				<span class="name">Stage</span>
+			</div>
+		</div>
+		<script type="module" src="src/components/app/index.ts"></script>
+	</body>
+</html>
