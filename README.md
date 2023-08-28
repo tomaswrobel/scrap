@@ -1,4 +1,4 @@
-# ![Scrap](src/images/scrap.png) 
+<h1 style="background: #4c97ff;padding: 10px;display: flex; align-items: center; color: white;"><img src="src/images/scrap.png" alt="Scrap" style="height: 1em;"></h1>
 
 Welcome to the official repository of **Scrap** - the tool designed to simplify the transition from Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve into JavaScript, Scrap is here to help bridge the gap and make your learning journey smoother.
 
@@ -64,10 +64,6 @@ Ready to make your transition from Scratch to JavaScript smoother? Scrap is here
     }
 
     h1 {
-        background: #4c97ff;
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        color: white;
+        
     }
 </style>
