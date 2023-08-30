@@ -1,0 +1,16 @@
+declare module "scrap-engine" {
+    export type Color = number;
+
+    export var Color: {
+        random(): Color;
+        rgb(r: number, g: number, b: number): Color;
+    };
+
+    export var Iterables: {
+        item(iterable: string | Array): void;
+        includes(iterable: string | Array): string | Array;
+        length(iterable: string | Array): number;
+        reverse(iterable: string | Array): typeof iterable;
+        indexOf(iterable: string | Array, item: any): number;
+    };
+}

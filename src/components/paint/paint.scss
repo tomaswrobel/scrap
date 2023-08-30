@@ -39,7 +39,7 @@ $primary: #4c97ff;
 .controls {
 	display: flex;
 	gap: 10px;
-    font: 18px sans-serif;
+    font-size: 18px;
 }
 
 .tools {
@@ -54,7 +54,6 @@ $primary: #4c97ff;
 }
 
 .canvas {
-    font-family: sans-serif;
 	grid-area: canvas;
 	display: grid;
 	align-content: center;

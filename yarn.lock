@@ -7,6 +7,18 @@
   resolved "https://registry.yarnpkg.com/@blockly/continuous-toolbox/-/continuous-toolbox-5.0.3.tgz#e41c7e290295e178d41fde7403364f94966cea55"
   integrity sha512-kR50CPYI4sxWMppvGd1tq3NkwguMl0bp4jzcA+4Z5ttBkAhhzH3R14Y1uz5beouLiky0DdPQ7Ld53xF6ghZTqA==
 
+"@blockly/field-colour-hsv-sliders@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-4.1.1.tgz#245aa76a36189eacd947615a84c6ac501cdba079"
+  integrity sha512-a/aB9bi5W3F6OcNrOku4z7R7UL9qcJ/YI6jhlOudrGRaPBFD3ycPI7WY+k1fIy6OcS2FG11drUZALEWwrTfFNA==
+  dependencies:
+    "@blockly/field-colour" "^3.0.3"
+
+"@blockly/field-colour@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-3.0.3.tgz#e926c18ae6d2ee61d3fff43fc778d9e18445cdb3"
+  integrity sha512-cHU9s/icBGSjqHBTAlUnU9CX5hp4FMfw4O1DukXWzH95J/bvIVUz434AvGaRzEoOj0hzP3KnpDhtvfnPbymhIQ==
+
 "@codemirror/autocomplete@^6.0.0":
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.9.0.tgz#1a1e63122288b8f8e1e9d7aff2eb39a83e04d8a9"
@@ -798,12 +810,13 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scrap-blocks@1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/scrap-blocks/-/scrap-blocks-1.0.19.tgz#e45af19ec8b43f588703a4ac618b9530822c35e6"
-  integrity sha512-SgOhK3ZOdVId7DJn/GnO93b1wMQtqJmybjIL3nvLpg68WLGO/ArBFdYKY9vQDb+s8YluoL3NkgDv+wwQ7Ur/Nw==
+scrap-blocks@1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/scrap-blocks/-/scrap-blocks-1.2.6.tgz#bc9826b438bb59dfc8cec5a62aca4c54c2ab828c"
+  integrity sha512-yzk06HK26yFjPDITk8xbc0bb3jh9E2h9Q7EaqzaqJgzC55f9F+rQz7fpW9XTQdLqVVbXyv/pUxSOCw0pBB+nTg==
   dependencies:
     "@blockly/continuous-toolbox" "5.0.3"
+    "@blockly/field-colour-hsv-sliders" "^4.1.1"
     blockly "10.1.3"
 
 scrap-engine@^0.1.3:
@@ -862,7 +875,7 @@ tr46@^4.1.1:
   dependencies:
     punycode "^2.3.0"
 
-typescript@^5.0.2:
+typescript@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.2.tgz#5ebb5e5a5b75f085f22bc3f8460fba308310fa78"
   integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==

@@ -42,7 +42,7 @@ iframe {
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
-	font: 15px sans-serif;
+	font-size: 15px;
 	background-color: $primary;
 
 	.dropdown {
@@ -130,7 +130,6 @@ iframe {
 	grid-area: tabs;
 	display: flex;
 	align-items: end;
-	font-family: sans-serif;
 
 	button {
 		all: unset;
@@ -228,11 +227,11 @@ label.file {
 	display: block;
 	text-align: center;
 	padding: 5px;
-	font-family: sans-serif;
 }
 
 body {
 	margin: 0;
+	font-family: sans-serif;
 }
 
 #app {

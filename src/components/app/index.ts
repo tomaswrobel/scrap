@@ -12,35 +12,35 @@ import JSZip from "jszip";
 import {saveAs} from "file-saver";
 
 class App {
-	static container = document.getElementById("app")!;
-	static add = document.getElementById("add")!;
+	container = document.getElementById("app")!;
+	add = document.getElementById("add")!;
 
-	static output = document.querySelector("iframe")!;
-	static play = document.getElementById("play")!;
+	output = document.querySelector("iframe")!;
+	play = document.getElementById("play")!;
 
-	static load = document.querySelector<HTMLInputElement>("#load")!;
-	static html = document.querySelector<HTMLInputElement>("#html")!;
-	static save = document.querySelector<HTMLInputElement>("#save")!;
+	load = document.querySelector<HTMLInputElement>("#load")!;
+	html = document.querySelector<HTMLInputElement>("#html")!;
+	save = document.querySelector<HTMLInputElement>("#save")!;
 
-	static paced = document.getElementById("paced")!;
-	static turbo = document.getElementById("turbo")!;
+	paced = document.getElementById("paced")!;
+	turbo = document.getElementById("turbo")!;
 
-	static tabs = new Map<string, Component>();
-	static activeTab = "Blocks";
+	tabs = new Map<string, Component>();
+	activeTab = "Blocks";
 
-	static workspace = new Workspace();
-	static code = new Code();
-	static paint = new Paint();
+	workspace = new Workspace(this);
+	code = new Code(this);
+	paint = new Paint(this);
 
-	static tabBar = document.getElementById("tabs")!;
+	tabBar = document.getElementById("tabs")!;
 
-	static entities = new Array<Entity>();
-	static current: Entity;
+	entities = new Array<Entity>();
+	current: Entity;
 
-	static spritePanel = document.querySelector(".sprites")!;
-	static stagePanel = document.querySelector(".stage")!;
+	spritePanel = document.querySelector(".sprites")!;
+	stagePanel = document.querySelector(".stage")!;
 
-	static init() {
+	constructor() {
 		this.entities.push((this.current = new Stage()));
 		this.tabs.set("Blocks", this.workspace);
 		this.tabs.set("Code", this.code);
@@ -53,7 +53,7 @@ class App {
 
 			button.addEventListener("click", () => {
 				if (this.activeTab === name) return;
-				this.tabs.get(this.activeTab)!.dispose(this.entities);
+				this.tabs.get(this.activeTab)!.dispose();
 
 				this.activeTab = name;
 
@@ -148,7 +148,7 @@ class App {
 		this.addSprite(new Sprite("Scrappy"));
 	}
 
-	static select(entity: Entity) {
+	select(entity: Entity) {
 		if (this.current === entity) {
 			return;
 		}
@@ -156,12 +156,13 @@ class App {
 		this.tabs.get(this.activeTab)!.update(entity);
 	}
 
-	static initDynamicMenus() {
+	initDynamicMenus() {
+		const app = this;
 		Blockly.Blocks.sprite = {
 			init(this: Blockly.Block) {
 				this.appendDummyInput().appendField(
 					new Blockly.FieldDropdown(() => {
-						const result = App.entities.map<[string, string]>(e => [e.name, e.name]);
+						const result = app.entities.map<[string, string]>(e => [e.name, e.name]);
 						result[0] = ["myself", "this"];
 						return result;
 					}),
@@ -181,13 +182,13 @@ class App {
 		Blockly.Extensions.register("costume_menu", function (this: Blockly.Block) {
 			const input = this.getInput("DUMMY")!;
 			const menu = new Blockly.FieldDropdown(() => {
-				return App.current.costumes.map<[string, string]>(e => [e.name, e.name]);
+				return app.current.costumes.map<[string, string]>(e => [e.name, e.name]);
 			});
 			input.appendField(menu, "NAME");
 		});
 	}
 
-	static updateVariables() {
+	updateVariables() {
 		const models = this.workspace.workspace.getVariableMap().getAllVariables();
 
 		for (const sprite of this.entities) {
@@ -197,7 +198,7 @@ class App {
 		}
 	}
 
-	static addSprite(sprite: Sprite) {
+	addSprite(sprite: Sprite) {
 		if (this.workspace.workspace) {
 			this.updateVariables();
 		}
@@ -223,7 +224,7 @@ class App {
 
 		element.addEventListener("click", select);
 	}
-	static async open(file?: File | null) {
+	async open(file?: File | null) {
 		if (!file) {
 			return;
 		}
@@ -249,7 +250,7 @@ class App {
 		this.stagePanel.dispatchEvent(new MouseEvent("click"));
 	}
 
-	static async export() {
+	async export() {
 		const zip = new JSZip();
 
 		zip.file("engine.js", engineScript);
@@ -265,4 +266,4 @@ class App {
 	}
 }
 
-App.init();
+export {App};

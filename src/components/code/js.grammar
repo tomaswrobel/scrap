@@ -10,30 +10,41 @@ Block {
     "{" Statement* "}"
 }
 
-MethodCall {
-    This "." Identifier "(" ArgumentList ")"
-}
-
-FunctionArgument {
-    kw<"function"> "()" Block
-}
-
-Property {
-    This "." Identifier
+ColorNamespace {
+    @specialize<Identifier, "Color">
 }
 
 Expression {
-    Number | String | MethodCall | Property | FunctionArgument | Boolean | "(" Expression ")" | BinaryExpression | This | Identifier
+    Number {number} | 
+    String {string} |
+    Color {color} |
+    IterableMethod {kw<"Iterables"> "." MethodName {kw<"length" | "reverse" | "includes">} "(" Expression ")" } |
+    MethodCall {This "." Identifier "(" ArgumentList ")"} | 
+    FunctionCall {Identifier "(" ArgumentList ")"} |
+    Property {This "." Identifier} | 
+    FunctionArgument {kw<"function"> "()" Block} | 
+    Boolean {kw<"true" | "false">} |
+    ArrayExpression { "[" ArrayItem? ("," ArrayItem)* "]" }
+    | RandomFraction {kw<"Math"> "." kw<"random"> "(" ")"}
+    | RandomColor {ColorNamespace"." kw<"random"> "(" ")"}
+    | RGB {ColorNamespace"." kw<"rgb"> "(" Expression "," Expression "," Expression ")"}
+    | "(" Expression ")" 
+    | BinaryExpression 
+    | Null {kw<"null">}
+    | This | Identifier
 }
 
 Statement {
+    ImportStatement {kw<"import"> "{" Identifier? ("," Identifier)* "}" "from" string ";"} |
+    FunctionDeclaration {kw<"function"> Identifier "(" ParameterList ")" (":"  Type)? Block} |
     ThrowStatement {kw<"throw"> Expression ";"} |   
     TryStatement {kw<"try"> Block kw<"catch"> "(" Identifier ")" Block} |
-    ReturnStatement {kw<"return"> Expression ";"} |
+    ReturnStatement {kw<"return"> Expression? ";"} |
     VariableDeclaration {kw<"var"> Identifier ";"} |
     IfStatement {If ElseIf* Else?} | 
 	ForOfStatement { kw<"for"> "(" kw<"const"> Identifier "of" Expression ")"  Block } |
-    ForStatement {kw<"for"> "(" kw<"let"> Identifier "=" Zero ";" Identifier "<" Expression ";" Identifier "++" ")" Block} |
+    EmpryForStatement {kw<"for"> "(" ";" ";" ")" Block} |
+    ForStatement {kw<"for"> "(" kw<"let"> Identifier "=" Zero {"0"} ";" Identifier "<" Expression ";" Identifier "++" ")" Block} |
     WhileStatement {kw<"while"> "(" Expression ")" Block} |
     Assignment {Identifier "=" Expression ";"} |
     kw<"break"> ";" |
@@ -41,18 +52,55 @@ Statement {
     Expression ";"
 }
 
+Type {
+    @specialize<Identifier, "String" | "Number" | "Boolean" | "Array" | "Color" | "Sprite" | "void">
+}
+
+Parameter {
+    Identifier (":" Type)?
+}
+
+ParameterList {
+    "" | Parameter ("," Parameter)*
+}
+
 ArgumentList { 
     "" | Expression ("," Expression)*
 }
 
+ArrayItem {
+    Spread? Expression
+}
+
+@precedence {
+    rel @left,
+    logic @left,
+    pow @right,
+    times @left,
+    divide @left,
+    plus @left,
+    minus @left,
+    not @right
+}
+
+Arithmetics {
+    Expression !pow Operator {"**"} Expression |
+    Expression !times Operator {"*"} Expression |
+    Expression !plus Operator {"+"} Expression |
+    Expression !minus Operator {"-"} Expression |
+    Expression !divide Operator {"/"} Expression
+}
+
+Compare {
+    Expression !rel Operator {"==" | "!=" | "<" | "<=" | ">" | ">="} Expression
+}
+
+Operation {
+    Expression !logic Operator {"&&" | "||"} Expression
+}
+
 BinaryExpression {
-    Expression !times "*" Expression |
-    Expression !plus "+" Expression |
-    Expression !minus "-" Expression |
-    Expression !divide "/" Expression |
-    Expression !rel ("==" | "!=" | "<" | "<=" | ">" | ">=") Expression |
-    Expression !logic ("&&" | "||") Expression |
-    Expression !not "!" Expression
+    Arithmetics | Compare | Operation 
 }
 
 If {
@@ -65,32 +113,6 @@ ElseIf {
 
 Else {
     kw<"else"> Block
-}
-
-@precedence {
-    rel @left,
-    logic @left,
-    times @left,
-    divide @left,
-    plus @left,
-    minus @left,
-    not @right
-}
-
-Number {
-    number
-}
-
-Boolean {
-    kw<"true"> | kw<"false">
-}
-
-String {
-    string
-}
-
-Zero {
-    "0"
 }
 
 This {
@@ -118,8 +140,21 @@ kw<term> {
         '"' ![\\\n']+  '"'
     }
 
+    color {
+       "0x" $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F]
+    }
+
     Identifier {
         $[a-zA-Z_]$[a-zA-Z0-9_]*
+    }
+
+    Spread {
+        "..."
+    }
+
+    @precedence {
+        color,
+        number
     }
 
     @precedence {

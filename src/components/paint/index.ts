@@ -3,6 +3,7 @@ import CropWorker from "./crop.ts?worker";
 import type {Entity} from "../entities";
 import Component from "../tab";
 import "./paint.scss";
+import type {App} from "../app";
 
 export default class Paint implements Component {
 	context: CanvasRenderingContext2D;
@@ -22,7 +23,7 @@ export default class Paint implements Component {
 
 	cropWorker = new CropWorker();
 
-	constructor() {
+	constructor(readonly app: App) {
 		this.container.classList.add("paint", "tab-content");
 		this.toolContainer.classList.add("tools");
 		this.controls.classList.add("controls");

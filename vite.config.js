@@ -10,16 +10,17 @@ export default defineConfig({
 		}),
 	],
 	build: {
+		chunkSizeWarningLimit: 2048,
 		rollupOptions: {
 			output: {
 				manualChunks: {
-					"blockly": [
-						"scrap-blocks",
-						"blockly",
-						"@blockly/continuous-toolbox",
+					blockly: [
+						"scrap-blocks", 
+						"blockly/core"
 					]
-				},
+				}
 			},
 		},
+		sourcemap: true,
 	},
 });

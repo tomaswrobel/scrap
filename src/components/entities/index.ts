@@ -25,7 +25,7 @@ class Entity implements Blockly.Scrap.Entity {
 	private outputGenerator = new Blockly.Scrap.Generator(this, true);
 	/** Generator used in exported HTML file */
 	private exportGenerator = new Blockly.Scrap.Generator(this, false);
-
+	
 	/**
 	 * Get the workspace as JSON.
 	 */
