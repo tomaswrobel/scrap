@@ -31,6 +31,7 @@ export default class Workspace implements Component {
 			},
 			trashcan: false,
 			oneBasedIndex: false,
+			disable: false
 		});
 
 		this.workspace.registerToolboxCategoryCallback("FUNCTIONS", workspace => {
@@ -59,6 +60,7 @@ export default class Workspace implements Component {
 		});
 
 		this.workspace.addChangeListener(e => {
+			Blockly.Events.disableOrphans(e);
 			if (e instanceof Blockly.Events.UiBase) {
 				return;
 			}

@@ -272,6 +272,11 @@
   resolved "https://registry.yarnpkg.com/@types/file-saver/-/file-saver-2.0.5.tgz#9ee342a5d1314bb0928375424a2f162f97c310c7"
   integrity sha512-zv9kNf3keYegP5oThGLaPk8E081DFDuwfqjtiTzm6PoxChdJ1raSuADf2YGCVIyrSynLrgc8JWv296s7Q7pQSQ==
 
+"@types/prismjs@^1.26.0":
+  version "1.26.0"
+  resolved "https://registry.yarnpkg.com/@types/prismjs/-/prismjs-1.26.0.tgz#a1c3809b0ad61c62cac6d4e0c56d610c910b7654"
+  integrity sha512-ZTaqn/qSqUuAq1YwvOFQfVW1AR/oQJlLSZVustdjwI+GZ8kr0MSHBj0tsXPW1EqHubx50gtBEjbPGsdZwQwCjQ==
+
 abab@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
@@ -710,6 +715,18 @@ postcss@^8.4.27:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+prism-code-editor@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/prism-code-editor/-/prism-code-editor-0.3.0.tgz#9304e9a378b01fe215ba3bdeed145da7aec5e60f"
+  integrity sha512-eBqNeycc9fpwR3l3cHRQL3uS4w6hEqx1Emp4nzuR1ZMZt5W+bwxwJyqZBuCb3Q5Sj4kNMmpdvmZxACySUh2Fgw==
+  dependencies:
+    "@types/prismjs" "^1.26.0"
+
+prismjs@^1.29.0:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.29.0.tgz#f113555a8fa9b57c35e637bba27509dcf802dd12"
+  integrity sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
@@ -810,10 +827,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scrap-blocks@1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/scrap-blocks/-/scrap-blocks-1.2.6.tgz#bc9826b438bb59dfc8cec5a62aca4c54c2ab828c"
-  integrity sha512-yzk06HK26yFjPDITk8xbc0bb3jh9E2h9Q7EaqzaqJgzC55f9F+rQz7fpW9XTQdLqVVbXyv/pUxSOCw0pBB+nTg==
+scrap-blocks@1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/scrap-blocks/-/scrap-blocks-1.2.7.tgz#937e24159ef2be001398cf7080148c52567c583e"
+  integrity sha512-q1FWRf7B142BNDqv/PAyu02bOB8DFIBOn0/y7sjy7TgXUxc2cGKMDtAfAhWszW+OGtbAfoRbH9ciNXA1/6J/2Q==
   dependencies:
     "@blockly/continuous-toolbox" "5.0.3"
     "@blockly/field-colour-hsv-sliders" "^4.1.1"
