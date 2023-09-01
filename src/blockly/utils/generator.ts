@@ -234,7 +234,7 @@ Generator.blocks.foreach = function (block: Blockly.Block, generator: Generator)
 
 Generator.blocks.property = function (block: Blockly.Block, generator: Generator) {
 	return [
-		`${generator.valueToCode(block, "SPRITE", Order.MEMBER)}}.${block.getFieldValue("PROPERTY")}`,
+		`${generator.valueToCode(block, "SPRITE", Order.MEMBER)}.${block.getFieldValue("PROPERTY")}`,
 		Order.MEMBER,
 	];
 };

@@ -11,11 +11,7 @@ import {createEditor, PrismEditor} from "prism-code-editor";
 import type TabComponent from "../tab";
 import type {App} from "../app";
 import type {Entity} from "../entities";
-import {Generator} from "../../blockly/utils/generator";
-
 import "./style.css";
-
-const generator = new Generator();
 
 export default class Code implements TabComponent {
 	container = document.createElement("div");

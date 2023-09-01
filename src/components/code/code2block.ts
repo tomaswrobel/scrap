@@ -6,7 +6,7 @@ import type {Entity} from "../entities";
 
 export default class CodeParser {
 	connection: Blockly.Connection | null;
-    functions = new Map<string, any>();
+	functions = new Map<string, any>();
 
 	constructor(readonly workspace: Blockly.Workspace, readonly entities: Entity[]) {
 		this.connection = null;
@@ -22,7 +22,7 @@ export default class CodeParser {
 			return;
 		}
 
-        this.functions.clear();
+		this.functions.clear();
 		this.workspace.clear();
 		tree.program.body.forEach(this.parse);
 	}
@@ -373,8 +373,8 @@ export default class CodeParser {
 					returnType,
 				};
 
-                block.loadExtraState!(extraState);
-                this.functions.set(id.name, extraState);
+				block.loadExtraState!(extraState);
+				this.functions.set(id.name, extraState);
 				block.setCommentText(commentText);
 
 				this.connection = block.nextConnection;
@@ -445,8 +445,8 @@ export default class CodeParser {
 
 								this.connection = block.nextConnection;
 							} else {
-                                throw new SyntaxError(`Method ${property.name} is not defined`);
-                            }
+								throw new SyntaxError(`Method ${property.name} is not defined`);
+							}
 						} else {
 							throw new SyntaxError("Only simple identifiers are supported");
 						}
@@ -488,19 +488,19 @@ export default class CodeParser {
 							break;
 						}
 						default: {
-                            if (this.functions.has(node.callee.name)) {
-                                const block = this.block("call");
+							if (this.functions.has(node.callee.name)) {
+								const block = this.block("call");
 
-                                block.loadExtraState!(this.functions.get(node.callee.name));
-                                let i = 0;
-                                for (const arg of node.arguments) {
-                                    this.connection = block.getInput(`PARAM_${i}`)!.connection!;
-                                    this.parse(arg);
-                                    i++;
-                                }
-                            } else {
-                                throw new SyntaxError(`Function ${node.callee.name} is not defined`);
-                            }
+								block.loadExtraState!(this.functions.get(node.callee.name));
+								let i = 0;
+								for (const arg of node.arguments) {
+									this.connection = block.getInput(`PARAM_${i}`)!.connection!;
+									this.parse(arg);
+									i++;
+								}
+							} else {
+								throw new SyntaxError(`Function ${node.callee.name} is not defined`);
+							}
 						}
 					}
 				}
@@ -514,6 +514,43 @@ export default class CodeParser {
 					if (property.type === "Identifier") {
 						if (property.name in blocks) {
 							this.block(property.name);
+						}
+					}
+				}
+				if (object.type === "MemberExpression") {
+					if (
+						object.object.type === "ThisExpression" &&
+						object.property.type === "Identifier" &&
+						object.property.name === "effects"
+					) {
+						const block = this.block("getEffect");
+						this.connection = block.getInput("EFFECT")!.connection!;
+						if (property.type === "Identifier") {
+							this.block("effect", true).setFieldValue(property.name, "EFFECT");
+						} else if (property.type === "StringLiteral") {
+							this.block("effect", true).setFieldValue(property.value, "EFFECT");
+						} else {
+							this.parse(property);
+						}
+					}
+					if (
+						property.type === "Identifier" &&
+						object.property.type === "Identifier" &&
+						object.property.name === "effects"
+					) {
+						const block = this.block("property");
+						block.setFieldValue(`effects.${property.name}`, "PROPERTY");
+						this.connection = block.getInput("SPRITE")!.connection!;
+						this.parse(object.object);
+					}
+				}
+				if (object.type === "Identifier") {
+					if (this.entities.some(n => object.name === n.name)) {
+						if (property.type === "Identifier") {
+							const block = this.block("property");
+							block.setFieldValue(property.name, "PROPERTY");
+							this.connection = block.getInput("SPRITE")!.connection!;
+							this.parse(object);
 						}
 					}
 				}

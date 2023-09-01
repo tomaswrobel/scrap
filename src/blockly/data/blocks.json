@@ -580,8 +580,7 @@
                 "type": "input_value",
                 "name": "DIRECTION",
                 "check": "Number",
-                "value": 90,
-                "block": "motion_angle"
+                "value": 90
             }
         ],
         "nextStatement": null,
@@ -809,8 +808,7 @@
             {
                 "type": "input_value",
                 "name": "EFFECT",
-                "check": "String",
-                "block": "effect"
+                "check": "String"
             },
             {
                 "type": "input_value",
@@ -830,8 +828,7 @@
             {
                 "type": "input_value",
                 "name": "EFFECT",
-                "check": "String",
-                "block": "effect"
+                "check": "String"
             },
             {
                 "type": "input_value",
@@ -866,8 +863,7 @@
             {
                 "type": "input_value",
                 "name": "COSTUME",
-                "check": "String",
-                "block": "costume"
+                "check": "String"
             }
         ],
         "previousStatement": null,
@@ -952,8 +948,7 @@
             {
                 "type": "input_value",
                 "name": "EFFECT",
-                "check": "String",
-                "block": "effect"
+                "check": "String"
             }
         ],
         "style": "Looks"
@@ -1069,8 +1064,7 @@
             {
                 "type": "input_value",
                 "name": "KEY",
-                "check": "String",
-                "block": "key"
+                "check": "String"
             }
         ],
         "nextStatement": null,
@@ -1405,8 +1399,7 @@
             {
                 "type": "input_value",
                 "name": "KEY",
-                "check": "String",
-                "block": "key"
+                "check": "String"
             }
         ],
         "output": "Boolean",
@@ -1541,8 +1534,7 @@
                 "check": [
                     "Number",
                     "String"
-                ],
-                "block": "math_number"
+                ]
             },
             {
                 "type": "field_dropdown",
@@ -1580,8 +1572,7 @@
                 "check": [
                     "Number",
                     "String"
-                ],
-                "block": "math_number"
+                ]
             }
         ],
         "output": "Boolean",
