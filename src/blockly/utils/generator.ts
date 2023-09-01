@@ -229,7 +229,7 @@ Generator.blocks.throw = function (block: Blockly.Block, generator: Generator) {
 Generator.blocks.foreach = function (block: Blockly.Block, generator: Generator) {
 	const item = block.getField("VAR")!.getText();
 	const iterable = generator.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
-	return `for (const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(block, "DO")}}\n`;
+	return `for ${generator.entity ? "await " : ""}(const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(block, "DO")}}\n`;
 };
 
 Generator.blocks.property = function (block: Blockly.Block, generator: Generator) {
