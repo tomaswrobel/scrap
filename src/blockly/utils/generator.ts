@@ -20,7 +20,7 @@ class Generator extends JavaScript {
 		 */
 		super("ScrapScript");
 		this.addReservedWords("Scrap");
-		this.INDENT = "\t";
+		this.INDENT = useBlobURLs ? "" : "\t";
 		this.forBlock = Generator.blocks;
 	}
 	public use(lib: string) {
@@ -86,10 +86,6 @@ class Generator extends JavaScript {
 
 		this.definitions_ = Object.create(null);
 		this.functionNames_ = Object.create(null);
-
-		if (this.useBlobURLs) {
-			return this.prefixLines(code, this.INDENT.repeat(2));
-		}
 
 		return code;
 	}

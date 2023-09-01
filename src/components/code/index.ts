@@ -7,11 +7,28 @@ import "prismjs/components/prism-jsdoc";
 import "prism-code-editor/scrollbar.css";
 import "prism-code-editor/layout.css";
 import "prism-code-editor/themes/vs-code-light.css";
-import {createEditor, PrismEditor} from "prism-code-editor";
+import {defaultCommands} from "prism-code-editor/commands";
+import {cursorPosition} from "prism-code-editor/cursor";
+import {matchTags} from "prism-code-editor/match-tags";
+import {highlightBracketPairs} from "prism-code-editor/highlight-brackets";
+import {createEditor, PrismEditor, Extension, EditorOptions} from "prism-code-editor";
 import type TabComponent from "../tab";
 import type {App} from "../app";
 import type {Entity} from "../entities";
 import "./style.css";
+import transform from "../entities/transformer";
+
+class Valid implements Extension {
+	update(editor: PrismEditor, options: EditorOptions) {
+		editor.addListener("update", () => {
+			try {
+				transform(editor.value);
+			} catch (e) {
+				
+			}
+		});
+	}
+}
 
 export default class Code implements TabComponent {
 	container = document.createElement("div");
@@ -31,19 +48,27 @@ export default class Code implements TabComponent {
 				value: entity.code,
 				insertSpaces: false,
 				tabSize: 4,
-				onUpdate: (value) => {
+				onUpdate: value => {
 					entity.code = value;
 				},
 			});
+
+			const cursor = cursorPosition();
+			this.editor.addExtensions(
+				defaultCommands(cursor),
+				matchTags(),
+				highlightBracketPairs(),
+				cursor
+			);
 		}
 	}
 
 	update(entity: Entity) {
 		this.editor.setOptions({
 			value: entity.code,
-			onUpdate: (value) => {
+			onUpdate: value => {
 				entity.code = value;
-			}
+			},
 		});
 	}
 
