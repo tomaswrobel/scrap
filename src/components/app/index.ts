@@ -1,31 +1,40 @@
-import engineStyle from "scrap-engine/dist/style.css?raw";
-import engineScript from "scrap-engine/dist/engine.js?raw";
 import {Entity, Sprite, Stage} from "../entities";
-import * as Blockly from "scrap-blocks";
+import * as Blockly from "blockly/core";
 import Workspace from "../workspace";
 import Component from "../tab";
 import Paint from "../paint";
 import Code from "../code";
 
+import fs from "fs";
+
 import "./app.scss";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
+import Swal from "sweetalert2";
+import {Generator} from "../../blockly/utils/generator";
+import CodeParser from "../code/code2block";
 
-class App {
+const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
+const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
+
+export class App {
 	container = document.getElementById("app")!;
 	add = document.getElementById("add")!;
+
+	generator = new Generator();
 
 	output = document.querySelector("iframe")!;
 	play = document.getElementById("play")!;
 
 	load = document.querySelector<HTMLInputElement>("#load")!;
-	html = document.querySelector<HTMLInputElement>("#html")!;
-	save = document.querySelector<HTMLInputElement>("#save")!;
+	html = document.getElementById("html")!;
+	save = document.getElementById("save")!;
 
 	paced = document.getElementById("paced")!;
 	turbo = document.getElementById("turbo")!;
 
 	tabs = new Map<string, Component>();
+	buttons = new Map<string, HTMLButtonElement>();
 	activeTab = "Blocks";
 
 	workspace = new Workspace(this);
@@ -51,18 +60,38 @@ class App {
 			button.textContent = name;
 			button.classList.toggle("selected", name === this.activeTab);
 
-			button.addEventListener("click", () => {
+			button.addEventListener("click", async () => {
 				if (this.activeTab === name) return;
 				this.tabs.get(this.activeTab)!.dispose();
-
 				this.activeTab = name;
+				if (name === "Blocks" || name === "Code") {
+					this.current.mode = name;
 
+					if (name === "Blocks") {
+						const parser = new CodeParser(this.current.codeWorkspace, this.entities);
+						try {
+							await parser.codeToBlock(this.current.code);
+							this.current.code = "";
+						} catch (e) {
+							await Swal.fire({
+								title: "Compilation Error",
+								text: String(e),
+								icon: "error",
+							});
+						}
+						
+					} else {
+						this.current.code = this.generator.workspaceToCode(this.current.codeWorkspace);
+						this.current.workspace = {};
+					}
+				}
 				this.tabBar.querySelector(".selected")?.classList.remove("selected");
 				button.classList.add("selected");
 
 				tab.render(this.current, this.container);
 			});
 
+			this.buttons.set(name, button);
 			this.tabBar.appendChild(button);
 		}
 
@@ -92,7 +121,7 @@ class App {
 			}
 		});
 
-		this.output.addEventListener("load", () => {
+		this.output.addEventListener("load", async () => {
 			const document = this.output.contentDocument!;
 
 			const style = document.createElement("style");
@@ -104,8 +133,22 @@ class App {
 			document.head.appendChild(engine);
 
 			const script = document.createElement("script");
-			const code = this.entities.map(e => e.generate()).join("\n\n");
-			script.textContent = code;
+			let code = "";
+
+			try {
+				for (const entity of this.entities) {
+					code += await entity.preview();
+					code += "\n\n";
+				}
+
+				script.textContent = code;
+			} catch (e) {
+				await Swal.fire({
+					title: "Compilation Error",
+					text: String(e),
+					icon: "error",
+				});
+			}
 			document.body.appendChild(script);
 		});
 
@@ -153,7 +196,10 @@ class App {
 			return;
 		}
 		this.current = entity;
-		this.tabs.get(this.activeTab)!.update(entity);
+		this.tabs.get(this.activeTab)!.dispose();
+		this.tabs.get(this.activeTab)!.render(this.current, this.container);
+		this.tabBar.querySelector(".selected")?.classList.remove("selected");
+		this.buttons.get(this.activeTab)!.classList.add("selected");
 	}
 
 	initDynamicMenus() {
@@ -254,16 +300,31 @@ class App {
 		const zip = new JSZip();
 
 		zip.file("engine.js", engineScript);
-		zip.file("script.js", this.entities.map(e => e.generate(zip)).join("\n\n"));
+
+		let scripts = "";
+
+		for (const e of this.entities) {
+			await e.export(zip);
+			scripts += `\t<script src="${e.name}.js"></script>\n`;
+		}
+
 		zip.file("style.css", engineStyle);
 
 		zip.file(
 			"index.html",
-			'<!DOCTYPE html>\n<html>\n<head>\n\t<title>Scrap Project</title>\n\t<meta charset="utf-8">\n\t<link href="style.css" rel="stylesheet">\n\t<script src="engine.js"></script>\n</head>\n<body>\n\t<script src="script.js"></script>\n</body>\n</html>'
+			`<!DOCTYPE html>
+<html>
+<head>
+	<title>Scrap Project</title>
+	<meta charset="utf-8">
+	<link href="style.css" rel="stylesheet">
+	<script src="engine.js"></script>
+</head>
+<body>
+${scripts.trimEnd()}
+</body>`
 		);
 
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
 	}
 }
-
-export {App};

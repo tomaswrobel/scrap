@@ -2,7 +2,6 @@ import line from "../../images/line.svg";
 import pen from "../../images/pen.svg";
 import fill from "../../images/fill.svg";
 import eraser from "../../images/eraser.svg";
-import FillWorker from "./fill?worker";
 
 /**
  * A tool that can be used to draw on the canvas.
@@ -324,7 +323,7 @@ export class Fill extends Tool {
 		this.button.classList.add("selected");
 	}
 
-	worker = new FillWorker();
+	worker = new Worker(new URL("./fill.worker.ts", import.meta.url));
 
 	constructor() {
 		super();

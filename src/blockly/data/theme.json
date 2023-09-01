@@ -1,0 +1,88 @@
+{
+    "name": "scrap",
+    "base": "zelos",
+    "startHats": true,
+    "blockStyles": {
+        "logic_blocks": {
+            "colourPrimary": "#59C059",
+            "colourSecondary": "#46B946",
+            "colourTertiary": "#389438"
+        },
+        "colour_blocks": {
+            "colourPrimary": "#0fBD8C",
+            "colourSecondary": "#0DA57A",
+            "colourTertiary": "#0B8E69"
+        },
+        "Motion": {
+            "colourPrimary": "#4C97FF",
+            "colourSecondary": "#4280D7",
+            "colourTertiary": "#3373CC"
+        },
+        "Looks": {
+            "colourPrimary": "#9966FF",
+            "colourSecondary": "#855CD6",
+            "colourTertiary": "#774DCB"
+        },
+        "Pen": {
+            "colourPrimary": "#0fBD8C",
+            "colourSecondary": "#0DA57A",
+            "colourTertiary": "#0B8E69"
+        },
+        "Events": {
+            "colourPrimary": "#FFBF00",
+            "colourSecondary": "#E6AC00",
+            "colourTertiary": "#CC9900"
+        },
+        "Controls": {
+            "colourPrimary": "#FFAB19",
+            "colourSecondary": "#EC9C13",
+            "colourTertiary": "#CF8B17"
+        },
+        "Sensing": {
+            "colourPrimary": "#5CB1D6",
+            "colourSecondary": "#47A8D1",
+            "colourTertiary": "#2E8EB8"
+        },
+        "Operators": {
+            "colourPrimary": "#59C059",
+            "colourSecondary": "#46B946",
+            "colourTertiary": "#389438"
+        },
+        "Iterables": {
+            "colourPrimary": "#FF661A",
+            "colourSecondary": "#FF5500",
+            "colourTertiary": "#E64D00"
+        }
+    },
+    "categoryStyles": {
+        "motion": {
+            "colour": "#4C97FF"
+        },
+        "looks": {
+            "colour": "#9966FF"
+        },
+        "pen": {
+            "colour": "#0fBD8C"
+        },
+        "events": {
+            "colour": "#FFBF00"
+        },
+        "controls": {
+            "colour": "#FFAB19"
+        },
+        "sensing": {
+            "colour": "#5CB1D6"
+        },
+        "operators": {
+            "colour": "#59C059"
+        },
+        "iterables": {
+            "colour": "#FF661A"
+        }
+    },
+    "componentStyles": {
+        "toolboxBackgroundColour": "#FFFFFF",
+        "flyoutBackgroundColour": "#FFFFFF"
+    },
+    "fontStyle": {}
+}

@@ -1,5 +1,4 @@
 import {Pen, Line, Rectangle, Ellipse, Eraser, Fill, type Tool, Triangle} from "../paint/tools";
-import CropWorker from "./crop.ts?worker";
 import type {Entity} from "../entities";
 import Component from "../tab";
 import "./paint.scss";
@@ -21,7 +20,7 @@ export default class Paint implements Component {
 	mouseDown = false;
 	changed!: boolean;
 
-	cropWorker = new CropWorker();
+	cropWorker = new Worker(new URL("./crop.worker.ts", import.meta.url));
 
 	constructor(readonly app: App) {
 		this.container.classList.add("paint", "tab-content");

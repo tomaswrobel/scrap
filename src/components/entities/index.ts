@@ -1,14 +1,15 @@
-import scrappy from "./scrappy.svg?raw";
-import * as Blockly from "scrap-blocks";
+import * as Blockly from "blockly/core";
+import {Generator} from "../../blockly/utils/generator";
 import JSZip from "jszip";
-
+import fs from "fs";
 import "./entity.scss";
+import transform from "./transformer";
 
 /**
  * I represent both a sprite and the stage.
  * I am able to generate code, save, and load.
  */
-class Entity implements Blockly.Scrap.Entity {
+class Entity {
 	// Costumes & Sounds are stored as files
 	costumes: File[] = [];
 	sounds: File[] = [];
@@ -18,14 +19,16 @@ class Entity implements Blockly.Scrap.Entity {
 
 	// Costume shown in the paint editor
 	currentCostume = 0;
-
 	/** Helper workspace for generating code. */
 	codeWorkspace = new Blockly.Workspace();
 	/** Generator used for preview in an iframe */
-	private outputGenerator = new Blockly.Scrap.Generator(this, true);
+	private outputGenerator = new Generator(this, true);
 	/** Generator used in exported HTML file */
-	private exportGenerator = new Blockly.Scrap.Generator(this, false);
-	
+	private exportGenerator = new Generator(this, false);
+
+	code = "";
+	mode: "Blocks" | "Code" = "Blocks";
+
 	/**
 	 * Get the workspace as JSON.
 	 */
@@ -93,7 +96,7 @@ class Entity implements Blockly.Scrap.Entity {
 				return {
 					...urls,
 					// Path to file in zip
-					[s.name]: `${this.name}/${s.name}`
+					[s.name]: `${this.name}/${s.name}`,
 				};
 			}, {} as Record<string, string>),
 			null,
@@ -101,22 +104,33 @@ class Entity implements Blockly.Scrap.Entity {
 		);
 	}
 
-	generate(zip?: JSZip) {
-		if (zip) {
-			zip = zip.folder(this.name)!;
+	async export(zip: JSZip) {
+		zip = zip.folder(this.name)!;
 
-			for (const file of this.costumes) {
-				zip.file(file.name, file);
-			}
-
-			for (const file of this.sounds) {
-				zip.file(file.name, file);
-			}
-
-			return this.exportGenerator.workspaceToCode(this.codeWorkspace);
+		for (const file of this.costumes) {
+			zip.file(file.name, file);
 		}
 
-		return this.outputGenerator.workspaceToCode(this.codeWorkspace);
+		for (const file of this.sounds) {
+			zip.file(file.name, file);
+		}
+
+		if (this.mode === "Code") {
+			const result = await transform(this.code);
+			zip.file(`${this.name}.js`, this.exportGenerator.finish(result.code || ""));
+			zip.file(`${this.name}.js.map`, result.map!.file!);
+		} else {
+			zip.file(`${this.name}.js`, this.exportGenerator.workspaceToCode(this.codeWorkspace));
+		}
+	}
+
+	async preview() {
+		if (this.mode === "Code") {
+			const result = await transform(this.code);
+			return this.outputGenerator.finish(result.code || "");
+		} else {
+			return this.outputGenerator.workspaceToCode(this.codeWorkspace);
+		}
 	}
 
 	update() {
@@ -149,6 +163,8 @@ class Entity implements Blockly.Scrap.Entity {
 			costumes: this.costumes.map(f => f.name),
 			sounds: this.sounds.map(f => f.name),
 			workspace: this.workspace,
+			code: this.code,
+			mode: this.mode,
 		};
 	}
 
@@ -158,6 +174,8 @@ class Entity implements Blockly.Scrap.Entity {
 		const fn = this.loadFiles.bind(this, json.name, zip);
 		entity.costumes = await Promise.all(json.costumes.map(fn));
 		entity.sounds = await Promise.all(json.sounds.map(fn));
+		entity.code = json.code;
+		entity.mode = json.mode;
 		return entity;
 	}
 
@@ -187,6 +205,8 @@ class Entity implements Blockly.Scrap.Entity {
 		return "image/svg+xml";
 	}
 }
+
+const scrappy = fs.readFileSync(__dirname + "/scrappy.svg", "utf-8");
 
 class Sprite extends Entity {
 	constructor(name: string) {

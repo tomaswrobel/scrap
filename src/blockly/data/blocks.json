@@ -1,0 +1,1854 @@
+{
+    "variables_set": {
+        "message0": "%{BKY_VARIABLES_SET}",
+        "args0": [
+            {
+                "type": "field_variable",
+                "name": "VAR",
+                "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+            },
+            {
+                "type": "input_value",
+                "name": "VALUE"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "variable_blocks",
+        "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
+        "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}"
+    },
+    "variables_get": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_variable",
+                "name": "VAR",
+                "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+            }
+        ],
+        "output": null,
+        "style": "variable_blocks",
+        "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
+        "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}"
+    },
+    "function_header": {
+        "message0": "function's parameters",
+        "style": "procedure_blocks",
+        "nextStatement": null
+    },
+    "call": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_label",
+                "name": "NAME",
+                "text": "foo"
+            }
+        ],
+        "style": "procedure_blocks",
+        "previousStatement": null,
+        "nextStatement": null,
+        "mutator": "mutator_call",
+        "inputsInline": true
+    },
+    "key": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "KEY",
+                "options": [
+                    [
+                        "Enter",
+                        "Enter"
+                    ],
+                    [
+                        "Escape",
+                        "Escape"
+                    ],
+                    [
+                        "Space",
+                        "Space"
+                    ],
+                    [
+                        "ArrowUp",
+                        "ArrowUp"
+                    ],
+                    [
+                        "ArrowDown",
+                        "ArrowDown"
+                    ],
+                    [
+                        "ArrowLeft",
+                        "ArrowLeft"
+                    ],
+                    [
+                        "ArrowRight",
+                        "ArrowRight"
+                    ],
+                    [
+                        "Shift",
+                        "Shift"
+                    ],
+                    [
+                        "Ctrl",
+                        "Ctrl"
+                    ],
+                    [
+                        "Alt",
+                        "Alt"
+                    ],
+                    [
+                        "Backspace",
+                        "Backspace"
+                    ],
+                    [
+                        "Tab",
+                        "Tab"
+                    ],
+                    [
+                        "Delete",
+                        "Delete"
+                    ],
+                    [
+                        "CapsLock",
+                        "CapsLock"
+                    ],
+                    [
+                        "F1",
+                        "F1"
+                    ],
+                    [
+                        "F2",
+                        "F2"
+                    ],
+                    [
+                        "F3",
+                        "F3"
+                    ],
+                    [
+                        "F4",
+                        "F4"
+                    ],
+                    [
+                        "F5",
+                        "F5"
+                    ],
+                    [
+                        "F6",
+                        "F6"
+                    ],
+                    [
+                        "F7",
+                        "F7"
+                    ],
+                    [
+                        "F8",
+                        "F8"
+                    ],
+                    [
+                        "F9",
+                        "F9"
+                    ],
+                    [
+                        "F10",
+                        "F10"
+                    ],
+                    [
+                        "F11",
+                        "F11"
+                    ],
+                    [
+                        "F12",
+                        "F12"
+                    ],
+                    [
+                        "A",
+                        "A"
+                    ],
+                    [
+                        "B",
+                        "B"
+                    ],
+                    [
+                        "C",
+                        "C"
+                    ],
+                    [
+                        "D",
+                        "D"
+                    ],
+                    [
+                        "E",
+                        "E"
+                    ],
+                    [
+                        "F",
+                        "F"
+                    ],
+                    [
+                        "G",
+                        "G"
+                    ],
+                    [
+                        "H",
+                        "H"
+                    ],
+                    [
+                        "I",
+                        "I"
+                    ],
+                    [
+                        "J",
+                        "J"
+                    ],
+                    [
+                        "K",
+                        "K"
+                    ],
+                    [
+                        "L",
+                        "L"
+                    ],
+                    [
+                        "M",
+                        "M"
+                    ],
+                    [
+                        "N",
+                        "N"
+                    ],
+                    [
+                        "O",
+                        "O"
+                    ],
+                    [
+                        "P",
+                        "P"
+                    ],
+                    [
+                        "Q",
+                        "Q"
+                    ],
+                    [
+                        "R",
+                        "R"
+                    ],
+                    [
+                        "S",
+                        "S"
+                    ],
+                    [
+                        "T",
+                        "T"
+                    ],
+                    [
+                        "U",
+                        "U"
+                    ],
+                    [
+                        "V",
+                        "V"
+                    ],
+                    [
+                        "W",
+                        "W"
+                    ],
+                    [
+                        "X",
+                        "X"
+                    ],
+                    [
+                        "Y",
+                        "Y"
+                    ],
+                    [
+                        "Z",
+                        "Z"
+                    ],
+                    [
+                        "a",
+                        "a"
+                    ],
+                    [
+                        "b",
+                        "b"
+                    ],
+                    [
+                        "c",
+                        "c"
+                    ],
+                    [
+                        "d",
+                        "d"
+                    ],
+                    [
+                        "e",
+                        "e"
+                    ],
+                    [
+                        "f",
+                        "f"
+                    ],
+                    [
+                        "g",
+                        "g"
+                    ],
+                    [
+                        "h",
+                        "h"
+                    ],
+                    [
+                        "i",
+                        "i"
+                    ],
+                    [
+                        "j",
+                        "j"
+                    ],
+                    [
+                        "k",
+                        "k"
+                    ],
+                    [
+                        "l",
+                        "l"
+                    ],
+                    [
+                        "m",
+                        "m"
+                    ],
+                    [
+                        "n",
+                        "n"
+                    ],
+                    [
+                        "o",
+                        "o"
+                    ],
+                    [
+                        "p",
+                        "p"
+                    ],
+                    [
+                        "q",
+                        "q"
+                    ],
+                    [
+                        "r",
+                        "r"
+                    ],
+                    [
+                        "s",
+                        "s"
+                    ],
+                    [
+                        "t",
+                        "t"
+                    ],
+                    [
+                        "u",
+                        "u"
+                    ],
+                    [
+                        "v",
+                        "v"
+                    ],
+                    [
+                        "w",
+                        "w"
+                    ],
+                    [
+                        "x",
+                        "x"
+                    ],
+                    [
+                        "y",
+                        "y"
+                    ],
+                    [
+                        "z",
+                        "z"
+                    ]
+                ]
+            }
+        ],
+        "output": "String",
+        "style": "variable_blocks",
+        "extensions": [
+            "parent_style"
+        ]
+    },
+    "parameter": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_label_serializable",
+                "name": "VAR"
+            }
+        ],
+        "style": "variable_blocks",
+        "output": null
+    },
+    "controls_if_if": {
+        "message0": "%{BKY_CONTROLS_IF_IF_TITLE_IF}",
+        "nextStatement": null,
+        "enableContextMenu": false,
+        "style": "Controls",
+        "tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}"
+    },
+    "controls_if_elseif": {
+        "message0": "%{BKY_CONTROLS_IF_ELSEIF_TITLE_ELSEIF}",
+        "previousStatement": null,
+        "nextStatement": null,
+        "enableContextMenu": false,
+        "style": "Controls",
+        "tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}"
+    },
+    "controls_if_else": {
+        "message0": "%{BKY_CONTROLS_IF_ELSE_TITLE_ELSE}",
+        "previousStatement": null,
+        "enableContextMenu": false,
+        "style": "Controls",
+        "tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}"
+    },
+    "array_mutator_item_single": {
+        "message0": "single item",
+        "style": "Iterables",
+        "nextStatement": null,
+        "previousStatement": null
+    },
+    "array_mutator_item_iterable": {
+        "message0": "spread iterable",
+        "style": "Iterables",
+        "nextStatement": null,
+        "previousStatement": null
+    },
+    "array_mutator_items": {
+        "message0": "items",
+        "style": "Iterables",
+        "nextStatement": null
+    },
+    "motion_angle": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_angle",
+                "name": "VALUE"
+            }
+        ],
+        "output": "Number",
+        "style": "Motion"
+    },
+    "costume": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "input_dummy",
+                "name": "DUMMY"
+            }
+        ],
+        "output": "String",
+        "style": "Looks",
+        "extensions": [
+            "costume_menu"
+        ]
+    },
+    "switchBackdropTo": {
+        "message0": "switch backdrop to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "COSTUME",
+                "check": "String"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Looks"
+    },
+    "nextBackdrop": {
+        "message0": "next backdrop",
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Looks"
+    },
+    "effect": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "EFFECT",
+                "options": [
+                    [
+                        "color",
+                        "color"
+                    ],
+                    [
+                        "ghost",
+                        "ghost"
+                    ],
+                    [
+                        "grayscale",
+                        "grayscale"
+                    ],
+                    [
+                        "brightness",
+                        "brightness"
+                    ]
+                ]
+            }
+        ],
+        "output": "String",
+        "style": "Looks"
+    },
+    "color": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_colour_hsv_sliders",
+                "name": "COLOR",
+                "colour": "#ff0000"
+            }
+        ],
+        "output": "Color",
+        "style": "Pen"
+    },
+    "math_number": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_number",
+                "name": "NUM",
+                "value": 0
+            }
+        ],
+        "output": "Number",
+        "style": "Operators"
+    },
+    "move": {
+        "inputsInline": true,
+        "message0": "move %1 steps",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "STEPS",
+                "check": "Number",
+                "value": 10
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "turnLeft": {
+        "inputsInline": true,
+        "message0": "turn left %1 degress",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "DEGREES",
+                "check": "Number",
+                "value": 15
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "turnRight": {
+        "inputsInline": true,
+        "message0": "turn right %1 degress",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "DEGREES",
+                "check": "Number",
+                "value": 15
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "pointInDirection": {
+        "inputsInline": true,
+        "message0": "point in direction %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "DIRECTION",
+                "check": "Number",
+                "value": 90,
+                "block": "motion_angle"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "pointTowards": {
+        "inputsInline": true,
+        "message0": "point towards %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SPRITE",
+                "check": "Sprite"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "goTo": {
+        "inputsInline": true,
+        "message0": "go to x: %1 y: %2",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "X",
+                "check": "Number"
+            },
+            {
+                "type": "input_value",
+                "name": "Y",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "goTowards": {
+        "inputsInline": true,
+        "message0": "go towards %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SPRITE",
+                "check": "Sprite"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "glide": {
+        "inputsInline": true,
+        "message0": "glide %1 secs to x: %2 y: %3",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SECS",
+                "check": "Number",
+                "value": 1
+            },
+            {
+                "type": "input_value",
+                "name": "X",
+                "check": "Number"
+            },
+            {
+                "type": "input_value",
+                "name": "Y",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "changeX": {
+        "inputsInline": true,
+        "message0": "change x by %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "X",
+                "check": "Number",
+                "value": 10
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "setX": {
+        "inputsInline": true,
+        "message0": "set x to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "X",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "changeY": {
+        "inputsInline": true,
+        "message0": "change y by %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "Y",
+                "check": "Number",
+                "value": 10
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "setY": {
+        "inputsInline": true,
+        "message0": "set y to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "Y",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Motion"
+    },
+    "x": {
+        "inputsInline": true,
+        "message0": "x position",
+        "output": "Number",
+        "style": "Motion"
+    },
+    "y": {
+        "inputsInline": true,
+        "message0": "y position",
+        "output": "Number",
+        "style": "Motion"
+    },
+    "sayWait": {
+        "inputsInline": true,
+        "message0": "say %1 for %2 seconds",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "MESSAGE",
+                "check": "String",
+                "value": "Hello!"
+            },
+            {
+                "type": "input_value",
+                "name": "SECS",
+                "check": "Number",
+                "value": 2
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "say": {
+        "inputsInline": true,
+        "message0": "say %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "MESSAGE",
+                "check": "String",
+                "value": "Hello!"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "thinkWait": {
+        "inputsInline": true,
+        "message0": "think %1 for %2 seconds",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "MESSAGE",
+                "check": "String",
+                "value": "Hello!"
+            },
+            {
+                "type": "input_value",
+                "name": "SECS",
+                "check": "Number",
+                "value": 2
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "think": {
+        "inputsInline": true,
+        "message0": "think %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "MESSAGE",
+                "check": "String",
+                "value": "Hello!"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "changeEffect": {
+        "inputsInline": true,
+        "message0": "change %1 effect by %2 %",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "EFFECT",
+                "check": "String",
+                "block": "effect"
+            },
+            {
+                "type": "input_value",
+                "name": "CHANGE",
+                "check": "Number",
+                "value": 25
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "setEffect": {
+        "inputsInline": true,
+        "message0": "set %1 effect to %2 %",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "EFFECT",
+                "check": "String",
+                "block": "effect"
+            },
+            {
+                "type": "input_value",
+                "name": "CHANGE",
+                "check": "Number",
+                "value": 100
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "switchCostumeToNum": {
+        "inputsInline": true,
+        "message0": "switch costume to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "COSTUME",
+                "check": "Number",
+                "value": 1
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "switchCostumeTo": {
+        "inputsInline": true,
+        "message0": "switch costume to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "COSTUME",
+                "check": "String",
+                "block": "costume"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Looks"
+    },
+    "nextCostume": {
+        "inputsInline": true,
+        "message0": "next costume",
+        "nextStatement": null,
+        "previousStatement": null,
+        "args0": [],
+        "style": "Looks"
+    },
+    "show": {
+        "inputsInline": true,
+        "message0": "show",
+        "nextStatement": null,
+        "previousStatement": null,
+        "args0": [],
+        "style": "Looks"
+    },
+    "hide": {
+        "inputsInline": true,
+        "message0": "hide",
+        "nextStatement": null,
+        "previousStatement": null,
+        "args0": [],
+        "style": "Looks"
+    },
+    "changeSize": {
+        "inputsInline": true,
+        "message0": "change size by %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SIZE",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "setSize": {
+        "inputsInline": true,
+        "message0": "set size to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SIZE",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Looks"
+    },
+    "showing": {
+        "inputsInline": true,
+        "message0": "visible?",
+        "output": "Boolean",
+        "style": "Looks"
+    },
+    "magnification": {
+        "inputsInline": true,
+        "message0": "size",
+        "output": "Number",
+        "style": "Looks"
+    },
+    "currentCostumeIndex": {
+        "inputsInline": true,
+        "message0": "costume #",
+        "output": "Number",
+        "style": "Looks"
+    },
+    "getEffect": {
+        "inputsInline": true,
+        "message0": "effect %1",
+        "output": "Number",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "EFFECT",
+                "check": "String",
+                "block": "effect"
+            }
+        ],
+        "style": "Looks"
+    },
+    "rgb": {
+        "inputsInline": true,
+        "message0": "RGB %1 %2 %3",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "RED",
+                "check": "Number",
+                "value": 255
+            },
+            {
+                "type": "input_value",
+                "name": "GREEN",
+                "check": "Number",
+                "value": 255
+            },
+            {
+                "type": "input_value",
+                "name": "BLUE",
+                "check": "Number",
+                "value": 255
+            }
+        ],
+        "output": "Color",
+        "style": "Pen"
+    },
+    "randomColor": {
+        "inputsInline": true,
+        "message0": "random color",
+        "output": "Color",
+        "style": "Pen"
+    },
+    "penClear": {
+        "inputsInline": true,
+        "message0": "clear",
+        "args0": [],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Pen"
+    },
+    "penDown": {
+        "inputsInline": true,
+        "message0": "pen down",
+        "args0": [],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Pen"
+    },
+    "penUp": {
+        "inputsInline": true,
+        "message0": "pen up",
+        "args0": [],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Pen"
+    },
+    "setPenColor": {
+        "inputsInline": true,
+        "message0": "set pen color to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "COLOR",
+                "check": "Color"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Pen"
+    },
+    "changePenSize": {
+        "inputsInline": true,
+        "message0": "change pen size by %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SIZE",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Pen"
+    },
+    "setPenSize": {
+        "inputsInline": true,
+        "message0": "set pen size to %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SIZE",
+                "check": "Number"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Pen"
+    },
+    "whenFlag": {
+        "inputsInline": true,
+        "message0": "when flag clicked",
+        "nextStatement": null,
+        "style": "Events"
+    },
+    "whenKeyPressed": {
+        "inputsInline": true,
+        "message0": "when %1 key pressed",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "KEY",
+                "check": "String",
+                "block": "key"
+            }
+        ],
+        "nextStatement": null,
+        "style": "Events"
+    },
+    "whenEvent": {
+        "inputsInline": true,
+        "message0": "when mouse %1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "EVENT",
+                "options": [
+                    [
+                        "clicked",
+                        "click"
+                    ],
+                    [
+                        "double-clicked",
+                        "dblclick"
+                    ],
+                    [
+                        "down",
+                        "mousedown"
+                    ],
+                    [
+                        "up",
+                        "mouseup"
+                    ],
+                    [
+                        "moved",
+                        "mousemove"
+                    ],
+                    [
+                        "enter",
+                        "mouseenter"
+                    ],
+                    [
+                        "leave",
+                        "mouseleave"
+                    ]
+                ]
+            }
+        ],
+        "nextStatement": null,
+        "style": "Events"
+    },
+    "whenReceiveMessage": {
+        "inputsInline": true,
+        "message0": "when I receive %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "check": "String",
+                "name": "MESSAGE",
+                "value": "message"
+            }
+        ],
+        "nextStatement": null,
+        "style": "Events"
+    },
+    "broadcastMessage": {
+        "inputsInline": true,
+        "message0": "broadcast %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "check": "String",
+                "name": "MESSAGE",
+                "value": "message"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Events"
+    },
+    "broadcastMessageWait": {
+        "inputsInline": true,
+        "message0": "broadcast %1 and wait",
+        "args0": [
+            {
+                "type": "input_value",
+                "check": "String",
+                "name": "MESSAGE",
+                "value": "message"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Events"
+    },
+    "wait": {
+        "inputsInline": true,
+        "message0": "wait %1 seconds",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SECS",
+                "check": "Number",
+                "value": 1
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Controls"
+    },
+    "repeat": {
+        "inputsInline": true,
+        "message0": "repeat %1 times",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "TIMES",
+                "check": "Number",
+                "value": 10
+            }
+        ],
+        "message1": "%1",
+        "args1": [
+            {
+                "type": "input_statement",
+                "name": "STACK"
+            }
+        ],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Controls"
+    },
+    "while": {
+        "inputsInline": true,
+        "message0": "while %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "CONDITION",
+                "check": "Boolean"
+            }
+        ],
+        "message1": "%1",
+        "args1": [
+            {
+                "type": "input_statement",
+                "name": "STACK"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Controls"
+    },
+    "break": {
+        "inputsInline": true,
+        "message0": "break",
+        "previousStatement": null,
+        "style": "Controls"
+    },
+    "continue": {
+        "inputsInline": true,
+        "message0": "continue",
+        "previousStatement": null,
+        "style": "Controls"
+    },
+    "controls_if": {
+        "inputsInline": true,
+        "message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "IF0",
+                "check": "Boolean"
+            }
+        ],
+        "message1": "%1",
+        "args1": [
+            {
+                "type": "input_statement",
+                "name": "DO0"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
+        "suppressPrefixSuffix": true,
+        "mutator": "mutator_if",
+        "style": "Controls"
+    },
+    "try": {
+        "message0": "try",
+        "style": "Controls",
+        "nextStatement": ["catch", "finally"]
+    },
+    "catch": {
+        "message0": "catch",
+        "style": "Controls",
+        "nextStatement": "finally",
+        "previousStatement": "catch"
+    },
+    "catchVar": {
+        "message0": "catch %1",
+        "args0": [
+            {
+                "type": "field_input",
+                "name": "ERROR",
+                "text": "error"
+            }
+        ],
+        "style": "Controls",
+        "nextStatement": "finally",
+        "previousStatement": "catch"
+    },
+    "finally": {
+        "message0": "finally",
+        "style": "Controls",
+        "previousStatement": "finally"
+    },
+    "tryCatch": {
+        "inputsInline": true,
+        "message0": "try",
+        "message1": "%1",
+        "args1": [
+            {
+                "type": "input_statement",
+                "name": "TRY"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Controls",
+        "mutator": "mutator_try"
+    },
+    "throw": {
+        "inputsInline": true,
+        "message0": "throw %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "ERROR"
+            }
+        ],
+        "previousStatement": null,
+        "style": "Controls"
+    },
+    "whenCloned": {
+        "inputsInline": true,
+        "message0": "when I start as a clone",
+        "nextStatement": null,
+        "style": "Controls"
+    },
+    "clone": {
+        "inputsInline": true,
+        "message0": "clone",
+        "args0": [],
+        "nextStatement": null,
+        "previousStatement": null,
+        "style": "Controls"
+    },
+    "delete": {
+        "inputsInline": true,
+        "message0": "delete",
+        "args0": [],
+        "previousStatement": null,
+        "style": "Controls"
+    },
+    "isTouching": {
+        "inputsInline": true,
+        "message0": "touching %1?",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SPRITE",
+                "check": "Sprite"
+            }
+        ],
+        "output": "Boolean",
+        "style": "Sensing"
+    },
+    "isTouchingBackdropColor": {
+        "inputsInline": true,
+        "message0": "touching backdrop color %1?",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "COLOR",
+                "check": "Color"
+            }
+        ],
+        "output": "Boolean",
+        "style": "Sensing"
+    },
+    "isTouchingEdge": {
+        "inputsInline": true,
+        "message0": "touching edge?",
+        "args0": [],
+        "output": "Boolean",
+        "style": "Sensing"
+    },
+    "distanceTo": {
+        "inputsInline": true,
+        "message0": "distance to x: %1 y: %2",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "X",
+                "check": "Number"
+            },
+            {
+                "type": "input_value",
+                "name": "Y",
+                "check": "Number"
+            }
+        ],
+        "output": "Number",
+        "style": "Sensing"
+    },
+    "ask": {
+        "inputsInline": true,
+        "message0": "ask %1 and wait",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "QUESTION",
+                "check": "String",
+                "value": "What's your name?"
+            }
+        ],
+        "output": "String",
+        "style": "Sensing"
+    },
+    "isKeyPressed": {
+        "inputsInline": true,
+        "message0": "key %1 pressed?",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "KEY",
+                "check": "String",
+                "block": "key"
+            }
+        ],
+        "output": "Boolean",
+        "style": "Sensing"
+    },
+    "mouseDown": {
+        "inputsInline": true,
+        "message0": "mouse down?",
+        "output": "Boolean",
+        "style": "Sensing"
+    },
+    "mouseX": {
+        "inputsInline": true,
+        "message0": "mouse x",
+        "output": "Number",
+        "style": "Sensing"
+    },
+    "mouseY": {
+        "inputsInline": true,
+        "message0": "mouse y",
+        "output": "Number",
+        "style": "Sensing"
+    },
+    "property": {
+        "inputsInline": true,
+        "message0": "%1 of %2",
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "PROPERTY",
+                "options": [
+                    [
+                        "x",
+                        "x"
+                    ],
+                    [
+                        "y",
+                        "y"
+                    ],
+                    [
+                        "size",
+                        "magnification"
+                    ],
+                    [
+                        "direction",
+                        "direction"
+                    ],
+                    [
+                        "color effect",
+                        "effects.color"
+                    ],
+                    [
+                        "ghost effect",
+                        "effects.ghost"
+                    ],
+                    [
+                        "grayscale effect",
+                        "effects.grayscale"
+                    ],
+                    [
+                        "brightness effect",
+                        "effects.brightness"
+                    ]
+                ]
+            },
+            {
+                "type": "input_value",
+                "name": "SPRITE",
+                "check": "Sprite"
+            }
+        ],
+        "output": "Number",
+        "style": "Sensing"
+    },
+    "arithmetics": {
+        "inputsInline": true,
+        "message0": "%1 %2 %3",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "A",
+                "check": "Number",
+                "value": 10
+            },
+            {
+                "type": "field_dropdown",
+                "name": "OP",
+                "options": [
+                    [
+                        "+",
+                        "+"
+                    ],
+                    [
+                        "-",
+                        "-"
+                    ],
+                    [
+                        "×",
+                        "*"
+                    ],
+                    [
+                        "÷",
+                        "/"
+                    ],
+                    [
+                        "^",
+                        "**"
+                    ],
+                    [
+                        "mod",
+                        "%"
+                    ]
+                ]
+            },
+            {
+                "type": "input_value",
+                "name": "B",
+                "check": "Number",
+                "value": 10
+            }
+        ],
+        "output": "Number",
+        "style": "Operators"
+    },
+    "compare": {
+        "inputsInline": true,
+        "message0": "%1 %2 %3",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "A",
+                "check": [
+                    "Number",
+                    "String"
+                ],
+                "block": "math_number"
+            },
+            {
+                "type": "field_dropdown",
+                "name": "OP",
+                "options": [
+                    [
+                        "=",
+                        "=="
+                    ],
+                    [
+                        "≠",
+                        "!="
+                    ],
+                    [
+                        "<",
+                        "<"
+                    ],
+                    [
+                        "≤",
+                        "<="
+                    ],
+                    [
+                        ">",
+                        ">"
+                    ],
+                    [
+                        "≥",
+                        ">="
+                    ]
+                ]
+            },
+            {
+                "type": "input_value",
+                "name": "B",
+                "check": [
+                    "Number",
+                    "String"
+                ],
+                "block": "math_number"
+            }
+        ],
+        "output": "Boolean",
+        "style": "Operators"
+    },
+    "operation": {
+        "inputsInline": true,
+        "message0": "%1 %2 %3",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "A",
+                "check": "Boolean"
+            },
+            {
+                "type": "field_dropdown",
+                "name": "OP",
+                "options": [
+                    [
+                        "and",
+                        "&&"
+                    ],
+                    [
+                        "or",
+                        "||"
+                    ]
+                ]
+            },
+            {
+                "type": "input_value",
+                "name": "B",
+                "check": "Boolean"
+            }
+        ],
+        "output": "Boolean",
+        "style": "Operators"
+    },
+    "not": {
+        "inputsInline": true,
+        "message0": "not %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "BOOL",
+                "check": "Boolean"
+            }
+        ],
+        "output": "Boolean",
+        "style": "Operators"
+    },
+    "boolean": {
+        "inputsInline": true,
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "BOOL",
+                "options": [
+                    [
+                        "true",
+                        "true"
+                    ],
+                    [
+                        "false",
+                        "false"
+                    ]
+                ]
+            }
+        ],
+        "output": "Boolean",
+        "style": "Operators"
+    },
+    "string": {
+        "inputsInline": true,
+        "message0": "convert %1 to string",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "VALUE"
+            }
+        ],
+        "output": "String",
+        "style": "Operators"
+    },
+    "iterables_string": {
+        "inputsInline": true,
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_string",
+                "name": "TEXT",
+                "text": ""
+            }
+        ],
+        "output": "String",
+        "style": "Iterables"
+    },
+    "array": {
+        "inputsInline": false,
+        "message0": "",
+        "mutator": "mutator_array",
+        "output": "Array",
+        "extraState": {
+            "items": [
+                "single",
+                "single",
+                "single"
+            ]
+        },
+        "style": "Iterables"
+    },
+    "length": {
+        "inputsInline": true,
+        "message0": "length of %1",
+        "args0": [
+            {
+                "name": "ITERABLE",
+                "type": "input_value",
+                "check": [
+                    "String",
+                    "Array"
+                ]
+            }
+        ],
+        "output": "Number",
+        "style": "Iterables"
+    },
+    "reverse": {
+        "inputsInline": true,
+        "message0": "reverse %1",
+        "args0": [
+            {
+                "name": "ITERABLE",
+                "type": "input_value",
+                "check": [
+                    "String",
+                    "Array"
+                ]
+            }
+        ],
+        "output": [
+            "Array",
+            "String"
+        ],
+        "style": "Iterables"
+    },
+    "includes": {
+        "inputsInline": true,
+        "message0": "%1 includes %2",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "ITERABLE",
+                "check": [
+                    "String",
+                    "Array"
+                ]
+            },
+            {
+                "type": "input_value",
+                "name": "ITEM"
+            }
+        ],
+        "output": "Boolean",
+        "style": "Iterables"
+    },
+    "slice": {
+        "inputsInline": true,
+        "message0": "slice %1 from %2 to %3",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "ITERABLE",
+                "check": [
+                    "String",
+                    "Array"
+                ]
+            },
+            {
+                "type": "input_value",
+                "name": "START",
+                "check": "Number"
+            },
+            {
+                "type": "input_value",
+                "name": "TO",
+                "check": "Number",
+                "value": 2
+            }
+        ],
+        "output": [
+            "Array",
+            "String"
+        ],
+        "style": "Iterables"
+    },
+    "item": {
+        "inputsInline": true,
+        "message0": "item %1 of %2",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "INDEX",
+                "check": "Number",
+                "value": 0
+            },
+            {
+                "type": "input_value",
+                "name": "ITERABLE",
+                "check": [
+                    "String",
+                    "Array"
+                ]
+            }
+        ],
+        "output": null,
+        "style": "Iterables"
+    },
+    "indexOf": {
+        "inputsInline": true,
+        "message0": "index of %1 in %2",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "ITEM"
+            },
+            {
+                "type": "input_value",
+                "name": "ITERABLE",
+                "check": [
+                    "String",
+                    "Array"
+                ]
+            }
+        ],
+        "output": null,
+        "style": "Iterables"
+    },
+    "foreach": {
+        "inputsInline": true,
+        "message0": "for each %1 in %2",
+        "args0": [
+            {
+                "type": "field_param",
+                "name": "VAR",
+                "var": "item"
+            },
+            {
+                "type": "input_value",
+                "name": "ITERABLE",
+                "check": [
+                    "String",
+                    "Array",
+                    "Iterator",
+                    null
+                ]
+            }
+        ],
+        "message1": "%1",
+        "args1": [
+            {
+                "type": "input_statement",
+                "name": "DO"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Iterables"
+    }
+}

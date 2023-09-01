@@ -1,8 +1,11 @@
+import * as stage from "../../blockly/data/stage.json";
+import * as sprite from "../../blockly/data/sprite.json";
+import * as theme from "../../blockly/data/theme.json";
 import {Stage, type Entity} from "../entities";
-import * as Blockly from "scrap-blocks";
+import * as Blockly from "blockly/core";
 import Component from "../tab";
-import "./style.scss";
 import type {App} from "../app";
+import "./style.scss";
 
 export default class Workspace implements Component {
 	container = document.createElement("div");
@@ -16,14 +19,12 @@ export default class Workspace implements Component {
 	render(entity: Entity, parent: HTMLElement) {
 		parent.appendChild(this.container);
 
-		const contents = entity instanceof Stage ? Blockly.Scrap.stage : Blockly.Scrap.contents;
-
 		this.workspace = Blockly.inject(this.container, {
-			theme: Blockly.Scrap.theme,
+			theme,
 			renderer: "zelos",
 			toolbox: {
 				kind: "categoryToolbox",
-				contents,
+				contents: [],
 			},
 			media: "blockly/media/",
 			zoom: {
@@ -31,7 +32,7 @@ export default class Workspace implements Component {
 			},
 			trashcan: false,
 			oneBasedIndex: false,
-			disable: false
+			disable: false,
 		});
 
 		this.workspace.registerToolboxCategoryCallback("FUNCTIONS", workspace => {
@@ -42,18 +43,27 @@ export default class Workspace implements Component {
 				},
 				{
 					kind: "block",
+					type: "function",
+					extraState: {
+						returnType: "Iterator",
+						params: [],
+						name: "generator",
+					},
+				},
+				{
+					kind: "block",
 					type: "return",
+				},
+				{
+					kind: "block",
+					type: "yield",
 				},
 			];
 			for (const block of workspace.getBlocksByType("function", false)) {
 				blockList.push({
 					kind: "block",
 					type: "call",
-					extraState: {
-						name: block.getFieldValue("NAME"),
-						returnType: block.getFieldValue("TYPE"),
-						params: "params" in block ? block.params : [],
-					},
+					extraState: block.saveExtraState!(),
 				});
 			}
 			return blockList;
@@ -70,7 +80,7 @@ export default class Workspace implements Component {
 		this.update(entity);
 	}
 	update(entity: Entity) {
-		const contents = entity instanceof Stage ? Blockly.Scrap.stage : Blockly.Scrap.contents;
+		const contents = entity instanceof Stage ? stage : sprite;
 
 		this.workspace.updateToolbox({
 			kind: "categoryToolbox",
@@ -88,6 +98,7 @@ export default class Workspace implements Component {
 		this.entity = entity;
 		Blockly.serialization.workspaces.load(entity.workspace, this.workspace);
 
+		this.workspace.cleanUp();
 		this.workspace.refreshToolboxSelection();
 	}
 	dispose() {

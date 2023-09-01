@@ -10,6 +10,7 @@ Welcome to the official repository of **Scrap** - the tool designed to simplify 
   - [Usage](#usage)
 - [Features](#features)
 - [Contributing](#contributing)
+- [Scrap Logo Explanation](#scrap-logo-explanation)
 - [License](#license)
 
 ## Introduction
@@ -22,7 +23,7 @@ Scratch is an excellent platform for beginners to get started with programming, 
 
 - **Block-Based Interface** - Scrap's interface is block-based, just like Scratch. This makes it easier for Scratch users to get started with Scrap. The block-based interface is powered by [Blockly](https://developers.google.com/blockly).
 
-- **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by [CodeMirror](https://codemirror.net/).
+- **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by [Prism Code Editor](https://prism-code-editor.netlify.app/).
 
 ## Getting Started
 
@@ -50,6 +51,18 @@ This will open up a local development server where you can access the Scrap inte
 
 I welcome contributions from the community to make Scrap even better. If you're interested in contributing, please refer to my [Contribution Guidelines](CONTRIBUTING.md) for detailed information on how to get involved.
 
+## Scrap Logo Explanation
+
+The logo for Scrap shares a visual resemblance with the Scratch logo as a deliberate homage. Here's what you need to know:
+
+- **Font Choice**: Scrap uses the "Black Boys on Moped" font, the same as Scratch's logo, which is freeware and freely usable.
+
+- **No Copyright Infringement**: Scrap respects copyright laws and does not infringe on Scratch's intellectual property. The similarity is a tribute, not a copy.
+
+- **Non-Commercial**: Scrap is a non-commercial project, and its logo is used to recognize Scratch's influence on its mission to help beginners transition from Scratch to JavaScript.
+
+In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.
+
 ## License
 
 Scrap is released under the [MIT License](LICENSE), which means you're free to use, modify, and distribute the project as long as you retain the original license terms.
@@ -57,13 +70,3 @@ Scrap is released under the [MIT License](LICENSE), which means you're free to u
 ---
 
 Ready to make your transition from Scratch to JavaScript smoother? Scrap is here to assist you. Start exploring, experimenting, and learning with Scrap today! If you have any questions or need help, feel free to reach out to us in the Issues section.
-
-<style>
-    img {
-        height: 1em;
-    }
-
-    h1 {
-        
-    }
-</style>
