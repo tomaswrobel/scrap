@@ -26,7 +26,7 @@ export default class Workspace implements Component {
 				kind: "categoryToolbox",
 				contents: [],
 			},
-			media: "blockly/media/",
+			media: "blockly-media/",
 			zoom: {
 				startScale: 0.65,
 			},

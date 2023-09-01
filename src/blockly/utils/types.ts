@@ -1,7 +1,7 @@
 import * as Blockly from "blockly/core";
 
 export const Types = ["", "Number", "String", "Boolean", "Color", "Array", "Sprite"];
-export const Error = `Type must be one of ${Types.join(", ")}`;
+export const Error = `Type must be one of void${Types.join(", ")}`;
 
 export const TypeToShadow: Record<string, string> = {
 	Number: "math_number",

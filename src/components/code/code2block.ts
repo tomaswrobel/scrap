@@ -337,7 +337,6 @@ export default class CodeParser {
 										throw new SyntaxError(`Unsupported type ${paramType!.type}. ${Error}`);
 									}
 								} else if (title === "returns") {
-									const {type} = paramType!;
 									if (paramType!.type === "NameExpression") {
 										if (Types.indexOf(type) !== -1) {
 											returnType = type;
@@ -374,6 +373,7 @@ export default class CodeParser {
 
                 block.loadExtraState!(extraState);
                 this.functions.set(id.name, extraState);
+				block.setCommentText(commentText);
 
 				this.connection = block.nextConnection;
 				this.parse(body);

@@ -62,8 +62,6 @@ export class App {
 
 			button.addEventListener("click", async () => {
 				if (this.activeTab === name) return;
-				this.tabs.get(this.activeTab)!.dispose();
-				this.activeTab = name;
 				if (name === "Blocks" || name === "Code") {
 					this.current.mode = name;
 
@@ -71,20 +69,22 @@ export class App {
 						const parser = new CodeParser(this.current.codeWorkspace, this.entities);
 						try {
 							await parser.codeToBlock(this.current.code);
-							this.current.code = "";
 						} catch (e) {
 							await Swal.fire({
 								title: "Compilation Error",
 								text: String(e),
 								icon: "error",
 							});
+							return;
 						}
-						
+						this.current.code = "";
 					} else {
 						this.current.code = this.generator.workspaceToCode(this.current.codeWorkspace);
 						this.current.workspace = {};
 					}
 				}
+				this.tabs.get(this.activeTab)!.dispose();
+				this.activeTab = name;
 				this.tabBar.querySelector(".selected")?.classList.remove("selected");
 				button.classList.add("selected");
 
