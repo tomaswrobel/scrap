@@ -338,8 +338,8 @@ export default class CodeParser {
 									}
 								} else if (title === "returns") {
 									if (paramType!.type === "NameExpression") {
-										if (Types.indexOf(type) !== -1) {
-											returnType = type;
+										if (Types.indexOf(paramType.name) !== -1) {
+											returnType = paramType.name;
 										}
 									}
 								}
