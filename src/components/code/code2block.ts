@@ -51,6 +51,8 @@ export default class CodeParser {
 
 	parse(node: import("@babel/types").Node) {
 		switch (node.type) {
+			case "NullLiteral":
+				break;
 			case "NumericLiteral":
 				this.block("math_number", true).setFieldValue(node.value.toString(), "NUM");
 				break;
