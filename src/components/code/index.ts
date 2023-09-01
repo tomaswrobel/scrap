@@ -32,7 +32,7 @@ export default class Code implements TabComponent {
 		} else {
 			this.editor = createEditor(Prism, this.container, {
 				language: "javascript",
-				value: generator.workspaceToCode(entity.codeWorkspace),
+				value: entity.code,
 				insertSpaces: false,
 				tabSize: 4,
 				onUpdate: (value) => {
