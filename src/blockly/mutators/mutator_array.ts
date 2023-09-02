@@ -62,7 +62,7 @@ export const MIXIN = {
 				itemBlock = itemBlock.getNextBlock();
 				continue;
 			}
-			this.items.push(itemBlock.type.slice(23) as "iterable" | "single");
+			this.items.push(itemBlock.type.slice(19) as "iterable" | "single");
 			itemBlock = itemBlock.getNextBlock();
 		}
 		this.updateShape();

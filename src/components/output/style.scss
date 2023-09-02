@@ -1,0 +1,141 @@
+// This is more Scratch-like style
+// than found in BlockLike.js
+* {
+	box-sizing: border-box;
+	-webkit-transform: translate3d(0, 0, 0);
+	-webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* prevent tap highlight color / shadow */
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.blocklike-panel-flag {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.blocklike-flag {
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 65px;
+	line-height: 65px;
+	padding: 32px;
+	color: transparent; // To hide default flag
+	background: #fafafa;
+	border: 2px solid #222;
+	border-radius: 65px;
+}
+
+.blocklike-flag::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url(../../images/flag.svg);
+	background-size: 70px 70px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.blocklike-think {
+	position: absolute;
+	min-width: 60px;
+	max-width: 200px;
+	left: 200px;
+	padding: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	min-height: 16px;
+	line-height: 16px;
+	text-align: left;
+	color: #222;
+	background: #fafafa;
+	border: 2px solid #444;
+	border-radius: 20px;
+	&::before {
+		position: absolute;
+		bottom: -30px;
+		left: 0px;
+		width: 30px;
+		height: 30px;
+		background: #fafafa;
+		border: 2px solid #444;
+		border-radius: 20px;
+		content: "";
+	}
+	&::after {
+		position: absolute;
+		bottom: -45px;
+		left: 0px;
+		width: 15px;
+		height: 15px;
+		background: #fafafa;
+		border: 2px solid #444;
+		border-radius: 15px;
+		content: "";
+	}
+}
+
+.blocklike-say {
+	position: absolute;
+	display: inline-block;
+	min-width: 60px;
+	max-width: 200px;
+	padding: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	min-height: 16px;
+	line-height: 16px;
+	text-align: left;
+	background-color: #fafafa;
+	border: 2px solid #444;
+	border-radius: 20px;
+	&::before {
+		content: " ";
+		position: absolute;
+		width: 0;
+		height: 0;
+		left: 13px;
+		right: auto;
+		top: auto;
+		bottom: -33px;
+		border: 16px solid;
+		border-color: #444 transparent transparent #444;
+	}
+	&::after {
+		content: " ";
+		position: absolute;
+		width: 0;
+		height: 0;
+		left: 15px;
+		right: auto;
+		top: auto;
+		bottom: -28px;
+		border: 16px solid;
+		border-color: #fafafa transparent transparent #fafafa;
+	}
+}
+
+.blocklike-ask {
+	@extend .blocklike-say;
+
+	input {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 16px;
+		padding: 2px;
+		margin: 2px;
+		width: 75%;
+	}
+	button {
+		font-size: 16px;
+		line-height: 16px;
+		height: 26px;
+		padding: 0 5px;
+		margin: 0;
+	}
+}

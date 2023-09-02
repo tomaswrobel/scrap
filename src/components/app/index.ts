@@ -12,7 +12,7 @@ import JSZip from "jszip";
 import {saveAs} from "file-saver";
 import Swal from "sweetalert2";
 import {Generator} from "../../blockly/utils/generator";
-import CodeParser from "../code/code2block";
+import CodeParser from "../code/parser";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -123,14 +123,6 @@ export class App {
 
 		this.output.addEventListener("load", async () => {
 			const document = this.output.contentDocument!;
-
-			const style = document.createElement("style");
-			style.textContent = engineStyle;
-			document.head.appendChild(style);
-
-			const engine = document.createElement("script");
-			engine.innerText = engineScript;
-			document.head.appendChild(engine);
 
 			const script = document.createElement("script");
 			let code = "";

@@ -979,12 +979,6 @@
         "output": "Color",
         "style": "Pen"
     },
-    "randomColor": {
-        "inputsInline": true,
-        "message0": "random color",
-        "output": "Color",
-        "style": "Pen"
-    },
     "penClear": {
         "inputsInline": true,
         "message0": "clear",
@@ -1793,12 +1787,8 @@
     },
     "indexOf": {
         "inputsInline": true,
-        "message0": "index of %1 in %2",
+        "message0": "index of %2 in %1",
         "args0": [
-            {
-                "type": "input_value",
-                "name": "ITEM"
-            },
             {
                 "type": "input_value",
                 "name": "ITERABLE",
@@ -1806,6 +1796,10 @@
                     "String",
                     "Array"
                 ]
+            },
+            {
+                "type": "input_value",
+                "name": "ITEM"
             }
         ],
         "output": null,

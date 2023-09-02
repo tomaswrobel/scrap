@@ -418,8 +418,27 @@ export default class CodeParser {
 			case "CallExpression": {
 				if (node.callee.type === "MemberExpression") {
 					const {object, property} = node.callee;
+					const iterablesMethods = [
+						"reverse",
+						"includes",
+						"indexOf",
+						"slice"
+					];
 
-					if (object.type === "ThisExpression") {
+					if (property.type === "Identifier" && iterablesMethods.indexOf(property.name) > -1) {
+						const block = this.block(property.name);
+						const [iterable, ...inputs] = block.inputList;
+						this.connection = iterable.connection!;
+						this.parse(object);
+
+						for (let i = 0; i < inputs.length; i++) {
+							const {connection} = inputs[i];
+							if (node.arguments[i]) {
+								this.connection = connection;
+								this.parse(node.arguments[i]);
+							}
+						}
+					} else if (object.type === "ThisExpression") {
 						if (property.type === "Identifier") {
 							if (property.name in blocks) {
 								const block = this.block(property.name);
@@ -509,15 +528,24 @@ export default class CodeParser {
 			}
 			case "MemberExpression": {
 				const {object, property} = node;
+				if (property.type !== "Identifier" && property.type !== "StringLiteral") {
+					const block = this.block("item");
+					this.connection = block.getInput("INDEX")!.connection!;
+					this.parse(property);
 
-				if (object.type === "ThisExpression") {
+					this.connection = block.getInput("ITERABLE")!.connection!;
+					this.parse(object);
+				} else if (property.type === "Identifier" && property.name === "length") {
+					const block = this.block("length");
+					this.connection = block.getInput("VALUE")!.connection!;
+					this.parse(object);
+				} else if (object.type === "ThisExpression") {
 					if (property.type === "Identifier") {
 						if (property.name in blocks) {
 							this.block(property.name);
 						}
 					}
-				}
-				if (object.type === "MemberExpression") {
+				} else if (object.type === "MemberExpression") {
 					if (
 						object.object.type === "ThisExpression" &&
 						object.property.type === "Identifier" &&
@@ -543,8 +571,7 @@ export default class CodeParser {
 						this.connection = block.getInput("SPRITE")!.connection!;
 						this.parse(object.object);
 					}
-				}
-				if (object.type === "Identifier") {
+				} else if (object.type === "Identifier") {
 					if (this.entities.some(n => object.name === n.name)) {
 						if (property.type === "Identifier") {
 							const block = this.block("property");
@@ -634,29 +661,6 @@ export default class CodeParser {
 				this.connection = block.getInput("VALUE")!.connection!;
 				this.parse(right);
 				break;
-			}
-			case "NewExpression": {
-				if (node.callee.type === "Identifier" && node.callee.name === "Color") {
-					if (node.arguments.length === 1) {
-						this.parse(node.arguments[0]);
-						break;
-					} else if (node.arguments.length === 3) {
-						const [r, g, b] = node.arguments;
-
-						const block = this.block("rgb");
-						this.connection = block.getInput("RED")!.connection!;
-						this.parse(r);
-
-						this.connection = block.getInput("GREEN")!.connection!;
-						this.parse(g);
-
-						this.connection = block.getInput("BLUE")!.connection!;
-						this.parse(b);
-
-						break;
-					}
-				}
-				throw new SyntaxError("Illegal constructor");
 			}
 			case "ForOfStatement": {
 				const {left, right, body} = node;

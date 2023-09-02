@@ -11,24 +11,11 @@ import {defaultCommands} from "prism-code-editor/commands";
 import {cursorPosition} from "prism-code-editor/cursor";
 import {matchTags} from "prism-code-editor/match-tags";
 import {highlightBracketPairs} from "prism-code-editor/highlight-brackets";
-import {createEditor, PrismEditor, Extension, EditorOptions} from "prism-code-editor";
+import {createEditor, PrismEditor} from "prism-code-editor";
 import type TabComponent from "../tab";
 import type {App} from "../app";
 import type {Entity} from "../entities";
 import "./style.css";
-import transform from "../entities/transformer";
-
-class Valid implements Extension {
-	update(editor: PrismEditor, options: EditorOptions) {
-		editor.addListener("update", () => {
-			try {
-				transform(editor.value);
-			} catch (e) {
-				
-			}
-		});
-	}
-}
 
 export default class Code implements TabComponent {
 	container = document.createElement("div");

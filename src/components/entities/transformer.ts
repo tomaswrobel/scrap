@@ -12,6 +12,9 @@ export default async function transform(code: string) {
 					FunctionExpression(path) {
 						path.node.async = true;
 					},
+					ImportDeclaration(path) {
+						path.remove();
+					},
 					CallExpression(path) {
 						if (path.parent.type !== "AwaitExpression") {
 							if (path.node.callee.type === "Identifier") {
@@ -32,7 +35,7 @@ export default async function transform(code: string) {
 					},
 					ForOfStatement(path) {
 						path.node.await = true;
-					}
+					},
 				},
 			},
 		],

@@ -110,10 +110,6 @@
                 }
             },
             {
-                "kind": "block",
-                "type": "randomColor"
-            },
-            {
                 "kind": "sep",
                 "gap": 40
             },
