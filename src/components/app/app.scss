@@ -19,15 +19,23 @@ $modes: (turbo, paced);
 .tab-content {
 	grid-area: tab-content;
 	margin-right: 5px;
+	font-size: 16px;
+	tab-size: 4;
 }
 
-.code {
+code.code.hljs {
 	white-space: pre-wrap;
-	tab-size: 4;
+}
 
-	&:empty::after {
-		content: "Here you will see JavaScript code generated from your blocks.";
-	}
+textarea.tab-content {
+	border: 0;
+	resize: none;
+	padding: 3px 5px;
+	word-wrap: break-word;
+	font-family: monospace;
+	background-color: transparent;
+	-webkit-text-fill-color: transparent;
+	outline: none;
 }
 
 iframe {

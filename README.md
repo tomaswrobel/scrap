@@ -23,7 +23,7 @@ Scratch is an excellent platform for beginners to get started with programming, 
 
 - **Block-Based Interface** - Scrap's interface is block-based, just like Scratch. This makes it easier for Scratch users to get started with Scrap. The block-based interface is powered by [Blockly](https://developers.google.com/blockly).
 
-- **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by [Prism Code Editor](https://prism-code-editor.netlify.app/).
+- **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is a subject of ongoing development, and more features will be added in the future.
 
 ## Getting Started
 

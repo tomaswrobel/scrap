@@ -1,8 +1,8 @@
 import * as Blockly from "blockly/core";
 import {parse} from "doctrine";
-import blocks from "../../blockly/data/blocks.json";
-import {Types, Error} from "../../blockly/utils/types";
+import {Types, Error, allBlocks} from "../../blockly";
 import type {Entity} from "../entities";
+import {Identifier, type CallExpression, type MemberExpression, type Node, StringLiteral} from "@babel/types";
 
 export default class CodeParser {
 	connection: Blockly.Connection | null;
@@ -43,13 +43,71 @@ export default class CodeParser {
 		return block;
 	}
 
-	comments(block: Blockly.Block, node: import("@babel/types").Node) {
+	comments(block: Blockly.Block, node: Node) {
 		if (node.leadingComments) {
 			block.setCommentText(node.leadingComments.reduce((a, b) => a + b.value + "\n", ""));
 		}
 	}
 
-	parse(node: import("@babel/types").Node) {
+	isProperty(node: MemberExpression, properties: string[]): node is MemberExpression & {property: Identifier | StringLiteral} {
+		return (
+			this.isIdentifier(node.property, ...properties) ||
+			(node.property.type === "StringLiteral" && properties.indexOf(node.property.value) > -1)
+		);
+	}
+
+	isIdentifier(node: Node, ...names: string[]) {
+		return node.type === "Identifier" && names.indexOf(node.name) > -1;
+	}
+
+	getPropertyContents(property: Identifier | StringLiteral) {
+		if (property.type === "Identifier") {
+			return property.name;
+		} else {
+			return property.value;
+		}
+	}
+
+	parseArguments(block: Blockly.Block, nodes: CallExpression["arguments"]) {
+		let i = 0;
+
+		const inputs = block.inputList.filter(input => {
+			if (input.type === Blockly.inputTypes.VALUE) {
+				// Skip inputs that are already connected
+				if (input.connection?.isConnected()) {
+					i++;
+				}
+				return true;
+			}
+			return false;
+		});
+
+		// Sorry for unusual for loop :-)
+		for (const shift = i; i < inputs.length; i++) {
+			const {connection} = inputs[i];
+
+			this.connection = connection;
+			this.parse(nodes[i - shift]);
+		}
+
+		if (!block.previousConnection && !block.outputConnection) {
+			const arg = nodes[i];
+
+			if (arg?.type === "FunctionExpression") {
+				this.connection = block.nextConnection;
+				this.parse(arg.body);
+			}
+
+			this.connection = null;
+		} else {
+			this.connection = block.nextConnection;
+		}
+	}
+
+	parse(node?: Node | null) {
+		if (!node) {
+			return;
+		}
 		switch (node.type) {
 			case "NullLiteral":
 				break;
@@ -417,117 +475,88 @@ export default class CodeParser {
 				break;
 			case "CallExpression": {
 				if (node.callee.type === "MemberExpression") {
-					const {object, property} = node.callee;
-					const iterablesMethods = [
-						"reverse",
-						"includes",
-						"indexOf",
-						"slice"
-					];
-
-					if (property.type === "Identifier" && iterablesMethods.indexOf(property.name) > -1) {
-						const block = this.block(property.name);
-						const [iterable, ...inputs] = block.inputList;
-						this.connection = iterable.connection!;
-						this.parse(object);
-
-						for (let i = 0; i < inputs.length; i++) {
-							const {connection} = inputs[i];
-							if (node.arguments[i]) {
-								this.connection = connection;
-								this.parse(node.arguments[i]);
-							}
-						}
-					} else if (object.type === "ThisExpression") {
-						if (property.type === "Identifier") {
-							if (property.name in blocks) {
-								const block = this.block(property.name);
-								const data = blocks[property.name as keyof typeof blocks];
-
-								if ("args0" in data) {
-									for (const i of data.args0) {
-										if (i.type === "input_value") {
-											this.connection = block.getInput(i.name)!.connection!;
-											this.parse(node.arguments.shift()!);
-										}
-									}
-								}
-
-								if (!("previousStatement" in data)) {
-									const arg = node.arguments.shift();
-
-									if (arg?.type === "FunctionExpression") {
-										this.connection = block.nextConnection;
-										this.parse(arg.body);
-									}
-								}
-
-								this.connection = block.nextConnection;
-							} else {
-								throw new SyntaxError(`Method ${property.name} is not defined`);
-							}
+					if (this.isProperty(node.callee, ["reverse", "includes", "indexOf", "slice"])) {
+						const block = this.block(this.getPropertyContents(node.callee.property));
+						this.connection = block.getInput("ITERABLE")!.connection!;
+						this.parse(node.callee);
+						this.parseArguments(block, node.arguments);
+					} else if (node.callee.object.type === "ThisExpression" && this.isProperty(node.callee, allBlocks)) {
+						const block = this.block(this.getPropertyContents(node.callee.property));
+						this.parseArguments(block, node.arguments);
+					} else if (this.isIdentifier(node.callee.object, "Math")) {
+						if (
+							this.isProperty(node.callee, [
+								"abs",
+								"floor",
+								"round",
+								"ceil",
+								"sqrt",
+								"sin",
+								"cos",
+								"tan",
+								"asin",
+								"acos",
+								"atan",
+								"log",
+								"log10",
+								"exp",
+							])
+						) {
+							const block = this.block("math");
+							block.setFieldValue(this.getPropertyContents(node.callee.property), "OP");
+							this.connection = block.getInput("NUM")!.connection!;
+							this.parse(node.arguments[0]);
+						} else if (this.isProperty(node.callee, ["random"])) {
+							this.block("random");
 						} else {
-							throw new SyntaxError("Only simple identifiers are supported");
+							throw new SyntaxError("Unsupported Math function");
 						}
-					} else if (object.type === "Identifier") {
-						switch (object.name) {
-							case "Math":
-							case "Color": {
-								if (property.type === "Identifier") {
-									if (property.name in blocks) {
-										const block = this.block(property.name);
-										const data = blocks[property.name as keyof typeof blocks];
+					} else if (this.isIdentifier(node.callee.object, "Color")) {
+						if (this.isProperty(node.callee, ["fromHex"])) {
+							const [arg] = node.arguments;
 
-										if ("args0" in data) {
-											for (const i of data.args0) {
-												if (i.type === "input_value") {
-													this.connection = block.getInput(i.name)!.connection!;
-													this.parse(node.arguments.shift()!);
-												}
-											}
-										}
-										break;
-									} else {
-										throw new SyntaxError("Unsupported function");
-									}
-								} else {
-									throw new SyntaxError("Only simple identifiers are supported");
-								}
+							if (arg.type !== "StringLiteral") {
+								throw new SyntaxError("Only string literals are supported for Color.fromHex");
 							}
-							default:
-								throw new SyntaxError("Only Math and Color are supported");
+
+							const block = this.block("color");
+							block.setFieldValue(arg.value, "COLOR");
+						} else if (this.isProperty(node.callee, ["fromRGB"])) {
+							const block = this.block("color");
+							this.connection = block.getInput("RED")!.connection!;
+							this.parse(node.arguments[0]);
+
+							this.connection = block.getInput("GREEN")!.connection!;
+							this.parse(node.arguments[1]);
+
+							this.connection = block.getInput("BLUE")!.connection!;
+							this.parse(node.arguments[2]);
 						}
 					}
+				} else if (this.isIdentifier(node.callee, "String")) {
+					const block = this.block("string");
+					this.connection = block.getInput("VALUE")!.connection!;
+					this.parse(node.arguments[0]);
 				} else if (node.callee.type === "Identifier") {
-					switch (node.callee.name) {
-						case "String": {
-							const block = this.block("string");
-							this.connection = block.getInput("VALUE")!.connection!;
-							this.parse(node.arguments.shift()!);
-							break;
-						}
-						default: {
-							if (this.functions.has(node.callee.name)) {
-								const block = this.block("call");
+					if (this.functions.has(node.callee.name)) {
+						const block = this.block("call");
 
-								block.loadExtraState!(this.functions.get(node.callee.name));
-								let i = 0;
-								for (const arg of node.arguments) {
-									this.connection = block.getInput(`PARAM_${i}`)!.connection!;
-									this.parse(arg);
-									i++;
-								}
-							} else {
-								throw new SyntaxError(`Function ${node.callee.name} is not defined`);
-							}
+						block.loadExtraState!(this.functions.get(node.callee.name));
+						let i = 0;
+						for (const arg of node.arguments) {
+							this.connection = block.getInput(`PARAM_${i}`)!.connection!;
+							this.parse(arg);
+							i++;
 						}
+					} else {
+						throw new SyntaxError(`Function ${node.callee.name} is not defined`);
 					}
 				}
-
 				break;
 			}
 			case "MemberExpression": {
 				const {object, property} = node;
+
 				if (property.type !== "Identifier" && property.type !== "StringLiteral") {
 					const block = this.block("item");
 					this.connection = block.getInput("INDEX")!.connection!;
@@ -535,22 +564,14 @@ export default class CodeParser {
 
 					this.connection = block.getInput("ITERABLE")!.connection!;
 					this.parse(object);
-				} else if (property.type === "Identifier" && property.name === "length") {
+				} else if (this.isIdentifier(property, "length")) {
 					const block = this.block("length");
 					this.connection = block.getInput("VALUE")!.connection!;
 					this.parse(object);
-				} else if (object.type === "ThisExpression") {
-					if (property.type === "Identifier") {
-						if (property.name in blocks) {
-							this.block(property.name);
-						}
-					}
+				} else if (object.type === "ThisExpression" && this.isProperty(node, allBlocks)) {
+					this.block(this.getPropertyContents(property));
 				} else if (object.type === "MemberExpression") {
-					if (
-						object.object.type === "ThisExpression" &&
-						object.property.type === "Identifier" &&
-						object.property.name === "effects"
-					) {
+					if (object.object.type === "ThisExpression" && this.isProperty(object, ["effects"])) {
 						const block = this.block("getEffect");
 						this.connection = block.getInput("EFFECT")!.connection!;
 						if (property.type === "Identifier") {
@@ -561,18 +582,20 @@ export default class CodeParser {
 							this.parse(property);
 						}
 					}
-					if (
-						property.type === "Identifier" &&
-						object.property.type === "Identifier" &&
-						object.property.name === "effects"
-					) {
+					if (property.type === "Identifier" && object.property.type === "Identifier" && object.property.name === "effects") {
 						const block = this.block("property");
 						block.setFieldValue(`effects.${property.name}`, "PROPERTY");
 						this.connection = block.getInput("SPRITE")!.connection!;
 						this.parse(object.object);
 					}
 				} else if (object.type === "Identifier") {
-					if (this.entities.some(n => object.name === n.name)) {
+					if (object.name === "Math") {
+						if (this.isProperty(node, ["PI", "E"])) {
+							this.block("constant").setFieldValue("Math." + this.getPropertyContents(property), "CONSTANT");
+						} else {
+							throw new SyntaxError("Unsupported Math constant");
+						}
+					} else if (this.entities.some(n => object.name === n.name)) {
 						if (property.type === "Identifier") {
 							const block = this.block("property");
 							block.setFieldValue(property.name, "PROPERTY");
@@ -707,10 +730,6 @@ export default class CodeParser {
 
 				break;
 			}
-			case "ImportDeclaration":
-				if (node.source.value === "scrap-engine") {
-					break;
-				}
 			default:
 				throw new SyntaxError(`Unsupported node type ${node.type}. ${Error}`);
 		}

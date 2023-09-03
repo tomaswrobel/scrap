@@ -1,5 +1,5 @@
 import * as Blockly from "blockly/core";
-import {Generator} from "../../blockly/utils/generator";
+import {Generator} from "../../blockly";
 import JSZip from "jszip";
 import fs from "fs";
 import "./entity.scss";

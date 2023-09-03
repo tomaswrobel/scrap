@@ -1,6 +1,4 @@
-import * as stage from "../../blockly/data/stage.json";
-import * as sprite from "../../blockly/data/sprite.json";
-import * as theme from "../../blockly/data/theme.json";
+import {stage, sprite, theme, plugins} from "../../blockly";
 import {Stage, type Entity} from "../entities";
 import * as Blockly from "blockly/core";
 import Component from "../tab";
@@ -24,7 +22,7 @@ export default class Workspace implements Component {
 			renderer: "zelos",
 			toolbox: {
 				kind: "categoryToolbox",
-				contents: [],
+				contents:  entity instanceof Stage ? stage : sprite,
 			},
 			media: "blockly-media/",
 			zoom: {
@@ -33,40 +31,7 @@ export default class Workspace implements Component {
 			trashcan: false,
 			oneBasedIndex: false,
 			disable: false,
-		});
-
-		this.workspace.registerToolboxCategoryCallback("FUNCTIONS", workspace => {
-			const blockList: Blockly.utils.toolbox.FlyoutItemInfoArray = [
-				{
-					kind: "block",
-					type: "function",
-				},
-				{
-					kind: "block",
-					type: "function",
-					extraState: {
-						returnType: "Iterator",
-						params: [],
-						name: "generator",
-					},
-				},
-				{
-					kind: "block",
-					type: "return",
-				},
-				{
-					kind: "block",
-					type: "yield",
-				},
-			];
-			for (const block of workspace.getBlocksByType("function", false)) {
-				blockList.push({
-					kind: "block",
-					type: "call",
-					extraState: block.saveExtraState!(),
-				});
-			}
-			return blockList;
+			plugins
 		});
 
 		this.workspace.addChangeListener(e => {
@@ -77,7 +42,8 @@ export default class Workspace implements Component {
 			(this.entity || entity).workspace = Blockly.serialization.workspaces.save(this.workspace);
 		});
 
-		this.update(entity);
+		this.entity = entity;
+		Blockly.serialization.workspaces.load(entity.workspace, this.workspace);
 	}
 	update(entity: Entity) {
 		const contents = entity instanceof Stage ? stage : sprite;

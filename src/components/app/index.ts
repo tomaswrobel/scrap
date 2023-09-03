@@ -10,8 +10,7 @@ import fs from "fs";
 import "./app.scss";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
-import Swal from "sweetalert2";
-import {Generator} from "../../blockly/utils/generator";
+import {Generator} from "../../blockly";
 import CodeParser from "../code/parser";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
@@ -70,11 +69,7 @@ export class App {
 						try {
 							await parser.codeToBlock(this.current.code);
 						} catch (e) {
-							await Swal.fire({
-								title: "Compilation Error",
-								text: String(e),
-								icon: "error",
-							});
+							window.alert(e);
 							return;
 						}
 						this.current.code = "";
@@ -110,17 +105,6 @@ export class App {
 
 		this.workspace.render(this.current, this.container);
 
-		this.workspace.workspace.addChangeListener(e => {
-			// Check for variable changes
-			if (
-				e.type === Blockly.Events.VAR_CREATE ||
-				e.type === Blockly.Events.VAR_DELETE ||
-				e.type === Blockly.Events.VAR_RENAME
-			) {
-				this.updateVariables();
-			}
-		});
-
 		this.output.addEventListener("load", async () => {
 			const document = this.output.contentDocument!;
 
@@ -135,11 +119,7 @@ export class App {
 
 				script.textContent = code;
 			} catch (e) {
-				await Swal.fire({
-					title: "Compilation Error",
-					text: String(e),
-					icon: "error",
-				});
+				window.alert(e);
 			}
 			document.body.appendChild(script);
 		});
@@ -226,22 +206,9 @@ export class App {
 		});
 	}
 
-	updateVariables() {
-		const models = this.workspace.workspace.getVariableMap().getAllVariables();
-
-		for (const sprite of this.entities) {
-			if (sprite !== this.current) {
-				sprite.updateVariables(models);
-			}
-		}
-	}
-
 	addSprite(sprite: Sprite) {
-		if (this.workspace.workspace) {
-			this.updateVariables();
-		}
-
 		const element = sprite.render(this.spritePanel);
+		sprite.codeWorkspace.newBlock("whenLoaded");
 
 		const select = () => {
 			this.stagePanel.classList.remove("selected");
@@ -305,7 +272,7 @@ export class App {
 		zip.file(
 			"index.html",
 			`<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>Scrap Project</title>
 	<meta charset="utf-8">

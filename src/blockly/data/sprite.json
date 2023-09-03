@@ -421,6 +421,10 @@
                 }
             },
             {
+                "kind": "block",
+                "type": "hex"
+            },
+            {
                 "kind": "sep",
                 "gap": 40
             },
@@ -478,6 +482,10 @@
         "contents": [
             {
                 "kind": "block",
+                "type": "whenLoaded"
+            },
+            {
+                "kind": "block",
                 "type": "whenFlag"
             },
             {
@@ -493,7 +501,14 @@
             },
             {
                 "kind": "block",
-                "type": "whenEvent"
+                "type": "whenMouse",
+                "inputs": {
+                    "EVENT": {
+                        "shadow": {
+                            "type": "event"
+                        }
+                    }
+                }
             },
             {
                 "kind": "block",
@@ -1060,6 +1075,25 @@
             },
             {
                 "kind": "block",
+                "type": "math",
+                "inputs": {
+                    "NUM": {
+                        "shadow": {
+                            "type": "math_number"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "random"
+            },
+            {
+                "kind": "block",
+                "type": "constant"
+            },
+            {
+                "kind": "block",
                 "type": "string"
             }
         ]
@@ -1069,10 +1103,6 @@
         "name": "Iterables",
         "categorystyle": "iterables",
         "contents": [
-            {
-                "kind": "label",
-                "text": "Strings & Arrays"
-            },
             {
                 "kind": "block",
                 "type": "iterables_string"
@@ -1155,5 +1185,33 @@
         "categorystyle": "variable_category",
         "custom": "VARIABLE",
         "name": "Variables"
+    },
+    {
+        "kind": "category",
+        "name": "Functions",
+        "categorystyle": "procedure_category",
+        "contents": [
+            {
+                "kind": "block",
+                "type": "function"
+            },
+            {
+                "kind": "block",
+                "type": "function",
+                "extraState": {
+                    "returnType": "Iterator",
+                    "params": [],
+                    "name": "generator"
+                }
+            },
+            {
+                "kind": "block",
+                "type": "return"
+            },
+            {
+                "kind": "block",
+                "type": "yield"
+            }
+        ]
     }
 ]

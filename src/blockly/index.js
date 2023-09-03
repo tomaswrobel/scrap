@@ -7,7 +7,7 @@ import "@blockly/field-color";
 import * as En from "blockly/msg/en";
 
 import blocksData from "./data/blocks.json";
-import {Generator, Order} from "./utils/generator.ts";
+import {Generator, Order} from "./generator";
 
 for (const block in blocks) {
 	Blockly.Blocks[block] = blocks[block].default;
@@ -18,43 +18,45 @@ for (const field in fields) {
 }
 
 for (const mutator in mutators) {
-	Blockly.Extensions.registerMutator(mutator, mutators[mutator].MIXIN, undefined, mutators[mutator].blocks);
+	Blockly.Extensions.registerMutator(
+		mutator,
+		mutators[mutator].MIXIN,
+		undefined,
+		mutators[mutator].blocks
+	);
 }
 
 Blockly.setLocale(En);
 
 const def = [];
 
+/** @type {string[]} */
+const allBlocks = [];
+
 for (const type in blocksData) {
+	allBlocks.push(type);
+
 	def.push({
 		type,
 		...blocksData[type],
 	});
 
 	const args0 = blocksData[type].args0;
-	const isEvent = !("output" in blocksData[type] || "previousStatement" in blocksData[type]);
+	const isEvent = !(
+		"output" in blocksData[type] || "previousStatement" in blocksData[type]
+	);
 
 	if (!(type in Generator.blocks)) {
 		Generator.blocks[type] = function (block, generator) {
 			let code = `this.${type}`;
 
 			if (args0 || isEvent) {
-				const args = [];
-
-				for (const input of args0 || []) {
-					if (input.type === "input_value") {
-						const value = generator.valueToCode(block, input.name, Order.NONE) || "null";
-						args.push(value);
-					}
-					if (input.type === "input_dummy") {
-						const value = block.getFieldValue("NAME");
-						args.push(value);
-					}
-					if (input.type.startsWith("field_")) {
-						const value = JSON.stringify(block.getFieldValue(input.name));
-						args.push(value);
-					}
-				}
+				const args = (args0 || []).map(input => {
+					return (
+						generator.valueToCode(block, input.name, Order.NONE) ||
+						"null"
+					);
+				});
 
 				if (isEvent) {
 					let arg = "function () {";
@@ -66,13 +68,20 @@ for (const type in blocksData) {
 					const next = block.getNextBlock();
 
 					if (next) {
-						arg += "\n" + generator.prefixLines(generator.blockToCode(next), generator.INDENT);
+						arg +=
+							"\n" +
+							generator.prefixLines(
+								generator.blockToCode(next),
+								generator.INDENT
+							);
 					}
 
 					args.push(arg + "}");
 				}
 
-				code = `${!generator.entity || isEvent ? "" : "await "}${code}(${args.join(", ")})`;
+				code = `${
+					!generator.entity || isEvent ? "" : "await "
+				}${code}(${args.join(", ")})`;
 			}
 
 			if (block.outputConnection) {
@@ -83,60 +92,6 @@ for (const type in blocksData) {
 		};
 	}
 }
-
-class ContinuousCategory extends Blockly.ToolboxCategory {
-	/**
-	 * Constructor for ContinuousCategory which is used in ContinuousToolbox.
-	 * @override
-	 */
-	constructor(categoryDef, toolbox) {
-		super(categoryDef, toolbox);
-	}
-
-	/** @override */
-	createLabelDom_(name) {
-		const label = document.createElement("div");
-		label.setAttribute("id", this.getId() + ".label");
-		label.textContent = name;
-		label.classList.add(this.cssConfig_["label"]);
-		return label;
-	}
-
-	/** @override */
-	createIconDom_() {
-		const icon = document.createElement("div");
-		icon.classList.add("categoryBubble");
-		icon.style.backgroundColor = this.colour_;
-		return icon;
-	}
-
-	/** @override */
-	addColourBorder_() {
-		// No-op
-	}
-
-	/** @override */
-	setSelected(isSelected) {
-		if (isSelected) {
-			Blockly.utils.dom.addClass(this.rowDiv_, this.cssConfig_["selected"]);
-		} else {
-			this.rowDiv_.style.backgroundColor = "";
-			Blockly.utils.dom.removeClass(this.rowDiv_, this.cssConfig_["selected"]);
-		}
-		Blockly.utils.aria.setState(
-			/** @type {!Element} */ this.htmlDiv_,
-			Blockly.utils.aria.State.SELECTED,
-			isSelected
-		);
-	}
-}
-
-Blockly.registry.register(
-	Blockly.registry.Type.TOOLBOX_ITEM,
-	Blockly.ToolboxCategory.registrationName,
-	ContinuousCategory,
-	true
-);
 
 Blockly.Extensions.register("parent_style", function () {
 	this.onchange = () => {
@@ -161,3 +116,11 @@ Blockly.FlyoutButton.TEXT_MARGIN_X = 20;
 Blockly.FlyoutButton.TEXT_MARGIN_Y = 10;
 
 Blockly.defineBlocksWithJsonArray(def);
+
+export * as sprite from "./data/sprite.json";
+export * as stage from "./data/stage.json";
+export * as theme from "./data/theme.json";
+export * from "./utils/types.ts";
+
+export {default as plugins} from "./toolbox";
+export {allBlocks, Generator, Order};

@@ -515,13 +515,23 @@
         "output": "Color",
         "style": "Pen"
     },
+    "hex": {
+        "message0": "# %1",
+        "args0": [
+            {
+                "type": "field_hex",
+                "name": "COLOR"
+            }
+        ],
+        "output": "Color",
+        "style": "Pen"
+    },
     "math_number": {
         "message0": "%1",
         "args0": [
             {
                 "type": "field_number",
-                "name": "NUM",
-                "value": 0
+                "name": "NUM"
             }
         ],
         "output": "Number",
@@ -534,8 +544,7 @@
             {
                 "type": "input_value",
                 "name": "STEPS",
-                "check": "Number",
-                "value": 10
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -549,8 +558,7 @@
             {
                 "type": "input_value",
                 "name": "DEGREES",
-                "check": "Number",
-                "value": 15
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -564,8 +572,7 @@
             {
                 "type": "input_value",
                 "name": "DEGREES",
-                "check": "Number",
-                "value": 15
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -579,8 +586,7 @@
             {
                 "type": "input_value",
                 "name": "DIRECTION",
-                "check": "Number",
-                "value": 90
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -641,8 +647,7 @@
             {
                 "type": "input_value",
                 "name": "SECS",
-                "check": "Number",
-                "value": 1
+                "check": "Number"
             },
             {
                 "type": "input_value",
@@ -666,8 +671,7 @@
             {
                 "type": "input_value",
                 "name": "X",
-                "check": "Number",
-                "value": 10
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -695,8 +699,7 @@
             {
                 "type": "input_value",
                 "name": "Y",
-                "check": "Number",
-                "value": 10
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -736,14 +739,12 @@
             {
                 "type": "input_value",
                 "name": "MESSAGE",
-                "check": "String",
-                "value": "Hello!"
+                "check": "String"
             },
             {
                 "type": "input_value",
                 "name": "SECS",
-                "check": "Number",
-                "value": 2
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -757,8 +758,7 @@
             {
                 "type": "input_value",
                 "name": "MESSAGE",
-                "check": "String",
-                "value": "Hello!"
+                "check": "String"
             }
         ],
         "nextStatement": null,
@@ -772,14 +772,12 @@
             {
                 "type": "input_value",
                 "name": "MESSAGE",
-                "check": "String",
-                "value": "Hello!"
+                "check": "String"
             },
             {
                 "type": "input_value",
                 "name": "SECS",
-                "check": "Number",
-                "value": 2
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -793,8 +791,7 @@
             {
                 "type": "input_value",
                 "name": "MESSAGE",
-                "check": "String",
-                "value": "Hello!"
+                "check": "String"
             }
         ],
         "nextStatement": null,
@@ -813,8 +810,7 @@
             {
                 "type": "input_value",
                 "name": "CHANGE",
-                "check": "Number",
-                "value": 25
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -833,8 +829,7 @@
             {
                 "type": "input_value",
                 "name": "CHANGE",
-                "check": "Number",
-                "value": 100
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -848,8 +843,7 @@
             {
                 "type": "input_value",
                 "name": "COSTUME",
-                "check": "Number",
-                "value": 1
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -960,20 +954,17 @@
             {
                 "type": "input_value",
                 "name": "RED",
-                "check": "Number",
-                "value": 255
+                "check": "Number"
             },
             {
                 "type": "input_value",
                 "name": "GREEN",
-                "check": "Number",
-                "value": 255
+                "check": "Number"
             },
             {
                 "type": "input_value",
                 "name": "BLUE",
-                "check": "Number",
-                "value": 255
+                "check": "Number"
             }
         ],
         "output": "Color",
@@ -1045,6 +1036,12 @@
         "previousStatement": null,
         "style": "Pen"
     },
+    "whenLoaded": {
+        "inputsInline": true,
+        "message0": "when loaded",
+        "nextStatement": null,
+        "style": "Events"
+    },
     "whenFlag": {
         "inputsInline": true,
         "message0": "when flag clicked",
@@ -1064,9 +1061,8 @@
         "nextStatement": null,
         "style": "Events"
     },
-    "whenEvent": {
-        "inputsInline": true,
-        "message0": "when mouse %1",
+    "event": {
+        "message0": "%1",
         "args0": [
             {
                 "type": "field_dropdown",
@@ -1074,33 +1070,46 @@
                 "options": [
                     [
                         "clicked",
-                        "click"
+                        "clicked"
                     ],
                     [
                         "double-clicked",
-                        "dblclick"
+                        "double-clicked"
                     ],
                     [
-                        "down",
-                        "mousedown"
+                        "pressed",
+                        "pressed"
                     ],
                     [
-                        "up",
-                        "mouseup"
+                        "released",
+                        "released"
+                    ],
+                    [
+                        "left",
+                        "left"
+                    ],
+                    [
+                        "entered",
+                        "entered"
                     ],
                     [
                         "moved",
-                        "mousemove"
-                    ],
-                    [
-                        "enter",
-                        "mouseenter"
-                    ],
-                    [
-                        "leave",
-                        "mouseleave"
+                        "moved"
                     ]
                 ]
+            }
+        ],
+        "output": "String",
+        "style": "Events"
+    },
+    "whenMouse": {
+        "inputsInline": true,
+        "message0": "when mouse %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "check": "String",
+                "name": "EVENT"
             }
         ],
         "nextStatement": null,
@@ -1113,8 +1122,7 @@
             {
                 "type": "input_value",
                 "check": "String",
-                "name": "MESSAGE",
-                "value": "message"
+                "name": "MESSAGE"
             }
         ],
         "nextStatement": null,
@@ -1127,8 +1135,7 @@
             {
                 "type": "input_value",
                 "check": "String",
-                "name": "MESSAGE",
-                "value": "message"
+                "name": "MESSAGE"
             }
         ],
         "nextStatement": null,
@@ -1142,8 +1149,7 @@
             {
                 "type": "input_value",
                 "check": "String",
-                "name": "MESSAGE",
-                "value": "message"
+                "name": "MESSAGE"
             }
         ],
         "nextStatement": null,
@@ -1157,8 +1163,7 @@
             {
                 "type": "input_value",
                 "name": "SECS",
-                "check": "Number",
-                "value": 1
+                "check": "Number"
             }
         ],
         "nextStatement": null,
@@ -1172,8 +1177,7 @@
             {
                 "type": "input_value",
                 "name": "TIMES",
-                "check": "Number",
-                "value": 10
+                "check": "Number"
             }
         ],
         "message1": "%1",
@@ -1379,8 +1383,7 @@
             {
                 "type": "input_value",
                 "name": "QUESTION",
-                "check": "String",
-                "value": "What's your name?"
+                "check": "String"
             }
         ],
         "output": "String",
@@ -1475,8 +1478,7 @@
             {
                 "type": "input_value",
                 "name": "A",
-                "check": "Number",
-                "value": 10
+                "check": "Number"
             },
             {
                 "type": "field_dropdown",
@@ -1511,8 +1513,7 @@
             {
                 "type": "input_value",
                 "name": "B",
-                "check": "Number",
-                "value": 10
+                "check": "Number"
             }
         ],
         "output": "Number",
@@ -1639,6 +1640,112 @@
         "output": "Boolean",
         "style": "Operators"
     },
+    "random": {
+        "message0": "random",
+        "output": "Number",
+        "style": "Operators"
+    },
+    "math": {
+        "inputsInline": true,
+        "message0": "%1 of %2",
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "OP",
+                "options": [
+                    [
+                        "abs",
+                        "abs"
+                    ],
+                    [
+                        "floor",
+                        "floor"
+                    ],
+                    [
+                        "ceiling",
+                        "ceil"
+                    ],
+                    [
+                        "sqrt",
+                        "sqrt"
+                    ],
+                    [
+                        "sin",
+                        "sin"
+                    ],
+                    [
+                        "cos",
+                        "cos"
+                    ],
+                    [
+                        "tan",
+                        "tan"
+                    ],
+                    [
+                        "asin",
+                        "asin"
+                    ],
+                    [
+                        "acos",
+                        "acos"
+                    ],
+                    [
+                        "atan",
+                        "atan"
+                    ],
+                    [
+                        "ln",
+                        "log"
+                    ],
+                    [
+                        "log",
+                        "log10"
+                    ],
+                    [
+                        "e ^",
+                        "exp"
+                    ]
+                ]
+            },
+            {
+                "type": "input_value",
+                "name": "NUM",
+                "check": "Number"
+            }
+        ],
+        "output": "Number",
+        "style": "Operators"
+    },
+    "constant": {
+        "inputsInline": true,
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_dropdown",
+                "name": "CONSTANT",
+                "options": [
+                    [
+                        "π",
+                        "Math.PI"
+                    ],
+                    [
+                        "e",
+                        "Math.E"
+                    ],
+                    [
+                        "∞",
+                        "Infinity"
+                    ],
+                    [
+                        "NaN",
+                        "NaN"
+                    ]
+                ]
+            }
+        ],
+        "output": "Number",
+        "style": "Operators"
+    },
     "string": {
         "inputsInline": true,
         "message0": "convert %1 to string",
@@ -1687,7 +1794,8 @@
                 "type": "input_value",
                 "check": [
                     "String",
-                    "Array"
+                    "Array",
+                    "Iterator"
                 ]
             }
         ],
@@ -1703,7 +1811,8 @@
                 "type": "input_value",
                 "check": [
                     "String",
-                    "Array"
+                    "Array",
+                    "Iterator"
                 ]
             }
         ],
@@ -1722,7 +1831,8 @@
                 "name": "ITERABLE",
                 "check": [
                     "String",
-                    "Array"
+                    "Array",
+                    "Iterator"
                 ]
             },
             {
@@ -1742,7 +1852,8 @@
                 "name": "ITERABLE",
                 "check": [
                     "String",
-                    "Array"
+                    "Array",
+                    "Iterator"
                 ]
             },
             {
@@ -1753,8 +1864,7 @@
             {
                 "type": "input_value",
                 "name": "TO",
-                "check": "Number",
-                "value": 2
+                "check": "Number"
             }
         ],
         "output": [
@@ -1770,15 +1880,15 @@
             {
                 "type": "input_value",
                 "name": "INDEX",
-                "check": "Number",
-                "value": 0
+                "check": "Number"
             },
             {
                 "type": "input_value",
                 "name": "ITERABLE",
                 "check": [
                     "String",
-                    "Array"
+                    "Array",
+                    "Iterator"
                 ]
             }
         ],
@@ -1794,7 +1904,8 @@
                 "name": "ITERABLE",
                 "check": [
                     "String",
-                    "Array"
+                    "Array",
+                    "Iterator"
                 ]
             },
             {
@@ -1820,8 +1931,7 @@
                 "check": [
                     "String",
                     "Array",
-                    "Iterator",
-                    null
+                    "Iterator"
                 ]
             }
         ],
