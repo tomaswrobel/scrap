@@ -36,7 +36,7 @@ export default class Code implements TabComponent {
 
 	render(entity: Entity, parent: HTMLElement) {
 		parent.append(this.container, this.textarea);
-		this.entity = entity;
+		this.update(entity);
 	}
 
 	update(entity: Entity) {
