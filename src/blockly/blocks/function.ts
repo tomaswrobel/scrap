@@ -2,26 +2,8 @@ import * as Blockly from "blockly/core";
 import {Types} from "../utils/types";
 import ProcedureEvent from "../events/procedure";
 import ProcedureBlock from "../utils/procedure_block";
-
-class TypeField extends Blockly.FieldDropdown {
-	constructor() {
-		super(
-			Types.map(type => [type || "void", type] as [string, string]),
-			function (this: Blockly.FieldDropdown, s: string) {
-				const block = this.getSourceBlock() as ProcedureBlock;
-
-				block.workspace.fireChangeListener(
-					new ProcedureEvent(block.getFieldValue("NAME"), {
-						...block.saveExtraState!(),
-						returnType: s,
-					})
-				);
-
-				return s;
-			}
-		);
-	}
-}
+import TypeField from "../fields/field_type";
+import FieldFuncName from "../fields/field_func_name";
 
 export default <Partial<ProcedureBlock>>{
 	params: [],
@@ -33,20 +15,9 @@ export default <Partial<ProcedureBlock>>{
 		this.setStyle("procedure_blocks");
 		this.setCommentText("Describe this function...");
 		this.appendDummyInput("DUMMY")
-			.appendField(
-				new TypeField(),
-				"TYPE"
-			)
+			.appendField(new TypeField(), "TYPE")
 			.appendField("function", "label")
-			.appendField(
-				new Blockly.FieldTextInput("foo", s => {
-					this.workspace.fireChangeListener(
-						new ProcedureEvent(this.getFieldValue("NAME"), {...this.saveExtraState!(), name: s})
-					);
-					return s;
-				}),
-				"NAME"
-			);
+			.appendField(new FieldFuncName("foo"), "NAME");
 		this.setMutator(
 			new Blockly.icons.MutatorIcon(
 				Types.map(type => "function_param_" + type),
@@ -128,5 +99,5 @@ export default <Partial<ProcedureBlock>>{
 		}
 
 		this.workspace.fireChangeListener(new ProcedureEvent(this.getFieldValue("NAME"), this.saveExtraState!()));
-	}
+	},
 };
