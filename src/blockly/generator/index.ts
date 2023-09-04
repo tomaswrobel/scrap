@@ -47,7 +47,7 @@ class Generator extends Blockly.CodeGenerator {
 	constructor(readonly entity?: Entity, readonly useBlobURLs = true) {
 		// ScrapScript is a ES5 subset.
 		// However it supports ES2015
-		// iterators and generators.
+		// iterables and for-of loops.
 		super("ScrapScript");
 		this.isInitialized = false;
 
@@ -366,11 +366,7 @@ Generator.blocks.function = function (block: ProcedureBlock, generator) {
 		code += ` * @param {${param.type || "*"}} ${param.name}\n`;
 	}
 
-	if (block.isGenerator) {
-		code += " */\n";
-	} else {
-		code += ` * @returns {${type || "void"}}\n */\n`;
-	}
+	code += ` * @returns {${type || "void"}}\n */\n`;
 
 	if (generator.entity) {
 		code += "async ";
@@ -382,14 +378,7 @@ Generator.blocks.function = function (block: ProcedureBlock, generator) {
 		code += generator.prefixLines(generator.blockToCode(nextBlock) as string, generator.INDENT);
 	}
 
-	code += "}\n";
-
-	if (generator.entity && block.isGenerator) {
-		code = `async function ${name}(...args) {\n\tconst result = [];\n\n${generator.prefixLines(code, generator.INDENT)}`;
-		code += `\n\n\nfor await (const value of ${name}.apply(this, args)) {\n\tresult.push(value);\n}\n\n\n\treturn result;\n}\n`;
-	}
-
-	generator.setDefinition("%" + name, code);
+	generator.setDefinition("%" + name, code + "}\n");
 	return null;
 };
 
@@ -420,10 +409,6 @@ Generator.blocks.return = function (block: Blockly.Block, generator) {
 	} else {
 		return "return;\n";
 	}
-};
-
-Generator.blocks.yield = function (block: Blockly.Block, generator) {
-	return `yield ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
 };
 
 Generator.blocks.arithmetics = function (block: Blockly.Block, generator) {

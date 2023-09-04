@@ -7,7 +7,6 @@ import FieldFuncName from "../fields/field_func_name";
 
 export default <Partial<ProcedureBlock>>{
 	params: [],
-	isGenerator: false,
 
 	init(this: ProcedureBlock) {
 		this.inputsInline = true;
@@ -29,7 +28,7 @@ export default <Partial<ProcedureBlock>>{
 	saveExtraState(this: ProcedureBlock) {
 		return {
 			name: this.getFieldValue("NAME"),
-			returnType: this.isGenerator ? "Iterator" : this.getFieldValue("TYPE"),
+			returnType: this.getFieldValue("TYPE"),
 			params: this.params,
 		};
 	},
@@ -37,21 +36,12 @@ export default <Partial<ProcedureBlock>>{
 		this.params = state.params;
 		const input = this.getInput("DUMMY")!;
 		this.setFieldValue(state.name, "NAME");
-
-		if (state.returnType === "Iterator") {
-			this.isGenerator = true;
-			this.setFieldValue("function*", "label");
-			input.removeField("TYPE", true);
-		} else {
-			this.isGenerator = false;
-
-			if (!this.getField("TYPE")) {
-				input.insertFieldAt(0, new TypeField(), "TYPE");
-			}
-
-			this.setFieldValue("function", "label");
-			this.setFieldValue(state.returnType, "TYPE");
+		if (!this.getField("TYPE")) {
+			input.insertFieldAt(0, new TypeField(), "TYPE");
 		}
+
+		this.setFieldValue("function", "label");
+		this.setFieldValue(state.returnType, "TYPE");
 
 		this.updateShape();
 	},

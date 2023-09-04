@@ -1197,20 +1197,7 @@
             },
             {
                 "kind": "block",
-                "type": "function",
-                "extraState": {
-                    "returnType": "Iterator",
-                    "params": [],
-                    "name": "generator"
-                }
-            },
-            {
-                "kind": "block",
                 "type": "return"
-            },
-            {
-                "kind": "block",
-                "type": "yield"
             }
         ]
     }

@@ -62,20 +62,24 @@ export class App {
 			button.addEventListener("click", async () => {
 				if (this.activeTab === name) return;
 				if (name === "Blocks" || name === "Code") {
-					this.current.mode = name;
+					if (this.activeTab === "Blocks" || this.activeTab === "Code") {
+						this.current.mode = name;
 
-					if (name === "Blocks") {
-						const parser = new CodeParser(this.current.codeWorkspace, this.entities);
-						try {
-							await parser.codeToBlock(this.current.code);
-						} catch (e) {
-							window.alert(e);
-							return;
+						if (name === "Blocks") {
+							const parser = new CodeParser(this.current.codeWorkspace, this.entities);
+							try {
+								await parser.codeToBlock(this.current.code);
+							} catch (e) {
+								window.alert(e);
+								return;
+							}
+							this.current.code = "";
+						} else if (!this.current.code) {
+							this.current.code = this.generator.workspaceToCode(this.current.codeWorkspace);
+							this.current.workspace = {};
 						}
-						this.current.code = "";
 					} else {
-						this.current.code = this.generator.workspaceToCode(this.current.codeWorkspace);
-						this.current.workspace = {};
+						this.current.mode = name;
 					}
 				}
 				this.tabs.get(this.activeTab)!.dispose();

@@ -45,7 +45,7 @@ export default class CodeParser {
 
 	comments(block: Blockly.Block, node: Node) {
 		if (node.leadingComments) {
-			block.setCommentText(node.leadingComments.reduce((a, b) => a + b.value + "\n", ""));
+			block.setCommentText(node.leadingComments.reduce((a, b) => a + b.value + "\n", "").trim());
 		}
 	}
 
@@ -121,7 +121,10 @@ export default class CodeParser {
 				this.block("boolean").setFieldValue(node.value.toString(), "BOOL");
 				break;
 			case "ExpressionStatement":
-				this.parse(node.expression);
+				this.parse({
+					...node.expression,
+					leadingComments: node.leadingComments
+				});
 				break;
 			case "ReturnStatement": {
 				const block = this.block("return");
@@ -144,11 +147,6 @@ export default class CodeParser {
 				this.comments(this.block("break"), node);
 				this.connection = null;
 				break;
-			case "YieldExpression":
-				this.connection = this.block("yield").getInput("VALUE")!.connection!;
-				this.parse(node.argument!);
-				break;
-
 			case "VariableDeclaration": {
 				if (node.kind !== "var") {
 					throw new SyntaxError("Only var declarations are supported");
@@ -410,10 +408,6 @@ export default class CodeParser {
 					}
 				}
 
-				if (node.generator) {
-					returnType = "Iterator";
-				}
-
 				const block = this.block("function");
 
 				const extraState = {
@@ -482,6 +476,7 @@ export default class CodeParser {
 						this.parseArguments(block, node.arguments);
 					} else if (node.callee.object.type === "ThisExpression" && this.isProperty(node.callee, allBlocks)) {
 						const block = this.block(this.getPropertyContents(node.callee.property));
+						this.comments(block, node);
 						this.parseArguments(block, node.arguments);
 					} else if (this.isIdentifier(node.callee.object, "Math")) {
 						if (

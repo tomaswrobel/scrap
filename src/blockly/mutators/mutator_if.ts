@@ -215,4 +215,4 @@ export const MIXIN = {
 	},
 };
 
-export const blocks = ["controls_if_if", "controls_if_elseif"];
+export const blocks = ["controls_if_elseif", "controls_if_else"];

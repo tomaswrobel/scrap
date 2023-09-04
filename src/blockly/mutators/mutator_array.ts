@@ -91,7 +91,7 @@ export const MIXIN = {
 				input.appendField("create array with");
 			}
 			if (this.items[i] === "iterable") {
-				input.setCheck(["String", "Array", "Iterator"]);
+				input.setCheck(["String", "Array"]);
 				input.appendField("...");
 			}
 		}
