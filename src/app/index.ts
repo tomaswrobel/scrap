@@ -10,13 +10,14 @@ import fs from "fs";
 import "./app.scss";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
-import {Generator} from "../../blockly";
+import {Generator} from "../blockly";
 import CodeParser from "../code/parser";
+import Sound from "../sounds";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
 
-export class App {
+class App {
 	container = document.getElementById("app")!;
 	add = document.getElementById("add")!;
 
@@ -36,6 +37,7 @@ export class App {
 	buttons = new Map<string, HTMLButtonElement>();
 	activeTab = "Blocks";
 
+	sounds = new Sound(this);
 	workspace = new Workspace(this);
 	code = new Code(this);
 	paint = new Paint(this);
@@ -53,6 +55,7 @@ export class App {
 		this.tabs.set("Blocks", this.workspace);
 		this.tabs.set("Code", this.code);
 		this.tabs.set("Costumes", this.paint);
+		this.tabs.set("Sounds", this.sounds);
 
 		for (const [name, tab] of this.tabs) {
 			const button = document.createElement("button");
@@ -84,7 +87,11 @@ export class App {
 				}
 				this.tabs.get(this.activeTab)!.dispose();
 				this.activeTab = name;
-				this.tabBar.querySelector(".selected")?.classList.remove("selected");
+
+				for (const s of this.tabBar.getElementsByClassName("selected")) {
+					s.classList.remove("selected");
+				}
+
 				button.classList.add("selected");
 
 				tab.render(this.current, this.container);
@@ -100,7 +107,9 @@ export class App {
 
 		this.stagePanel.addEventListener("click", () => {
 			this.stagePanel.classList.add("selected");
-			this.spritePanel.querySelector(".selected")?.classList.remove("selected");
+			for (const s of this.spritePanel.getElementsByClassName("selected")) {
+				s.classList.remove("selected");
+			}
 			this.select(this.entities[0]);
 		});
 
@@ -174,7 +183,9 @@ export class App {
 		this.current = entity;
 		this.tabs.get(this.activeTab)!.dispose();
 		this.tabs.get(this.activeTab)!.render(this.current, this.container);
-		this.tabBar.querySelector(".selected")?.classList.remove("selected");
+		for (const s of this.tabBar.getElementsByClassName("selected")) {
+			s.classList.remove("selected");
+		}
 		this.buttons.get(this.activeTab)!.classList.add("selected");
 	}
 
@@ -208,6 +219,13 @@ export class App {
 			});
 			input.appendField(menu, "NAME");
 		});
+		Blockly.Extensions.register("sound_menu", function (this: Blockly.Block) {
+			const input = this.getInput("DUMMY")!;
+			const menu = new Blockly.FieldDropdown(() => {
+				return app.current.sounds.map<[string, string]>(e => [e.name, e.name]);
+			});
+			input.appendField(menu, "NAME");
+		});
 	}
 
 	addSprite(sprite: Sprite) {
@@ -216,7 +234,9 @@ export class App {
 
 		const select = () => {
 			this.stagePanel.classList.remove("selected");
-			this.spritePanel.querySelector(".selected")?.classList.remove("selected");
+			for (const s of this.spritePanel.getElementsByClassName("selected")) {
+				s.classList.remove("selected");
+			}
 			element.classList.add("selected");
 
 			this.select(sprite);
@@ -291,3 +311,6 @@ ${scripts.trimEnd()}
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
 	}
 }
+
+export type {App};
+export default new App();

@@ -1,15 +1,21 @@
 $primary: #4c97ff;
+$background: hsla(215, 100%, 95%, 1);
 
-.sprites {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 4px;
-    gap: 4px;
-    overflow-y: auto;
-    align-content: baseline;
+.media-list {
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	overflow-y: auto;
+	gap: 20px;
+    padding: 10px;
+    background: $background;
+
+    + .fab {
+        margin-bottom: 10px;
+    }
 }
 
-.sprite {
+.media-element {
     width: 90px;
     height: 90px;
     display: flex;
@@ -20,6 +26,8 @@ $primary: #4c97ff;
     > img {
         display: block;
         margin: auto;
+        max-width: 100%;
+        max-height: 100%;
     }
 
     .name {
@@ -27,6 +35,7 @@ $primary: #4c97ff;
         border-radius: 0 0 4px 4px;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     &.selected {
@@ -37,17 +46,5 @@ $primary: #4c97ff;
         > .name {
             background-color: $primary;
         }
-    }
-}
-
-.stage {
-    > img { 
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        border-radius: 8px;
-        width: 90%;
-        aspect-ratio: 480 / 360;
-        margin: auto;
-        display: block;
-        margin-top: 1em;
     }
 }

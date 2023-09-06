@@ -1,4 +1,4 @@
-import {stage, sprite, theme, plugins} from "../../blockly";
+import {stage, sprite, theme, plugins} from "../blockly";
 import {Stage, type Entity} from "../entities";
 import * as Blockly from "blockly/core";
 import Component from "../tab";

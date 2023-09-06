@@ -1,6 +1,6 @@
 import * as Blockly from "blockly/core";
 import {parse} from "doctrine";
-import {Types, Error, allBlocks} from "../../blockly";
+import {Types, Error, allBlocks} from "../blockly";
 import type {Entity} from "../entities";
 import {Identifier, type CallExpression, type MemberExpression, type Node, StringLiteral} from "@babel/types";
 

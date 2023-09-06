@@ -1,6 +1,5 @@
 import * as Blockly from "blockly/core";
 import {TypeToShadow, Types} from "../utils/types";
-import ProcedureEvent from "../events/procedure";
 
 export type CallExtraState = {
 	params?: {type: string}[];
@@ -73,12 +72,6 @@ export const MIXIN = {
 		this.name_ = state.name ?? "unnamed";
 
 		this.updateShape();
-	},
-
-	onchange(this: CallBlock, e: Blockly.Events.Abstract) {
-		if (e instanceof ProcedureEvent && e.extra.name === this.name_) {
-			this.loadExtraState!(e.extra);
-		}
 	},
 };
 

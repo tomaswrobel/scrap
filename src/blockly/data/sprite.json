@@ -383,6 +383,39 @@
     },
     {
         "kind": "category",
+        "name": "Sounds",
+        "categorystyle": "sounds",
+        "contents": [
+            {
+                "kind": "block",
+                "type": "playSound",
+                "inputs": {
+                    "SOUND": {
+                        "shadow": {
+                            "type": "sound"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "playSoundUntilDone",
+                "inputs": {
+                    "SOUND": {
+                        "shadow": {
+                            "type": "sound"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "stopSounds"
+            }
+        ]
+    },
+    {
+        "kind": "category",
         "name": "Pen",
         "categorystyle": "pen",
         "contents": [

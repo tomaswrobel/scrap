@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<div id="app">
-			<iframe width="480" data-mode="paced" height="360" name="output" src="src/components/output/index.html"></iframe>
+			<iframe width="480" data-mode="paced" height="360" name="output" src="src/output/index.html"></iframe>
 			<!-- Nav -->
 			<ul role="navigation">
 				<li>
@@ -51,8 +51,8 @@
 
 			<!-- Stage controls -->
 			<div id="buttons">
-				<a href="javascript:void(0)" id="play"><img src="src/images/flag.svg" alt="Play" /></a>
-				<a href="javascript:stop();" target="output"><img src="src/images/stop.svg" alt="Stop" /></a>
+				<a href="javascript:void(0)" id="play"><img src="src/app/flag.svg" alt="Play" /></a>
+				<a href="javascript:stop();" target="output"><img src="src/app/stop.svg" alt="Stop" /></a>
 			</div>
 
 			<!-- Sprite Bar -->
@@ -64,6 +64,6 @@
 				<span class="name">Stage</span>
 			</div>
 		</div>
-		<script type="module" src="src/index.ts"></script>
+		<script type="module" src="src/app/index.ts"></script>
 	</body>
 </html>

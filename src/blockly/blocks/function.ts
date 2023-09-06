@@ -1,9 +1,6 @@
 import * as Blockly from "blockly/core";
 import {Types} from "../utils/types";
-import ProcedureEvent from "../events/procedure";
 import ProcedureBlock from "../utils/procedure_block";
-import TypeField from "../fields/field_type";
-import FieldFuncName from "../fields/field_func_name";
 
 export default <Partial<ProcedureBlock>>{
 	params: [],
@@ -14,9 +11,9 @@ export default <Partial<ProcedureBlock>>{
 		this.setStyle("procedure_blocks");
 		this.setCommentText("Describe this function...");
 		this.appendDummyInput("DUMMY")
-			.appendField(new TypeField(), "TYPE")
+			.appendField(new Blockly.FieldDropdown(Types.map(type => [type || "void", type] as [string, string])), "TYPE")
 			.appendField("function", "label")
-			.appendField(new FieldFuncName("foo"), "NAME");
+			.appendField(new Blockly.FieldTextInput("foo"), "NAME");
 		this.setMutator(
 			new Blockly.icons.MutatorIcon(
 				Types.map(type => "function_param_" + type),
@@ -24,7 +21,6 @@ export default <Partial<ProcedureBlock>>{
 			)
 		);
 	},
-
 	saveExtraState(this: ProcedureBlock) {
 		return {
 			name: this.getFieldValue("NAME"),
@@ -37,7 +33,7 @@ export default <Partial<ProcedureBlock>>{
 		const input = this.getInput("DUMMY")!;
 		this.setFieldValue(state.name, "NAME");
 		if (!this.getField("TYPE")) {
-			input.insertFieldAt(0, new TypeField(), "TYPE");
+			input.insertFieldAt(0, new Blockly.FieldDropdown(Types.map(type => [type || "void", type] as [string, string])), "TYPE");
 		}
 
 		this.setFieldValue("function", "label");
@@ -87,7 +83,5 @@ export default <Partial<ProcedureBlock>>{
 				`PARAM_${i}`
 			);
 		}
-
-		this.workspace.fireChangeListener(new ProcedureEvent(this.getFieldValue("NAME"), this.saveExtraState!()));
 	},
 };

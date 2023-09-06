@@ -1,7 +1,7 @@
-import line from "../../images/line.svg";
-import pen from "../../images/pen.svg";
-import fill from "../../images/fill.svg";
-import eraser from "../../images/eraser.svg";
+import line from "./icons/line.svg";
+import pen from "./icons/pen.svg";
+import fill from "./icons/fill.svg";
+import eraser from "./icons/eraser.svg";
 
 /**
  * A tool that can be used to draw on the canvas.
@@ -63,6 +63,9 @@ export abstract class Tool {
 	}
 }
 
+/**
+ * A tool that draws a shape on the canvas
+ */
 export abstract class ShapeTool extends Tool {
 	/**
 	 * When true, shape will be outlined. Otherwise, it will be filled.

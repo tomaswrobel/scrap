@@ -2,15 +2,13 @@ $primary: #4c97ff;
 
 .paint {
 	display: grid;
-	padding: 20px;
 
-	grid-template-areas: 
-		"looks . controls"
-		"looks tools canvas"
-	;
+	grid-template-areas:
+		"costume . controls"
+		"costume tools canvas";
 	gap: 20px;
 
-	grid-template-columns: 90px 40px 1fr;
+	grid-template-columns: auto 40px 1fr;
 	grid-template-rows: 40px 1fr;
 
 	button {
@@ -22,13 +20,14 @@ $primary: #4c97ff;
 		justify-content: center;
 		align-items: center;
 		aspect-ratio: 1;
-		color: #575E75;
-		
+		color: #575e75;
+
 		&.selected {
 			background-color: $primary;
 			color: white;
 
-			svg, img {
+			svg,
+			img {
 				filter: brightness(0) invert(100%);
 			}
 		}
@@ -39,7 +38,7 @@ $primary: #4c97ff;
 .controls {
 	display: flex;
 	gap: 10px;
-    font-size: 18px;
+	font-size: 18px;
 }
 
 .tools {
@@ -50,7 +49,8 @@ $primary: #4c97ff;
 .controls {
 	grid-area: controls;
 	align-items: center;
-	align-content: center;
+	padding-top: 20px;
+	padding-right: 20px;
 }
 
 .canvas {
@@ -59,25 +59,18 @@ $primary: #4c97ff;
 	align-content: center;
 	justify-content: center;
 	background: #d3d3d3;
+	overflow: auto;
 
 	canvas {
 		&:first-child {
-			background-image: url(../../images/checkboard.svg);
+			background-image: url(checkboard.svg);
 		}
-		grid-area: 1 / 1 ;
+		grid-area: 1 / 1;
 	}
 }
 
 input[type="color"] {
+	margin: 10px 0;
 	height: 100%;
 	width: 100%;
-}
-
-.looks {
-	grid-area: looks;
-	display: flex;
-	flex-direction: column;
-	align-content: center;
-	overflow-y: auto;
-	gap: 20px;
 }

@@ -503,6 +503,52 @@
         "output": "String",
         "style": "Looks"
     },
+    "sound": {
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "input_dummy",
+                "name": "DUMMY"
+            }
+        ],
+        "output": "String",
+        "style": "Sounds",
+        "extensions": [
+            "sound_menu"
+        ]
+    },
+    "playSound": {
+        "message0": "play sound %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SOUND",
+                "check": "String"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Sounds"
+    },
+    "playSoundUntilDone": {
+        "message0": "play sound %1 until done",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "SOUND",
+                "check": "String"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Sounds"
+    },
+    "stopSounds": {
+        "message0": "stop my sounds",
+        "previousStatement": null,
+        "nextStatement": null,
+        "style": "Sounds"
+    },
     "color": {
         "message0": "%1",
         "args0": [

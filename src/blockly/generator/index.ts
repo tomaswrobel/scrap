@@ -3,7 +3,7 @@
 import * as Blockly from "blockly/core";
 import Order from "./order.ts";
 import {Block} from "blockly/core";
-import {Entity} from "../../components/entities";
+import type {Entity} from "../../entities";
 import {TryBlock} from "../mutators/mutator_try.ts";
 import {ArrayBlock} from "../mutators/mutator_array.ts";
 import ProcedureBlock from "../utils/procedure_block";
@@ -14,8 +14,7 @@ interface BlockCallback<T extends Blockly.Block = any> {
 }
 
 class Generator extends Blockly.CodeGenerator {
-	static blocks: Record<string, BlockCallback> = {
-	};
+	static blocks: Record<string, BlockCallback> = {};
 
 	ORDER_OVERRIDES = [
 		// (foo()).bar -> foo().bar
@@ -41,7 +40,7 @@ class Generator extends Blockly.CodeGenerator {
 		// a && (b && c) -> a && b && c
 		[Order.LOGICAL_AND, Order.LOGICAL_AND],
 		// a || (b || c) -> a || b || c
-		[Order.LOGICAL_OR, Order.LOGICAL_OR]
+		[Order.LOGICAL_OR, Order.LOGICAL_OR],
 	];
 
 	constructor(readonly entity?: Entity, readonly useBlobURLs = true) {
@@ -54,20 +53,20 @@ class Generator extends Blockly.CodeGenerator {
 		this.addReservedWords(
 			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
 			"break,case,catch,class,const,continue,debugger,default,delete,do," +
-			"else,export,extends,finally,for,function,if,import,in,instanceof," +
-			"new,return,super,switch,this,throw,try,typeof,var,void," +
-			"while,with,yield," +
-			"enum," +
-			"implements,interface,let,package,private,protected,public,static," +
-			"await," +
-			"null,true,false," +
-			// Magic variable.
-			"arguments," +
-			// Everything in the current environment (835 items in Chrome,
-			// 104 in Node).
-			Object.getOwnPropertyNames(globalThis) +
-			// ScrapScript-specific globals.
-			"Scrap,Color"
+				"else,export,extends,finally,for,function,if,import,in,instanceof," +
+				"new,return,super,switch,this,throw,try,typeof,var,void," +
+				"while,with,yield," +
+				"enum," +
+				"implements,interface,let,package,private,protected,public,static," +
+				"await," +
+				"null,true,false," +
+				// Magic variable.
+				"arguments," +
+				// Everything in the current environment (835 items in Chrome,
+				// 104 in Node).
+				Object.getOwnPropertyNames(globalThis) +
+				// ScrapScript-specific globals.
+				"Scrap,Color"
 		);
 
 		// @ts-ignore
@@ -88,8 +87,8 @@ class Generator extends Blockly.CodeGenerator {
 		this.nameDB_.populateVariables(workspace);
 		this.nameDB_.populateProcedures(workspace);
 
-		const vars = Blockly.Variables.allUsedVarModels(workspace).map(
-			(variable: Blockly.VariableModel) => this.names.getName(variable.getId(), Blockly.VARIABLE_CATEGORY_NAME)
+		const vars = Blockly.Variables.allUsedVarModels(workspace).map((variable: Blockly.VariableModel) =>
+			this.names.getName(variable.getId(), Blockly.VARIABLE_CATEGORY_NAME)
 		);
 
 		if (vars.length > 0) {
@@ -132,7 +131,7 @@ class Generator extends Blockly.CodeGenerator {
 		}
 
 		const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-		const nextCode = (opt_thisOnly || !block.previousConnection) ? "" : this.blockToCode(nextBlock);
+		const nextCode = opt_thisOnly || !block.previousConnection ? "" : this.blockToCode(nextBlock);
 
 		return commentCode + code + nextCode;
 	}
@@ -144,18 +143,20 @@ class Generator extends Blockly.CodeGenerator {
 
 		if (this.entity) {
 			const isStage = this.entity.name === "Stage";
-			let code = `const ${this.entity.name} = new Scrap.${isStage ? "Stage" : "Sprite"}(${this.getURLsFor(this.entity.costumes)},${this.getURLsFor(this.entity.sounds)});\n`;
+			let code = `const ${this.entity.name} = new Scrap.${isStage ? "Stage" : "Sprite"}(${this.getURLsFor(
+				this.entity.costumes
+			)},${this.getURLsFor(this.entity.sounds)});\n`;
 
 			if (!isStage) {
 				code += `${this.entity.name}.addTo(Stage);\n`;
 			}
 
 			if (result || definitions) {
-				code += "(function () {\n"
+				code += "(function () {\n";
 				code += this.prefixLines(definitions, this.INDENT);
 				code += "\n\n\n";
 				code += this.prefixLines(result, this.INDENT);
-				code += `}).call(${this.entity.name});\n`
+				code += `}).call(${this.entity.name});\n`;
 			}
 
 			return super.finish(code);
@@ -235,10 +236,7 @@ Generator.blocks.costume = function (block: Blockly.Block) {
 Generator.blocks.repeat = function (block: Blockly.Block, generator) {
 	const times = generator.valueToCode(block, "TIMES", Order.NONE) || "0";
 	const i = Blockly.Variables.generateUniqueName(block.workspace);
-	return `for (let ${i} = 0; ${i} < ${times}; ${i}++) {${generator.protection}\n${generator.statementToCode(
-		block,
-		"STACK"
-	)}}\n`;
+	return `for (let ${i} = 0; ${i} < ${times}; ${i}++) {${generator.protection}\n${generator.statementToCode(block, "STACK")}}\n`;
 };
 
 Generator.blocks.while = function (block: Blockly.Block, generator) {
@@ -297,12 +295,29 @@ Generator.blocks.throw = function (block: Blockly.Block, generator) {
 	return `throw ${error};\n`;
 };
 
+Generator.blocks.controls_if = function (block, generator) {
+	// If/elseif/else condition.
+	let code = "";
+	
+	for (let i = 0; block.getInput("IF" + i); i++) {
+		const conditionCode = generator.valueToCode(block, "IF" + i, Order.NONE) || "false";
+		const branchCode = generator.statementToCode(block, "DO" + i);
+		code += `${i ? " else " : ""}if (${conditionCode}) {\n${branchCode}}`
+	}
+
+	if (block.getInput("ELSE")) {
+		code += ` else {\n${generator.statementToCode(block, "ELSE")}}`
+	}
+	return code + "\n";
+};
+
 Generator.blocks.foreach = function (block: Blockly.Block, generator) {
 	const item = block.getField("VAR")!.getText();
 	const iterable = generator.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
-	return `for ${generator.entity ? "await " : ""}(const ${item} of ${iterable}) {${
-		generator.protection
-	}\n${generator.statementToCode(block, "DO")}}\n`;
+	return `for ${generator.entity ? "await " : ""}(const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(
+		block,
+		"DO"
+	)}}\n`;
 };
 
 Generator.blocks.property = function (block: Blockly.Block, generator) {
@@ -477,8 +492,8 @@ Generator.blocks.math_number = function (block: Blockly.Block) {
 
 Generator.blocks.math = function (block: Blockly.Block, generator) {
 	const number = generator.valueToCode(block, "NUM", Order.NONE) || "0";
-	return [`Math.${block.getFieldValue("OP")}(${(number)})`, Order.FUNCTION_CALL];
-}
+	return [`Math.${block.getFieldValue("OP")}(${number})`, Order.FUNCTION_CALL];
+};
 
 Generator.blocks.constant = function (block: Blockly.Block) {
 	return [block.getFieldValue("CONSTANT"), Order.ATOMIC];

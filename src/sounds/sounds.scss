@@ -1,0 +1,17 @@
+.sound {
+    display: grid;
+	grid-template-areas: 
+		"sound ."
+	;
+	gap: 20px;
+
+	grid-template-columns: 110px 1fr;
+}
+
+.sounds {
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	overflow-y: auto;
+	gap: 20px;
+}

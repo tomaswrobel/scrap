@@ -1,5 +1,4 @@
 import * as Blockly from "blockly/core";
-import ProcedureEvent from "../events/procedure";
 import {TypeToShadow} from "../utils/types";
 
 interface ReturnBlock extends Blockly.BlockSvg {
@@ -23,26 +22,22 @@ export default <Partial<ReturnBlock>>{
 	},
 
 	loadExtraState(this: ReturnBlock, state: any) {
-		this.removeInput("VALUE", true);
+		const {output} = this.saveExtraState!();
 
-		if (state.output !== false) {
-			this.addValue(state.output);
+		if (output !== state.output) {
+			this.removeInput("VALUE", true);
+
+			if (state.output !== false) {
+				this.addValue(state.output);
+			}
 		}
 	},
 
 	onchange(this: ReturnBlock, e: Blockly.Events.Abstract) {
-		const parent = this.getRootBlock();
-        
-		if (parent.type === "function") {
-			if (e instanceof ProcedureEvent && e.name === parent.getFieldValue("NAME")) {
-				this.removeInput("VALUE", true);
-				const type = e.extra.returnType;
-				if (type) {
-					this.addValue(type);
-				}
-			}
+		if (e instanceof Blockly.Events.BlockMove && e.blockId === this.id) {
+			const parent = this.getRootBlock();
 
-			if (e instanceof Blockly.Events.BlockMove && e.blockId === this.id) {
+			if (parent.type === "function") {
 				this.removeInput("VALUE", true);
 				const type = parent.getFieldValue("TYPE");
 				if (type) {

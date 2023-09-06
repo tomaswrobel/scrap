@@ -3,6 +3,7 @@ import type {Entity} from "../entities";
 import Component from "../tab";
 import "./paint.scss";
 import type {App} from "../app";
+import { MediaList } from "../media-list";
 
 export default class Paint implements Component {
 	context: CanvasRenderingContext2D;
@@ -12,13 +13,14 @@ export default class Paint implements Component {
 	toolContainer = document.createElement("div");
 	controls = document.createElement("div");
 	layer = document.createElement("canvas");
-	lookContainer = document.createElement("div");
 	seperator = document.createElement("div");
 	cancelButton = document.createElement("button");
 	saveButton = document.createElement("button");
 	currentTool?: Tool;
 	mouseDown = false;
 	changed!: boolean;
+	mediaList?: MediaList;
+	file?: File;
 
 	cropWorker = new Worker(new URL("./crop.worker.ts", import.meta.url));
 
@@ -26,7 +28,6 @@ export default class Paint implements Component {
 		this.container.classList.add("paint", "tab-content");
 		this.toolContainer.classList.add("tools");
 		this.controls.classList.add("controls");
-		this.lookContainer.classList.add("looks");
 		this.canvasContainer.classList.add("canvas");
 
 		this.context = this.canvas.getContext("2d", {
@@ -83,7 +84,7 @@ export default class Paint implements Component {
 
 		this.setChanged(false);
 
-		this.container.append(this.toolContainer, this.canvasContainer, this.controls, this.lookContainer, colorInput);
+		this.container.append(this.toolContainer, this.canvasContainer, this.controls, colorInput);
 	}
 
 	mouseMove(e: MouseEvent) {
@@ -107,11 +108,11 @@ export default class Paint implements Component {
 		document.removeEventListener("mouseup", this.mouseUp);
 	}
 
-	load(file: File) {
+	async load(file: File) {		
 		const reader = new FileReader();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		return new Promise<void>((resolve, reject) => {
+		await new Promise<void>((resolve, reject) => {
 			reader.onload = () => {
 				const image = new Image();
 				image.onload = () => {
@@ -126,6 +127,8 @@ export default class Paint implements Component {
 			reader.onerror = reject;
 			reader.readAsDataURL(file);
 		});
+
+		this.file = file;
 	}
 
 	crop() {
@@ -182,30 +185,6 @@ export default class Paint implements Component {
 	render(entity: Entity, element: Element) {
 		this.update(entity);
 		element.appendChild(this.container);
-
-		const label = document.createElement("label");
-		label.textContent = "+";
-		label.style.gridArea = "looks";
-		label.classList.add("fab");
-
-		const input = document.createElement("input");
-		input.style.display = "none";
-		input.type = "file";
-		input.accept = "image/*";
-
-		input.addEventListener("change", () => {
-			if (input.files) {
-				entity.costumes.push(...input.files);
-				this.update(entity);
-			}
-		});
-
-		label.style.lineHeight = "50px";
-		label.style.textAlign = "center";
-		label.style.font = "20px sans-serif bold";
-
-		label.appendChild(input);
-		this.container.appendChild(label);
 	}
 
 	setChanged(changed: boolean) {
@@ -221,23 +200,41 @@ export default class Paint implements Component {
 	}
 
 	dispose() {
-		this.lookContainer.innerHTML = "";
+		this.mediaList?.dispose();
+		delete this.mediaList;
 		this.container.remove();
-		this.container.querySelector("label")!.remove();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		document.removeEventListener("mousemove", this.mouseMove);
 		document.removeEventListener("mouseup", this.mouseUp);
 	}
 
 	update(entity: Entity) {
-		this.lookContainer.innerHTML = "";
-		this.load(entity.costumes[entity.currentCostume]);
+		this.mediaList?.dispose();
+
+		this.mediaList = new MediaList(MediaList.COSTUME, entity.costumes);
+		
+		this.mediaList.addEventListener("select", async e => {
+			const {detail: file} = e as CustomEvent<File>;
+			entity.currentCostume = entity.costumes.indexOf(file);
+			await this.load((e as CustomEvent<File>).detail);
+			this.setChanged(false);
+		});
+
+		this.mediaList.render(this.container);
+
+		this.load(entity.costumes[0]);
 
 		this.saveButton.onclick = async () => {
-			if (this.changed) {
+			if (this.changed && this.file) {
 				this.setChanged(false);
-				const file = await this.save(entity.costumes[entity.currentCostume].name);
-				entity.costumes[entity.currentCostume] = file;
+				const file = await this.save(this.file.name);
+				const index = entity.costumes.indexOf(this.file);
+
+				if (index === -1) {
+					throw new Error("Costume not found");
+				}
+
+				entity.costumes[index] = file;
 				this.update(entity);
 			}
 		};
@@ -248,29 +245,6 @@ export default class Paint implements Component {
 				this.load(entity.costumes[entity.currentCostume]);
 			}
 		};
-
-		for (const file of entity.costumes) {
-			const img = new Image(60, 60);
-			img.src = URL.createObjectURL(file);
-
-			const costume = document.createElement("div");
-			costume.classList.add("sprite");
-			const name = document.createElement("span");
-			name.textContent = file.name;
-			name.classList.add("name");
-			costume.append(img, name);
-
-			if (file === entity.costumes[entity.currentCostume]) {
-				costume.classList.add("selected");
-			}
-
-			costume.addEventListener("click", () => {
-				entity.currentCostume = entity.costumes.indexOf(file);
-				this.update(entity);
-			});
-
-			this.lookContainer.appendChild(costume);
-		}
 
 		entity.update();
 	}

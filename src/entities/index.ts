@@ -1,9 +1,11 @@
 import * as Blockly from "blockly/core";
-import {Generator} from "../../blockly";
+import {Generator} from "../blockly";
 import JSZip from "jszip";
 import fs from "fs";
 import "./entity.scss";
 import transform from "./transformer";
+
+const click = fs.readFileSync(__dirname + "/click.mp3");
 
 /**
  * I represent both a sprite and the stage.
@@ -12,7 +14,7 @@ import transform from "./transformer";
 class Entity {
 	// Costumes & Sounds are stored as files
 	costumes: File[] = [];
-	sounds: File[] = [];
+	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
 	// Thumbnail of the entity
 	thumbnail = new Image(60, 60);
@@ -215,7 +217,7 @@ class Sprite extends Entity {
 
 	override render(parent: Element) {
 		const sprite = document.createElement("div");
-		sprite.classList.add("sprite");
+		sprite.classList.add("media-element");
 		super.render(sprite);
 		const name = document.createElement("span");
 		name.textContent = this.name;

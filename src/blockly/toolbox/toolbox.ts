@@ -21,7 +21,7 @@ export class Toolbox extends Blockly.Toolbox {
 		flyout.recordScrollPositions();
 
 		this.workspace_.addChangeListener(e => {
-			if (e.type === Blockly.Events.BLOCK_CREATE || e.type === Blockly.Events.BLOCK_DELETE || e.type === "procedure") {
+			if (e.type === Blockly.Events.BLOCK_CREATE || e.type === Blockly.Events.BLOCK_DELETE || e.type === Blockly.Events.BLOCK_CHANGE) {
 				this.refreshSelection();
 			}
 		});

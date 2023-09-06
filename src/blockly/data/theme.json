@@ -52,6 +52,11 @@
             "colourPrimary": "#FF661A",
             "colourSecondary": "#FF5500",
             "colourTertiary": "#E64D00"
+        },
+        "Sounds": {
+            "colourPrimary": "#CF63CF",
+            "colourSecondary": "#C94FC9",
+            "colourTertiary": "#BD42BD"
         }
     },
     "categoryStyles": {
@@ -78,6 +83,9 @@
         },
         "iterables": {
             "colour": "#FF661A"
+        },
+        "sounds": {
+            "colour": "#CF63CF"
         }
     },
     "componentStyles": {

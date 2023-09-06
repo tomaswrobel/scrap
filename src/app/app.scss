@@ -1,5 +1,5 @@
 $primary: #4c97ff;
-$background: #4c97ff66;
+$background: hsla(215, 100%, 95%, 1);
 $modes: (turbo, paced);
 
 @each $mode in $modes {
@@ -98,7 +98,7 @@ iframe {
 			background-color: rgba(0, 0, 0, 0.1);
 		}
 		&:empty {
-			background-image: url(../../images/scrap.png);
+			background-image: url("./scrap.png");
 			background-size: 90%;
 			background-repeat: no-repeat;
 			background-position: center;
@@ -256,15 +256,9 @@ body {
 	background: $background;
 }
 
-#add {
-	grid-area: sprites;
-}
-
 .fab {
 	align-self: end;
-	justify-self: end;
-	margin-right: 20px;
-	margin-bottom: 20px;
+	justify-self: center;
 	background: $primary;
 	border: 0;
 	border-radius: 50%;
@@ -276,11 +270,14 @@ body {
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
+#add {
+	grid-area: sprites;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	justify-self: end;
+}
+
 iframe,
 .stage {
 	margin-right: 5px;
-}
-
-.cm-editor {
-	height: 100%;
 }
