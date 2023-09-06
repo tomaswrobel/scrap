@@ -33,7 +33,7 @@
 		"file-saver": "^2.0.5",
 		"highlight.js": "^11.8.0",
 		"jszip": "^3.10.1",
-		"scrap-engine": "0.1.8",
+		"scrap-engine": "0.1.9",
 		"wavesurfer.js": "^7.2.1"
 	},
 	"staticFiles": {
