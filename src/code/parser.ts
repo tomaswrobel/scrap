@@ -534,14 +534,21 @@ export default class CodeParser {
 					this.parse(node.arguments[0]);
 				} else if (node.callee.type === "Identifier") {
 					if (this.functions.has(node.callee.name)) {
-						const block = this.block("call");
+						const block = this.workspace.newBlock("call");
 
 						block.loadExtraState!(this.functions.get(node.callee.name));
-						let i = 0;
-						for (const arg of node.arguments) {
+						
+						if (this.connection) {
+							if (block.previousConnection) {
+								block.previousConnection.connect(this.connection);
+							} else if (block.outputConnection) {
+								block.outputConnection.connect(this.connection);
+							}
+						}
+
+						for (let i = 0; i < node.arguments.length; i++) {
 							this.connection = block.getInput(`PARAM_${i}`)!.connection!;
-							this.parse(arg);
-							i++;
+							this.parse(node.arguments[i]);
 						}
 					} else {
 						throw new SyntaxError(`Function ${node.callee.name} is not defined`);
