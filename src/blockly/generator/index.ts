@@ -139,7 +139,7 @@ class Generator extends Blockly.CodeGenerator {
 	finish(result: string): string {
 		const definitions = Object.values(this.definitions_).join("\n\n");
 		this.isInitialized = false;
-		this.names.reset();
+		this.nameDB_?.reset();
 
 		if (this.entity) {
 			const isStage = this.entity.name === "Stage";
