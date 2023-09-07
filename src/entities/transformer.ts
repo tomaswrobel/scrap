@@ -30,5 +30,6 @@ export default async function transform(code: string) {
 			},
 		],
 		sourceMaps: true,
+		filename: "script.js",
 	}))!;
 }

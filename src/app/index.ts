@@ -288,7 +288,7 @@ class App {
 
 		for (const e of this.entities) {
 			await e.export(zip);
-			scripts += `\t<script src="${e.name}.js"></script>\n`;
+			scripts += `\t<script src="${e.name}/script.js"></script>\n`;
 		}
 
 		zip.file("style.css", engineStyle);

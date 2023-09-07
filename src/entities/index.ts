@@ -119,10 +119,10 @@ class Entity {
 
 		if (this.mode === "Code") {
 			const result = await transform(this.code);
-			zip.file(`${this.name}.js`, this.exportGenerator.finish(result.code || ""));
-			zip.file(`${this.name}.js.map`, result.map!.file!);
+			zip.file("script.js", this.exportGenerator.finish(result.code || ""));
+			zip.file("script.js.map", result.map!.file!);
 		} else {
-			zip.file(`${this.name}.js`, this.exportGenerator.workspaceToCode(this.codeWorkspace));
+			zip.file("script.js", this.exportGenerator.workspaceToCode(this.codeWorkspace));
 		}
 	}
 
