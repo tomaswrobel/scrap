@@ -229,7 +229,7 @@ Generator.blocks.key = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("KEY")), Order.ATOMIC];
 };
 
-Generator.blocks.costume = function (block: Blockly.Block) {
+Generator.blocks.costume = Generator.blocks.sound = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("NAME")), Order.ATOMIC];
 };
 
