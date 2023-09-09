@@ -1,0 +1,75 @@
+%invalid {
+	position: relative;
+	text-decoration: underline wavy red;
+	pointer-events: auto;
+	z-index: 1e20;
+	cursor: text;
+
+	&::after {
+		padding: 2px;
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		text-align: center;
+		background-color: #fef4c5;
+		border: 1px solid #d4b943;
+		color: black;
+		font-size: 10px;
+		border-radius: 2px;
+		cursor: text;
+		pointer-events: none;
+	}
+
+	&:hover::after {
+		display: block;
+	}
+}
+
+@mixin invalid($msg) {
+	@extend %invalid;
+
+	&::after {
+		content: $msg;
+	}
+}
+
+.token.keyword.keyword-async,
+.token.keyword.keyword-await {
+	@include invalid("Asynchronous programming not allowed.");
+}
+
+.token.keyword.keyword.keyword-yield {
+    @include invalid("Yield not supported.");
+}
+
+.token.keyword.keyword.keyword-function:has(+ .token.operator) {
+    @include invalid("Generators not supported.");
+}
+
+@supports not selector(:has(a)) {
+    .token.keyword.keyword.keyword-function + .token.operator {
+        @include invalid("Generators not supported.");
+    }
+
+    .token.keyword.keyword.keyword-function + .token.operator::after {
+        content: unset;
+    }
+}
+
+.token.keyword.keyword-class,
+.token.keyword.keyword-extends {
+    @include invalid("Classes are not supported.");
+}
+
+.token.keyword[class$="keyword-@"]:not([class$="keyword-@param"]):not([class$="keyword-@returns"]) {
+    @include invalid("This JSDoc tag is not supported.");
+}
+
+.token.regex {
+    @include invalid("Regular expressions are not supported.");
+}
+
+.prism-editor {
+    height: 100%;
+}

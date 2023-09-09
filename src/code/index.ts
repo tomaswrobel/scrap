@@ -1,55 +1,70 @@
-import hljs from "highlight.js/lib/core";
-import "highlight.js/styles/atom-one-light.css";
-import javascript from "highlight.js/lib/languages/javascript";
+import Prism from "prism-code-editor/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-javadoclike";
+import "prismjs/components/prism-jsdoc";
+
+import {createEditor, type PrismEditor} from "prism-code-editor";
+import {matchBrackets} from "prism-code-editor/match-brackets";
+import {indentGuides} from "prism-code-editor/guides";
+
+// Importing styles
+import "./invalid.scss";
+import "prism-code-editor/layout.css";
+import "prism-code-editor/scrollbar.css";
+import "prism-code-editor/search.css";
+import "prism-code-editor/themes/vs-code-light.css";
+
+// Importing types
 import type TabComponent from "../tab";
 import type {App} from "../app";
 import type {Entity} from "../entities";
 
-hljs.registerLanguage("javascript", javascript);
-
 export default class Code implements TabComponent {
-	container = document.createElement("code");
-	textarea = document.createElement("textarea");
-	entity!: Entity;
+    editor?: PrismEditor;
 
-	constructor(readonly app: App) {
-		this.container.classList.add("code", "hljs", "tab-content");
-		this.textarea.classList.add("tab-content");
+    // DOM
+    container = document.createElement("div");
 
-		this.textarea.addEventListener("input", () => {
-			this.container.innerHTML = hljs.highlight(
-				this.entity.code = this.textarea.value, 
-				{language: "javascript"}
-			).value;
-		});
+    constructor(readonly app: App) {
+        this.container.classList.add("tab-content");
+    }
 
-		this.textarea.addEventListener("keydown", e => {
-			if (e.key === "Tab") {
-				e.preventDefault();
-				const start = this.textarea.selectionStart;
-				const end = this.textarea.selectionEnd;
-				this.textarea.value = this.textarea.value.substring(0, start) + "\t" + this.textarea.value.substring(end);
-				this.textarea.selectionStart = this.textarea.selectionEnd = start + 1;
-			}
-		});
-	}
+    render(entity: Entity, parent: HTMLElement) {
+        parent.append(this.container);
 
-	render(entity: Entity, parent: HTMLElement) {
-		parent.append(this.container, this.textarea);
-		this.update(entity);
-	}
+        this.editor = createEditor(
+            Prism,
+            this.container,
+            {
+                language: "javascript",
+                tabSize: 4,
+                insertSpaces: false,
+            },
+            indentGuides(),
+            matchBrackets(true),
+        );
 
-	update(entity: Entity) {
-		this.entity = entity;
-		this.textarea.value = entity.code;
-		this.container.innerHTML = hljs.highlight(
-			entity.code, 
-			{language: "javascript"}
-		).value;
-	}
+        import("./extensions").then(module => {
+            module.addExtensions(this.editor!);
+            this.update(entity);
+        });
+    }
 
-	dispose() {
-		this.container.remove();
-		this.textarea.remove();
-	}
+    update(entity: Entity) {
+        this.editor!.setOptions({
+            value: entity.code,
+            onUpdate(value) {
+                entity.code = value;
+            },
+        });
+    }
+
+    dispose() {
+        this.editor?.remove();
+        this.container.remove();
+
+        delete this.editor;
+    }
 }

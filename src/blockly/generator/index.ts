@@ -44,9 +44,10 @@ class Generator extends Blockly.CodeGenerator {
 	];
 
 	constructor(readonly entity?: Entity, readonly useBlobURLs = true) {
-		// ScrapScript is a ES5 subset.
-		// However it supports ES2015
-		// iterables and for-of loops.
+		// "ScrapScript" is a ES5 subset. However it supports 
+		// ES2015 spread operator and for-of loops.
+		// ScrapScript cannot be run in a browser.
+
 		super("ScrapScript");
 		this.isInitialized = false;
 
@@ -351,6 +352,13 @@ Generator.blocks.includes = function (block: Blockly.Block, generator) {
 	const array = generator.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	const item = generator.valueToCode(block, "ITEM", Order.NONE) || "null";
 	return [`${array}.includes(${item})`, Order.MEMBER];
+};
+
+Generator.blocks.slice = function (block: Blockly.Block, generator) {
+	const array = generator.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const start = generator.valueToCode(block, "START", Order.NONE) || "0";
+	const end = generator.valueToCode(block, "TO", Order.NONE) || "0";
+	return [`${array}.slice(${start}, ${end})`, Order.MEMBER];
 };
 
 Generator.blocks.indexOf = function (block: Blockly.Block, generator) {

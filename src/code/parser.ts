@@ -123,7 +123,7 @@ export default class CodeParser {
 			case "ExpressionStatement":
 				this.parse({
 					...node.expression,
-					leadingComments: node.leadingComments
+					leadingComments: node.leadingComments,
 				});
 				break;
 			case "ReturnStatement": {
@@ -171,7 +171,7 @@ export default class CodeParser {
 				this.comments(block, node);
 				this.connection = block.getInput("ERROR")!.connection!;
 				this.parse(node.argument);
-
+				this.connection = null;
 				break;
 			}
 			case "BlockStatement":
@@ -408,7 +408,7 @@ export default class CodeParser {
 					}
 				}
 
-				const block = this.block("function");
+				const block = this.workspace.newBlock("function");
 
 				const extraState = {
 					name: id.name,
@@ -448,17 +448,9 @@ export default class CodeParser {
 					}),
 				});
 
-				let i = 0;
-				for (const element of node.elements) {
-					if (!element) {
-					} else if (element.type === "SpreadElement") {
-						this.connection = block.getInput(`ADD${i}`)!.connection!;
-						this.parse(element.argument);
-					} else {
-						this.connection = block.getInput(`ADD${i}`)!.connection!;
-						this.parse(element);
-					}
-					i++;
+				for (let i = 0; i < node.elements.length; i++) {
+					this.connection = block.getInput(`ADD${i}`)!.connection!;
+					this.parse(node.elements[i]);
 				}
 
 				this.connection = null;
@@ -472,7 +464,7 @@ export default class CodeParser {
 					if (this.isProperty(node.callee, ["reverse", "includes", "indexOf", "slice"])) {
 						const block = this.block(this.getPropertyContents(node.callee.property));
 						this.connection = block.getInput("ITERABLE")!.connection!;
-						this.parse(node.callee);
+						this.parse(node.callee.object);
 						this.parseArguments(block, node.arguments);
 					} else if (node.callee.object.type === "ThisExpression" && this.isProperty(node.callee, allBlocks)) {
 						const block = this.block(this.getPropertyContents(node.callee.property));
@@ -537,7 +529,7 @@ export default class CodeParser {
 						const block = this.workspace.newBlock("call");
 
 						block.loadExtraState!(this.functions.get(node.callee.name));
-						
+
 						if (this.connection) {
 							if (block.previousConnection) {
 								block.previousConnection.connect(this.connection);
@@ -550,6 +542,8 @@ export default class CodeParser {
 							this.connection = block.getInput(`PARAM_${i}`)!.connection!;
 							this.parse(node.arguments[i]);
 						}
+
+						this.connection = block.nextConnection;
 					} else {
 						throw new SyntaxError(`Function ${node.callee.name} is not defined`);
 					}
@@ -713,6 +707,8 @@ export default class CodeParser {
 
 				this.connection = block.getInput("DO")!.connection!;
 				this.parse(body);
+
+				this.connection = block.nextConnection;
 				break;
 			}
 			case "Identifier": {

@@ -1938,7 +1938,7 @@
     },
     "indexOf": {
         "inputsInline": true,
-        "message0": "index of %2 in %1",
+        "message0": "in %1 find index of %2",
         "args0": [
             {
                 "type": "input_value",
