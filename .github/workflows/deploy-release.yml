@@ -43,7 +43,6 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v2
   release:
-    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,4 +52,6 @@ jobs:
       - name: Release
         run: >
           VERSION=$(node -p "require('./package.json').version")
-          gh release create "v$VERSION" -F CHANGELOG.md -t "Scrap v$VERSION"         
+          gh release create "v$VERSION" -F CHANGELOG.md -t "Scrap v$VERSION"
+        env:
+          GH_TOKEN: ${{github.token}}       
