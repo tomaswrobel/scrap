@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Release and Deploy
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages and creation of a release
 permissions:
   contents: write
   pages: write
