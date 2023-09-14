@@ -29,7 +29,7 @@ class Entity {
 	private exportGenerator = new Generator(this, false);
 
 	code = "";
-	mode: "Blocks" | "Code" = "Blocks";
+	blocks = true;
 
 	/**
 	 * Get the workspace as JSON.
@@ -117,21 +117,21 @@ class Entity {
 			zip.file(file.name, file);
 		}
 
-		if (this.mode === "Code") {
+		if (this.blocks) {
+			zip.file("script.js", this.exportGenerator.workspaceToCode(this.codeWorkspace));
+		} else {
 			const result = await transform(this.code);
 			zip.file("script.js", this.exportGenerator.finish(result.code || ""));
 			zip.file("script.js.map", result.map!.file!);
-		} else {
-			zip.file("script.js", this.exportGenerator.workspaceToCode(this.codeWorkspace));
 		}
 	}
 
 	async preview() {
-		if (this.mode === "Code") {
+		if (this.blocks) {
+			return this.outputGenerator.workspaceToCode(this.codeWorkspace);
+		} else {
 			const result = await transform(this.code);
 			return this.outputGenerator.finish(result.code || "");
-		} else {
-			return this.outputGenerator.workspaceToCode(this.codeWorkspace);
 		}
 	}
 
@@ -166,7 +166,7 @@ class Entity {
 			sounds: this.sounds.map(f => f.name),
 			workspace: this.workspace,
 			code: this.code,
-			mode: this.mode,
+			blocks: this.blocks
 		};
 	}
 
@@ -177,7 +177,7 @@ class Entity {
 		entity.costumes = await Promise.all(json.costumes.map(fn));
 		entity.sounds = await Promise.all(json.sounds.map(fn));
 		entity.code = json.code;
-		entity.mode = json.mode;
+		entity.blocks = json.blocks;
 		return entity;
 	}
 

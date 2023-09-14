@@ -153,7 +153,7 @@ class Generator extends Blockly.CodeGenerator {
 			}
 
 			if (result || definitions) {
-				code += "(function () {\n";
+				code += "(async function () {\n";
 				code += this.prefixLines(definitions, this.INDENT);
 				code += "\n\n\n";
 				code += this.prefixLines(result, this.INDENT);

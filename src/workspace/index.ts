@@ -35,7 +35,6 @@ export default class Workspace implements Component {
 		});
 
 		this.workspace.addChangeListener(e => {
-			Blockly.Events.disableOrphans(e);
 			if (e instanceof Blockly.Events.UiBase) {
 				return;
 			}
