@@ -55,6 +55,8 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@v1.3.1
       - name: Create release notes from changelog
         uses: CSchoel/release-notes-from-changelog@v1.3.0
+        with:
+          version: ${{steps.package-version.outputs.current-version}}
       - name: Release
         run: gh release create "v${{steps.package-version.outputs.current-version}}" -F RELEASE.md
         env:

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 2022-09-14
+
+### Fixed
+
+- Releases now correctly include the CHANGELOG.md file.
+
+### Changed
+
+- Paint Editor's buttons Save & Cancel have now smaller font size.
+
 ## [2.0.1] - 2022-09-14
 
 ### Fixed
