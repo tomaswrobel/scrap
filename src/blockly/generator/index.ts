@@ -315,7 +315,7 @@ Generator.blocks.controls_if = function (block, generator) {
 Generator.blocks.foreach = function (block: Blockly.Block, generator) {
 	const item = block.getField("VAR")!.getText();
 	const iterable = generator.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
-	return `for ${generator.entity ? "await " : ""}(const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(
+	return `for (const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(
 		block,
 		"DO"
 	)}}\n`;

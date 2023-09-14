@@ -179,6 +179,10 @@
             {
                 "kind": "block",
                 "type": "y"
+            },
+            {
+                "kind": "block",
+                "type": "direction"
             }
         ]
     },
@@ -653,7 +657,17 @@
             },
             {
                 "kind": "block",
-                "type": "throw"
+                "type": "throw",
+                "inputs": {
+                    "ERROR": {
+                        "shadow": {
+                            "type": "iterables_string",
+                            "fields": {
+                                "TEXT": "error"
+                            }
+                        }
+                    }
+                }
             },
             {
                 "kind": "block",

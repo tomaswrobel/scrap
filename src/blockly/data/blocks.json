@@ -778,14 +778,19 @@
         "output": "Number",
         "style": "Motion"
     },
+    "direction": {
+        "inputsInline": true,
+        "message0": "direction",
+        "output": "Number",
+        "style": "Motion"
+    },
     "sayWait": {
         "inputsInline": true,
         "message0": "say %1 for %2 seconds",
         "args0": [
             {
                 "type": "input_value",
-                "name": "MESSAGE",
-                "check": "String"
+                "name": "MESSAGE"
             },
             {
                 "type": "input_value",
@@ -803,8 +808,7 @@
         "args0": [
             {
                 "type": "input_value",
-                "name": "MESSAGE",
-                "check": "String"
+                "name": "MESSAGE"
             }
         ],
         "nextStatement": null,
@@ -817,8 +821,7 @@
         "args0": [
             {
                 "type": "input_value",
-                "name": "MESSAGE",
-                "check": "String"
+                "name": "MESSAGE"
             },
             {
                 "type": "input_value",
@@ -1428,8 +1431,7 @@
         "args0": [
             {
                 "type": "input_value",
-                "name": "QUESTION",
-                "check": "String"
+                "name": "QUESTION"
             }
         ],
         "output": "String",
