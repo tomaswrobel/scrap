@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2022-09-14
+
+### Fixed
+
+- CHANGELOG.md links
+
+### Changed
+
+- When deploy fails, the release is not created.
+- Release now includes only fragments of the CHANGELOG.md file.
+
 ## [2.0.0] - 2022-09-14
 
 ### Added
@@ -29,5 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.0.0...HEAD
-[2.0.0]: https:github.com/tomas-wrobel/scrap/releases/tag/v2.0.0
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.0.1
+[2.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.0.0
