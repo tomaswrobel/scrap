@@ -9,7 +9,7 @@ Welcome to the official repository of **Scrap** - the tool designed to simplify 
   - [Installation](#installation)
   - [Usage](#usage)
 - [Features](#features)
-- [Contributing](#contributing)
+- [Roadmap](#roadmap)
 - [Scrap Logo Explanation](#scrap-logo-explanation)
 - [License](#license)
 
@@ -47,15 +47,23 @@ npm run dev
 
 This will open up a local development server where you can access the Scrap interface using your web browser.
 
-## Contributing
+## Roadmap
 
-I welcome contributions from the community to make Scrap even better. If you're interested in contributing, please refer to my [Contribution Guidelines](CONTRIBUTING.md) for detailed information on how to get involved.
+Scrap is still in its early stages of development. Here's what's planned for the future:
+
+- **More Blocks** - Scrap currently supports only a limited number of blocks. More blocks will be added in the future to make Scrap more useful.
+
+- **Scratch Compatibility** - Scrap is not fully compatible with Scratch yet. In the future, Scrap will be made compatible with Scratch to make the transition smoother.
+
+- **More Features** - Scrap will be getting more features in the future, such as a built-in code editor, a better paint editor, and more.
+
+- **More Resources** - Scrap will be getting more resources in the future, such as tutorials, guides, and more.
 
 ## Scrap Logo Explanation
 
 The logo for Scrap shares a visual resemblance with the Scratch logo as a deliberate homage. Here's what you need to know:
 
-- **Font Choice**: Scrap uses the "Black Boys on Moped" font, the same as Scratch's logo, which is freeware and freely usable.
+- **Font Choice**: Scrap uses the "Black Boys on Mopeds" font, the same as Scratch's logo, which is freeware and freely usable.
 
 - **No Copyright Infringement**: Scrap respects copyright laws and does not infringe on Scratch's intellectual property. The similarity is a tribute, not a copy.
 

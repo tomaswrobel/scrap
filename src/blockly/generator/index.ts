@@ -15,6 +15,7 @@ interface BlockCallback<T extends Blockly.Block = any> {
 
 class Generator extends Blockly.CodeGenerator {
 	static blocks: Record<string, BlockCallback> = {};
+	static ReservedWords = Object.getOwnPropertyNames(globalThis);
 
 	ORDER_OVERRIDES = [
 		// (foo()).bar -> foo().bar
@@ -44,31 +45,13 @@ class Generator extends Blockly.CodeGenerator {
 	];
 
 	constructor(readonly entity?: Entity, readonly useBlobURLs = true) {
-		// "ScrapScript" is a ES5 subset. However it supports 
+		// "ScrapScript" is a ES5 subset. However it supports
 		// ES2015 spread operator and for-of loops.
 		// ScrapScript cannot be run in a browser.
 
 		super("ScrapScript");
 		this.isInitialized = false;
-
-		this.addReservedWords(
-			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
-			"break,case,catch,class,const,continue,debugger,default,delete,do," +
-				"else,export,extends,finally,for,function,if,import,in,instanceof," +
-				"new,return,super,switch,this,throw,try,typeof,var,void," +
-				"while,with,yield," +
-				"enum," +
-				"implements,interface,let,package,private,protected,public,static," +
-				"await," +
-				"null,true,false," +
-				// Magic variable.
-				"arguments," +
-				// Everything in the current environment (835 items in Chrome,
-				// 104 in Node).
-				Object.getOwnPropertyNames(globalThis) +
-				// ScrapScript-specific globals.
-				"Scrap,Color"
-		);
+		this.addReservedWords(`${Generator.ReservedWords}`);
 
 		// @ts-ignore
 		this.forBlock = Generator.blocks;
@@ -203,6 +186,58 @@ class Generator extends Blockly.CodeGenerator {
 	}
 }
 
+Generator.ReservedWords.unshift(
+	"break",
+	"case",
+	"catch",
+	"class",
+	"const",
+	"continue",
+	"debugger",
+	"default",
+	"delete",
+	"do",
+	"else",
+	"export",
+	"extends",
+	"finally",
+	"for",
+	"function",
+	"if",
+	"import",
+	"in",
+	"instanceof",
+	"new",
+	"return",
+	"super",
+	"switch",
+	"this",
+	"throw",
+	"try",
+	"typeof",
+	"var",
+	"void",
+	"while",
+	"with",
+	"yield",
+	"enum",
+	"implements",
+	"interface",
+	"let",
+	"package",
+	"private",
+	"protected",
+	"public",
+	"static",
+	"await",
+	"null",
+	"true",
+	"false",
+	"arguments",
+	"Scrap",
+	"Color"
+);
+
 Generator.blocks.variables_get = function (block: Blockly.Block, generator) {
 	const name = generator.names.getName(block.getFieldValue("VAR"), Blockly.Names.NameType.VARIABLE);
 	return [name, Order.ATOMIC];
@@ -299,15 +334,15 @@ Generator.blocks.throw = function (block: Blockly.Block, generator) {
 Generator.blocks.controls_if = function (block, generator) {
 	// If/elseif/else condition.
 	let code = "";
-	
+
 	for (let i = 0; block.getInput("IF" + i); i++) {
 		const conditionCode = generator.valueToCode(block, "IF" + i, Order.NONE) || "false";
 		const branchCode = generator.statementToCode(block, "DO" + i);
-		code += `${i ? " else " : ""}if (${conditionCode}) {\n${branchCode}}`
+		code += `${i ? " else " : ""}if (${conditionCode}) {\n${branchCode}}`;
 	}
 
 	if (block.getInput("ELSE")) {
-		code += ` else {\n${generator.statementToCode(block, "ELSE")}}`
+		code += ` else {\n${generator.statementToCode(block, "ELSE")}}`;
 	}
 	return code + "\n";
 };
@@ -315,10 +350,7 @@ Generator.blocks.controls_if = function (block, generator) {
 Generator.blocks.foreach = function (block: Blockly.Block, generator) {
 	const item = block.getField("VAR")!.getText();
 	const iterable = generator.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
-	return `for (const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(
-		block,
-		"DO"
-	)}}\n`;
+	return `for (const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(block, "DO")}}\n`;
 };
 
 Generator.blocks.property = function (block: Blockly.Block, generator) {

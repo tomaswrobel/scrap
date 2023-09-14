@@ -375,7 +375,7 @@ export default class CodeParser {
 						} else if (value[0] === "*") {
 							const {description, tags} = parse(`/*${value}*/`, {
 								unwrap: true,
-								tags: ["returns", "param"],
+								tags: ["returns", "param", "return"],
 								recoverable: true,
 							});
 
@@ -391,14 +391,18 @@ export default class CodeParser {
 										} else {
 											throw new SyntaxError(`Unsupported type ${paramType!.type}. ${Error}`);
 										}
+									} else if (paramType!.type === "ArrayType") {
+										typeMap.set(name!, "Array");
 									} else if (paramType!.type !== "AllLiteral") {
 										throw new SyntaxError(`Unsupported type ${paramType!.type}. ${Error}`);
 									}
-								} else if (title === "returns") {
+								} else if (title === "returns" || title === "return") {
 									if (paramType!.type === "NameExpression") {
 										if (Types.indexOf(paramType.name) !== -1) {
 											returnType = paramType.name;
 										}
+									} else if (paramType!.type === "ArrayType") {
+										returnType = "Array";
 									}
 								}
 							}
@@ -427,7 +431,7 @@ export default class CodeParser {
 
 				block.loadExtraState!(extraState);
 				this.functions.set(id.name, extraState);
-				block.setCommentText(commentText);
+				block.setCommentText(commentText.trim());
 
 				this.connection = block.nextConnection;
 				this.parse(body);

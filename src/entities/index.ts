@@ -219,10 +219,33 @@ class Sprite extends Entity {
 		const sprite = document.createElement("div");
 		sprite.classList.add("media-element");
 		super.render(sprite);
-		const name = document.createElement("span");
-		name.textContent = this.name;
-		name.classList.add("name");
-		sprite.appendChild(name);
+
+		const validIdentifier = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/;
+
+		const input = document.createElement("input");
+		input.pattern = validIdentifier.source;
+		input.classList.add("name");
+
+		const span = document.createElement("span");
+		span.textContent = this.name;
+		span.classList.add("name");
+
+		span.ondblclick = () => {
+			input.value = span.textContent!;
+			sprite.replaceChild(input, span);
+			input.focus();
+			input.select();
+		};
+
+		input.onblur = () => {
+			if (validIdentifier.test(input.value) && Generator.ReservedWords.indexOf(input.value) === -1) {
+				span.textContent = input.value;
+				this.name = input.value;
+			}
+			sprite.replaceChild(span, input);
+		};
+
+		sprite.appendChild(span);
 		return parent.appendChild(sprite);
 	}
 }
