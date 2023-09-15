@@ -53,7 +53,7 @@ class App {
 	constructor() {
 		this.entities.push((this.current = new Stage()));
 		this.tabs.set("Blocks", this.workspace);
-		this.tabs.set("Code", this.code);
+		this.tabs.set("JavaScript", this.code);
 		this.tabs.set("Costumes", this.paint);
 		this.tabs.set("Sounds", this.sounds);
 
@@ -65,7 +65,7 @@ class App {
 			button.addEventListener("click", async () => {
 				if (this.activeTab === name) return;
 
-				if (name === "Blocks") {
+				if (tab === this.workspace) {
 					this.current.blocks = true;
 					const parser = new CodeParser(this.current.codeWorkspace, this.entities);
 					try {
@@ -75,7 +75,7 @@ class App {
 						return;
 					}
 					this.current.code = "";
-				} else if (name === "Code") {
+				} else if (tab === this.code) {
 					this.current.blocks = false;
 					this.current.code = this.generator.workspaceToCode(this.current.codeWorkspace);
 					this.current.workspace = {};
