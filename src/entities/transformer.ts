@@ -12,11 +12,8 @@ export default async function transform(code: string) {
 					FunctionExpression(path) {
 						path.node.async = true;
 					},
-					ImportDeclaration(path) {
-						path.remove();
-					},
 					CallExpression(path) {
-						if (path.parent.type !== "AwaitExpression" && path.node.arguments.every(a => a.type !== "FunctionExpression")) {
+						if (path.parent.type !== "AwaitExpression") {
 							// If this is a user-defined function, we need to bind `this` to it
 							if (path.node.callee.type === "Identifier" && path.node.callee.name !== "String") {
 								path.node.callee = babel.types.memberExpression(path.node.callee, babel.types.identifier("call"));

@@ -458,10 +458,6 @@
                 }
             },
             {
-                "kind": "block",
-                "type": "hex"
-            },
-            {
                 "kind": "sep",
                 "gap": 40
             },

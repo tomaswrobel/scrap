@@ -81,10 +81,6 @@
             },
             {
                 "kind": "block",
-                "type": "hex"
-            },
-            {
-                "kind": "block",
                 "type": "rgb",
                 "inputs": {
                     "RED": {

@@ -17,6 +17,7 @@
  * Conversion to TypeScript
  * Using Modern ECMAScript
  * Using Modern DOM API
+ * Color Validation
  */
 import * as Blockly from "blockly/core";
 
@@ -130,5 +131,36 @@ export default class FieldString extends Blockly.FieldTextInput {
 		}
 		this.quoteRight_.setAttribute("transform", `translate(${this.quoteRightX_},${this.quoteY_})`);
 		return addedWidth;
+	}
+
+	protected doClassValidation_(newValue?: any): string | null {
+		const index = this.sourceBlock_?.outputConnection?.targetConnection?.getCheck()?.indexOf("Color");
+		const isInColorInput = index === 0 || (index && index > 0);
+
+		if (!isInColorInput) {
+			return newValue;
+		}
+
+		newValue = newValue.toLowerCase();
+
+		const hex6 = /^#?[0-9A-F]{6}$/i;
+
+		if (hex6.test(newValue)) {
+			if (newValue[0] !== "#") {
+				newValue = "#" + newValue;
+			}
+			return newValue;
+		}
+
+		const hex3 = /^#?[0-9A-F]{3}$/i;
+
+		if (hex3.test(newValue)) {
+			if (newValue[0] !== "#") {
+				newValue = "#" + newValue;
+			}
+			return newValue.replace(/([0-9A-F])/gi, "$1$1");
+		}
+
+		return "#000000";
 	}
 }

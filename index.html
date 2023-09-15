@@ -20,14 +20,10 @@
 					<div class="dropdown-content">
 						<label>
 							Open
-							<input accept=".scrap" type="file" id="load">
+							<input accept=".scrap" type="file" id="load" />
 						</label>
-						<a href="javascript:void(0)" id="save">
-							Save
-						</a>
-						<a href="javascript:void(0)" id="html">
-							Export
-						</a>
+						<a href="javascript:void(0)" id="save"> Save </a>
+						<a href="javascript:void(0)" id="html"> Export </a>
 					</div>
 				</li>
 
@@ -43,6 +39,10 @@
 							Turbo
 						</a>
 					</div>
+				</li>
+
+				<li>
+					<a href="javascript:void(document.getElementById('about').showModal())">About</a>
 				</li>
 			</ul>
 
@@ -64,6 +64,77 @@
 				<span class="name">Stage</span>
 			</div>
 		</div>
+		<dialog id="about">
+			<h2 style="display: flex">
+				About Scrap
+				<div style="flex: 1"></div>
+				<form method="dialog">
+					<input type="submit" value="×" />
+				</form>
+			</h2>
+			<p>
+				Scrap is a tool by me, <a href="https://tomaswrobel.dev" target="_blank">Tomáš Wróbel</a> designed to simplify the transition from
+				Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve into JavaScript, Scrap is here
+				to help bridge the gap and make your learning journey smoother.
+			</p>
+			<h3>Inspiration</h3>
+			<p>
+				The name Scrap is a combination of the words <a href="https://scratch.mit.edu/" target="_blank">Scratch</a> and
+				<a href="https://snap.berkeley.edu/" target="_blank">Snap</a>, two block-based programming languages that inspired me to create Scrap.
+				Snap gave me an idea to make the IDE advanced and powerful, while Scratch inspired me to make it intuitive and easy to use.
+			</p>
+			<p>
+				The design is heavily inspired by Scratch not to lose familiar environment. The logo for Scrap shares a visual resemblance with the
+				Scratch logo as a deliberate homage. Here's what you need to know:
+			</p>
+			<ul>
+				<li>
+					<strong>Font Choice</strong>: Scrap uses the <q>Black Boys on Mopeds</q> font, the same as Scratch's logo, which is freeware and
+					freely usable.
+				</li>
+				<li>
+					<strong>No Copyright Infringement</strong>: Scrap respects copyright laws and does not infringe on Scratch's intellectual
+					property. The similarity is a tribute, not a copy.
+				</li>
+				<li>
+					<strong>Non-Commercial</strong>: Scrap is a non-commercial project, and its logo is used to recognize Scratch's influence on its
+					mission to help beginners transition from Scratch to JavaScript.
+				</li>
+			</ul>
+			<p>In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.</p>
+			<h3>Technology</h3>
+			<p>
+				Scrap is not a programming language, it uses technology based on <a href="https://blocklike.org" target="_blank">BlockLike.js</a> as
+				an engine (not VM).
+			</p>
+			<p>
+				It uses <a href="https://developers.google.com/blockly" target="_blank">Blockly</a> as a block editor. The code editor is powered by
+				<a href="https://prism-code-editor.netlify.app/" target="_blank">Prism Code Editor</a>
+			</p>
+			<p>
+				Scrap output uses <a href="https://jsdoc.app/">JSDoc</a> for type annotations and is compiled by
+				<a href="https://babeljs.io/">Babel</a>.
+			</p>
+			<h3>Why Babel?</h3>
+			<p>Babel is used to walk through the AST and:</p>
+			<ol>
+				<li>Make JavaScript code asynchronous.</li>
+				<li>Convert code into blocks.</li>
+			</ol>
+			<p>
+				BlockLike.js includes a rewriter that adds <code>async</code> / <code>await</code> keywords to the code, but it relies on RegEx, which
+				isn&#x27;t ideal. Additionally, it lacks support for nested blocks.
+			</p>
+			<p>
+				To address these issues, I forked BlockLike.js and developed <a href="https://github.com/tomas-wrobel/scrap-engine">Scrap Engine</a>.
+				Scrap Engine eliminates the rewriter, making it necessary to manually add <code>async</code> / <code>await</code> keywords. This is
+				where <strong>Babel</strong> comes into play, as it compiles the code and inserts the required keywords.
+			</p>
+			<p>
+				Why just not let users add <code>async</code> / <code>await</code> keywords manually? Because it's not intuitive. Some methods are
+				asynchronous, while others are synchronous. Scrap is designed to be intuitive and easy to use, so it should handle this for the user.
+			</p>
+		</dialog>
 		<script type="module" src="src/app/index.ts"></script>
 	</body>
 </html>
