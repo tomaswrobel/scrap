@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2022-09-16
+
+### Changed
+
+- Dependencies update
+- Instead of string interpolation, `path.join` is now used to join paths.
+- Primary color is now green (the same as on my website).
+- Main script is now separated from the `app` file.
+- GitHub action - release job is no longer dependent on the deploy job.
+
+### Fixed
+
+- When switching sprites, the JavaScript / Blocks tab now changes.
+
 ## [2.3.2] - 2022-09-16
 
 ### Fixed
@@ -103,9 +117,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.3.2...HEAD
-[2.3.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.1
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.4.0
 [2.3.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.2
+[2.3.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.1
 [2.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.0
 [2.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.2.0
 [2.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.1.0

@@ -2,7 +2,7 @@ import {stage, sprite, theme, plugins} from "../blockly";
 import {Stage, type Entity} from "../entities";
 import * as Blockly from "blockly/core";
 import Component from "../tab";
-import type {App} from "../app";
+import type App from "../app";
 import "./style.scss";
 
 export default class Workspace implements Component {

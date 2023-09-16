@@ -1,5 +1,5 @@
 import WaveSurfer from "wavesurfer.js";
-import {App} from "../app";
+import type App from "../app";
 import type {Entity} from "../entities";
 import TabComponent from "../tab";
 import "./sounds.scss";

@@ -3,9 +3,10 @@ import {Generator} from "../blockly";
 import JSZip from "jszip";
 import fs from "fs";
 import "./entity.scss";
+import path from "path";
 import transform from "./transformer";
 
-const click = fs.readFileSync(__dirname + "/click.mp3");
+const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
 
 /**
  * I represent both a sprite and the stage.
@@ -28,7 +29,7 @@ class Entity {
 	/** Generator used in exported HTML file */
 	private exportGenerator = new Generator(this, false);
 
-	code = "";
+	code = "this.whenLoaded(function () {});";
 	blocks = true;
 
 	/**
@@ -51,6 +52,7 @@ class Entity {
 	 * @param name My name (can be changed later)
 	 */
 	constructor(initialCostume: File, public name: string) {
+		this.codeWorkspace.newBlock("whenLoaded");
 		this.costumes.push(initialCostume);
 		this.update();
 	}
@@ -98,7 +100,7 @@ class Entity {
 				return {
 					...urls,
 					// Path to file in zip
-					[s.name]: `${this.name}/${s.name}`,
+					[s.name]: path.join(this.name, s.name),
 				};
 			}, {} as Record<string, string>),
 			null,
@@ -183,7 +185,7 @@ class Entity {
 
 	private static loadFiles(name: string, zip: JSZip, f: string) {
 		return zip
-			.file(`${name}/${f}`)!
+			.file(path.join(name, f))!
 			.async("arraybuffer")
 			.then(b => new File([b], f, {type: this.getMimeType(b)}));
 	}
@@ -208,7 +210,7 @@ class Entity {
 	}
 }
 
-const scrappy = fs.readFileSync(__dirname + "/scrappy.svg", "utf-8");
+const scrappy = fs.readFileSync(path.join(__dirname, "scrappy.svg"), "utf-8");
 
 class Sprite extends Entity {
 	constructor(name: string) {

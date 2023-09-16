@@ -2,7 +2,7 @@ import {Pen, Line, Rectangle, Ellipse, Eraser, Fill, type Tool, Triangle} from "
 import type {Entity} from "../entities";
 import Component from "../tab";
 import "./paint.scss";
-import type {App} from "../app";
+import type App from "../app";
 import { MediaList } from "../media-list";
 
 export default class Paint implements Component {

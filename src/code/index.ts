@@ -18,7 +18,7 @@ import "prism-code-editor/themes/vs-code-light.css";
 
 // Importing types
 import type TabComponent from "../tab";
-import type {App} from "../app";
+import type App from "../app";
 import type {Entity} from "../entities";
 
 export default class Code implements TabComponent {

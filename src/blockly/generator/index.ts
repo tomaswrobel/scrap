@@ -9,6 +9,8 @@ import {ArrayBlock} from "../mutators/mutator_array.ts";
 import ProcedureBlock from "../utils/procedure_block";
 import {CallBlock} from "../mutators/mutator_call.ts";
 
+import path from "path";
+
 interface BlockCallback<T extends Blockly.Block = any> {
 	(block: T, generator: Generator): null | string | [string, Order];
 }
@@ -167,7 +169,7 @@ class Generator extends Blockly.CodeGenerator {
 				files.reduce(
 					(urls, s) => ({
 						...urls,
-						[s.name]: `${this.entity!.name}/${s.name}`,
+						[s.name]: path.join(this.entity!.name, s.name),
 					}),
 					{} as Record<string, string>
 				),

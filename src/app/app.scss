@@ -1,5 +1,4 @@
-$primary: #4c97ff;
-$background: hsla(215, 100%, 95%, 1);
+@import "../theme";
 $modes: (turbo, paced);
 
 @each $mode in $modes {

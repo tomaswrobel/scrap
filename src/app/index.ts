@@ -17,7 +17,7 @@ import Sound from "../sounds";
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
 
-class App {
+export default class App {
 	container = document.getElementById("app")!;
 	add = document.getElementById("add")!;
 
@@ -176,9 +176,18 @@ class App {
 		if (this.current === entity) {
 			return;
 		}
+		const tab = this.tabs.get(this.activeTab)!;
 		this.current = entity;
-		this.tabs.get(this.activeTab)!.dispose();
-		this.tabs.get(this.activeTab)!.render(this.current, this.container);
+		tab.dispose();
+		if (tab === this.workspace && !entity.blocks) {
+			this.activeTab = "JavaScript";
+			this.code.render(entity, this.container);
+		} else if (tab === this.code && entity.blocks) {
+			this.activeTab = "Blocks";
+			this.workspace.render(entity, this.container);
+		} else {
+			tab.render(entity, this.container);
+		}
 		for (const s of this.tabBar.getElementsByClassName("selected")) {
 			s.classList.remove("selected");
 		}
@@ -226,7 +235,6 @@ class App {
 
 	addSprite(sprite: Sprite) {
 		const element = sprite.render(this.spritePanel);
-		sprite.codeWorkspace.newBlock("whenLoaded");
 
 		const select = () => {
 			this.stagePanel.classList.remove("selected");
@@ -308,6 +316,3 @@ ${scripts.trimEnd()}
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
 	}
 }
-
-export type {App};
-export default new App();

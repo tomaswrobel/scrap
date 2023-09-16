@@ -1,4 +1,4 @@
-import {App} from "./app";
+import type App from "./app";
 import {Entity} from "./entity";
 
 export default interface TabComponent {
