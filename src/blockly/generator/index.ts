@@ -184,6 +184,10 @@ class Generator extends Blockly.CodeGenerator {
 	get names() {
 		return this.nameDB_!;
 	}
+
+	scrubNakedValue() {
+		return "";
+	}
 }
 
 Generator.ReservedWords.unshift(

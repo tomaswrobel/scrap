@@ -3,6 +3,8 @@ import * as blocks from "./blocks/*.ts";
 import * as fields from "./fields/*.ts";
 import * as mutators from "./mutators/*.ts";
 
+import "./utils/export_png";
+
 import "@blockly/field-color";
 import * as En from "blockly/msg/en";
 
@@ -122,5 +124,5 @@ export * as stage from "./data/stage.json";
 export * as theme from "./data/theme.json";
 export * from "./utils/types.ts";
 
-export {default as plugins} from "./toolbox";
+export {default as plugins} from "./toolbox/index.ts";
 export {allBlocks, Generator, Order};

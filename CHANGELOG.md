@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2022-09-16
+
+### Added
+
+- You can export PNG images of blocks.
+
+### Changed
+
+- Naked values are not included in the generated code.
+
 ## [2.2.0] - 2022-09-15
 
 ### Fixed
@@ -77,7 +87,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.1.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.0
+[2.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.2.0
 [2.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.1.0
 [2.1.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.1.1
 [2.0.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.0.2
