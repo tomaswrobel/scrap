@@ -1,6 +1,8 @@
 import * as Blockly from "blockly/core";
 import {saveAs} from "file-saver";
 
+const BLOCK_PADDING = 2;
+
 Blockly.ContextMenuRegistry.registry.register({
 	displayText: "Save block image",
 	preconditionFn: () => "enabled",
@@ -24,23 +26,42 @@ Blockly.ContextMenuRegistry.registry.register({
 		svg.removeAttribute("data-id");
 		svg.removeAttribute("filter");
 
-		svg.lastElementChild!.remove();
-
 		const canvas = document.createElement("canvas");
-		const svgData = new XMLSerializer().serializeToString(svg);
-        const size = block.getHeightWidth();
+		const {width, height} = block.getHeightWidth();
 
-		canvas.width = size.width + 2;
-		canvas.height = size.height + 2;
+		const svgData = `
+			<svg 
+				xmlns="http://www.w3.org/2000/svg" 
+				xmlns:xlink="http://www.w3.org/1999/xlink"
+				width="${width}" height="${height}"
+				class="${renderer.getClassName()} ${theme.getClassName()}" 
+			>
+				<style>
+					.blocklyIconGroup {
+						fill: #00f;
+						stroke: #fff;
+					}
+					
+					.blocklyIconSymbol {
+						fill: #fff;
+					}
+					
+					${css}
+				</style>		
+				${Blockly.utils.xml.domToText(svg)}
+			</svg>
+		`;
+
+		canvas.width = width + BLOCK_PADDING * 2;
+		canvas.height = height + BLOCK_PADDING * 2;
 
 		const ctx = canvas.getContext("2d")!;
 		const img = new Image();
 		img.onload = () => {
-			ctx.drawImage(img, 1, 1, size.width, size.height);
+			ctx.drawImage(img, BLOCK_PADDING, BLOCK_PADDING, width, height);
 			canvas.toBlob(e => saveAs(e!, `${block.type}.png`));
 		};
-		img.src =
-			"data:image/svg+xml;utf-8," +
-			encodeURIComponent(`<svg class="${renderer.getClassName()} ${theme.getClassName()}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${size.width}" height="${size.height}"><style>${css}</style>${svgData}</svg>`);
+		
+		img.src = "data:image/svg+xml;utf-8," + encodeURIComponent(svgData);
 	},
 });

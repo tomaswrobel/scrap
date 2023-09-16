@@ -47,6 +47,20 @@
 	&FlyoutLabelText {
 		font-size: 20px !important;
 	}
+
+	&IconGroup {
+		cursor: pointer;
+		filter: brightness(110%);
+
+		&:not(:hover) {
+			opacity: 1;
+			filter: none;
+		}
+	}
+
+	&IconSymbol {
+		fill: white;
+	}
 }
 
 .categoryBubble {
