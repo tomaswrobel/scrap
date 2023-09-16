@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.1] - 2022-09-16
+
+### Fixed
+
+- Fixed data URLs by migrating to UTF-8 encoding. (`btoa` &rarr; `encodeURIComponent`)
+
+### Added
+
+- do ... while loop block
+
 ## [2.3.0] - 2022-09-16
 
 ### Added
@@ -87,7 +97,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.3.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.3.1...HEAD
+[2.3.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.1
 [2.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.0
 [2.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.2.0
 [2.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.1.0

@@ -27,7 +27,7 @@ Blockly.ContextMenuRegistry.registry.register({
 		svg.lastElementChild!.remove();
 
 		const canvas = document.createElement("canvas");
-		const svgData = svg.outerHTML.replace(/&nbsp;/g, " ");
+		const svgData = new XMLSerializer().serializeToString(svg);
         const size = block.getHeightWidth();
 
 		canvas.width = size.width + 2;
@@ -40,7 +40,7 @@ Blockly.ContextMenuRegistry.registry.register({
 			canvas.toBlob(e => saveAs(e!, `${block.type}.png`));
 		};
 		img.src =
-			"data:image/svg+xml;base64," +
-			btoa(`<svg class="${renderer.getClassName()} ${theme.getClassName()}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${size.width}" height="${size.height}"><style>${css}</style>${svgData}</svg>`);
+			"data:image/svg+xml;utf-8," +
+			encodeURIComponent(`<svg class="${renderer.getClassName()} ${theme.getClassName()}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${size.width}" height="${size.height}"><style>${css}</style>${svgData}</svg>`);
 	},
 });

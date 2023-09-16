@@ -236,6 +236,10 @@
             },
             {
                 "kind": "block",
+                "type": "doWhile"
+            },
+            {
+                "kind": "block",
                 "type": "break"
             },
             {

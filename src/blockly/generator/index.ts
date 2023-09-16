@@ -284,6 +284,11 @@ Generator.blocks.while = function (block: Blockly.Block, generator) {
 	return `while (${condition}) {${generator.protection}\n${generator.statementToCode(block, "STACK")}}\n`;
 };
 
+Generator.blocks.doWhile = function (block: Blockly.Block, generator) {
+	const condition = generator.valueToCode(block, "CONDITION", Order.NONE) || "false";
+	return `do {${generator.protection}\n${generator.statementToCode(block, "STACK")}} while (${condition});\n`;
+}
+
 Generator.blocks.getEffect = function (block: Blockly.Block, generator) {
 	const effect = generator.valueToCode(block, "EFFECT", Order.NONE) || "null";
 	return [`this.effects[${effect}]`, Order.MEMBER];
