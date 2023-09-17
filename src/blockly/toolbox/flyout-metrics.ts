@@ -15,7 +15,12 @@ export class FlyoutMetrics extends Blockly.FlyoutMetricsManager {
 	constructor(workspace: Blockly.WorkspaceSvg, flyout: Flyout) {
 		super(workspace, flyout);
 	}
-	getScrollMetrics(getWorkspaceCoordinates = undefined, cachedViewMetrics = undefined, cachedContentMetrics = undefined) {
+
+	getScrollMetrics(
+		getWorkspaceCoordinates?: boolean,
+		cachedViewMetrics?: Blockly.MetricsManager.ContainerRegion,
+		cachedContentMetrics?: Blockly.MetricsManager.ContainerRegion
+	) {
 		const scrollMetrics = super.getScrollMetrics(getWorkspaceCoordinates, cachedViewMetrics, cachedContentMetrics);
 		const contentMetrics = cachedContentMetrics || this.getContentMetrics(getWorkspaceCoordinates);
 		const viewMetrics = cachedViewMetrics || this.getViewMetrics(getWorkspaceCoordinates);

@@ -56,7 +56,8 @@ Blockly.ContextMenuRegistry.registry.register({
 		canvas.height = height + BLOCK_PADDING * 2;
 
 		const ctx = canvas.getContext("2d")!;
-		const img = new Image();
+		const img = new Image(width, height);
+		
 		img.onload = () => {
 			ctx.drawImage(img, BLOCK_PADDING, BLOCK_PADDING, width, height);
 			canvas.toBlob(e => saveAs(e!, `${block.type}.png`));

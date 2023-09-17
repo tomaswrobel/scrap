@@ -1,5 +1,12 @@
-// Inspired by
-// Blockly's JavaScript generator
+/**
+ * @license MIT
+ * @fileoverview Scrap's code generator.
+ * @author Tomáš Wróbel
+ * 
+ * Inspired by Blockly's JavaScript generator.
+ * Where noted, some parts are directly copied 
+ * from Blockly's JavaScript generator.
+ */
 import * as Blockly from "blockly/core";
 import Order from "./order.ts";
 import {Block} from "blockly/core";
@@ -15,10 +22,27 @@ interface BlockCallback<T extends Blockly.Block = any> {
 	(block: T, generator: Generator): null | string | [string, Order];
 }
 
+/**
+ * This generator generates ScrapScript, a
+ * JavaScript subset. ScrapScript is used
+ * to interact with Scrap. It looks like
+ * valid JavaScript, but it is not:
+ *
+ * * `this` is always bound to the current sprite or stage.
+ * * `async` and `await` are never present, even where they should be.
+ * 
+ * Scrap uses two ways to run ScrapScript:
+ * 
+ * * Babel is used to transpile ScrapScript to JavaScript.
+ * * This generator is used to generate JavaScript directly.
+ * 
+ * This generator generates both ScrapScript and JavaScript.
+ */
 class Generator extends Blockly.CodeGenerator {
 	static blocks: Record<string, BlockCallback> = {};
 	static ReservedWords = Object.getOwnPropertyNames(globalThis);
 
+	// Directly copied from Blockly's JavaScript generator.
 	ORDER_OVERRIDES = [
 		// (foo()).bar -> foo().bar
 		// (foo())[0] -> foo()[0]
@@ -55,8 +79,7 @@ class Generator extends Blockly.CodeGenerator {
 		this.isInitialized = false;
 		this.addReservedWords(`${Generator.ReservedWords}`);
 
-		// @ts-ignore
-		this.forBlock = Generator.blocks;
+		this.forBlock = Generator.blocks as Blockly.CodeGenerator["forBlock"];
 		this.INDENT = "\t";
 	}
 
@@ -88,7 +111,7 @@ class Generator extends Blockly.CodeGenerator {
 		if (!this.entity) {
 			return "";
 		}
-		return "\n\tawait new Promise(setTimeout)";
+		return "\n\tawait new Promise(setTimeout);";
 	}
 
 	protected scrub_(block: Block, code: string, opt_thisOnly?: boolean): string {

@@ -1,3 +1,8 @@
+/**
+ * @license MIT
+ * @fileoverview Plugins export file.
+ * @author Tomáš Wróbel
+ */
 import * as Blockly from "blockly/core";
 import Category from "./category";
 import {Metrics} from "./metrics";

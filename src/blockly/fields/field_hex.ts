@@ -1,3 +1,8 @@
+/**
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Custom Blockly field for hex colors.
+ */
 import * as Blockly from 'blockly/core';
 
 export default class FieldHex extends Blockly.FieldTextInput {

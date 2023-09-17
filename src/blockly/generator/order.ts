@@ -1,4 +1,13 @@
-// Taken from Blockly
+/**
+ * @license MIT
+ * @fileoverview Order of operations for JavaScript.
+ * @author Tomáš Wróbel
+ * 
+ * This was taken from Blockly's JavaScript generator
+ * but it was rewritten to TypeScript enum.
+ * 
+ * See https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
+ */
 enum Order {
 	ATOMIC = 0,            // 0 "" ...
 	NEW = 1.1,             // new

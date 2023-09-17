@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.1] - 2022-09-17
+
+### Fixed
+
+- field_param now responds to the change of the field's value.
+- field_param crashes in rare cases. (This was caused by super.updateSize_().)
+
+### Added
+
+- Some more documentation.
+- Context menu for `foreach` to rename the variable.
+
 ## [2.4.0] - 2022-09-16
 
 ### Changed
@@ -117,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.4.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.4.1...HEAD
+[2.4.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.4.1
 [2.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.4.0
 [2.3.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.2
 [2.3.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.1

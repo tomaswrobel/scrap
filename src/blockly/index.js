@@ -105,6 +105,21 @@ Blockly.Extensions.register("parent_style", function () {
 	};
 });
 
+Blockly.Extensions.registerMixin("foreach_contextmenu", {
+	customContextMenu(options) {
+		options.push({
+			text: "Rename variable...",
+			callback: () => {
+				this.setFieldValue(
+					window.prompt("New name:", this.getFieldValue("VAR")),
+					"VAR"
+				);
+			},
+			enabled: true,
+		});
+	},
+});
+
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "function";
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = "function";
 Blockly.Msg.MATH_MODULO_TITLE = "%1 mod %2";

@@ -1571,6 +1571,9 @@
 		],
 		"previousStatement": null,
 		"nextStatement": null,
-		"style": "Iterables"
+		"style": "Iterables",
+		"extensions": [
+			"foreach_contextmenu"
+		]
 	}
 }

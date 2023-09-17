@@ -124,7 +124,6 @@ class Entity {
 		} else {
 			const result = await transform(this.code);
 			zip.file("script.js", this.exportGenerator.finish(result.code || ""));
-			zip.file("script.js.map", result.map!.file!);
 		}
 	}
 
