@@ -713,6 +713,34 @@
 		"previousStatement": null,
 		"style": "Looks"
 	},
+	"goForward": {
+		"message0": "go one layer forwards",
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Looks",
+		"args0": []
+	},
+	"goBackward": {
+		"message0": "go one layer backwards",
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Looks",
+		"args0": []
+	},
+	"goToFront": {
+		"message0": "go to front",
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Looks",
+		"args0": []
+	},
+	"goToBack": {
+		"message0": "go to back",
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Looks",
+		"args0": []
+	},
 	"showing": {
 		"inputsInline": true,
 		"message0": "visible?",

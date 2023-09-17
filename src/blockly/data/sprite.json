@@ -340,6 +340,17 @@
             },
             {
                 "kind": "block",
+                "type": "setSize",
+                "inputs": {
+                    "SIZE": {
+                        "shadow": {
+                            "type": "math_number"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
                 "type": "changeSize",
                 "inputs": {
                     "SIZE": {
@@ -351,14 +362,19 @@
             },
             {
                 "kind": "block",
-                "type": "setSize",
-                "inputs": {
-                    "SIZE": {
-                        "shadow": {
-                            "type": "math_number"
-                        }
-                    }
-                }
+                "type": "goForward"
+            },
+            {
+                "kind": "block",
+                "type": "goBackward"
+            },
+            {
+                "kind": "block",
+                "type": "goToFront"
+            },
+            {
+                "kind": "block",
+                "type": "goToBack"
             },
             {
                 "kind": "block",
