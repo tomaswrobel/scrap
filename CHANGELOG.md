@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.2] - 2022-09-17
+
+### Added
+
+- GitHub's dependabot is now enabled.
+
+### Fixed
+
+- `array` block now preserves connections.
+
 ## [2.4.1] - 2022-09-17
 
 ### Fixed
@@ -129,7 +139,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.4.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.4.2...HEAD
+[2.4.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.4.2
 [2.4.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.4.1
 [2.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.4.0
 [2.3.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.3.2

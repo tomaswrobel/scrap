@@ -79,8 +79,20 @@ export const MIXIN = {
 			);
 		}
 
+		const connections: Record<number, Blockly.Connection> = {};
+
 		// Remove inputs
-		for (let i = 0; this.removeInput("ADD" + i, true); i++);
+		for (let i = 0; ; i++) {
+			const input = this.getInput("ADD" + i);
+			if (!input) {
+				break;
+			}
+			const block = input.connection?.targetBlock();
+			if (block?.outputConnection) {
+				connections[i] = block.outputConnection;
+			}
+			this.removeInput("ADD" + i);
+		}
 
 		// Add new inputs.
 		for (let i = 0; i < this.items.length; i++) {
@@ -93,6 +105,9 @@ export const MIXIN = {
 			if (this.items[i] === "iterable") {
 				input.setCheck(["String", "Array"]);
 				input.appendField("...");
+			}
+			if (connections[i]) {
+				input.connection!.connect(connections[i]);
 			}
 		}
 	},
