@@ -40,36 +40,36 @@
 }
 
 .token.keyword.keyword.keyword-yield {
-    @include invalid("Yield not supported.");
+	@include invalid("Yield not supported.");
 }
 
 .token.keyword.keyword.keyword-function:has(+ .token.operator) {
-    @include invalid("Generators not supported.");
+	@include invalid("Generators not supported.");
 }
 
 @supports not selector(:has(a)) {
-    .token.keyword.keyword.keyword-function + .token.operator {
-        @include invalid("Generators not supported.");
-    }
+	.token.keyword.keyword.keyword-function + .token.operator {
+		@include invalid("Generators not supported.");
+	}
 
-    .token.keyword.keyword.keyword-function + .token.operator::after {
-        content: unset;
-    }
+	.token.keyword.keyword.keyword-function + .token.operator::after {
+		content: unset;
+	}
 }
 
 .token.keyword.keyword-class,
 .token.keyword.keyword-extends {
-    @include invalid("Classes are not supported.");
+	@include invalid("Classes are not supported.");
 }
 
 .token.keyword[class$="keyword-@"]:not([class$="keyword-@param"]):not([class$="keyword-@returns"]) {
-    @include invalid("This JSDoc tag is not supported.");
+	@include invalid("This JSDoc tag is not supported.");
 }
 
 .token.regex {
-    @include invalid("Regular expressions are not supported.");
+	@include invalid("Regular expressions are not supported.");
 }
 
 .prism-editor {
-    height: 100%;
+	height: 100%;
 }

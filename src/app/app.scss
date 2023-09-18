@@ -1,5 +1,6 @@
 @import "../theme";
 $modes: (turbo, paced);
+$gap: 5px;
 
 @each $mode in $modes {
 	##{$mode} > .checkmark {
@@ -17,30 +18,15 @@ $modes: (turbo, paced);
 
 .tab-content {
 	grid-area: tab-content;
-	margin-right: 5px;
+	margin-right: $gap;
 	font-size: 16px;
 	tab-size: 4;
-}
-
-code.code.hljs {
-	white-space: pre-wrap;
-}
-
-textarea.tab-content {
-	border: 0;
-	resize: none;
-	padding: 3px 5px;
-	word-wrap: break-word;
-	font-family: monospace;
-	background-color: transparent;
-	-webkit-text-fill-color: transparent;
-	outline: none;
 }
 
 iframe {
 	grid-area: output;
 	border: 0;
-	margin-bottom: 5px;
+	margin-bottom: $gap;
 }
 
 #app > ul {
@@ -51,6 +37,7 @@ iframe {
 	overflow: hidden;
 	font-size: 15px;
 	background-color: $primary;
+	width: calc(100% + #{$gap});
 
 	.dropdown {
 		display: inline-block;
@@ -120,8 +107,8 @@ iframe {
 
 .stage {
 	grid-area: stage;
-	margin-bottom: 5px;
-	margin-left: 5px;
+	margin-bottom: $gap;
+	margin-left: $gap;
 
 	&.selected {
 		border: 2px solid $primary;
@@ -171,7 +158,7 @@ iframe {
 #buttons {
 	grid-area: buttons;
 	display: flex;
-	gap: 5px;
+	gap: $gap;
 	align-items: center;
 
 	> a {
@@ -207,6 +194,7 @@ iframe,
 
 .sprites {
 	grid-area: sprites;
+	margin-bottom: $gap;
 }
 
 label.file {
@@ -253,6 +241,7 @@ body {
 	grid-template-columns: 1fr 380px 100px;
 	grid-template-rows: auto 40px auto 1fr;
 	background: $background;
+	padding-right: $gap;
 }
 
 .fab {
@@ -274,11 +263,6 @@ body {
 	margin-right: 20px;
 	margin-bottom: 20px;
 	justify-self: end;
-}
-
-iframe,
-.stage {
-	margin-right: 5px;
 }
 
 #about {

@@ -284,6 +284,10 @@
             },
             {
                 "kind": "block",
+                "type": "clearEffects"
+            },
+            {
+                "kind": "block",
                 "type": "setEffect",
                 "inputs": {
                     "EFFECT": {
@@ -488,6 +492,14 @@
             {
                 "kind": "block",
                 "type": "penUp"
+            },
+            {
+                "kind": "block",
+                "type": "stamp"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
             },
             {
                 "kind": "block",

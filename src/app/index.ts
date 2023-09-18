@@ -65,7 +65,7 @@ export default class App {
 			button.addEventListener("click", async () => {
 				if (this.activeTab === name) return;
 
-				if (tab === this.workspace) {
+				if (tab === this.workspace && !this.current.blocks) {
 					this.current.blocks = true;
 					const parser = new CodeParser(this.current.codeWorkspace, this.entities);
 					try {
@@ -75,7 +75,7 @@ export default class App {
 						return;
 					}
 					this.current.code = "";
-				} else if (tab === this.code) {
+				} else if (tab === this.code && this.current.blocks) {
 					this.current.blocks = false;
 					this.current.code = this.generator.workspaceToCode(this.current.codeWorkspace);
 					this.current.workspace = {};
