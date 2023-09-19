@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.1] - 2022-09-19
+
+### Fixed
+
+- `stamp` block now works correctly.
+
+### Changed
+
+- engine update
+
 ## [2.6.0] - 2022-09-17
 
 ### Added
