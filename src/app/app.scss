@@ -37,7 +37,7 @@ iframe {
 	overflow: hidden;
 	font-size: 15px;
 	background-color: $primary;
-	width: calc(100% + #{$gap});
+	margin-right: $gap * -1;
 
 	.dropdown {
 		display: inline-block;
@@ -133,7 +133,7 @@ iframe {
 		padding: 1px 16px;
 		border: 1px solid rgba(0, 0, 0, 0.1);
 		position: relative;
-		margin-right: -8px;
+		margin-right: -12px;
 	}
 
 	button:not(.selected) {

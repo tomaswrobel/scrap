@@ -2,9 +2,9 @@
  * @license MIT
  * @fileoverview Scrap's code generator.
  * @author Tomáš Wróbel
- * 
+ *
  * Inspired by Blockly's JavaScript generator.
- * Where noted, some parts are directly copied 
+ * Where noted, some parts are directly copied
  * from Blockly's JavaScript generator.
  */
 import * as Blockly from "blockly/core";
@@ -30,12 +30,12 @@ interface BlockCallback<T extends Blockly.Block = any> {
  *
  * * `this` is always bound to the current sprite or stage.
  * * `async` and `await` are never present, even where they should be.
- * 
+ *
  * Scrap uses two ways to run ScrapScript:
- * 
+ *
  * * Babel is used to transpile ScrapScript to JavaScript.
  * * This generator is used to generate JavaScript directly.
- * 
+ *
  * This generator generates both ScrapScript and JavaScript.
  */
 class Generator extends Blockly.CodeGenerator {
@@ -162,15 +162,17 @@ class Generator extends Blockly.CodeGenerator {
 
 			if (result || definitions) {
 				code += "(async function () {\n";
-				code += this.prefixLines(definitions, this.INDENT);
-				code += "\n\n\n";
+				if (definitions) {
+					code += this.prefixLines(definitions, this.INDENT);
+					code += "\n\n\n";
+				}
 				code += this.prefixLines(result, this.INDENT);
 				code += `}).call(${this.entity.name});\n`;
 			}
 
 			return super.finish(code);
 		} else {
-			return `${definitions}\n\n\n${super.finish(result)}`;
+			return `${definitions}${definitions && "\n\n\n"}${super.finish(result)}`;
 		}
 	}
 
@@ -312,7 +314,7 @@ Generator.blocks.while = function (block: Blockly.Block, generator) {
 Generator.blocks.doWhile = function (block: Blockly.Block, generator) {
 	const condition = generator.valueToCode(block, "CONDITION", Order.NONE) || "false";
 	return `do {${generator.protection}\n${generator.statementToCode(block, "STACK")}} while (${condition});\n`;
-}
+};
 
 Generator.blocks.getEffect = function (block: Blockly.Block, generator) {
 	const effect = generator.valueToCode(block, "EFFECT", Order.NONE) || "null";

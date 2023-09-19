@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.2] - 2022-09-19
+
+### Fixed
+
+- engine version in README.md
+- navbar width
+- code prefix in the generated code
+
 ## [2.6.1] - 2022-09-19
 
 ### Fixed
@@ -180,7 +188,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.6.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.6.2...HEAD
+[2.6.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.2
+[2.6.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.1
 [2.6.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.0
 [2.5.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.5.0
 [2.4.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.4.3
