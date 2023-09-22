@@ -1,0 +1,7 @@
+{
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+    "typescript.format.semicolons": "insert",
+
+    "editor.formatOnSave": true
+}

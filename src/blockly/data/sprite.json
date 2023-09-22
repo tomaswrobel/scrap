@@ -382,11 +382,11 @@
             },
             {
                 "kind": "block",
-                "type": "showing"
+                "type": "visible"
             },
             {
                 "kind": "block",
-                "type": "magnification"
+                "type": "size"
             },
             {
                 "kind": "block",
@@ -708,6 +708,10 @@
             {
                 "kind": "block",
                 "type": "delete"
+            },
+            {
+                "kind": "block",
+                "type": "stop"
             }
         ]
     },

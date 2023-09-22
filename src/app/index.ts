@@ -25,6 +25,7 @@ export default class App {
 
 	output = document.querySelector("iframe")!;
 	play = document.getElementById("play")!;
+	stop = document.getElementById("stop")!;
 
 	load = document.querySelector<HTMLInputElement>("#load")!;
 	html = document.getElementById("html")!;
@@ -101,6 +102,10 @@ export default class App {
 			this.output.src = this.output.src;
 		});
 
+		this.stop.addEventListener("click", () => {
+			this.output.contentWindow!.postMessage("STOP", "*");
+		});
+
 		this.stagePanel.addEventListener("click", () => {
 			this.stagePanel.classList.add("selected");
 			for (const s of this.spritePanel.getElementsByClassName("selected")) {
@@ -118,7 +123,7 @@ export default class App {
 			const document = this.output.contentDocument!;
 
 			const script = document.createElement("script");
-			let code = "";
+			let code = engineScript;
 
 			try {
 				for (const entity of this.entities) {
@@ -298,9 +303,7 @@ export default class App {
 
 		zip.file("style.css", engineStyle);
 
-		zip.file(
-			"index.html",
-			`<!DOCTYPE html>
+		zip.file("index.html", `<!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Scrap Project</title>
@@ -310,8 +313,7 @@ export default class App {
 </head>
 <body>
 ${scripts.trimEnd()}
-</body>`
-		);
+</body>`);
 
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
 	}

@@ -3,7 +3,7 @@ import type {Entity} from "../entities";
 import Component from "../tab";
 import "./paint.scss";
 import type App from "../app";
-import { MediaList } from "../media-list";
+import {MediaList} from "../media-list";
 
 export default class Paint implements Component {
 	context: CanvasRenderingContext2D;
@@ -108,7 +108,7 @@ export default class Paint implements Component {
 		document.removeEventListener("mouseup", this.mouseUp);
 	}
 
-	async load(file: File) {		
+	async load(file: File) {
 		const reader = new FileReader();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -142,10 +142,11 @@ export default class Paint implements Component {
 
 				resolve(canvas);
 			};
-
 			this.cropWorker.onerror = reject;
 			this.cropWorker.postMessage({
 				imageData: this.context.getImageData(0, 0, this.canvas.width, this.canvas.height),
+				width: this.canvas.width,
+				height: this.canvas.height
 			});
 		});
 	}
@@ -212,7 +213,7 @@ export default class Paint implements Component {
 		this.mediaList?.dispose();
 
 		this.mediaList = new MediaList(MediaList.COSTUME, entity.costumes);
-		
+
 		this.mediaList.addEventListener("select", async e => {
 			const {detail: file} = e as CustomEvent<File>;
 			entity.currentCostume = entity.costumes.indexOf(file);

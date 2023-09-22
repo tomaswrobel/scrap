@@ -465,7 +465,11 @@ export default class CodeParser {
 				break;
 			case "CallExpression": {
 				if (node.callee.type === "MemberExpression") {
-					if (this.isProperty(node.callee, ["reverse", "includes", "indexOf", "slice"])) {
+					if (this.isIdentifier(node.callee.object, "Scrap") && this.isProperty(node.callee, ["delete"])) {
+						const block = this.block("stop");
+						this.comments(block, node);
+						this.connection = null;
+					} else if (this.isProperty(node.callee, ["reverse", "includes", "indexOf", "slice"])) {
 						const block = this.block(this.getPropertyContents(node.callee.property));
 						this.connection = block.getInput("ITERABLE")!.connection!;
 						this.parse(node.callee.object);

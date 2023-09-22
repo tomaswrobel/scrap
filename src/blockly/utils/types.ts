@@ -6,7 +6,7 @@ export const Error = `Type must be one of void${Types.join(", ")}`;
 export const TypeToShadow: Record<string, string> = {
 	Number: "math_number",
 	String: "iterables_string",
-	Color: "colour_picker",
+	Color: "color",
 	Sprite: "sprite",
 };
 

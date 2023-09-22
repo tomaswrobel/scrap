@@ -348,6 +348,12 @@ Generator.blocks.tryCatch = function (block: TryBlock, generator) {
 	if (block.catch) {
 		if (typeof block.catch === "string") {
 			code += `} catch (${block.catch}) {\n`;
+
+			if (generator.entity) {
+				code += `\tif (${block.catch} instanceof Scrap.StopError) throw ${block.catch};`;
+			}
+		} else if (generator.entity) {
+			code += "} catch (e) {\n\tif (e instanceof Scrap.StopError) throw e;\n";
 		} else {
 			code += "} catch {\n";
 		}
@@ -366,6 +372,10 @@ Generator.blocks.throw = function (block: Blockly.Block, generator) {
 	const error = generator.valueToCode(block, "ERROR", Order.NONE) || "null";
 	return `throw ${error};\n`;
 };
+
+Generator.blocks.stop = function () {
+	return "Scrap.stop();\n";
+}
 
 Generator.blocks.controls_if = function (block, generator) {
 	// If/elseif/else condition.
@@ -556,6 +566,10 @@ Generator.blocks.compare = function (block: Blockly.Block, generator) {
 	const right = generator.valueToCode(block, "B", order) || "0";
 
 	return [`${left} ${operator} ${right}`, order];
+};
+
+Generator.blocks.not = function (block: Blockly.Block, generator) {
+	return [`!${generator.valueToCode(block, "BOOL", Order.LOGICAL_NOT) || "false"}`, Order.LOGICAL_NOT];
 };
 
 Generator.blocks.boolean = function (block: Blockly.Block) {

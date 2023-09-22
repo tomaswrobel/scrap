@@ -54,6 +54,7 @@ class Entity {
 	constructor(initialCostume: File, public name: string) {
 		this.codeWorkspace.newBlock("whenLoaded");
 		this.costumes.push(initialCostume);
+		this.outputGenerator.INDENT = "";
 		this.update();
 	}
 
@@ -131,7 +132,7 @@ class Entity {
 		if (this.blocks) {
 			return this.outputGenerator.workspaceToCode(this.codeWorkspace);
 		} else {
-			const result = await transform(this.code);
+			const result = await transform(this.code, true);
 			return this.outputGenerator.finish(result.code || "");
 		}
 	}
@@ -252,7 +253,7 @@ class Sprite extends Entity {
 }
 
 const stage =
-	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect width="480" height="360" fill="#ffffff"/></svg>';
+	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
 
 class Stage extends Entity {
 	constructor() {

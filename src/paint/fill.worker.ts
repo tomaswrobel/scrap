@@ -9,7 +9,7 @@ onmessage = function (e) {
 	const b = parseInt(color.slice(5, 7), 16);
 
 	while (stack.length > 0) {
-		if (closed) {
+		if (self.closed) {
 			return;
 		}
 

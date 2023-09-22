@@ -1,7 +1,0 @@
-{
-	"arrowParens": "avoid",
-	"bracketSpacing": false,
-	"tabWidth": 4,
-	"useTabs": true,
-	"printWidth": 150
-}

@@ -1,7 +1,8 @@
-export default async function transform(code: string) {
+export default async function transform(code: string, minified = false) {
 	const babel = await import("@babel/core");
 
 	return (await babel.transformAsync(code, {
+		minified,
 		plugins: [
 			{
 				name: "babel-plugin-transform-scrap-async",
@@ -55,6 +56,27 @@ export default async function transform(code: string) {
 								)
 							);
 						}
+					},
+					CatchClause(path) {
+						if (!path.node.param) {
+							path.node.param = babel.types.identifier("e");
+						}
+
+						path.node.body.body.unshift(
+							babel.types.ifStatement(
+								babel.types.binaryExpression(
+									"instanceof",
+									babel.types.identifier("e"),
+									babel.types.memberExpression(
+										babel.types.identifier("Scrap"),
+										babel.types.identifier("StopError")
+									)
+								),
+								babel.types.throwStatement(
+									babel.types.identifier("e")
+								),
+							),
+						);
 					}
 				},
 			},

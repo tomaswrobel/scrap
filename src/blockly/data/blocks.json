@@ -741,13 +741,13 @@
 		"style": "Looks",
 		"args0": []
 	},
-	"showing": {
+	"visible": {
 		"inputsInline": true,
-		"message0": "visible?",
+		"message0": "visible",
 		"output": "Boolean",
 		"style": "Looks"
 	},
-	"magnification": {
+	"size": {
 		"inputsInline": true,
 		"message0": "size",
 		"output": "Number",
@@ -1164,6 +1164,13 @@
 		"previousStatement": null,
 		"style": "Controls"
 	},
+	"stop": {
+		"inputsInline": true,
+		"message0": "stop",
+		"args0": [],
+		"previousStatement": null,
+		"style": "Controls"
+	},
 	"isTouching": {
 		"inputsInline": true,
 		"message0": "touching %1?",
@@ -1268,7 +1275,7 @@
 				"options": [
 					["x", "x"],
 					["y", "y"],
-					["size", "magnification"],
+					["size", "size"],
 					["direction", "direction"],
 					["color effect", "effects.color"],
 					["ghost effect", "effects.ghost"],

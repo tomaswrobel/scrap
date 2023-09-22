@@ -7,7 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.6.2] - 2022-09-19
+## [2.6.3] - 2023-09-22
+
+### Fixed
+
+- color parameter fix
+- engine udate
+- worker's fixes
+
+## Added
+
+- stop functionality
+
+## [2.6.2] - 2023-09-19
 
 ### Fixed
 
@@ -15,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - navbar width
 - code prefix in the generated code
 
-## [2.6.1] - 2022-09-19
+## [2.6.1] - 2023-09-19
 
 ### Fixed
 
@@ -25,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - engine update
 
-## [2.6.0] - 2022-09-17
+## [2.6.0] - 2023-09-17
 
 ### Added
 
@@ -40,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - workspace deletion does not occur anymore
 
-## [2.5.0] - 2022-09-17
+## [2.5.0] - 2023-09-17
 
 ### Added
 
@@ -50,13 +62,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - engine update
 
-## [2.4.3] - 2022-09-17
+## [2.4.3] - 2023-09-17
 
 ### Fixed
 
 - `buffer` 6.0.1 &rarr; 6.0.3 
 
-## [2.4.2] - 2022-09-17
+## [2.4.2] - 2023-09-17
 
 ### Added
 
@@ -66,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `array` block now preserves connections.
 
-## [2.4.1] - 2022-09-17
+## [2.4.1] - 2023-09-17
 
 ### Fixed
 
@@ -78,7 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some more documentation.
 - Context menu for `foreach` to rename the variable.
 
-## [2.4.0] - 2022-09-16
+## [2.4.0] - 2023-09-16
 
 ### Changed
 
@@ -92,13 +104,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - When switching sprites, the JavaScript / Blocks tab now changes.
 
-## [2.3.2] - 2022-09-16
+## [2.3.2] - 2023-09-16
 
 ### Fixed
 
 - Icons are now correctly displayed in the PNG export.
 
-## [2.3.1] - 2022-09-16
+## [2.3.1] - 2023-09-16
 
 ### Fixed
 
@@ -108,7 +120,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - do ... while loop block
 
-## [2.3.0] - 2022-09-16
+## [2.3.0] - 2023-09-16
 
 ### Added
 
@@ -118,7 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Naked values are not included in the generated code.
 
-## [2.2.0] - 2022-09-15
+## [2.2.0] - 2023-09-15
 
 ### Fixed
 
@@ -134,7 +146,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed the `hex` block.
 
-## [2.1.0] - 2022-09-15
+## [2.1.0] - 2023-09-15
 
 ### Changed
 
@@ -145,7 +157,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - RELEASE_HEADER.md file is now included in releases.
 
-## [2.0.2] - 2022-09-14
+## [2.0.2] - 2023-09-14
 
 ### Fixed
 
@@ -155,7 +167,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Paint Editor's buttons Save & Cancel have now smaller font size.
 
-## [2.0.1] - 2022-09-14
+## [2.0.1] - 2023-09-14
 
 ### Fixed
 
@@ -166,7 +178,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - When deploy fails, the release is not created.
 - Release now includes only fragments of the CHANGELOG.md file.
 
-## [2.0.0] - 2022-09-14
+## [2.0.0] - 2023-09-14
 
 ### Added
 
@@ -188,7 +200,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.6.2...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.6.3...HEAD
+[2.6.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.3
 [2.6.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.2
 [2.6.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.1
 [2.6.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.0

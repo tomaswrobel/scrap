@@ -1,24 +1,33 @@
-onmessage = function (e) {
-	const data: ImageData["data"] = e.data.imageData.data;
-	const used = new Set<number>();
+type CropEvent = MessageEvent<{
+	imageData: ImageData;
+	width: number;
+	height: number;
+}>;
 
-	for (let i = 0; i < data.length; i += 4) {
-		if (data[i + 3] > 0) {
-			used.add(i / 4);
+onmessage = function ({data: {width, height, imageData: {data}}}: CropEvent) {
+	let minX = width;
+	let minY = height;
+
+	let maxX = 0;
+	let maxY = 0;
+
+	for (let y = 0; y < height; y++) {
+		for (let x = 0; x < width; x++) {
+			const i = (y * width + x) * 4;
+			if (data[i + 3] > 0) {
+				minX = Math.min(minX, x);
+				minY = Math.min(minY, y);
+
+				maxX = Math.max(maxX, x);
+				maxY = Math.max(maxY, y);
+			}
 		}
 	}
 
-	const array = Array.from(used);
-
-	const x = Math.min(...array.map(i => i % 480));
-	const y = Math.min(...array.map(i => Math.floor(i / 480)));
-	const width = Math.max(...array.map(i => i % 480)) - x;
-	const height = Math.max(...array.map(i => Math.floor(i / 480))) - y;
-
-    postMessage({
-        x,
-        y,
-        width,
-        height,
-    })
+	postMessage({
+		x: minX,
+		y: minY,
+		width: maxX - minX,
+		height: maxY - minY
+	});
 };
