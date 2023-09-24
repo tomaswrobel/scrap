@@ -2,7 +2,7 @@
 	"name": "scrap",
 	"displayName": "Scrap",
 	"private": true,
-	"version": "2.6.3",
+	"version": "2.6.4",
 	"type": "module",
 	"scripts": {
 		"dev": "parcel index.html",
@@ -34,7 +34,7 @@
 		"jszip": "3.10.1",
 		"prism-code-editor": "1.1.0",
 		"prismjs": "1.29.0",
-		"scrap-engine": "1.0.2",
+		"scrap-engine": "1.0.3",
 		"wavesurfer.js": "7.3.2"
 	},
 	"staticFiles": {

@@ -449,6 +449,10 @@ Generator.blocks.string = function (block: Blockly.Block, generator) {
 	return [`String(${generator.valueToCode(block, "VALUE", Order.NONE) || "null"})`, Order.FUNCTION_CALL];
 };
 
+Generator.blocks.number = function (block: Blockly.Block, generator) {
+	return [`Number(${generator.valueToCode(block, "VALUE", Order.NONE) || "null"})`, Order.FUNCTION_CALL];
+};
+
 Generator.blocks.function = function (block: ProcedureBlock, generator) {
 	const name = generator.names.getName(block.getFieldValue("NAME"), Blockly.Names.NameType.PROCEDURE);
 	const type = block.getFieldValue("TYPE");

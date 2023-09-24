@@ -11,6 +11,7 @@
 import * as Blockly from "blockly/core";
 import type {Toolbox} from "./toolbox";
 import {FlyoutMetrics} from "./flyout-metrics";
+import {bind} from "../../decorators";
 
 
 export class Flyout extends Blockly.VerticalFlyout {
@@ -85,10 +86,11 @@ export class Flyout extends Blockly.VerticalFlyout {
 		const metrics = this.workspace_.getMetrics();
 		this.scrollTarget = Math.min(position * this.workspace_.scale, metrics.scrollHeight - metrics.viewHeight);
 
-		this.stepScrollAnimation_();
+		this.stepScrollAnimation();
 	}
 
-	private stepScrollAnimation_() {
+	@bind
+	stepScrollAnimation() {
 		if (!this.scrollTarget) {
 			return;
 		}
@@ -102,7 +104,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 		}
 		this.workspace_.scrollbar!.setY(currentScrollPos + diff * this.scrollAnimationFraction);
 
-		requestAnimationFrame(this.stepScrollAnimation_.bind(this));
+		requestAnimationFrame(this.stepScrollAnimation);
 	}
 
 	calculateBottomPadding(

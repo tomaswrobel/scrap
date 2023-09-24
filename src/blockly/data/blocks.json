@@ -1474,6 +1474,18 @@
 		"output": "String",
 		"style": "Operators"
 	},
+	"number": {
+		"inputsInline": true,
+		"message0": "convert %1 to number",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "VALUE"
+			}
+		],
+		"output": "Number",
+		"style": "Operators"
+	},
 	"iterables_string": {
 		"inputsInline": true,
 		"message0": "%1",

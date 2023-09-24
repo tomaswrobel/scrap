@@ -4,6 +4,7 @@ import Component from "../tab";
 import "./paint.scss";
 import type App from "../app";
 import {MediaList} from "../media-list";
+import {bind} from "../decorators";
 
 export default class Paint implements Component {
 	context: CanvasRenderingContext2D;
@@ -51,9 +52,6 @@ export default class Paint implements Component {
 		const colorInput = document.createElement("input");
 		colorInput.type = "color";
 
-		this.mouseMove = this.mouseMove.bind(this);
-		this.mouseUp = this.mouseUp.bind(this);
-
 		this.canvas.addEventListener("mousedown", e => {
 			if (this.currentTool) {
 				this.mouseDown = true;
@@ -87,6 +85,7 @@ export default class Paint implements Component {
 		this.container.append(this.toolContainer, this.canvasContainer, this.controls, colorInput);
 	}
 
+	@bind
 	mouseMove(e: MouseEvent) {
 		const bbox = this.canvas.getBoundingClientRect();
 		if (this.currentTool && this.mouseDown) {
@@ -94,6 +93,7 @@ export default class Paint implements Component {
 		}
 	}
 
+	@bind
 	mouseUp() {
 		this.mouseDown = false;
 		if (this.currentTool) {

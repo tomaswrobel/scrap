@@ -2,7 +2,8 @@ import * as Blockly from "blockly/core";
 import {parse} from "doctrine";
 import {Types, Error, allBlocks} from "../blockly";
 import type {Entity} from "../entities";
-import {Identifier, type CallExpression, type MemberExpression, type Node, StringLiteral} from "@babel/types";
+import {Identifier, type CallExpression, type MemberExpression, type Node, StringLiteral, IfStatement} from "@babel/types";
+import {bind} from "../decorators";
 
 export default class CodeParser {
 	connection: Blockly.Connection | null;
@@ -10,7 +11,6 @@ export default class CodeParser {
 
 	constructor(readonly workspace: Blockly.Workspace, readonly entities: Entity[]) {
 		this.connection = null;
-		this.parse = this.parse.bind(this);
 	}
 
 	async codeToBlock(code: string) {
@@ -104,6 +104,7 @@ export default class CodeParser {
 		}
 	}
 
+	@bind
 	parse(node?: Node | null) {
 		if (!node) {
 			return;
@@ -112,7 +113,7 @@ export default class CodeParser {
 			case "NullLiteral":
 				break;
 			case "NumericLiteral":
-				this.block("math_number", true).setFieldValue(node.value.toString(), "NUM");
+				this.block("math_number", true).setFieldValue(node.value, "NUM");
 				break;
 			case "StringLiteral":
 				this.block("iterables_string", true).setFieldValue(node.value, "TEXT");
@@ -235,7 +236,7 @@ export default class CodeParser {
 				this.parse(node.consequent);
 
 				let elseIfCount = 0,
-					elseIfStatements = [],
+					elseIfStatements: IfStatement[] = [],
 					alternate = node.alternate;
 
 				while (alternate && alternate.type === "IfStatement") {
@@ -532,6 +533,10 @@ export default class CodeParser {
 					const block = this.block("string");
 					this.connection = block.getInput("VALUE")!.connection!;
 					this.parse(node.arguments[0]);
+				} else if (this.isIdentifier(node.callee, "Number")) {
+					const block = this.block("number");
+					this.connection = block.getInput("VALUE")!.connection!;
+					this.parse(node.arguments[0]);
 				} else if (node.callee.type === "Identifier") {
 					if (this.functions.has(node.callee.name)) {
 						const block = this.workspace.newBlock("call");
@@ -664,8 +669,28 @@ export default class CodeParser {
 					this.connection = block.getInput("BOOL")!.connection!;
 					this.parse(node.argument);
 					break;
+				} else if (node.operator === "-") {
+					if (node.argument.type === "NumericLiteral") {
+						this.block("math_number", true).setFieldValue(-node.argument.value, "NUM");
+					} else {
+						const block = this.block("arithmetics");
+						block.setFieldValue("-", "OP");
+						this.comments(block, node);
+
+						this.connection = block.getInput("A")!.connection!;
+						this.block("math_number", true).setFieldValue(0, "NUM");
+
+						this.connection = block.getInput("B")!.connection!;
+						this.parse(node.argument);
+					}
+				} else if (node.operator === "+") {
+					const block = this.block("number");
+					this.connection = block.getInput("VALUE")!.connection!;
+					this.parse(node.argument);
+				} else {
+					throw new SyntaxError("Unsupported operator");
 				}
-				throw new SyntaxError("Unsupported operator");
+				break;
 			}
 			case "AssignmentExpression": {
 				const {left, right, operator} = node;

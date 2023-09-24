@@ -677,7 +677,25 @@
             },
             {
                 "kind": "block",
-                "type": "string"
+                "type": "string",
+                "inputs": {
+                    "VALUE": {
+                        "shadow": {
+                            "type": "math_number"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "number",
+                "inputs": {
+                    "VALUE": {
+                        "shadow": {
+                            "type": "iterables_string"
+                        }
+                    }
+                }
             }
         ]
     },
