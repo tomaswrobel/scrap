@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.5] - 2023-09-24
+
+### Fixed
+
+- bind decorator
+
 ## [2.6.4] - 2023-09-24
 
 ### Fixed
@@ -213,7 +219,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.6.4...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.6.5...HEAD
+[2.6.5]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.5
 [2.6.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.4
 [2.6.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.3
 [2.6.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.2
