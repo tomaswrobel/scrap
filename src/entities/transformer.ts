@@ -57,6 +57,7 @@ export default async function transform(code: string, minified = false) {
 							);
 						}
 					},
+					// Scrap.StopError cannot be caught
 					CatchClause(path) {
 						if (!path.node.param) {
 							path.node.param = babel.types.identifier("e");

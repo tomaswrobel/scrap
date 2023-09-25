@@ -47,6 +47,10 @@
                 }
             },
             {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
                 "kind": "block",
                 "type": "pointInDirection",
                 "inputs": {
@@ -70,6 +74,32 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "block",
+                "type": "pointTo",
+                "inputs": {
+                    "X": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 30
+                            }
+                        }
+                    },
+                    "Y": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 30
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
             },
             {
                 "kind": "block",
@@ -123,6 +153,10 @@
                 }
             },
             {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
                 "kind": "block",
                 "type": "changeX",
                 "inputs": {
@@ -171,6 +205,10 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
             },
             {
                 "kind": "block",
@@ -264,6 +302,10 @@
                 }
             },
             {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
                 "kind": "block",
                 "type": "changeEffect",
                 "inputs": {
@@ -306,18 +348,8 @@
                 }
             },
             {
-                "kind": "block",
-                "type": "switchCostumeToNum",
-                "inputs": {
-                    "COSTUME": {
-                        "shadow": {
-                            "type": "math_number",
-                            "fields": {
-                                "NUM": 1
-                            }
-                        }
-                    }
-                }
+                "kind": "sep",
+                "gap": 40
             },
             {
                 "kind": "block",
@@ -325,7 +357,7 @@
                 "inputs": {
                     "COSTUME": {
                         "shadow": {
-                            "type": "costume"
+                            "type": "costume_menu"
                         }
                     }
                 }
@@ -333,6 +365,10 @@
             {
                 "kind": "block",
                 "type": "nextCostume"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
             },
             {
                 "kind": "block",
@@ -343,12 +379,19 @@
                 "type": "hide"
             },
             {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
                 "kind": "block",
                 "type": "setSize",
                 "inputs": {
                     "SIZE": {
                         "shadow": {
-                            "type": "math_number"
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 100
+                            }
                         }
                     }
                 }
@@ -359,10 +402,17 @@
                 "inputs": {
                     "SIZE": {
                         "shadow": {
-                            "type": "math_number"
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 10
+                            }
                         }
                     }
                 }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
             },
             {
                 "kind": "block",
@@ -381,6 +431,10 @@
                 "type": "goToBack"
             },
             {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
                 "kind": "block",
                 "type": "visible"
             },
@@ -390,7 +444,7 @@
             },
             {
                 "kind": "block",
-                "type": "currentCostumeIndex"
+                "type": "costume"
             },
             {
                 "kind": "block",
@@ -435,6 +489,46 @@
             {
                 "kind": "block",
                 "type": "stopSounds"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "setVolume",
+                "inputs": {
+                    "VOLUME": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 100
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "changeVolume",
+                "inputs": {
+                    "VOLUME": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 10
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "volume"
             }
         ]
     },
@@ -518,7 +612,10 @@
                 "inputs": {
                     "SIZE": {
                         "shadow": {
-                            "type": "math_number"
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 1
+                            }
                         }
                     }
                 }
@@ -533,6 +630,22 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "penSize"
+            },
+            {
+                "kind": "block",
+                "type": "penColor"
+            },
+            {
+                "kind": "block",
+                "type": "isPenDown"
             }
         ]
     },
@@ -821,6 +934,10 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "block",
+                "type": "isTurbo"
             }
         ]
     },

@@ -598,7 +598,13 @@ export default class CodeParser {
 						this.parse(object.object);
 					}
 				} else if (object.type === "Identifier") {
-					if (object.name === "Math") {
+					if (object.name === "Scrap") {
+						if (this.isProperty(node, ["isTurbo"])) {
+							this.block("isTurbo");
+						} else {
+							throw new SyntaxError("Unsupported Scrap property");
+						}
+					} else if (object.name === "Math") {
 						if (this.isProperty(node, ["PI", "E"])) {
 							this.block("constant").setFieldValue("Math." + this.getPropertyContents(property), "CONSTANT");
 						} else {

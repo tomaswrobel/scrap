@@ -154,7 +154,7 @@ class Generator extends Blockly.CodeGenerator {
 			const isStage = this.entity.name === "Stage";
 			let code = `const ${this.entity.name} = new Scrap.${isStage ? "Stage" : "Sprite"}(${this.getURLsFor(
 				this.entity.costumes
-			)},${this.getURLsFor(this.entity.sounds)});\n`;
+			)}, ${this.getURLsFor(this.entity.sounds)}, ${this.entity.current});\n`;
 
 			if (!isStage) {
 				code += `${this.entity.name}.addTo(Stage);\n`;
@@ -296,7 +296,7 @@ Generator.blocks.key = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("KEY")), Order.ATOMIC];
 };
 
-Generator.blocks.costume = Generator.blocks.sound = function (block: Blockly.Block) {
+Generator.blocks.costume_menu = Generator.blocks.sound = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("NAME")), Order.ATOMIC];
 };
 
@@ -375,7 +375,7 @@ Generator.blocks.throw = function (block: Blockly.Block, generator) {
 
 Generator.blocks.stop = function () {
 	return "Scrap.stop();\n";
-}
+};
 
 Generator.blocks.controls_if = function (block, generator) {
 	// If/elseif/else condition.
@@ -401,6 +401,10 @@ Generator.blocks.foreach = function (block: Blockly.Block, generator) {
 
 Generator.blocks.property = function (block: Blockly.Block, generator) {
 	return [`${generator.valueToCode(block, "SPRITE", Order.MEMBER)}.${block.getFieldValue("PROPERTY")}`, Order.MEMBER];
+};
+
+Generator.blocks.isTurbo = function () {
+	return ["Scrap.isTurbo", Order.MEMBER];
 };
 
 Generator.blocks.array = function (block: ArrayBlock, generator) {

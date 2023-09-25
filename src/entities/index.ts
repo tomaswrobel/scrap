@@ -18,10 +18,10 @@ class Entity {
 	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
 	// Thumbnail of the entity
-	thumbnail = new Image(60, 60);
+	thumbnail = new Image();
 
-	// Costume shown in the paint editor
-	currentCostume = 0;
+	// Costume / Backdrop shown in the paint editor
+	current = 0;
 	/** Helper workspace for generating code. */
 	codeWorkspace = new Blockly.Workspace();
 	/** Generator used for preview in an iframe */
@@ -139,7 +139,7 @@ class Entity {
 
 	update() {
 		this.thumbnail.src && URL.revokeObjectURL(this.thumbnail.src);
-		this.thumbnail.src = URL.createObjectURL(this.costumes[this.currentCostume]);
+		this.thumbnail.src = URL.createObjectURL(this.costumes[this.current]);
 	}
 
 	render(parent: Element): HTMLElement {

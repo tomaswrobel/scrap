@@ -75,11 +75,12 @@ export class MediaList extends EventTarget {
         const element = document.createElement("div");
         element.classList.add("media-element");
 
-        const img = new Image(60, 60);
+        const img = new Image();
         img.src = this.type.getURLFor(file);
         element.appendChild(img);
 
         const name = document.createElement("span");
+        name.title = file.name;
         name.classList.add("name");
         name.textContent = file.name;
         element.appendChild(name);

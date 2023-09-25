@@ -216,7 +216,8 @@ export default class Paint implements Component {
 
 		this.mediaList.addEventListener("select", async e => {
 			const {detail: file} = e as CustomEvent<File>;
-			entity.currentCostume = entity.costumes.indexOf(file);
+			entity.current = entity.costumes.indexOf(file);
+			entity.update();
 			await this.load((e as CustomEvent<File>).detail);
 			this.setChanged(false);
 		});
@@ -243,7 +244,7 @@ export default class Paint implements Component {
 		this.cancelButton.onclick = () => {
 			if (this.changed) {
 				this.setChanged(false);
-				this.load(entity.costumes[entity.currentCostume]);
+				this.load(entity.costumes[entity.current]);
 			}
 		};
 
