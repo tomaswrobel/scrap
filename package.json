@@ -34,7 +34,7 @@
 		"jszip": "3.10.1",
 		"prism-code-editor": "1.1.0",
 		"prismjs": "1.29.0",
-		"scrap-engine": "1.0.3",
+		"scrap-engine": "1.1.1",
 		"wavesurfer.js": "7.3.2"
 	},
 	"staticFiles": {
