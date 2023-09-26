@@ -1,0 +1,25 @@
+{
+    "name": "Scrap",
+    "short_name": "Scrap",
+    "icons": [
+        {
+            "src": "android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#2fbf71",
+    "background_color": "#c8f2db",
+    "display": "standalone",
+    "start_url": "/",
+    "file_handlers": [
+        {
+            "action": "/",
+            "accept": {
+                "application/zip": [
+                    ".scrap"
+                ]
+            }
+        }
+    ]
+}
