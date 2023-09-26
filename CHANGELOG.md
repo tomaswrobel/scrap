@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.1] - 2023-09-26
+
+### Added
+
+- 256x256 icon
+
+### Changed
+
+- Icon color
+
 ## [2.8.0] - 2023-09-26
 
 ### Added
@@ -253,8 +263,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.8.0...HEAD
-[2.8.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.7.2
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.8.1...HEAD
+[2.8.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.1
+[2.8.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.0
 [2.7.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.7.1
 [2.7.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.7.0
 [2.6.5]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.5
