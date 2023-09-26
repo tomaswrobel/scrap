@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.1] - 2023-09-26
+
+### Fixed
+
+- Stop functionality for events
+
 ## [2.7.0] - 2023-09-25
 
 ### Added
@@ -240,7 +246,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.7.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.7.1...HEAD
+[2.7.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.7.0
 [2.7.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.7.0
 [2.6.5]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.5
 [2.6.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.6.4
