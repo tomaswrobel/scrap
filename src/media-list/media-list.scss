@@ -1,11 +1,11 @@
 @import "../theme";
 
 .media-list {
-	display: flex;
-	flex-direction: column;
-	align-content: center;
-	overflow-y: auto;
-	gap: 20px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    overflow-y: auto;
+    gap: 20px;
     padding: 10px;
     background: $background;
 
@@ -38,13 +38,30 @@
         white-space: nowrap;
     }
 
+    .remove {
+        display: none;
+    }
+
     &.selected {
         border-color: $primary;
         background-color: #FFF;
         color: #FFF;
+        position: relative;
 
-        > .name {
+        .name {
             background-color: $primary;
+        }
+
+        &:not(:only-child) .remove {
+            display: block;
+            position: absolute;
+            background: #2fbf71;
+            padding: 3px 7px;
+            border-radius: 50%;
+            top: -0.5em;
+            right: -0.5em;
+            user-select: none;
+            cursor: pointer;
         }
     }
 }

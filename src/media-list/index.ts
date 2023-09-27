@@ -8,7 +8,7 @@ export class MediaList extends EventTarget {
         readonly type: MediaType,
         readonly files: File[]
     ) {
-        super();
+        super(); 
 
         this.root.classList.add("media-list");
         this.root.style.gridArea = type.gridArea;
@@ -85,16 +85,30 @@ export class MediaList extends EventTarget {
         name.textContent = file.name;
         element.appendChild(name);
 
-        element.onclick = () => {
-            for (const child of this.root.getElementsByClassName("selected")) {
-                child.classList.remove("selected");
-            }
+        const remove = document.createElement("div");
+        remove.classList.add("remove");
+        remove.textContent = "×";
+        element.appendChild(remove);
 
-            element.classList.add("selected");
-            
-            this.dispatchEvent(new CustomEvent("select", {
-                detail: file
-            }));
+        element.onclick = e => {
+            if (e.target === remove) {
+                element.remove();
+                this.files.splice(this.files.indexOf(file), 1);
+                this.dispatchEvent(new CustomEvent("select", {detail: this.files[0]}));
+                
+                for (const child of this.root.getElementsByClassName("selected")) {
+                    child.classList.remove("selected");
+                }
+
+                this.root.querySelector(".media-element")!.classList.add("selected");
+            } else {
+                for (const child of this.root.getElementsByClassName("selected")) {
+                    child.classList.remove("selected");
+                }
+
+                element.classList.add("selected");
+                this.dispatchEvent(new CustomEvent("select", {detail: file}));
+            }
         };
 
         this.root.appendChild(element);

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.2] - 2023-09-27
+
+### Fixed
+
+- README.md links
+
+### Added
+
+- Media list can now delete items.
+
 ## [2.8.1] - 2023-09-26
 
 ### Added
@@ -263,7 +273,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.8.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.8.2...HEAD
+[2.8.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.2
 [2.8.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.1
 [2.8.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.0
 [2.7.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.7.1
