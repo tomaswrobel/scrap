@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.4] - 2023-09-28
+
+### Changed
+
+- Update Blockly to 10.2.0
+
 ## [2.8.3] - 2023-09-28
 
 ### Changed
@@ -284,7 +290,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.8.2...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.8.4...HEAD
+[2.8.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.4
+[2.8.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.3
 [2.8.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.2
 [2.8.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.1
 [2.8.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.0
