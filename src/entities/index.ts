@@ -168,7 +168,8 @@ class Entity {
 			sounds: this.sounds.map(f => f.name),
 			workspace: this.workspace,
 			code: this.code,
-			blocks: this.blocks
+			blocks: this.blocks,
+			current: this.current,
 		};
 	}
 
@@ -180,6 +181,7 @@ class Entity {
 		entity.sounds = await Promise.all(json.sounds.map(fn));
 		entity.code = json.code;
 		entity.blocks = json.blocks;
+		entity.current = json.current;
 		return entity;
 	}
 

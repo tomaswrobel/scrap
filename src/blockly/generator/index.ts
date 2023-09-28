@@ -111,7 +111,7 @@ class Generator extends Blockly.CodeGenerator {
 		if (!this.entity) {
 			return "";
 		}
-		return "\n\tawait new Promise(setTimeout);";
+		return "\n\tawait new Promise(Scrap.loop);";
 	}
 
 	protected scrub_(block: Block, code: string, opt_thisOnly?: boolean): string {

@@ -33,7 +33,10 @@ export default async function transform(code: string, minified = false) {
 										babel.types.newExpression(
 											babel.types.identifier("Promise"),
 											[
-												babel.types.identifier("setTimeout"),
+												babel.types.memberExpression(
+													babel.types.identifier("Scrap"),
+													babel.types.identifier("loop")
+												),
 											]
 										)
 									)
@@ -49,7 +52,29 @@ export default async function transform(code: string, minified = false) {
 										babel.types.newExpression(
 											babel.types.identifier("Promise"),
 											[
-												babel.types.identifier("setTimeout"),
+												babel.types.memberExpression(
+													babel.types.identifier("Scrap"),
+													babel.types.identifier("loop")
+												),
+											]
+										)
+									)
+								)
+							);
+						}
+					},
+					ForOfStatement(path) {
+						if (path.node.body.type === "BlockStatement") {
+							path.node.body.body.unshift(
+								babel.types.expressionStatement(
+									babel.types.awaitExpression(
+										babel.types.newExpression(
+											babel.types.identifier("Promise"),
+											[
+												babel.types.memberExpression(
+													babel.types.identifier("Scrap"),
+													babel.types.identifier("loop")
+												),
 											]
 										)
 									)

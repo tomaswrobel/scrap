@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.8.3] - 2023-09-28
+
+### Changed
+
+- Engine update
+- Loop protection
+
+### Fixed
+
+- Current costume now saves correctly.
+
 ## [2.8.2] - 2023-09-27
 
 ### Fixed
