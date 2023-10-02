@@ -861,26 +861,5 @@
     },
     {
         "kind": "sep"
-    },
-    {
-        "kind": "category",
-        "categorystyle": "variable_category",
-        "custom": "VARIABLE",
-        "name": "Variables"
-    },
-    {
-        "kind": "category",
-        "name": "Functions",
-        "categorystyle": "procedure_category",
-        "contents": [
-            {
-                "kind": "block",
-                "type": "function"
-            },
-            {
-                "kind": "block",
-                "type": "return"
-            }
-        ]
     }
 ]

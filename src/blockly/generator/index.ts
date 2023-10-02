@@ -96,12 +96,17 @@ class Generator extends Blockly.CodeGenerator {
 		this.nameDB_.populateVariables(workspace);
 		this.nameDB_.populateProcedures(workspace);
 
-		const vars = Blockly.Variables.allUsedVarModels(workspace).map((variable: Blockly.VariableModel) =>
-			this.names.getName(variable.getId(), Blockly.VARIABLE_CATEGORY_NAME)
+		const vars = workspace.getAllVariables().map(
+			variable => {
+				if (this.entity) {
+					return `await this.declareVariable(${JSON.stringify(variable.name)}, "${variable.type}");`
+				}
+				return `/** @type {${variable.type || "*"}} */\nlet ${variable.name};`
+			}
 		);
 
 		if (vars.length > 0) {
-			this.definitions_.variables = `var ${vars.join(",\n\t")};`;
+			this.definitions_.variables = vars.join("\n\n");
 		}
 
 		this.isInitialized = true;
@@ -172,7 +177,7 @@ class Generator extends Blockly.CodeGenerator {
 
 			return super.finish(code);
 		} else {
-			return `${definitions}${definitions && "\n\n\n"}${super.finish(result)}`;
+			return `${definitions}${definitions && "\n\n"}${super.finish(result)}`;
 		}
 	}
 
@@ -269,15 +274,39 @@ Generator.ReservedWords.unshift(
 	"Color"
 );
 
-Generator.blocks.variables_get = function (block: Blockly.Block, generator) {
-	const name = generator.names.getName(block.getFieldValue("VAR"), Blockly.Names.NameType.VARIABLE);
-	return [name, Order.ATOMIC];
+Generator.blocks.setVariable = function (block: Blockly.Block, generator) {
+	if (generator.entity) {
+		return `await this.setVariable("${block.getField("VAR")!.getText()}", ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"});\n`;
+	}
+	return `${block.getField("VAR")!.getText()} = ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
 };
 
-Generator.blocks.variables_set = function (block: Blockly.Block, generator) {
-	const name = generator.names.getName(block.getFieldValue("VAR"), Blockly.Names.NameType.VARIABLE);
-	const value = generator.valueToCode(block, "VALUE", Order.NONE) || "0";
-	return `${name} = ${value};\n`;
+Generator.blocks.getVariable = function (block: Blockly.Block, generator) {
+	if (generator.entity) {
+		return [`await this.getVariable("${block.getField("VAR")!.getText()}")`, Order.MEMBER];
+	}
+	return [block.getField("VAR")!.getText(), Order.ATOMIC];
+};
+
+Generator.blocks.changeVariable = function (block: Blockly.Block, generator) {
+	if (generator.entity) {
+		return `await this.changeVariable("${block.getField("VAR")!.getText()}", ${generator.valueToCode(block, "VALUE", Order.NONE) || "0"});\n`;
+	}
+	return `${block.getField("VAR")!.getText()} += ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
+};
+
+Generator.blocks.showVariable = function (block: Blockly.Block, generator) {
+	if (generator.entity) {
+		return `await this.showVariable("${block.getField("VAR")!.getText()}");\n`;
+	}
+	return `this.showVariable(${block.getField("VAR")!.getText()});\n`;
+};
+
+Generator.blocks.hideVariable = function (block: Blockly.Block, generator) {
+	if (generator.entity) {
+		return `await this.hideVariable("${block.getField("VAR")!.getText()}");\n`;
+	}
+	return `this.hideVariable(${block.getField("VAR")!.getText()});\n`;
 };
 
 Generator.blocks.color = Generator.blocks.hex = function (block: Blockly.Block) {

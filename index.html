@@ -1,82 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Loading...</title>
-		<link rel="apple-touch-icon" sizes="180x180" href="pwa/apple-touch-icon.png" />
-		<link rel="icon" type="image/png" sizes="32x32" href="pwa/favicon-32x32.png" />
-		<link rel="icon" type="image/png" sizes="16x16" href="pwa/favicon-16x16.png" />
-		<link rel="manifest" href="pwa/site.webmanifest" />
-		<meta name="theme-color" content="#2fbf71" />
-	</head>
-	<body>
-		<div id="app">
-			<iframe width="480" data-mode="paced" height="360" name="output" src="src/output/index.html"></iframe>
-			<!-- Nav -->
-			<ul role="navigation">
-				<li>
-					<!-- Logo is injected here -->
-					<a href="/"></a>
-				</li>
 
-				<li class="dropdown">
-					<a href="javascript:void(0)">File</a>
-					<div class="dropdown-content">
-						<label>
-							Open
-							<input accept=".scrap" type="file" id="load" />
-						</label>
-						<a href="javascript:void(0)" id="save"> Save </a>
-						<a href="javascript:void(0)" id="html"> Export </a>
-					</div>
-				</li>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Loading...</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="pwa/apple-touch-icon.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="pwa/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="pwa/favicon-16x16.png" />
+	<link rel="manifest" href="pwa/site.webmanifest" />
+	<meta name="theme-color" content="#2fbf71" />
+</head>
 
-				<li class="dropdown">
-					<a href="javascript:void(0)">Mode</a>
-					<div class="dropdown-content">
-						<a href="javascript:void(0)" id="paced">
-							<span class="checkmark">&check;&nbsp;</span>
-							Paced
-						</a>
-						<a href="javascript:void(0)" id="turbo">
-							<span class="checkmark">&check;&nbsp;</span>
-							Turbo
-						</a>
-					</div>
-				</li>
+<body>
+	<div id="app">
+		<iframe width="480" data-mode="paced" height="360" name="output" src="src/output/index.html"></iframe>
+		<!-- Nav -->
+		<ul role="navigation">
+			<li>
+				<!-- Logo is injected here -->
+				<a href="/"></a>
+			</li>
 
-				<li>
-					<a href="javascript:void(document.getElementById('about').showModal())">About</a>
-				</li>
-			</ul>
+			<li class="dropdown">
+				<a href="javascript:void(0)">File</a>
+				<div class="dropdown-content">
+					<label>
+						Open
+						<input accept=".scrap" type="file" id="load" />
+					</label>
+					<a href="javascript:void(0)" id="save"> Save </a>
+					<a href="javascript:void(0)" id="html"> Export </a>
+				</div>
+			</li>
 
-			<!-- Tabs -->
-			<div id="tabs"></div>
+			<li class="dropdown">
+				<a href="javascript:void(0)">Mode</a>
+				<div class="dropdown-content">
+					<a href="javascript:void(0)" id="paced">
+						<span class="checkmark">&check;&nbsp;</span>
+						Paced
+					</a>
+					<a href="javascript:void(0)" id="turbo">
+						<span class="checkmark">&check;&nbsp;</span>
+						Turbo
+					</a>
+				</div>
+			</li>
 
-			<!-- Stage controls -->
-			<div id="buttons">
-				<a href="javascript:void(0)" id="play"><img src="src/app/flag.svg" alt="Play" /></a>
-				<a href="javascript:void(0);" id="stop"><img src="src/app/stop.svg" alt="Stop" /></a>
-			</div>
+			<li>
+				<a href="javascript:void(document.getElementById('about').showModal())">About</a>
+			</li>
+		</ul>
 
-			<!-- Sprite Bar -->
-			<div class="sprites"></div>
-			<button id="add" class="fab">+</button>
+		<!-- Tabs -->
+		<div id="tabs"></div>
 
-			<!-- Stage -->
-			<div class="stage">
-				<span class="name">Stage</span>
-			</div>
+		<!-- Stage controls -->
+		<div id="buttons">
+			<a href="javascript:void(0)" id="play"><img src="src/app/flag.svg" alt="Play" /></a>
+			<a href="javascript:void(0);" id="stop"><img src="src/app/stop.svg" alt="Stop" /></a>
 		</div>
-		<dialog id="about">
-			<h2 style="display: flex">
-				About Scrap
-				<div style="flex: 1"></div>
-				<form method="dialog">
-					<input type="submit" value="×" />
-				</form>
-			</h2>
+
+		<!-- Sprite Bar -->
+		<div class="sprites"></div>
+		<button id="add" class="fab">+</button>
+
+		<!-- Stage -->
+		<div class="stage">
+			<span class="name">Stage</span>
+		</div>
+	</div>
+	<dialog class="parley" id="about">
+		<h2>
+			About Scrap
+		</h2>
+		<div style="text-align: left;">
 			<p>
 				Scrap is a tool by <a href="https://tomaswrobel.dev" target="_blank">Tomáš Wróbel</a> designed to simplify the transition from
 				Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve into JavaScript, Scrap is here
@@ -140,7 +139,14 @@
 				Why just not let users add <code>async</code> / <code>await</code> keywords manually? Because it's not intuitive. Some methods are
 				asynchronous, while others are synchronous. Scrap is designed to be intuitive and easy to use, so it should handle this for the user.
 			</p>
-		</dialog>
-		<script type="module" src="src/main.ts"></script>
-	</body>
+		</div>
+		<form method="dialog">
+			<div class="button-container">
+				<button type="submit" style="background: var(--parley-primary);">OK</button>
+			</div>
+		</form>
+	</dialog>
+	<script type="module" src="src/main.ts"></script>
+</body>
+
 </html>

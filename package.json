@@ -2,7 +2,7 @@
 	"name": "scrap",
 	"displayName": "Scrap",
 	"private": true,
-	"version": "2.8.4",
+	"version": "2.9.0",
 	"type": "module",
 	"scripts": {
 		"dev": "parcel index.html",
@@ -36,9 +36,10 @@
 		"doctrine": "3.0.0",
 		"file-saver": "2.0.5",
 		"jszip": "3.10.1",
+		"parley.js": "2.0.0",
 		"prism-code-editor": "1.2.1",
 		"prismjs": "1.29.0",
-		"scrap-engine": "1.2.0",
+		"scrap-engine": "1.3.0",
 		"wavesurfer.js": "7.3.2"
 	},
 	"staticFiles": {

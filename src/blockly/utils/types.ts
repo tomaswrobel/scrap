@@ -26,3 +26,49 @@ Blockly.defineBlocksWithJsonArray(
 		previousStatement: null,
 	}))
 );
+
+Blockly.Extensions.register("getVar", function (this: Blockly.Block) {
+	this.getField("VAR")!.setValidator(id => {
+		this.setOutput(true, this.workspace.getVariableById(id)!.type);
+		return id;
+	});
+});
+
+Blockly.Extensions.register("setVar", function (this: Blockly.Block) {
+	const input = this.getInput("VALUE")!;
+	const field = this.getField("VAR")!;
+
+	const onChange = (id: string) => {
+		const {type} = this.workspace.getVariableById(id)!;
+
+		if (!(type in TypeToShadow)) {
+			return id;
+		}
+
+		const old = input.connection!.targetBlock();
+		if (old) {
+			if (old.isShadow()) {
+				old.setShadow(false);
+				old.dispose(false);
+			} else {
+				old.unplug();
+			}
+		}
+
+		input.setCheck(type);
+
+		const block = this.workspace.newBlock(TypeToShadow[type]);
+		block.setShadow(true);
+		
+		if (block instanceof Blockly.BlockSvg) {
+			block.initSvg();
+			block.render();
+		}
+
+		input.connection!.connect(block.outputConnection!);
+
+		return id;
+	};
+
+	field.setValidator(onChange);
+});

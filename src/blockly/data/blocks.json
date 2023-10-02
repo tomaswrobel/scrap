@@ -1,11 +1,10 @@
 {
-	"variables_set": {
+	"setVariable": {
 		"message0": "%{BKY_VARIABLES_SET}",
 		"args0": [
 			{
 				"type": "field_variable",
-				"name": "VAR",
-				"variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+				"name": "VAR"
 			},
 			{
 				"type": "input_value",
@@ -15,22 +14,64 @@
 		"previousStatement": null,
 		"nextStatement": null,
 		"style": "variable_blocks",
-		"tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
-		"helpUrl": "%{BKY_VARIABLES_SET_HELPURL}"
+		"extensions": [
+			"setVar"
+		]
 	},
-	"variables_get": {
+	"getVariable": {
 		"message0": "%1",
 		"args0": [
 			{
 				"type": "field_variable",
-				"name": "VAR",
-				"variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+				"name": "VAR"
 			}
 		],
 		"output": null,
 		"style": "variable_blocks",
-		"tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-		"helpUrl": "%{BKY_VARIABLES_GET_HELPURL}"
+		"extensions": [
+			"getVar"
+		]
+	},
+	"changeVariable": {
+		"message0": "change %1 by %2",
+		"args0": [
+			{
+				"type": "field_variable",
+				"name": "VAR"
+			},
+			{
+				"type": "input_value",
+				"name": "VALUE",
+				"check": "Number"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "variable_blocks"
+	},
+	"showVariable": {
+		"message0": "show variable %1",
+		"args0": [
+			{
+				"type": "field_variable",
+				"name": "VAR"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "variable_blocks"
+	},
+	"hideVariable": {
+		"message0": "hide variable %1",
+		"args0": [
+			{
+				"type": "field_variable",
+				"name": "VAR"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "variable_blocks"
 	},
 	"function_header": {
 		"message0": "function's parameters",

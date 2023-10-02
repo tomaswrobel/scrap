@@ -1,4 +1,5 @@
 import App from "./app";
+import "parley.js/dist/default.css";
 import {version, displayName} from "../package.json";
 
 const app = new App();
@@ -13,12 +14,12 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-if (window.launchQueue) {
+if ("launchQueue" in window) {
     function isFile(file: FileSystemHandle): file is FileSystemFileHandle {
         return file.kind === "file";
     }
 
-    window.launchQueue.setConsumer(async launchParams => {
+    window.launchQueue!.setConsumer(async launchParams => {
         if (launchParams.files.length > 0) {
             const fileHandle = launchParams.files[0];
 

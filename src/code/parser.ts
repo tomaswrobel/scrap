@@ -149,21 +149,51 @@ export default class CodeParser {
 				this.connection = null;
 				break;
 			case "VariableDeclaration": {
-				if (node.kind !== "var") {
-					throw new SyntaxError("Only var declarations are supported");
+				if (node.kind !== "var" && node.kind !== "let") {
+					throw new SyntaxError("Only var and let declarations are supported");
 				}
 
-				for (const {id, init} of node.declarations) {
-					if (init) {
-						throw new SyntaxError("Only declarations without initializers are supported");
-					}
+				const {declarations: [{id, init}], leadingComments} = node;
 
-					if (id.type !== "Identifier") {
-						throw new SyntaxError("Only simple identifiers are supported");
-					}
-
-					this.workspace.createVariable(id.name);
+				if (init) {
+					throw new SyntaxError("Only declarations without initializers are supported");
 				}
+
+				if (id.type !== "Identifier") {
+					throw new SyntaxError("Only simple identifiers are supported");
+				}
+
+				let varType = "";
+
+				if (leadingComments) {
+					for (const {type, value} of leadingComments) {
+						if (type === "CommentBlock") {
+							const {tags} = parse(`/*${value}*/`, {
+								unwrap: true,
+								tags: ["type"],
+								recoverable: true,
+							});
+
+							for (const {title, type: paramType} of tags) {
+								if (title === "type") {
+									if (paramType!.type === "NameExpression") {
+										if (Types.indexOf(paramType!.name) !== -1) {
+											varType = paramType!.name;
+										} else {
+											throw new SyntaxError(`Unsupported type ${paramType!.type}. ${Error}`);
+										}
+									} else if (paramType!.type === "ArrayType") {
+										varType = "Array";
+									} else if (paramType!.type !== "AllLiteral") {
+										throw new SyntaxError(`Unsupported type ${paramType!.type}. ${Error}`);
+									}
+								}
+							}
+						}
+					}
+				}
+
+				this.workspace.createVariable(id.name, varType || null);
 
 				break;
 			}
@@ -705,19 +735,42 @@ export default class CodeParser {
 					throw new SyntaxError("Only simple identifiers are supported");
 				}
 
-				if (operator !== "=") {
-					throw new SyntaxError("Only = operator is supported");
+				if (operator !== "=" && operator !== "+=" && operator !== "-=") {
+					throw new SyntaxError("Only =, += and -= operators are supported")
 				}
 
-				const block = this.block("variables_set");
+				const block = this.block(operator === "=" ? "setVariable" : "changeVariable");
 				this.comments(block, node);
 
-				const variable = Blockly.Variables.getOrCreateVariablePackage(this.workspace, null, left.name, "");
+				const variable = this.workspace.getAllVariables().find(variable => variable.name === left.name);
+
+				if (!variable) {
+					throw new SyntaxError(`Variable ${left.name} is not defined`);
+				}
 
 				block.setFieldValue(variable.getId(), "VAR");
 
 				this.connection = block.getInput("VALUE")!.connection!;
+
+				if (operator === "-=") {
+					if (right.type === "NumericLiteral") {
+						this.block("math_number", true).setFieldValue(-right.value, "NUM");
+						this.connection = block.nextConnection;
+						break;
+					}
+
+					const neg = this.block("arithmetics");
+					neg.setFieldValue("-", "OP");
+
+					this.connection =  neg.getInput("A")!.connection!;
+					this.block("math_number", true);
+
+					this.connection = neg.getInput("B")!.connection!;
+				}
+
 				this.parse(right);
+				this.connection = block.nextConnection;
+
 				break;
 			}
 			case "ForOfStatement": {
@@ -754,11 +807,9 @@ export default class CodeParser {
 				if (this.entities.some(entity => entity.name === node.name)) {
 					this.block("sprite", true).setFieldValue(node.name, "SPRITE");
 				} else {
-					const variable = this.workspace.getVariable(node.name);
+					const variable = this.workspace.getAllVariables().find(variable => variable.name === node.name);
 					if (variable) {
-						const block = this.block("variables_get");
-						const variable = Blockly.Variables.getOrCreateVariablePackage(this.workspace, null, node.name);
-
+						const block = this.block("getVariable");
 						block.setFieldValue(variable.getId(), "VAR");
 					} else {
 						this.block("parameter").setFieldValue(node.name, "VAR");
