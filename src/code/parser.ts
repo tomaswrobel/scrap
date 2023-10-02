@@ -110,6 +110,9 @@ export default class CodeParser {
 			return;
 		}
 		switch (node.type) {
+			case "SpreadElement":
+				this.parse(node.argument);
+				break;
 			case "NullLiteral":
 				break;
 			case "NumericLiteral":
@@ -483,10 +486,10 @@ export default class CodeParser {
 					}),
 				});
 
-				for (let i = 0; i < node.elements.length; i++) {
+				node.elements.forEach((element, i) => {
 					this.connection = block.getInput(`ADD${i}`)!.connection!;
-					this.parse(node.elements[i]);
-				}
+					this.parse(element);
+				});
 
 				this.connection = null;
 				break;

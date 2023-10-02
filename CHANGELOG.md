@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.9.0] - 2223-10-02
+## [2.9.1] - 2023-10-02
+
+### Fixed
+
+- spread operator
+
+## [2.9.0] - 2023-10-02
 
 ### Added
 
