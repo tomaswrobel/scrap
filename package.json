@@ -32,7 +32,7 @@
 		"@babel/core": "7.23.0",
 		"@blockly/field-colour-hsv-sliders": "4.1.4",
 		"@parcel/service-worker": "2.9.3",
-		"blockly": "10.2.0",
+		"blockly": "10.2.1",
 		"doctrine": "3.0.0",
 		"file-saver": "2.0.5",
 		"jszip": "3.10.1",
