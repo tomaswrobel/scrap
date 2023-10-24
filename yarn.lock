@@ -2610,10 +2610,10 @@ w3c-xmlserializer@^4.0.0:
   dependencies:
     xml-name-validator "^4.0.0"
 
-wavesurfer.js@7.3.3:
-  version "7.3.3"
-  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.3.3.tgz#abc1e5baa497018a45e7c1851d7475ce08bd7e66"
-  integrity sha512-I1erzD2mjKH3H8HjNnwasQwNk4T7v2uDCFegxPr+9WyW4Rg8CZgcmSkIH0pdsMhLE5P+Tugy/KAiEEolenREXg==
+wavesurfer.js@7.4.2:
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.4.2.tgz#59f5c87193d4eeeb199858688ddac1ad7ba86b3a"
+  integrity sha512-4pNQ1porOCUBYBmd2F1TqVuBnB2wBPipaw2qI920zYLuPnada0Rd1CURgh8HRuPGKxijj2iyZDFN2UZwsaEuhA==
 
 weak-lru-cache@^1.2.2:
   version "1.2.2"
