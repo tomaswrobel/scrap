@@ -110,6 +110,9 @@ export default async function transform(code: string, minified = false) {
 					},
 					// Variables with `let` or `var` are converted to `this.declareVariable`
 					VariableDeclaration(path) {
+						if (path.parent.type === "ForOfStatement" || path.parent.type === "ForStatement") {
+							return;
+						}
 						if (path.node.kind === "let" || path.node.kind === "var") {
 							let varType = "";
 
