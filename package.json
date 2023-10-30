@@ -31,7 +31,7 @@
 	"dependencies": {
 		"@babel/core": "7.23.0",
 		"@blockly/field-colour-hsv-sliders": "4.1.4",
-		"@parcel/service-worker": "2.9.3",
+		"@parcel/service-worker": "2.10.1",
 		"blockly": "10.2.0",
 		"doctrine": "3.0.0",
 		"file-saver": "2.0.5",

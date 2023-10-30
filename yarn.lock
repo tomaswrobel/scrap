@@ -731,10 +731,10 @@
   resolved "https://registry.yarnpkg.com/@parcel/rust/-/rust-2.10.0.tgz#fc930715a3200bb05a58007fc11cb29f444382c9"
   integrity sha512-9J7riqPI8mVlFSDphK9kVUH8nFQgeMbO/95Ycf4vaEOVE1ICQo1h18WHAy2DndmL1uSd/UTimirrP6yLt/I3KA==
 
-"@parcel/service-worker@2.9.3":
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/@parcel/service-worker/-/service-worker-2.9.3.tgz#ec949859c7fa4c8ca33d9b3e258a9e12a438aeb4"
-  integrity sha512-Qdcr937GAn7mAmSoE/4xdGOs4Rbe+FCvQpn+7j6+GZXOFdnecQrqvBv5j1kvqAmVmEmgo5x/+oaeGXUJrm+X/A==
+"@parcel/service-worker@2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@parcel/service-worker/-/service-worker-2.10.1.tgz#ecfcacb663c36f29ecfd0c8d152ecab271f39abd"
+  integrity sha512-byeDsfXHHk/aGVzEBHU+VOM/C8uLse0YFLJbee4VdZdkDrysBGMW/k/3vazu7L1If+ySBYDh73DrPHb15UlHxA==
 
 "@parcel/source-map@^2.1.1":
   version "2.1.1"
