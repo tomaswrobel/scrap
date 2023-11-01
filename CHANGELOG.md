@@ -7,9 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.4] - 2023-11-01
+
+### Fixed
+
+- dependencies update
+
+## [2.9.3] - 2023-10-24
+
+### Fixed
+
+- Variables in for loop are not rewritten anymore.
+
 ## [2.9.2] - 2023-10-03
 
-## Fixed
+### Fixed
 
 - dependencies update
 
@@ -308,7 +320,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.9.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.9.4...HEAD
+[2.9.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.4
+[2.9.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.3
+[2.9.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.2
+[2.9.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.1
 [2.9.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.0
 [2.8.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.4
 [2.8.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.8.3
