@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.5] - 2023-11-03
+
+### Changed
+
+- Sass update
+- File structure
+
+### Added
+
+- Work on Scrap 3.0.0 has begun.
+- SB3 file compatibility will be added in Scrap 3.0.0.
+
 ## [2.9.4] - 2023-11-01
 
 ### Fixed
@@ -320,7 +332,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.9.4...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.9.5...HEAD
+[2.9.5]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.5
 [2.9.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.4
 [2.9.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.3
 [2.9.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.2

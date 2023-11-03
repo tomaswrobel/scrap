@@ -5,7 +5,7 @@ export default async function transform(code: string, minified = false) {
 	const babel = await import("@babel/core");
 	const variables = new Set<string>();
 
-	return (await babel.transformAsync(code, {
+	return babel.transformAsync(code, {
 		minified,
 		plugins: [
 			{
@@ -233,5 +233,5 @@ export default async function transform(code: string, minified = false) {
 				},
 			},
 		],
-	}))!;
+	});
 }

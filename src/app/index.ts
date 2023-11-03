@@ -11,7 +11,7 @@ import "./app.scss";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
 import {Generator} from "../blockly";
-import CodeParser from "../code/parser";
+import CodeParser from "../files/blocks";
 import Sound from "../sounds";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");

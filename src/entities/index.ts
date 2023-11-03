@@ -4,7 +4,7 @@ import JSZip from "jszip";
 import fs from "fs";
 import "./entity.scss";
 import path from "path";
-import transform from "./transformer";
+import transform from "../files/javascript";
 
 const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
 
@@ -124,7 +124,7 @@ class Entity {
 			zip.file("script.js", this.exportGenerator.workspaceToCode(this.codeWorkspace));
 		} else {
 			const result = await transform(this.code);
-			zip.file("script.js", this.exportGenerator.finish(result.code || ""));
+			zip.file("script.js", this.exportGenerator.finish(result?.code || ""));
 		}
 	}
 
@@ -133,7 +133,7 @@ class Entity {
 			return this.outputGenerator.workspaceToCode(this.codeWorkspace);
 		} else {
 			const result = await transform(this.code, true);
-			return this.outputGenerator.finish(result.code || "");
+			return this.outputGenerator.finish(result?.code || "");
 		}
 	}
 
