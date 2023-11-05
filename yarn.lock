@@ -1307,7 +1307,7 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/prismjs@^1.26.0":
+"@types/prismjs@^1.26.2":
   version "1.26.2"
   resolved "https://registry.yarnpkg.com/@types/prismjs/-/prismjs-1.26.2.tgz#f574066903a7f0d516353581185db74326100edc"
   integrity sha512-/r7Cp7iUIk7gts26mHXD66geUC+2Fo26TZYjQK6Nr4LDfi6lmdRmMqM0oPwfiMhUwoBAOFe8GstKi2pf6hZvwA==
@@ -2443,17 +2443,12 @@ posthtml@^0.16.4, posthtml@^0.16.5:
     posthtml-parser "^0.11.0"
     posthtml-render "^3.0.0"
 
-prism-code-editor@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/prism-code-editor/-/prism-code-editor-1.2.1.tgz#ffa561b473d7fffd26a72ac54cc55967fa900638"
-  integrity sha512-v7tNZ0PSwn7ltXdThG7zZKQl8ZwqoFhq6rUixeTRqnpjEwQcYhh5vaLzu/Ek2BBVQ5PL0tNvg1dMDOnsHby0xA==
+prism-code-editor@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/prism-code-editor/-/prism-code-editor-2.2.0.tgz#7fcbdfe486782a3b0d1cf5e7e14b0a3096b2702b"
+  integrity sha512-6BxS2f2FeC7/q6ypG6E7SabLi5hZjVF0yXr4wF1X2jRiEtUmo68cIDLjV385yZ4pyC9NtxgvkZCnuk6QCR6eeA==
   dependencies:
-    "@types/prismjs" "^1.26.0"
-
-prismjs@1.29.0:
-  version "1.29.0"
-  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.29.0.tgz#f113555a8fa9b57c35e637bba27509dcf802dd12"
-  integrity sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==
+    "@types/prismjs" "^1.26.2"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -2570,10 +2565,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scrap-engine@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-1.3.0.tgz#f9992c9295a6dae4ae0b9b82d1726c01e25726ff"
-  integrity sha512-ZV2onL0F2bIZV1To8JfmecxnRhEKXkOvr6n7uHsNP9PBl8kZLbwUWYP15gaS/3mEsS7dlKHKxB/ufmcjYf+98A==
+scrap-engine@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-1.4.2.tgz#63655069cc1ddf860811d1e9895f44941acd5b76"
+  integrity sha512-wkl06f9rmV3QpKMIRpIUvSxwTXANVBdsmgi8tr+aozJ/vHthMjKtLWsb4zmScz82guouwZaZtbA6QNLzM33Ffg==
 
 semver@^6.3.1:
   version "6.3.1"

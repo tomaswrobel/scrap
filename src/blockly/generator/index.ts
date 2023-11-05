@@ -10,7 +10,7 @@
 import * as Blockly from "blockly/core";
 import Order from "./order.ts";
 import {Block} from "blockly/core";
-import type {Entity} from "../../entities";
+import {Sprite, type Entity} from "../../entities";
 import {TryBlock} from "../mutators/mutator_try.ts";
 import {ArrayBlock} from "../mutators/mutator_array.ts";
 import ProcedureBlock from "../utils/procedure_block";
@@ -156,13 +156,20 @@ class Generator extends Blockly.CodeGenerator {
 		this.nameDB_?.reset();
 
 		if (this.entity) {
-			const isStage = this.entity.name === "Stage";
-			let code = `const ${this.entity.name} = new Scrap.${isStage ? "Stage" : "Sprite"}(${this.getURLsFor(
-				this.entity.costumes
-			)}, ${this.getURLsFor(this.entity.sounds)}, ${this.entity.current});\n`;
+			let code = `const ${this.entity.name} = new Scrap.`;
 
-			if (!isStage) {
+			const params = [
+				this.getURLsFor(this.entity.costumes),
+				this.getURLsFor(this.entity.sounds),
+			];
+
+			if (this.entity instanceof Sprite) {
+				code += "Sprite";
+				params.push(JSON.stringify(this.entity.init));
+				code += `(${params},${this.entity.current});\n`;
 				code += `${this.entity.name}.addTo(Stage);\n`;
+			} else {
+				code += `Stage(${params},${this.entity.current});\n`;
 			}
 
 			if (result || definitions) {

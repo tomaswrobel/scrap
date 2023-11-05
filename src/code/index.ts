@@ -1,9 +1,5 @@
-import Prism from "prism-code-editor/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-javadoclike";
-import "prismjs/components/prism-jsdoc";
+import "prism-code-editor/grammars/javascript";
+import "prism-code-editor/grammars/jsdoc";
 
 import {createEditor, type PrismEditor} from "prism-code-editor";
 import {matchBrackets} from "prism-code-editor/match-brackets";
@@ -35,7 +31,6 @@ export default class Code implements TabComponent {
         parent.append(this.container);
 
         this.editor = createEditor(
-            Prism,
             this.container,
             {
                 language: "javascript",

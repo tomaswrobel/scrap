@@ -215,6 +215,16 @@ class Entity {
 const scrappy = fs.readFileSync(path.join(__dirname, "scrappy.svg"), "utf-8");
 
 class Sprite extends Entity {
+	readonly init = {
+		x: 0,
+		y: 0,
+		direction: 90,
+		size: 100,
+		rotationStyle: 0,
+		visible: true,
+		draggable: true
+	};
+
 	constructor(name: string) {
 		super(new File([scrappy], "scrappy.svg", {type: "image/svg+xml"}), name);
 	}

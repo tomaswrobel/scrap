@@ -81,6 +81,11 @@
 				Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve into JavaScript, Scrap is here
 				to help bridge the gap and make your learning journey smoother.
 			</p>
+			<h3>Open-Source</h3>
+			<p>
+				Since Scrap is open-source, you can see how it works and even contribute to its development. The source code is available on
+				<a href="https://github.com/tomas-wrobel/scrap">GitHub</a>
+			</p>
 			<h3>Inspiration</h3>
 			<p>
 				The name Scrap is a combination of the words <a href="https://scratch.mit.edu/" target="_blank">Scratch</a> and
@@ -118,26 +123,6 @@
 			<p>
 				Scrap output uses <a href="https://jsdoc.app/">JSDoc</a> for type annotations and is compiled by
 				<a href="https://babeljs.io/">Babel</a>.
-			</p>
-			<h3>Why Babel?</h3>
-			<p>Babel is used to walk through the AST and:</p>
-			<ol>
-				<li>Bind <code>this</code> correctly.</li>
-				<li>Make JavaScript code asynchronous.</li>
-				<li>Convert code into blocks.</li>
-			</ol>
-			<p>
-				BlockLike.js includes a rewriter that adds <code>async</code> / <code>await</code> keywords to the code, but it relies on RegEx, which
-				isn&#x27;t ideal. Additionally, it lacks support for nested blocks.
-			</p>
-			<p>
-				To address these issues, I forked BlockLike.js and developed <a href="https://github.com/tomas-wrobel/scrap-engine">Scrap Engine</a>.
-				Scrap Engine eliminates the rewriter, making it necessary to manually add <code>async</code> / <code>await</code> keywords. This is
-				where <strong>Babel</strong> comes into play, as it compiles the code and inserts the required keywords.
-			</p>
-			<p>
-				Why just not let users add <code>async</code> / <code>await</code> keywords manually? Because it's not intuitive. Some methods are
-				asynchronous, while others are synchronous. Scrap is designed to be intuitive and easy to use, so it should handle this for the user.
 			</p>
 		</div>
 		<form method="dialog">

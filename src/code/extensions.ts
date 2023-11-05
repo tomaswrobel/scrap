@@ -10,6 +10,13 @@ import {cursorPosition} from "prism-code-editor/cursor";
 import {matchTags} from "prism-code-editor/match-tags";
 import {highlightBracketPairs} from "prism-code-editor/highlight-brackets";
 
-export const addExtensions = (editor: PrismEditor) => {
-	editor.addExtensions(highlightSelectionMatches(), searchWidget(), defaultCommands(), matchTags(), highlightBracketPairs(), cursorPosition());
+export function addExtensions(editor: PrismEditor) {
+	editor.addExtensions(
+		highlightSelectionMatches(),
+		searchWidget(),
+		defaultCommands(),
+		matchTags(),
+		highlightBracketPairs(),
+		cursorPosition()
+	);
 };
