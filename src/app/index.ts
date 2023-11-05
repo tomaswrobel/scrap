@@ -6,6 +6,7 @@ import Paint from "../paint";
 import Code from "../code";
 
 import fs from "fs";
+import * as Parley from "parley.js";
 
 import "./app.scss";
 import JSZip from "jszip";
@@ -305,9 +306,16 @@ export default class App {
 		this.spritePanel.innerHTML = "";
 		this.stagePanel.innerHTML = '<span class="name">Stage</span>';
 
-		await SB3.transformProject(this, file);
-
-		this.stagePanel.dispatchEvent(new MouseEvent("click"));
+		try {	
+			await SB3.transformProject(this, file);
+			this.stagePanel.dispatchEvent(new MouseEvent("click"));
+		} catch (e) {
+			await Parley.fire({
+				title: "Error",
+				body: String(e),
+				input: "none"
+			});
+		}
 	}
 
 	async export() {

@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.9.6] - 2023-11-05
+## [3.0.0] - 2023-11-05
+
+### Added
+
+- SB3 file compatibility (experimental, about 20 % so far)
+- `ifOnEdgeBounce` block
 
 ## Changed
 
@@ -339,7 +344,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v2.9.5...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.0.0
 [2.9.5]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.5
 [2.9.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.4
 [2.9.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v2.9.3

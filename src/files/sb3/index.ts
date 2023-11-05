@@ -67,16 +67,17 @@ interface Override {
     inputs?: Record<string, string>;
 }
 
-function transform(override: Override, target: Target, data: Block, entity: Entity) {
-    const block = entity.codeWorkspace.newBlock(override.opcode ?? data.opcode);
+function transform({opcode, inputs = {}}: Override, target: Target, data: Block, entity: Entity) {
+    const block = entity.codeWorkspace.newBlock(opcode ?? data.opcode);
     for (const [name, input] of Object.entries(data.inputs)) {
-        block.getInput(override.inputs?.[name] ?? name)!.connection!.connect(
-            transformInput(
-                target,
-                input,
-                entity
-            ).outputConnection!
-        );
+        const {connection} = block.getInput(inputs[name] ?? name)!;
+        const inner = transformInput(target, input, entity);
+
+        if (inner.previousConnection) {
+            connection!.connect(inner.previousConnection);
+        } else if (inner.outputConnection) {
+            connection!.connect(inner.outputConnection);
+        }
     }
     return nextBlock(block, target, data, entity);
 }
@@ -327,7 +328,93 @@ const transformers: Record<string, (target: Target, data: Block, entity: Entity)
     event_whenkeypressed: (target, data, entity) => {
         const block = entity.codeWorkspace.newBlock("whenKeyPressed");
         return nextBlock(block, target, data, entity);
-    }
+    },
+
+    // Control
+    control_wait: transform.bind(null, {
+        opcode: "wait",
+        inputs: {DURATION: "SECS"}
+    }),
+    control_wait_until: (target, data, entity) => {
+        const block = entity.codeWorkspace.newBlock("while");
+        const not = entity.codeWorkspace.newBlock("not");
+
+        const condition = transformInput(target, data.inputs.CONDITION, entity);
+        not.getInput("BOOL")!.connection!.connect(condition.outputConnection!);
+
+        block.getInput("CONDITION")!.connection!.connect(not.outputConnection!);
+
+        return nextBlock(block, target, data, entity);
+    },
+    control_repeat_until: (target, data, entity) => {
+        const block = entity.codeWorkspace.newBlock("while");
+        const not = entity.codeWorkspace.newBlock("not");
+
+        const condition = transformInput(target, data.inputs.CONDITION, entity);
+        not.getInput("BOOL")!.connection!.connect(condition.outputConnection!);
+
+        block.getInput("CONDITION")!.connection!.connect(not.outputConnection!);
+        
+        if ("SUBSTACK" in data.inputs) {
+            block.getInput("STACK")!.connection!.connect(
+                transformInput(target, data.inputs.SUBSTACK, entity).previousConnection!
+            );
+        }
+
+        return nextBlock(block, target, data, entity);
+    },
+    control_repeat: transform.bind(null, {
+        opcode: "repeat",
+        inputs: {SUBSTACK: "STACK"}
+    }),
+    control_start_as_clone: transform.bind(null, {
+        opcode: "whenCloned"
+    }),
+    control_forever: (target, data, entity) => {
+        const block = entity.codeWorkspace.newBlock("while");
+        if ("SUBSTACK" in data.inputs) {
+            block.getInput("STACK")!.connection!.connect(
+                transformInput(target, data.inputs.SUBSTACK, entity).previousConnection!
+            );
+        }
+
+        const trueBlock = entity.codeWorkspace.newBlock("boolean");
+        trueBlock.setFieldValue("true", "BOOL");
+
+        block.getInput("CONDITION")!.connection!.connect(trueBlock.outputConnection!);
+
+        return block;
+    },
+    control_if: transform.bind(null, {
+        inputs: {
+            SUBSTACK: "DO0",
+            CONDITION: "IF0"
+        },
+        opcode: "controls_if"
+    }),
+    control_if_else: (target, data, entity) => {
+        const block = entity.codeWorkspace.newBlock("controls_if");
+        block.loadExtraState!({
+            hasElse: true
+        });
+        if ("SUBSTACK" in data.inputs) {
+            block.getInput("DO0")!.connection!.connect(
+                transformInput(target, data.inputs.SUBSTACK, entity).previousConnection!
+            );
+        }
+        if ("SUBSTACK2" in data.inputs) {
+            block.getInput("DO1")!.connection!.connect(
+                transformInput(target, data.inputs.SUBSTACK2, entity).previousConnection!
+            );
+        }
+        if ("CONDITION" in data.inputs) {
+            block.getInput("IF0")!.connection!.connect(
+                transformInput(target, data.inputs.CONDITION, entity).outputConnection!
+            );
+        }
+        return nextBlock(block, target, data, entity);
+    },
+    
 };
 
 transformers.looks_backdrops = transformers.looks_costume;
