@@ -328,6 +328,10 @@ Generator.blocks.effect = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("EFFECT")), Order.ATOMIC];
 };
 
+Generator.blocks.rotationStyle = function (block: Blockly.Block) {
+	return [JSON.stringify(block.getFieldValue("STYLE")), Order.ATOMIC];
+};
+
 Generator.blocks.key = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("KEY")), Order.ATOMIC];
 };

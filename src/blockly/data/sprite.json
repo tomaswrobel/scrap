@@ -212,6 +212,25 @@
             },
             {
                 "kind": "block",
+                "type": "setRotationStyle",
+                "inputs": {
+                    "STYLE": {
+                        "shadow": {
+                            "type": "rotationStyle"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "ifOnEdgeBounce"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
                 "type": "x"
             },
             {

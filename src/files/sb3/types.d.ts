@@ -44,7 +44,7 @@ export interface Costume {
 
 export interface Sound {
     name: string;
-    format: "wav" | "mp3" | "m4a" | "ogg";
+    dataFormat: "wav" | "mp3" | "m4a" | "ogg";
     assetId: string;
 }
 

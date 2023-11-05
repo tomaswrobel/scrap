@@ -875,6 +875,56 @@
 		"output": "Number",
 		"style": "Motion"
 	},
+	"rotationStyle": {
+		"inputsInline": true,
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "STYLE",
+				"options": [
+					[
+						"all around",
+						"all around"
+					],
+					[
+						"left-right",
+						"left-right"
+					],
+					[
+						"don't rotate",
+						"don't rotate"
+					]
+				]
+			}
+		],
+		"output": "String",
+		"style": "Motion"
+	},
+	"setRotationStyle": {
+		"inputsInline": true,
+		"message0": "set rotation style %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "STYLE",
+				"check": [
+					"String",
+					"Number"
+				]
+			}
+		],
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Motion"
+	},
+	"ifOnEdgeBounce": {
+		"message0": "if on edge, bounce",
+		"nextStatement": null,
+		"previousStatement": null,
+		"args0": [],
+		"style": "Motion"
+	},
 	"sayWait": {
 		"inputsInline": true,
 		"message0": "say %1 for %2 seconds",
@@ -1089,6 +1139,18 @@
 	},
 	"backdrop": {
 		"message0": "backdrop",
+		"output": "Number",
+		"style": "Looks"
+	},
+	"costumeNumber": {
+		"inputsInline": true,
+		"message0": "costume #",
+		"output": "Number",
+		"style": "Looks"
+	},
+	"backdropNumber": {
+		"inputsInline": true,
+		"message0": "backdrop #",
 		"output": "Number",
 		"style": "Looks"
 	},

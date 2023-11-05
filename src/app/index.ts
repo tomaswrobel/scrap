@@ -305,16 +305,7 @@ export default class App {
 		this.spritePanel.innerHTML = "";
 		this.stagePanel.innerHTML = '<span class="name">Stage</span>';
 
-		const result = await SB3.transformProject(file);
-
-		for (const entity of result) {
-			if (entity instanceof Sprite) {
-				this.addSprite(entity);
-			} else {
-				this.entities.push(entity);
-				entity.render(this.stagePanel);
-			}
-		}
+		await SB3.transformProject(this, file);
 
 		this.stagePanel.dispatchEvent(new MouseEvent("click"));
 	}
