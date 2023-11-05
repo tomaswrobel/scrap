@@ -14,6 +14,8 @@ import {Generator} from "../blockly";
 import CodeParser from "../files/blocks";
 import Sound from "../sounds";
 
+import * as SB3 from "../files/sb3";
+
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
 
@@ -28,6 +30,7 @@ export default class App {
 	stop = document.getElementById("stop")!;
 
 	load = document.querySelector<HTMLInputElement>("#load")!;
+	sb3 = document.querySelector<HTMLInputElement>("#sb3")!;
 	html = document.getElementById("html")!;
 	save = document.getElementById("save")!;
 
@@ -162,6 +165,10 @@ export default class App {
 			this.open(this.load.files![0]);
 		});
 
+		this.sb3.addEventListener("change", () => {
+			this.openSB3(this.sb3.files![0]);
+		});
+
 		this.html.addEventListener("click", () => {
 			this.export();
 		});
@@ -283,6 +290,29 @@ export default class App {
 				entity.render(this.stagePanel);
 			} else {
 				this.addSprite(entity);
+			}
+		}
+
+		this.stagePanel.dispatchEvent(new MouseEvent("click"));
+	}
+
+	async openSB3(file?: File | null) {
+		if (!file) {
+			return;
+		}
+
+		this.entities = [];
+		this.spritePanel.innerHTML = "";
+		this.stagePanel.innerHTML = '<span class="name">Stage</span>';
+
+		const result = await SB3.transformProject(file);
+
+		for (const entity of result) {
+			if (entity instanceof Sprite) {
+				this.addSprite(entity);
+			} else {
+				this.entities.push(entity);
+				entity.render(this.stagePanel);
 			}
 		}
 
