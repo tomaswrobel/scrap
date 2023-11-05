@@ -5,7 +5,7 @@ const BLOCK_PADDING = 2;
 
 Blockly.ContextMenuRegistry.registry.register({
 	displayText: "Save block image",
-	preconditionFn: () => "enabled",
+	preconditionFn: (scope) => scope.block!.isInFlyout ? "hidden" : "enabled",
 	scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
 	id: "export_png",
 	weight: Infinity,

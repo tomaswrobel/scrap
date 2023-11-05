@@ -1,6 +1,19 @@
 export type Variable = [string, string | number, true?];
-export type Input = [unknown, string];
+export type Input = [1 | 2, string | SimpleBlock];
 export type Field = [string, string | null];
+
+export type SimpleBlock =
+    | [4, `${number}`]
+    | [5, `${number}`]
+    | [6, `${number}`]
+    | [7, `${number}`]
+    | [8, `${number}`]
+    | [9, `#${string}`]
+    | [10, string]
+    | [11, string, string]
+    | [12, string, string]
+    | [13, string, string]
+;
 
 export interface Mutation {
     tagName: "mutation";
@@ -31,18 +44,23 @@ export interface Costume {
 
 export interface Sound {
     name: string;
-    format: "wav" | "mp3" | "m4a" | "ogg";
+    dataFormat: "wav" | "mp3" | "m4a" | "ogg";
     assetId: string;
 }
 
 export interface Target {
     name: string;
+    isStage: boolean;
     variables: Record<string, Variable>;
+    lists: Record<string, unknown>;
     costumes: Costume[];
+    currentCostume: number;
     sounds: Sound[];
+    blocks: Record<string, Block>;
 }
 
 export interface Stage extends Target {
+    name: "string";
     isStage: true;
 }
 
