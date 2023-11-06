@@ -403,7 +403,7 @@ const transformers: Record<string, (target: Target, data: Block, entity: Entity)
             );
         }
         if ("SUBSTACK2" in data.inputs) {
-            block.getInput("DO1")!.connection!.connect(
+            block.getInput("ELSE")!.connection!.connect(
                 transformInput(target, data.inputs.SUBSTACK2, entity).previousConnection!
             );
         }
@@ -413,8 +413,7 @@ const transformers: Record<string, (target: Target, data: Block, entity: Entity)
             );
         }
         return nextBlock(block, target, data, entity);
-    },
-    
+    }
 };
 
 transformers.looks_backdrops = transformers.looks_costume;

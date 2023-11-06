@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.1] - 2023-11-06
+
+### Fixed
+
+- if...else block compatibility with SB3 files
+
 ## [3.0.0] - 2023-11-05
 
 ### Added
