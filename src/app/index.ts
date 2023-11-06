@@ -15,7 +15,7 @@ import {Generator} from "../blockly";
 import CodeParser from "../files/blocks";
 import Sound from "../sounds";
 
-import * as SB3 from "../files/sb3";
+import SB3 from "../files/sb3";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -54,6 +54,8 @@ export default class App {
 
 	spritePanel = document.querySelector(".sprites")!;
 	stagePanel = document.querySelector(".stage")!;
+
+	scratchFiles = new SB3(this);
 
 	constructor() {
 		this.entities.push((this.current = new Stage()));
@@ -191,15 +193,16 @@ export default class App {
 		}
 		const tab = this.tabs.get(this.activeTab)!;
 		this.current = entity;
-		tab.dispose();
 		if (tab === this.workspace && !entity.blocks) {
+			tab.dispose();
 			this.activeTab = "JavaScript";
 			this.code.render(entity, this.container);
 		} else if (tab === this.code && entity.blocks) {
+			tab.dispose();
 			this.activeTab = "Blocks";
 			this.workspace.render(entity, this.container);
 		} else {
-			tab.render(entity, this.container);
+			tab.update(entity);
 		}
 		for (const s of this.tabBar.getElementsByClassName("selected")) {
 			s.classList.remove("selected");
@@ -307,7 +310,7 @@ export default class App {
 		this.stagePanel.innerHTML = '<span class="name">Stage</span>';
 
 		try {	
-			await SB3.transformProject(this, file);
+			await this.scratchFiles.transform(file);
 			this.stagePanel.dispatchEvent(new MouseEvent("click"));
 		} catch (e) {
 			await Parley.fire({

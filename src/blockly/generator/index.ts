@@ -373,6 +373,11 @@ Generator.blocks.sprite = function (block: Blockly.Block) {
 	return [block.getFieldValue("SPRITE"), Order.ATOMIC];
 };
 
+Generator.blocks.clone = function (block: Blockly.Block, generator) {
+	const sprite = generator.valueToCode(block, "SPRITE", Order.NONE);
+	return `${generator.entity ? "await " : ""}${sprite}.clone();\n`;
+};
+
 Generator.blocks.parameter = function (block: Blockly.Block) {
 	return [block.getField("VAR")!.getText(), Order.ATOMIC];
 };

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.2] - 2023-11-06
+
+### Changed
+
+- OOP inside the SB3 support
+- `clone` block now accepts a sprite as an argument
+
 ## [3.0.1] - 2023-11-06
 
 ### Fixed

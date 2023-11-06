@@ -835,7 +835,14 @@
             },
             {
                 "kind": "block",
-                "type": "clone"
+                "type": "clone",
+                "inputs": {
+                    "SPRITE": {
+                        "shadow": {
+                            "type": "sprite"
+                        }
+                    }
+                }
             },
             {
                 "kind": "block",

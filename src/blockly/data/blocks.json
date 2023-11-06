@@ -1585,8 +1585,14 @@
 	},
 	"clone": {
 		"inputsInline": true,
-		"message0": "clone",
-		"args0": [],
+		"message0": "clone %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "SPRITE",
+				"check": "Sprite"
+			}
+		],
 		"nextStatement": null,
 		"previousStatement": null,
 		"style": "Controls"

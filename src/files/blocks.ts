@@ -503,6 +503,12 @@ export default class CodeParser {
 						const block = this.block("stop");
 						this.comments(block, node);
 						this.connection = null;
+					} else if (this.isProperty(node.callee, ["clone"])) {
+						const block = this.block("clone");
+						this.comments(block, node);
+						this.connection = block.getInput("SPRITE")!.connection!;
+						this.parse(node.callee.object);
+						this.connection = block.nextConnection;
 					} else if (this.isProperty(node.callee, ["reverse", "includes", "indexOf", "slice"])) {
 						const block = this.block(this.getPropertyContents(node.callee.property));
 						this.connection = block.getInput("ITERABLE")!.connection!;

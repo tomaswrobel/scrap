@@ -1,5 +1,5 @@
 export type Variable = [string, string | number, true?];
-export type Input = [1 | 2, string | SimpleBlock];
+export type Input = [1 | 2, string | SimpleBlock | null];
 export type Field = [string, string | null];
 
 export type SimpleBlock =
