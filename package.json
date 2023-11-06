@@ -11,7 +11,7 @@
 	"devDependencies": {
 		"@parcel/packager-raw-url": "2.10.1",
 		"@parcel/resolver-glob": "2.10.1",
-		"@parcel/transformer-sass": "2.10.1",
+		"@parcel/transformer-sass": "2.10.2",
 		"@parcel/transformer-webmanifest": "2.10.1",
 		"@types/babel__core": "7.20.2",
 		"@types/doctrine": "0.0.7",
