@@ -1,6 +1,6 @@
 import * as Blockly from "blockly/core";
 
-export const Types = ["", "Number", "String", "Boolean", "Color", "Array", "Sprite"];
+export const Types = ["", "Number", "String", "Boolean", "Color", "Array", "Sprite", "Date"];
 export const Error = `Type must be one of void${Types.join(", ")}`;
 
 export const TypeToShadow: Record<string, string> = {
@@ -8,6 +8,7 @@ export const TypeToShadow: Record<string, string> = {
 	String: "iterables_string",
 	Color: "color",
 	Sprite: "sprite",
+	Date: "date"
 };
 
 Blockly.defineBlocksWithJsonArray(

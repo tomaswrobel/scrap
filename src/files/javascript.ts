@@ -1,6 +1,22 @@
 import {parse} from "doctrine";
 import {Types} from "../blockly";
 
+/**
+ * Transform ScrapScript code to JavaScript.
+ * Specifically, this function:
+ * * Adds `async` to all functions
+ * * Adds `await` to all function calls
+ * * Adds loop protection to `while` and `for` loops
+ * * Adds `this.declareVariable` to all variable declarations
+ * * Adds `this.setVariable` to all variable assignments
+ * * Adds `this.changeVariable` to all variable assignments
+ * * Adds `this.getVariable` to all variable references
+ * * Makes sure `Scrap.StopError` cannot be caught
+ * Uses Babel to transform the code.
+ * @param code The ScrapScript code to transform
+ * @param minified Shall the code be minified?
+ * @returns Valid JavaScript code
+ */
 export default async function transform(code: string, minified = false) {
 	const babel = await import("@babel/core");
 	const variables = new Set<string>();
@@ -20,7 +36,7 @@ export default async function transform(code: string, minified = false) {
 					CallExpression(path) {
 						if (path.parent.type !== "AwaitExpression") {
 							// If this is a user-defined function, we need to bind `this` to it
-							if (path.node.callee.type === "Identifier" && path.node.callee.name !== "String") {
+							if (path.node.callee.type === "Identifier" && path.node.callee.name !== "String" && path.node.callee.name !== "Number") {
 								path.node.callee = babel.types.memberExpression(path.node.callee, babel.types.identifier("call"));
 								path.node.arguments.unshift(babel.types.thisExpression());
 							}
@@ -96,7 +112,7 @@ export default async function transform(code: string, minified = false) {
 							babel.types.ifStatement(
 								babel.types.binaryExpression(
 									"instanceof",
-									babel.types.identifier("e"),
+									path.node.param as babel.types.Identifier,
 									babel.types.memberExpression(
 										babel.types.identifier("Scrap"),
 										babel.types.identifier("StopError")

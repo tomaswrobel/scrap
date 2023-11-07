@@ -6,6 +6,7 @@ import * as mutators from "./mutators/*.ts";
 import "./utils/export_png";
 
 import "@blockly/field-color";
+import "@blockly/field-date";
 import * as En from "blockly/msg/en";
 
 import blocksData from "./data/blocks.json";

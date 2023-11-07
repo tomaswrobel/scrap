@@ -687,4 +687,19 @@ Generator.blocks.rgb = function (block: Blockly.Block, generator) {
 	return [`Color.fromRGB(${r}, ${g}, ${b})`, Order.FUNCTION_CALL];
 };
 
+Generator.blocks.date = function (blockly: Blockly.Block) {
+	return [`new Date("${blockly.getFieldValue("DATE")}")`, Order.FUNCTION_CALL];
+};
+
+Generator.blocks.today = function () {
+	return ["new Date()", Order.FUNCTION_CALL];
+};
+
+Generator.blocks.dateProperty = function (block: Blockly.Block, generator) {
+	return [
+		`${generator.valueToCode(block, "DATE", Order.MEMBER)}.${block.getFieldValue("PROPERTY")}()`,
+		Order.FUNCTION_CALL,
+	];
+};
+
 export {Order, Generator};

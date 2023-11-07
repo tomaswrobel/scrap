@@ -2,7 +2,7 @@ import JSZip from "jszip";
 import {Entity, Sprite, Stage} from "../../entities";
 import type {Project, Target, Block, Input} from "./types";
 import type App from "../../app";
-import type * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 class SB3 {
     target!: Target;
@@ -32,16 +32,14 @@ class SB3 {
             inputs: {DX: "X"}
         });
         this.transformers.motion_setx = this.override({
-            opcode: "setX",
-            inputs: {X: "X"}
+            opcode: "setX"
         });
         this.transformers.motion_changeyby = this.override({
             opcode: "changeY",
             inputs: {DY: "Y"}
         });
         this.transformers.motion_sety = this.override({
-            opcode: "setY",
-            inputs: {Y: "Y"}
+            opcode: "setY"
         });
         this.transformers.motion_ifonedgebounce = this.override({
             opcode: "ifOnEdgeBounce"
@@ -166,10 +164,10 @@ class SB3 {
         });
         this.transformers.sound_volume = this.reporter("volume"),
 
-            // Pen
-            this.transformers.pen_clear = this.override({
-                opcode: "penClear"
-            });
+        // Pen
+        this.transformers.pen_clear = this.override({
+            opcode: "penClear"
+        });
         this.transformers.pen_stamp = this.override({
             opcode: "stamp"
         });
@@ -284,9 +282,106 @@ class SB3 {
                 hasElse: true
             }
         });
+
+        // Sensing
+        this.transformers.sensing_touchingobject = data => {
+            const fieldValue = this.target.blocks[data.inputs.TOUCHINGOBJECTMENU[1] as string].fields.TOUCHINGOBJECTMENU[0];
+
+            if (fieldValue === "_edge_") {
+                return this.entity.codeWorkspace.newBlock("isTouchingEdge");
+            } else if (fieldValue === "_mouse_") {
+                // Currently, there is no block to check if the mouse is touching the sprite.
+                // Scrap is event-driven, so we can introduce a variable
+                if (this.helperVariable("scratch_mouse", "Boolean")) {
+                    const mouseLeft = this.entity.codeWorkspace.newBlock("whenMouse");
+                    const mouseLeftEvent = this.entity.codeWorkspace.newBlock("event");
+                    const mouseEnter = this.entity.codeWorkspace.newBlock("whenMouse");
+                    const mouseEnterEvent = this.entity.codeWorkspace.newBlock("event");
+                    
+                    mouseEnterEvent.setShadow(true);
+                    mouseLeftEvent.setShadow(true);
+
+                    mouseEnterEvent.setFieldValue("entered", "EVENT");
+                    mouseLeftEvent.setFieldValue("left", "EVENT");
+
+                    mouseLeft.getInput("EVENT")!.connection!.connect(mouseLeftEvent.outputConnection!);
+                    mouseEnter.getInput("EVENT")!.connection!.connect(mouseEnterEvent.outputConnection!);
+
+                    const mouseEnterBlock = this.entity.codeWorkspace.newBlock("setVariable");
+                    const mouseLeftBlock = this.entity.codeWorkspace.newBlock("setVariable");
+
+                    const boolTrue = this.entity.codeWorkspace.newBlock("boolean");
+                    const boolFalse = this.entity.codeWorkspace.newBlock("boolean");
+
+                    boolTrue.setFieldValue("true", "BOOL");
+                    boolFalse.setFieldValue("false", "BOOL");
+
+                    mouseEnterBlock.setFieldValue("scratch_mouse", "VAR");
+                    mouseLeftBlock.setFieldValue("scratch_mouse", "VAR");
+
+                    mouseEnterBlock.getInput("VALUE")!.connection!.connect(boolTrue.outputConnection!);
+                    mouseLeftBlock.getInput("VALUE")!.connection!.connect(boolFalse.outputConnection!);
+
+                    mouseLeft.nextConnection!.connect(mouseLeftBlock.previousConnection!);
+                    mouseEnter.nextConnection!.connect(mouseEnterBlock.previousConnection!);
+                }
+
+                const block = this.entity.codeWorkspace.newBlock("getVariable");
+                block.setFieldValue("scratch_mouse", "VAR");
+                return block;
+            } else {
+                const block = this.entity.codeWorkspace.newBlock("isTouching");
+                block.getInput("SPRITE")!.connection!.connect(this.setSprite(fieldValue));
+                return block;
+            }
+        };
         this.transformers.sensing_touchingcolor = this.override({
             opcode: "isTouchingBackdropColor",
         });
+        this.transformers.sensing_distanceto = data => {
+            // Scrap does not have "distance to [object]" block,
+            // rather it has "distance to [x: number] [y: number]" block.
+            const fieldValue = this.target.blocks[data.inputs.DISTANCETOMENU[1] as string].fields.DISTANCETOMENU[0];
+            const block = this.entity.codeWorkspace.newBlock("distanceTo");
+            if (fieldValue === "_mouse_") {
+                block.getInput("X")!.connection!.connect(
+                    this.entity.codeWorkspace.newBlock("mouseX")!.outputConnection!
+                );
+                block.getInput("Y")!.connection!.connect(
+                    this.entity.codeWorkspace.newBlock("mouseY")!.outputConnection!
+                );
+            } else {
+                const x = this.entity.codeWorkspace.newBlock("property");
+                x.setFieldValue("x", "PROPERTY");
+                x.getInput("SPRITE")!.connection!.connect(this.setSprite(fieldValue));
+
+                const y = this.entity.codeWorkspace.newBlock("property");
+                y.setFieldValue("y", "PROPERTY");
+                y.getInput("SPRITE")!.connection!.connect(this.setSprite(fieldValue));
+
+                block.getInput("X")!.connection!.connect(x.outputConnection!);
+                block.getInput("Y")!.connection!.connect(y.outputConnection!);
+            }
+            return block;
+        };
+        this.transformers.sensing_askandwait = data => {
+            this.helperVariable("scratch_answer", "String");
+            const block = this.entity.codeWorkspace.newBlock("setVariable");
+            const ask = this.entity.codeWorkspace.newBlock("ask");
+            ask.getInput("QUESTION")!.connection!.connect(
+                this.input(data.inputs.QUESTION)!.outputConnection!
+            );
+            block.setFieldValue("scratch_answer", "VAR");
+            block.getInput("VALUE")!.connection!.connect(ask.outputConnection!);
+            return this.next(block, data);
+        };
+        this.transformers.sensing_answer = () => {
+            this.helperVariable("scratch_answer", "String");
+            const block = this.entity.codeWorkspace.newBlock("getVariable");
+            block.setFieldValue("scratch_answer", "VAR");
+            return block;
+        };
+
     }
 
     effect(data: Block) {
@@ -352,7 +447,6 @@ class SB3 {
                     this.block(block);
                 }
             }
-
             if (target.isStage) {
                 this.app.entities.unshift(this.entity);
                 this.entity.render(this.app.stagePanel);
@@ -363,7 +457,10 @@ class SB3 {
     }
 
     isProjectCompatible(project: Project) {
-        if (project.extensions.length > 0 && project.extensions[0] !== "pen") {
+        if (project.extensions.length > 0) {
+            if (project.extensions.length === 1 && project.extensions[0] === "pen") {
+                return;
+            }
             throw "Scrap does not support extensions other than the pen extension.";
         }
     }
@@ -372,6 +469,25 @@ class SB3 {
         if (Object.keys(target.lists).length) {
             throw "Scrap does not support lists.";
         }
+    }
+
+    private setSprite(name: string) {
+        const block = this.entity.codeWorkspace.newBlock("sprite");
+        block.setFieldValue(name, "SPRITE");
+        block.setShadow(true);
+        return block.outputConnection!;
+    }
+
+    private helperVariable(id: string, type: string) {
+        if (!this.entity.codeWorkspace.getVariableById(id)) {
+            this.entity.codeWorkspace.createVariable(
+                Blockly.Variables.generateUniqueName(this.entity.codeWorkspace), 
+                type,
+                id
+            );
+            return true;
+        }
+        return false;
     }
 
     input([shadow, data]: Input) {
@@ -418,11 +534,13 @@ class SB3 {
         throw `Unknown input type: ${data[0]}`;
     }
 
-    override({opcode, inputs = {}, extraState}: {
-        opcode?: string;
-        inputs?: Record<string, string>;
-        extraState?: unknown;
-    }) {
+    /**
+     * Most Scratch blocks are directly supported by Scrap,
+     * but with different naming. This function is used to
+     * just interchange the input names and opcode.
+     * @param config The renaming configuration.
+     */
+    override({opcode, inputs = {}, extraState}: SB3.Override) {
         return (data: Block) => {
             const block = this.entity.codeWorkspace.newBlock(opcode ?? data.opcode);
 
@@ -462,6 +580,47 @@ class SB3 {
             return this.transformers[data.opcode](data);
         }
         throw `Unsupported Scratch block type: ${data.opcode}`;
+    }
+
+    /**
+     * Some Scratch blocks do not have a corresponding block in Scrap.
+     * However, it is sometimes possible to emulate the block using a function.
+     * This is a helper function to create a function that can be used to emulate a block.
+     */
+    provide(init: SB3.Provide, ...blocks: (() => Blockly.Block)[]) {
+        const name = `scratch_${init.name}_${Date.now().toString(36)}`;
+        let block = this.entity.codeWorkspace.newBlock("function");
+
+        block.loadExtraState!({
+            name,
+            params: init.args,
+            returnType: init.returns
+        });
+
+        for (let i = 0; i < blocks.length; i++) {
+            const current = blocks[i]();
+            block.nextConnection!.connect(
+                current.previousConnection!
+            );
+            block = current;
+        }
+    }
+}
+
+declare namespace SB3 {
+    interface Override {
+        opcode?: string;
+        inputs?: Record<string, string>;
+        extraState?: unknown;
+    }
+
+    interface Provide {
+        returns: string;
+        args: {
+            name: string;
+            type: string;
+        }[];
+        name: string;
     }
 }
 

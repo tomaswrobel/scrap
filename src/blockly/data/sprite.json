@@ -964,6 +964,48 @@
             {
                 "kind": "block",
                 "type": "isTurbo"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "setDraggable"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "date"
+            },
+            {
+                "kind": "block",
+                "type": "today"
+            },
+            {
+                "kind": "block",
+                "type": "dateProperty",
+                "inputs": {
+                    "DATE": {
+                        "shadow": {
+                            "type": "date"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "dateProperty",
+                "inputs": {
+                    "DATE": {
+                        "shadow": {
+                            "type": "today"
+                        }
+                    }
+                }
             }
         ]
     },

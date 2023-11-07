@@ -1355,7 +1355,7 @@
 	},
 	"whenMouse": {
 		"inputsInline": true,
-		"message0": "when mouse %1",
+		"message0": "when mouse has %1",
 		"args0": [
 			{
 				"type": "input_value",
@@ -1757,6 +1757,83 @@
 				"type": "input_value",
 				"name": "SPRITE",
 				"check": "Sprite"
+			}
+		],
+		"output": "Number",
+		"style": "Sensing"
+	},
+	"setDraggable": {
+		"inputsInline": true,
+		"message0": "set draggable %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "DRAGGABLE",
+				"check": "Boolean"
+			}
+		],
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Sensing"
+	},
+	"date": {
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_date",
+				"name": "DATE"
+			}
+		],
+		"output": "Date",
+		"style": "Sensing"
+	},
+	"today": {
+		"message0": "today",
+		"output": "Date",
+		"style": "Sensing"
+	},
+	"dateProperty": {
+		"inputsInline": true,
+		"message0": "%1 of %2",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "PROPERTY",
+				"options": [
+					[
+						"year",
+						"getFullYear"
+					],
+					[
+						"month",
+						"getMonth"
+					],
+					[
+						"date",
+						"getDate"
+					],
+					[
+						"day of week",
+						"getDay"
+					],
+					[
+						"hour",
+						"getHours"
+					],
+					[
+						"minute",
+						"getMinutes"
+					],
+					[
+						"second",
+						"getSeconds"
+					]
+				]
+			},
+			{
+				"type": "input_value",
+				"name": "DATE",
+				"check": "Date"
 			}
 		],
 		"output": "Number",

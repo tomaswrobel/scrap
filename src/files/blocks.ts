@@ -49,7 +49,7 @@ export default class CodeParser {
 		}
 	}
 
-	isProperty(node: MemberExpression, properties: string[]): node is MemberExpression & {property: Identifier | StringLiteral} {
+	isProperty(node: MemberExpression, properties: string[]): node is MemberExpression & {property: Identifier | StringLiteral;} {
 		return (
 			this.isIdentifier(node.property, ...properties) ||
 			(node.property.type === "StringLiteral" && properties.indexOf(node.property.value) > -1)
@@ -110,6 +110,19 @@ export default class CodeParser {
 			return;
 		}
 		switch (node.type) {
+			case "NewExpression": {
+				if (this.isIdentifier(node.callee, "Date")) {
+					if (node.arguments.length === 0) {
+						this.block("today");
+						break;
+					}
+					if (node.arguments.length === 1 && node.arguments[0].type === "StringLiteral") {
+						this.block("date").setFieldValue(node.arguments[0].value, "DATE");
+						break;
+					}
+				}
+				throw new SyntaxError("Only Date() and Date(string) are supported");
+			}
 			case "SpreadElement":
 				this.parse(node.argument);
 				break;
@@ -514,6 +527,19 @@ export default class CodeParser {
 						this.connection = block.getInput("ITERABLE")!.connection!;
 						this.parse(node.callee.object);
 						this.parseArguments(block, node.arguments);
+					} else if (this.isProperty(node.callee, [
+						"getFullYear",
+						"getMonth",
+						"getDate",
+						"getDay",
+						"getHours",
+						"getMinutes",
+						"getSeconds"
+					])) {
+						const block = this.block("dateProperty");
+						block.setFieldValue(this.getPropertyContents(node.callee.property), "PROPERTY");
+						this.connection = block.getInput("DATE")!.connection!;
+						this.parse(node.callee.object);
 					} else if (node.callee.object.type === "ThisExpression" && this.isProperty(node.callee, allBlocks)) {
 						const block = this.block(this.getPropertyContents(node.callee.property));
 						this.comments(block, node);
@@ -745,7 +771,7 @@ export default class CodeParser {
 				}
 
 				if (operator !== "=" && operator !== "+=" && operator !== "-=") {
-					throw new SyntaxError("Only =, += and -= operators are supported")
+					throw new SyntaxError("Only =, += and -= operators are supported");
 				}
 
 				const block = this.block(operator === "=" ? "setVariable" : "changeVariable");
@@ -771,7 +797,7 @@ export default class CodeParser {
 					const neg = this.block("arithmetics");
 					neg.setFieldValue("-", "OP");
 
-					this.connection =  neg.getInput("A")!.connection!;
+					this.connection = neg.getInput("A")!.connection!;
 					this.block("math_number", true);
 
 					this.connection = neg.getInput("B")!.connection!;
