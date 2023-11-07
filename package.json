@@ -2,7 +2,7 @@
 	"name": "scrap",
 	"displayName": "Scrap",
 	"private": true,
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"type": "module",
 	"description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
 	"scripts": {
