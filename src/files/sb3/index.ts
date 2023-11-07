@@ -11,7 +11,9 @@ class SB3 {
     transformers: Record<string, (data: Block) => Blockly.Block> = {};
 
     constructor(private app: App) {
-        this.transformers.motion_movesteps = this.override({opcode: "move"});
+        this.transformers.motion_movesteps = this.override({
+            opcode: "move"
+        });
         this.transformers.motion_turnright = this.override({
             opcode: "turnRight"
         });
@@ -290,45 +292,7 @@ class SB3 {
             if (fieldValue === "_edge_") {
                 return this.entity.codeWorkspace.newBlock("isTouchingEdge");
             } else if (fieldValue === "_mouse_") {
-                // Currently, there is no block to check if the mouse is touching the sprite.
-                // Scrap is event-driven, so we can introduce a variable
-                if (this.helperVariable("scratch_mouse", "Boolean")) {
-                    const mouseLeft = this.entity.codeWorkspace.newBlock("whenMouse");
-                    const mouseLeftEvent = this.entity.codeWorkspace.newBlock("event");
-                    const mouseEnter = this.entity.codeWorkspace.newBlock("whenMouse");
-                    const mouseEnterEvent = this.entity.codeWorkspace.newBlock("event");
-                    
-                    mouseEnterEvent.setShadow(true);
-                    mouseLeftEvent.setShadow(true);
-
-                    mouseEnterEvent.setFieldValue("entered", "EVENT");
-                    mouseLeftEvent.setFieldValue("left", "EVENT");
-
-                    mouseLeft.getInput("EVENT")!.connection!.connect(mouseLeftEvent.outputConnection!);
-                    mouseEnter.getInput("EVENT")!.connection!.connect(mouseEnterEvent.outputConnection!);
-
-                    const mouseEnterBlock = this.entity.codeWorkspace.newBlock("setVariable");
-                    const mouseLeftBlock = this.entity.codeWorkspace.newBlock("setVariable");
-
-                    const boolTrue = this.entity.codeWorkspace.newBlock("boolean");
-                    const boolFalse = this.entity.codeWorkspace.newBlock("boolean");
-
-                    boolTrue.setFieldValue("true", "BOOL");
-                    boolFalse.setFieldValue("false", "BOOL");
-
-                    mouseEnterBlock.setFieldValue("scratch_mouse", "VAR");
-                    mouseLeftBlock.setFieldValue("scratch_mouse", "VAR");
-
-                    mouseEnterBlock.getInput("VALUE")!.connection!.connect(boolTrue.outputConnection!);
-                    mouseLeftBlock.getInput("VALUE")!.connection!.connect(boolFalse.outputConnection!);
-
-                    mouseLeft.nextConnection!.connect(mouseLeftBlock.previousConnection!);
-                    mouseEnter.nextConnection!.connect(mouseEnterBlock.previousConnection!);
-                }
-
-                const block = this.entity.codeWorkspace.newBlock("getVariable");
-                block.setFieldValue("scratch_mouse", "VAR");
-                return block;
+                return this.entity.codeWorkspace.newBlock("isTouchingMouse");
             } else {
                 const block = this.entity.codeWorkspace.newBlock("isTouching");
                 block.getInput("SPRITE")!.connection!.connect(this.setSprite(fieldValue));
@@ -381,7 +345,56 @@ class SB3 {
             block.setFieldValue("scratch_answer", "VAR");
             return block;
         };
+        this.transformers.sensing_keyoptions = data => {
+            const block = this.entity.codeWorkspace.newBlock("key");
+            
+            switch (data.fields.KEY_OPTION[0]) {
+                case "space":
+                    block.setFieldValue("Space", "KEY");
+                    break;
+                case "left arrow":
+                    block.setFieldValue("ArrowLeft", "KEY");
+                    break;
+                case "right arrow":
+                    block.setFieldValue("ArrowRight", "KEY");
+                    break;
+                case "up arrow":
+                    block.setFieldValue("ArrowUp", "KEY");
+                    break;
+                case "down arrow":
+                    block.setFieldValue("ArrowDown", "KEY");
+                    break;
+                default:
+                    block.setFieldValue(data.fields.KEY_OPTION[0], "KEY");
+                    break;
+            }
 
+            return block;
+        };
+        this.transformers.sensing_keypressed = this.override({
+            opcode: "keyPressed",
+            inputs: {KEY_OPTION: "KEY"}
+        });
+        this.transformers.sensing_mousedown = this.reporter("mouseDown");
+        this.transformers.sensing_mousex = this.reporter("mouseX");
+        this.transformers.sensing_mousey = this.reporter("mouseY");
+        this.transformers.sensing_setdragmode = data => {
+            const block = this.entity.codeWorkspace.newBlock("setDragMode");
+            if (data.fields.DRAG_MODE[0] === "draggable") {
+                const trueBlock = this.entity.codeWorkspace.newBlock("boolean");
+                trueBlock.setFieldValue("true", "BOOL");
+                block.getInput("DRAGGABLE")!.connection!.connect(trueBlock.outputConnection!);
+            } else if (data.fields.DRAG_MODE[0] === "not draggable") {
+                const falseBlock = this.entity.codeWorkspace.newBlock("boolean");
+                falseBlock.setFieldValue("false", "BOOL");
+                block.getInput("DRAGGABLE")!.connection!.connect(falseBlock.outputConnection!);
+            }
+            return block;
+        };
+        this.transformers.sensing_timer = this.reporter("getTimer");
+        this.transformers.sensing_resettimer = this.override({
+            opcode: "resetTimer"
+        });
     }
 
     effect(data: Block) {

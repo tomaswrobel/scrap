@@ -413,6 +413,18 @@
             },
             {
                 "kind": "block",
+                "type": "resetTimer"
+            },
+            {
+                "kind": "block",
+                "type": "getTimer"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
                 "type": "date"
             },
             {

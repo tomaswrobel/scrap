@@ -4,15 +4,21 @@
 	"private": true,
 	"version": "3.1.0",
 	"type": "module",
+	"description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
 	"scripts": {
 		"dev": "parcel index.html",
 		"build": "parcel build index.html"
 	},
+	"author": {
+		"name": "Tomáš Wróbel",
+		"email": "tomas.wrobel@email.cz",
+		"url": "https://tomaswrobel.dev"
+	},
 	"devDependencies": {
-		"@parcel/packager-raw-url": "2.10.1",
-		"@parcel/resolver-glob": "2.10.1",
-		"@parcel/transformer-sass": "2.10.1",
-		"@parcel/transformer-webmanifest": "2.10.1",
+		"@parcel/packager-raw-url": "2.10.2",
+		"@parcel/resolver-glob": "2.10.2",
+		"@parcel/transformer-sass": "2.10.2",
+		"@parcel/transformer-webmanifest": "2.10.2",
 		"@types/babel__core": "7.20.2",
 		"@types/doctrine": "0.0.7",
 		"@types/file-saver": "2.0.5",
@@ -21,7 +27,7 @@
 		"@types/wicg-web-app-launch": "2023.1.1",
 		"assert": "2.1.0",
 		"buffer": "6.0.3",
-		"parcel": "2.10.1",
+		"parcel": "2.10.2",
 		"parcel-reporter-static-files-copy": "1.5.3",
 		"path-browserify": "1.0.1",
 		"process": "0.11.10",
@@ -30,17 +36,17 @@
 	},
 	"dependencies": {
 		"@babel/core": "7.23.0",
-		"@blockly/field-colour-hsv-sliders": "4.1.4",
+		"@blockly/field-colour-hsv-sliders": "4.1.6",
 		"@blockly/field-date": "8.0.7",
-		"@parcel/service-worker": "2.10.1",
+		"@parcel/service-worker": "2.10.2",
 		"blockly": "10.2.2",
 		"doctrine": "3.0.0",
 		"file-saver": "2.0.5",
 		"jszip": "3.10.1",
 		"parley.js": "2.0.0",
 		"prism-code-editor": "2.2.0",
-		"scrap-engine": "1.5.1",
-		"wavesurfer.js": "7.4.2"
+		"scrap-engine": "1.7.1",
+		"wavesurfer.js": "7.4.3"
 	},
 	"staticFiles": {
 		"staticPath": "node_modules/blockly/media",

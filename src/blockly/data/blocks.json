@@ -101,6 +101,10 @@
 				"name": "KEY",
 				"options": [
 					[
+						"any",
+						"any"
+					],
+					[
 						"Enter",
 						"Enter"
 					],
@@ -1642,6 +1646,13 @@
 		"output": "Boolean",
 		"style": "Sensing"
 	},
+	"isTouchingMouse": {
+		"inputsInline": true,
+		"message0": "touching mouse-pointer?",
+		"args0": [],
+		"output": "Boolean",
+		"style": "Sensing"
+	},
 	"distanceTo": {
 		"inputsInline": true,
 		"message0": "distance to x: %1 y: %2",
@@ -1764,7 +1775,7 @@
 	},
 	"setDraggable": {
 		"inputsInline": true,
-		"message0": "set draggable %1",
+		"message0": "set draggable to %1",
 		"args0": [
 			{
 				"type": "input_value",
@@ -1775,6 +1786,21 @@
 		"nextStatement": null,
 		"previousStatement": null,
 		"style": "Sensing"
+	},
+	"getTimer": {
+		"inputsInline": true,
+		"message0": "timer",
+		"output": "Number",
+		"style": "Sensing",
+		"args0": []
+	},
+	"resetTimer": {
+		"inputsInline": true,
+		"message0": "reset timer",
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Sensing",
+		"args0": []
 	},
 	"date": {
 		"message0": "%1",

@@ -61,6 +61,10 @@
 	&IconSymbol {
 		fill: white;
 	}
+
+	&HtmlInput::-webkit-calendar-picker-indicator {
+		display: none;
+	}
 }
 
 .categoryBubble {

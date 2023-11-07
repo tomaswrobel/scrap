@@ -887,6 +887,10 @@
             },
             {
                 "kind": "block",
+                "type": "isTouchingMouse"
+            },
+            {
+                "kind": "block",
                 "type": "distanceTo",
                 "inputs": {
                     "X": {
@@ -971,7 +975,27 @@
             },
             {
                 "kind": "block",
-                "type": "setDraggable"
+                "type": "setDraggable",
+                "inputs": {
+                    "DRAGGABLE": {
+                        "block": {
+                            "kind": "block",
+                            "type": "boolean"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "resetTimer"
+            },
+            {
+                "kind": "block",
+                "type": "getTimer"
             },
             {
                 "kind": "sep",

@@ -55,6 +55,7 @@ class Entity {
 		this.codeWorkspace.newBlock("whenLoaded");
 		this.costumes.push(initialCostume);
 		this.outputGenerator.INDENT = "";
+		this.thumbnail.alt = "";
 		this.update();
 	}
 
