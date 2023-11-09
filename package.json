@@ -46,7 +46,7 @@
 		"parley.js": "2.0.0",
 		"prism-code-editor": "2.2.0",
 		"scrap-engine": "1.8.1",
-		"wavesurfer.js": "7.4.3"
+		"wavesurfer.js": "7.4.5"
 	},
 	"staticFiles": {
 		"staticPath": "node_modules/blockly/media",
