@@ -2,7 +2,7 @@
 	"name": "scrap",
 	"displayName": "Scrap",
 	"private": true,
-	"version": "3.1.2",
+	"version": "3.2.0",
 	"type": "module",
 	"description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
 	"scripts": {
@@ -45,8 +45,8 @@
 		"jszip": "3.10.1",
 		"parley.js": "2.0.0",
 		"prism-code-editor": "2.2.0",
-		"scrap-engine": "1.8.1",
-		"wavesurfer.js": "7.4.3"
+		"scrap-engine": "1.8.2",
+		"wavesurfer.js": "7.4.5"
 	},
 	"staticFiles": {
 		"staticPath": "node_modules/blockly/media",

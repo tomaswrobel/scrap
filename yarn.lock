@@ -2570,10 +2570,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scrap-engine@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-1.8.1.tgz#6d54f710141d823f1dbb5a32d1d471af224276a7"
-  integrity sha512-RdC7TxtAWW4Uodv3vW9t/iLz8qwxtG8CbYVuStVFmQESiD5bmSC0MHiFl/1l8t8fWdG9cOwuyBlVsMYI58bMBA==
+scrap-engine@1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-1.8.2.tgz#2df94d7e6faec0fb8f5ff238f399152a88b5ade0"
+  integrity sha512-qvzlTVaK0jczWk3jkWMrXnY07TLkXvqZ67x26bH1klD/3TzUgp3xCtM4xd4HAUC4MVs57SstSPlefLiPl5o04A==
 
 semver@^6.3.1:
   version "6.3.1"
@@ -2769,10 +2769,10 @@ w3c-xmlserializer@^4.0.0:
   dependencies:
     xml-name-validator "^4.0.0"
 
-wavesurfer.js@7.4.3:
-  version "7.4.3"
-  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.4.3.tgz#ed797bbefdf4c4b99b2591d886eafd957356b455"
-  integrity sha512-jpg/gMfXKrvt2HSLlpriq3vVQXFHv04xGxiRaZefvqVU69iLXCOEoYVupAes/vS2t+VnBbncebLVo9ylnXvDxA==
+wavesurfer.js@7.4.5:
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.4.5.tgz#a66db31fb062ec87c77e2aa01b4f00a6f4ae73fd"
+  integrity sha512-Vwvui02yNlpe8NYCEcPH6KMlLm+0SELyAUsTbqLOdECLamS8iJI3LU8dyAhL7q1XhYHVhmK1i3jD4QtnnpajPQ==
 
 weak-lru-cache@^1.2.2:
   version "1.2.2"

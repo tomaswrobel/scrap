@@ -13,6 +13,7 @@ export default class Workspace implements Component {
 
 	constructor(readonly app: App) {
 		this.container.classList.add("blockly", "tab-content");
+		this.changed = this.changed.bind(this);
 		Blockly.setParentContainer(this.container);
 	}
 	render(entity: Entity, parent: HTMLElement) {
@@ -43,7 +44,9 @@ export default class Workspace implements Component {
 					placeholder: "Valid JavaScript identifier"
 				},
 				title: "Create Variable",
-				body: "Name:"
+				body: this.app.current instanceof Stage
+					? "You are creating global variable"
+					: "To create a global variable, select the stage."
 			});
 
 			if (name === false) {
@@ -61,7 +64,16 @@ export default class Workspace implements Component {
 				return;
 			}
 
-			this.workspace.createVariable(name, type);
+			const variable = this.workspace.createVariable(name, type);
+
+			if (this.app.current instanceof Stage) {
+				for (const sprite of this.app.entities) {
+					if (sprite instanceof Stage) {
+						continue;
+					}
+					sprite.codeWorkspace.createVariable(name, type, variable.getId());
+				}
+			}
 		});
 
 		this.workspace.registerToolboxCategoryCallback(
@@ -123,23 +135,23 @@ export default class Workspace implements Component {
 							type: "hideVariable",
 							fields: {VAR}
 						}
-					)
+					);
 				}
 
 				return json;
 			}
-		)
-
-		this.workspace.addChangeListener(e => {
-			if (e instanceof Blockly.Events.UiBase) {
-				return;
-			}
-			(this.entity || entity).workspace = Blockly.serialization.workspaces.save(this.workspace);
-		});
+		);
 
 		this.update(entity);
 	}
+	changed(e: Blockly.Events.Abstract) {
+		if (e instanceof Blockly.Events.UiBase) {
+			return;
+		}
+		this.entity.workspace = Blockly.serialization.workspaces.save(this.workspace);
+	}
 	update(entity: Entity) {
+		this.workspace.removeChangeListener(this.changed);
 		const contents = entity instanceof Stage ? stage : sprite;
 
 		this.workspace.updateToolbox({
@@ -172,6 +184,7 @@ export default class Workspace implements Component {
 
 		this.entity = entity;
 		Blockly.serialization.workspaces.load(entity.workspace, this.workspace);
+		this.workspace.addChangeListener(this.changed);
 
 		this.workspace.cleanUp();
 		this.workspace.refreshToolboxSelection();

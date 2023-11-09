@@ -250,6 +250,9 @@ export default class App {
 		Blockly.Extensions.register("sound_menu", function (this: Blockly.Block) {
 			const input = this.getInput("DUMMY")!;
 			const menu = new Blockly.FieldDropdown(() => {
+				if (!app.current.sounds.length) {
+					return [["", ""]];
+				}
 				return app.current.sounds.map<[string, string]>(e => [e.name, e.name]);
 			});
 			input.appendField(menu, "NAME");

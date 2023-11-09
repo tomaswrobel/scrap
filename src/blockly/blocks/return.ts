@@ -17,7 +17,7 @@ export default <Partial<ReturnBlock>>{
 		const input = this.getInput("VALUE");
 
 		return {
-			output: input ? input.connection!.getCheck() : false,
+			output: input ? input.connection!.getCheck()![0] : false,
 		};
 	},
 
@@ -25,24 +25,37 @@ export default <Partial<ReturnBlock>>{
 		const {output} = this.saveExtraState!();
 
 		if (output !== state.output) {
-			this.removeInput("VALUE", true);
+			const input = this.getInput("VALUE");
 
-			if (state.output !== false) {
+			if (input) {
+				const block = input.connection!.targetBlock();
+				input.connection!.disconnect();
+				this.removeInput("VALUE");
+
+				if (state.output !== false) {
+					this.addValue(state.output);
+				}
+
+				if (block) {
+					const check = block.outputConnection!.getCheck();
+
+					if (!check || check.includes(state.output)) {
+						this.getInput("VALUE")!.connection!.connect(block.outputConnection!);
+					}
+				}
+			} else if (state.output !== false) {
 				this.addValue(state.output);
 			}
 		}
 	},
 
 	onchange(this: ReturnBlock, e: Blockly.Events.Abstract) {
-		if (e instanceof Blockly.Events.BlockMove && e.blockId === this.id) {
+		if (e instanceof Blockly.Events.BlockMove && e.blockId === this.id && e.recordUndo) {
 			const parent = this.getRootBlock();
 
 			if (parent.type === "function") {
-				this.removeInput("VALUE", true);
 				const type = parent.getFieldValue("TYPE");
-				if (type) {
-					this.addValue(type);
-				}
+				this.loadExtraState!({output: type});
 			}
 		}
 	},

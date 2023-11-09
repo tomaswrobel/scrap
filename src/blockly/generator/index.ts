@@ -281,6 +281,8 @@ Generator.ReservedWords.unshift(
 	"Color"
 );
 
+Generator.blocks.unknown = () => "";
+
 Generator.blocks.setVariable = function (block: Blockly.Block, generator) {
 	if (generator.entity) {
 		return `await this.setVariable("${block.getField("VAR")!.getText()}", ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"});\n`;

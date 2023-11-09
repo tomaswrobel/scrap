@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2023-11-09
+
+### Added
+
+- global variables
+- much higher SB3 compatibility
+
+### Fixed
+
+- `return` block no longer disconnects the value if it is type-compatible.
+
+### Changed
+
+- Instead of throwing an error, SB3 compatibility manner fills the missing blocks with `unknown` blocks.
+
 ## [3.1.2] - 2023-11-09
 
 ### Added

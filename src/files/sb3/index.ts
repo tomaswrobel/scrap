@@ -31,14 +31,18 @@ class SB3 {
         });
         this.transformers.motion_changexby = this.override({
             opcode: "changeX",
-            inputs: {DX: "X"}
+            inputs: {
+                DX: ["X"]
+            }
         });
         this.transformers.motion_setx = this.override({
             opcode: "setX"
         });
         this.transformers.motion_changeyby = this.override({
             opcode: "changeY",
-            inputs: {DY: "Y"}
+            inputs: {
+                DY: ["Y"]
+            }
         });
         this.transformers.motion_sety = this.override({
             opcode: "setY"
@@ -73,28 +77,29 @@ class SB3 {
         this.transformers.looks_hide = this.override({
             opcode: "hide"
         });
-        this.transformers.looks_changeeffectby = data => {
-            const block = this.entity.codeWorkspace.newBlock("changeEffect");
-            block.getInput("EFFECT")!.connection!.connect(this.effect(data));
-            block.getInput("CHANGE")!.connection!.connect(
-                this.input(data.inputs.CHANGE)!.outputConnection!
-            );
-            return this.next(block, data);
-        };
-        this.transformers.looks_seteffectto = data => {
-            const block = this.entity.codeWorkspace.newBlock("setEffect");
-            block.getInput("EFFECT")!.connection!.connect(this.effect(data));
+        this.transformers.looks_changeeffectby = this.transformers.looks_seteffectto = data => {
+            const effect = this.effect(data);
+
+            if (!effect) {
+                return this.unknown(`${data.opcode} [${data.fields.EFFECT[0]}]`, "command");
+            }
+
+            const block = this.entity.codeWorkspace.newBlock(data.opcode === "looks_seteffectto" ? "setEffect" : "changeEffect");
+            block.getInput("EFFECT")!.connection!.connect(effect);
             block.getInput("CHANGE")!.connection!.connect(
                 this.input(data.inputs.VALUE)!.outputConnection!
             );
-            return this.next(block, data);
+
+            return block;
         };
         this.transformers.looks_cleargraphiceffects = this.override({
             opcode: "clearEffects"
         });
         this.transformers.looks_changesizeby = this.override({
             opcode: "changeSize",
-            inputs: {CHANGE: "SIZE"}
+            inputs: {
+                CHANGE: ["SIZE"]
+            }
         });
         this.transformers.looks_setsizeto = this.override({
             opcode: "setSize",
@@ -102,28 +107,33 @@ class SB3 {
         this.transformers.looks_size = this.reporter("size");
         this.transformers.looks_costume = this.transformers.looks_backdrop = data => {
             const block = this.entity.codeWorkspace.newBlock("costume_menu");
-            block.setFieldValue(data.fields.COSTUME[0], "NAME");
+            block.setFieldValue(this.assetMap[data.fields.COSTUME[0]], "NAME");
             return block;
         };
         this.transformers.looks_switchcostumeto = this.override({
-            opcode: "switchCostume",
+            opcode: "switchCostumeTo",
         });
         this.transformers.looks_nextcostume = this.override({
             opcode: "nextCostume",
         });
         this.transformers.looks_switchbackdropto = this.override({
-            opcode: "switchBackdrop",
+            opcode: "switchBackdropTo",
+            inputs: {
+                BACKDROP: ["COSTUME"]
+            }
         });
         this.transformers.looks_gotofrontback = data => {
-            const block = data.fields.FRONT_BACK[0] === "front"
+            return data.fields.FRONT_BACK[0] === "front"
                 ? this.entity.codeWorkspace.newBlock("goToFront")
                 : this.entity.codeWorkspace.newBlock("goToBack")
                 ;
-            return this.next(block, data);
         };
-        this.transformers.looks_goforwardbackwardlayers = this.override({
-            opcode: "goLayers",
-        });
+        this.transformers.looks_goforwardbackwardlayers = data => {
+            return data.fields.FORWARD_BACKWARD[0] === "forward"
+                ? this.entity.codeWorkspace.newBlock("goForward")
+                : this.entity.codeWorkspace.newBlock("goBackward")
+                ;
+        };
         this.transformers.looks_costumenumbername = data => (
             data.fields.NUMBER_NAME[0] === "number"
                 ? this.entity.codeWorkspace.newBlock("costumeNumber")
@@ -148,11 +158,15 @@ class SB3 {
         };
         this.transformers.sound_play = this.override({
             opcode: "playSound",
-            inputs: {SOUND_MENU: "SOUND"}
+            inputs: {
+                SOUND_MENU: ["SOUND"]
+            }
         });
         this.transformers.sound_playuntildone = this.override({
             opcode: "playSoundUntilDone",
-            inputs: {SOUND_MENU: "SOUND"}
+            inputs: {
+                SOUND_MENU: ["SOUND"]
+            }
         });
         this.transformers.sound_stopallsounds = this.override({
             opcode: "stopSounds"
@@ -162,14 +176,16 @@ class SB3 {
         });
         this.transformers.sound_changevolumeby = this.override({
             opcode: "changeVolume",
-            inputs: {VOLUME: "VALUE"}
+            inputs: {
+                VOLUME: ["VALUE"]
+            }
         });
         this.transformers.sound_volume = this.reporter("volume"),
 
-        // Pen
-        this.transformers.pen_clear = this.override({
-            opcode: "penClear"
-        });
+            // Pen
+            this.transformers.pen_clear = this.override({
+                opcode: "penClear"
+            });
         this.transformers.pen_stamp = this.override({
             opcode: "stamp"
         });
@@ -193,12 +209,23 @@ class SB3 {
         this.transformers.event_whenflagclicked = this.override({
             opcode: "whenFlag"
         });
+        this.transformers.event_whengreaterthan = data => {
+            if (data.fields.WHENGREATERTHANMENU[0] === "TIMER") {
+                const block = this.entity.codeWorkspace.newBlock("whenTimerElapsed");
+                block.getInput("TIMER")!.connection!.connect(
+                    this.input(data.inputs.VALUE)!.outputConnection!
+                );
+                return block;
+            } else {
+                return this.unknown("event_whengreaterthan [volume]", "command");
+            }
+        };
         this.transformers.event_whenthisspriteclicked = data => {
             const block = this.entity.codeWorkspace.newBlock("whenMouse");
-            block.getInput("MOUSE")!.connection!.connect(
+            block.getInput("EVENT")!.connection!.connect(
                 this.entity.codeWorkspace.newBlock("event")!.outputConnection!
             );
-            return this.next(block, data);
+            return block;
         };
         this.transformers.event_whenstageclicked = this.transformers.event_whenthisspriteclicked;
         this.transformers.event_whenbroadcastreceived = data => {
@@ -207,21 +234,27 @@ class SB3 {
             message.setFieldValue(data.fields.BROADCAST_OPTION[0], "TEXT");
             message.setShadow(true);
             block.getInput("MESSAGE")!.connection!.connect(message.outputConnection!);
-            return this.next(block, data);
+            return block;
         };
         this.transformers.event_broadcast = this.override({
             opcode: "broadcastMessage",
-            inputs: {BROADCAST_INPUT: "MESSAGE"}
+            inputs: {
+                BROADCAST_INPUT: ["MESSAGE"]
+            }
         });
         this.transformers.event_broadcastandwait = this.override({
             opcode: "broadcastMessageWait",
-            inputs: {BROADCAST_INPUT: "MESSAGE"}
+            inputs: {
+                BROADCAST_INPUT: ["MESSAGE"]
+            }
         });
 
         // Control
         this.transformers.control_wait = this.override({
             opcode: "wait",
-            inputs: {DURATION: "SECS"}
+            inputs: {
+                DURATION: ["SECS"]
+            }
         });
         this.transformers.control_repeat_until = data => {
             const block = this.entity.codeWorkspace.newBlock("while");
@@ -236,26 +269,28 @@ class SB3 {
 
             if ("SUBSTACK" in data.inputs) {
                 block.getInput("STACK")!.connection!.connect(
-                    this.input(data.inputs.SUBSTACK)!.previousConnection!
+                    this.input(data.inputs.SUBSTACK, true)!.previousConnection!
                 );
             }
 
-            return this.next(block, data);
+            return block;
         };
         this.transformers.control_wait_until = this.transformers.control_repeat_until;
         this.transformers.control_repeat = this.override({
             opcode: "repeat",
-            inputs: {SUBSTACK: "STACK"}
+            inputs: {
+                SUBSTACK: ["STACK", true]
+            }
         });
         this.transformers.control_start_as_clone = this.override({
             opcode: "whenCloned"
         });
         this.transformers.control_forever = data => {
             const block = this.entity.codeWorkspace.newBlock("while");
-        
+
             if ("SUBSTACK" in data.inputs) {
                 block.getInput("STACK")!.connection!.connect(
-                    this.input(data.inputs.SUBSTACK)!.previousConnection!
+                    this.input(data.inputs.SUBSTACK, true)!.previousConnection!
                 );
             }
 
@@ -268,16 +303,16 @@ class SB3 {
         };
         this.transformers.control_if = this.override({
             inputs: {
-                SUBSTACK: "DO0",
-                CONDITION: "IF0"
+                SUBSTACK: ["DO0", true],
+                CONDITION: ["IF0"]
             },
             opcode: "controls_if"
         });
         this.transformers.control_if_else = this.override({
             inputs: {
-                SUBSTACK: "DO0",
-                SUBSTACK2: "ELSE",
-                CONDITION: "IF0"
+                SUBSTACK: ["DO0", true],
+                SUBSTACK2: ["ELSE", true],
+                CONDITION: ["IF0"]
             },
             opcode: "controls_if",
             extraState: {
@@ -337,7 +372,7 @@ class SB3 {
             );
             block.setFieldValue("scratch_answer", "VAR");
             block.getInput("VALUE")!.connection!.connect(ask.outputConnection!);
-            return this.next(block, data);
+            return block;
         };
         this.transformers.sensing_answer = () => {
             this.helperVariable("scratch_answer", "String");
@@ -347,7 +382,7 @@ class SB3 {
         };
         this.transformers.sensing_keyoptions = data => {
             const block = this.entity.codeWorkspace.newBlock("key");
-            
+
             switch (data.fields.KEY_OPTION[0]) {
                 case "space":
                     block.setFieldValue("Space", "KEY");
@@ -372,8 +407,10 @@ class SB3 {
             return block;
         };
         this.transformers.sensing_keypressed = this.override({
-            opcode: "keyPressed",
-            inputs: {KEY_OPTION: "KEY"}
+            opcode: "isKeyPressed",
+            inputs: {
+                KEY_OPTION: ["KEY"]
+            }
         });
         this.transformers.sensing_mousedown = this.reporter("mouseDown");
         this.transformers.sensing_mousex = this.reporter("mouseX");
@@ -395,6 +432,129 @@ class SB3 {
         this.transformers.sensing_resettimer = this.override({
             opcode: "resetTimer"
         });
+
+        this.transformers.operator_add = this.operator("arithmetics", "+");
+        this.transformers.operator_subtract = this.operator("arithmetics", "-");
+        this.transformers.operator_multiply = this.operator("arithmetics", "*");
+        this.transformers.operator_divide = this.operator("arithmetics", "/");
+
+        this.transformers.operator_random = data => {
+            const fromParam = this.entity.codeWorkspace.newBlock("parameter");
+            fromParam.setFieldValue("__from__", "VAR");
+
+            const toParam = this.entity.codeWorkspace.newBlock("parameter");
+            toParam.setFieldValue("__to__", "VAR");
+
+            const multiply = this.entity.codeWorkspace.newBlock("arithmetics");
+            multiply.setFieldValue("*", "OP");
+
+            const add = this.entity.codeWorkspace.newBlock("arithmetics");
+            add.setFieldValue("+", "OP");
+
+            const subtract = this.entity.codeWorkspace.newBlock("arithmetics");
+            subtract.setFieldValue("-", "OP");
+
+            const floor = this.entity.codeWorkspace.newBlock("math");
+            floor.setFieldValue("floor", "OP");
+
+            const one = this.entity.codeWorkspace.newBlock("math_number");
+            one.setFieldValue("1", "NUM");
+
+            const returnBlock = this.entity.codeWorkspace.newBlock("return");
+            returnBlock.loadExtraState!({output: "Number"});
+
+            const random = this.entity.codeWorkspace.newBlock("random");
+
+            // Connections
+            multiply.getInput("A")!.connection!.connect(random.outputConnection!);
+            multiply.getInput("B")!.connection!.connect(subtract.outputConnection!);
+            subtract.getInput("A")!.connection!.connect(toParam.outputConnection!);
+            subtract.getInput("B")!.connection!.connect(fromParam.outputConnection!);
+
+            floor.getInput("NUM")!.connection!.connect(multiply.outputConnection!);
+            add.getInput("A")!.connection!.connect(floor.outputConnection!);
+            add.getInput("B")!.connection!.connect(one.outputConnection!);
+
+            const name = this.provide({
+                args: [
+                    {
+                        name: "__from__",
+                        type: "number"
+                    },
+                    {
+                        name: "__to__",
+                        type: "number"
+                    }
+                ],
+                name: "random",
+                returns: "Number"
+            }, returnBlock);
+
+            if (returnBlock.disposed) {
+                add.dispose(false);
+            } else {
+                returnBlock.getInput("VALUE")!.connection!.connect(add.outputConnection!);
+            }
+
+            const block = this.entity.codeWorkspace.newBlock("call");
+            block.loadExtraState!({
+                name,
+                params: [
+                    "Number",
+                    "Number"
+                ],
+                returnType: "Number"
+            });
+
+            block.getInput("PARAM_0")!.connection!.connect(
+                this.input(data.inputs.FROM)!.outputConnection!
+            );
+            block.getInput("PARAM_1")!.connection!.connect(
+                this.input(data.inputs.TO)!.outputConnection!
+            );
+
+            return block;
+        };
+
+        this.transformers.operator_lt = this.operator("compare", "<");
+        this.transformers.operator_equals = this.operator("compare", "==");
+        this.transformers.operator_gt = this.operator("compare", ">");
+        this.transformers.operator_and = this.operator("operation", "&&");
+        this.transformers.operator_or = this.operator("operation", "||");
+
+        this.transformers.operator_not = this.override({
+            opcode: "not",
+            inputs: {
+                OPERAND: ["BOOL"]
+            }
+        });
+
+        // Scratch uses 1-based indexing, while Scrap uses 0-based indexing.
+        this.transformers.operator_letter_of = data => {
+            const block = this.entity.codeWorkspace.newBlock("item");
+            const minus = this.entity.codeWorkspace.newBlock("arithmetics");
+            minus.setFieldValue("-", "OP");
+            const one = this.entity.codeWorkspace.newBlock("math_number");
+            one.setFieldValue("1", "NUM");
+            minus.getInput("A")!.connection!.connect(
+                this.input(data.inputs.LETTER)!.outputConnection!
+            );
+            minus.getInput("B")!.connection!.connect(one.outputConnection!);
+
+            block.getInput("INDEX")!.connection!.connect(minus.outputConnection!);
+            block.getInput("ITERABLE")!.connection!.connect(
+                this.input(data.inputs.STRING)!.outputConnection!
+            );
+
+            return block;
+        };
+
+        this.transformers.operator_length = this.override({
+            opcode: "length",
+            inputs: {
+                STRING: ["ITERABLE"]
+            }
+        });
     }
 
     effect(data: Block) {
@@ -410,12 +570,32 @@ class SB3 {
             case "BRIGHTNESS":
                 block.setFieldValue("brightness", "EFFECT");
                 break;
+            default:
+                block.dispose(false);
+                return null;
         }
 
         block.setShadow(true);
 
         return block.outputConnection!;
     }
+
+    operator(type: "compare" | "arithmetics" | "operation", operator: string) {
+        const input = type === "arithmetics" ? "NUM" : "OPERAND";
+        return (data: Block) => {
+            const block = this.entity.codeWorkspace.newBlock(type);
+            block.setFieldValue(operator, "OP");
+            block.getInput("A")!.connection!.connect(
+                this.input(data.inputs[`${input}1`])!.outputConnection!
+            );
+            block.getInput("B")!.connection!.connect(
+                this.input(data.inputs[`${input}2`])!.outputConnection!
+            );
+            return block;
+        };
+    }
+
+    assetMap: Record<string, string> = {};
 
     async transform(file: File) {
         const zip = await JSZip.loadAsync(file);
@@ -438,6 +618,7 @@ class SB3 {
                         {type: `image/${costume.dataFormat}${costume.dataFormat === "svg" ? "+xml" : ""}`}
                     )
                 );
+                this.assetMap[costume.name] = `${costume.name}.${costume.dataFormat}`;
             }
             this.entity.update();
             this.entity.sounds = [];
@@ -455,6 +636,12 @@ class SB3 {
             for (const id in target.variables) {
                 this.entity.codeWorkspace.createVariable(target.variables[id][0], null, id);
             }
+            if (!target.isStage) {
+                for (const id in project.targets[0].variables) {
+                    this.entity.codeWorkspace.createVariable(project.targets[0].variables[id][0], null, id);
+                }
+            }
+            this.provided = {};
             for (const block of Object.values(target.blocks)) {
                 if (block.topLevel) {
                     this.block(block);
@@ -494,7 +681,7 @@ class SB3 {
     private helperVariable(id: string, type: string) {
         if (!this.entity.codeWorkspace.getVariableById(id)) {
             this.entity.codeWorkspace.createVariable(
-                Blockly.Variables.generateUniqueName(this.entity.codeWorkspace), 
+                Blockly.Variables.generateUniqueName(this.entity.codeWorkspace),
                 type,
                 id
             );
@@ -503,9 +690,12 @@ class SB3 {
         return false;
     }
 
-    input([shadow, data]: Input) {
+    input([shadow, data]: Input, command = false) {
         if (typeof data === "string") {
-            const block = this.block(this.target.blocks[data]);
+            const block = this.block(
+                this.target.blocks[data],
+                !command
+            );
             block.setShadow(shadow === 1);
             return block;
         }
@@ -562,8 +752,8 @@ class SB3 {
             }
 
             for (const [name, input] of Object.entries(data.inputs)) {
-                const {connection} = block.getInput(inputs[name] ?? name)!;
-                const inner = this.input(input);
+                const {connection} = block.getInput(name in inputs ? inputs[name][0] : name)!;
+                const inner = this.input(input, name in inputs ? inputs[name][1] : false);
 
                 if (inner && inner.previousConnection) {
                     connection!.connect(inner.previousConnection);
@@ -571,7 +761,7 @@ class SB3 {
                     connection!.connect(inner.outputConnection);
                 }
             }
-            return this.next(block, data);
+            return block;
         };
     }
 
@@ -588,19 +778,38 @@ class SB3 {
         return block;
     }
 
-    block(data: Block): Blockly.Block {
+    block(data: Block, isInput?: boolean): Blockly.Block {
         if (data.opcode in this.transformers) {
-            return this.transformers[data.opcode](data);
+            var block = this.transformers[data.opcode](data);
+        } else {
+            var block = this.unknown(data.opcode, isInput ? "reporter" : "command");
         }
-        throw `Unsupported Scratch block type: ${data.opcode}`;
+        if (data.next) {
+            block.nextConnection!.connect(
+                this.block(this.target.blocks[data.next]).previousConnection!
+            );
+        }
+        return block;
     }
 
+    unknown(opcode: string, shape: "reporter" | "command") {
+        const block = this.entity.codeWorkspace.newBlock("unknown");
+        block.loadExtraState!({shape, opcode});
+        return block;
+    }
+
+    provided!: Record<string, string>;
     /**
      * Some Scratch blocks do not have a corresponding block in Scrap.
      * However, it is sometimes possible to emulate the block using a function.
      * This is a helper function to create a function that can be used to emulate a block.
      */
-    provide(init: SB3.Provide, ...blocks: (() => Blockly.Block)[]) {
+    provide(init: SB3.Provide, _block: Blockly.Block) {
+        if (init.name in this.provided) {
+            _block.dispose(false);
+            return this.provided[init.name];
+        }
+
         const name = `scratch_${init.name}_${Date.now().toString(36)}`;
         let block = this.entity.codeWorkspace.newBlock("function");
 
@@ -610,20 +819,16 @@ class SB3 {
             returnType: init.returns
         });
 
-        for (let i = 0; i < blocks.length; i++) {
-            const current = blocks[i]();
-            block.nextConnection!.connect(
-                current.previousConnection!
-            );
-            block = current;
-        }
+        block.nextConnection!.connect(_block.previousConnection!);
+
+        return this.provided[init.name] = name;
     }
 }
 
 declare namespace SB3 {
     interface Override {
         opcode?: string;
-        inputs?: Record<string, string>;
+        inputs?: Record<string, [string, boolean?]>;
         extraState?: unknown;
     }
 
