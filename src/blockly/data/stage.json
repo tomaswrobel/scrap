@@ -210,6 +210,20 @@
             },
             {
                 "kind": "block",
+                "type": "whenTimerElapsed",
+                "inputs": {
+                    "TIMER": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 1
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
                 "type": "whenKeyPressed",
                 "inputs": {
                     "KEY": {

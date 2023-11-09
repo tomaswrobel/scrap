@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.2] - 2023-11-09
+
+### Added
+
+- `when timer > ` block
+
 ## [3.1.1] - 2023-11-07
 
 ### Added
@@ -380,7 +386,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.1.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.1.2...HEAD
+[3.1.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.1.2
 [3.1.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.1.1
 [3.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.1.0
 [3.0.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.0.2

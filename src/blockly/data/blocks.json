@@ -1316,6 +1316,19 @@
 		"nextStatement": null,
 		"style": "Events"
 	},
+	"whenTimerElapsed": {
+		"inputsInline": true,
+		"message0": "when timer > %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "TIMER",
+				"check": "Number"
+			}
+		],
+		"nextStatement": null,
+		"style": "Events"
+	},
 	"event": {
 		"message0": "%1",
 		"args0": [
