@@ -235,10 +235,7 @@ class Sprite extends Entity {
 		sprite.classList.add("media-element");
 		super.render(sprite);
 
-		const validIdentifier = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/;
-
 		const input = document.createElement("input");
-		input.pattern = validIdentifier.source;
 		input.classList.add("name");
 
 		const span = document.createElement("span");
@@ -253,7 +250,7 @@ class Sprite extends Entity {
 		};
 
 		input.onblur = () => {
-			if (validIdentifier.test(input.value) && Generator.ReservedWords.indexOf(input.value) === -1) {
+			if (Generator.ReservedWords.indexOf(input.value) === -1) {
 				span.textContent = input.value;
 				this.name = input.value;
 			}

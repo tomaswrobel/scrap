@@ -1,5 +1,5 @@
 import {parse} from "doctrine";
-import {Types} from "../blockly";
+import {Generator, Types} from "../blockly";
 
 /**
  * Transform ScrapScript code to JavaScript.
@@ -27,6 +27,21 @@ export default async function transform(code: string, minified = false) {
 			{
 				name: "babel-plugin-transform-scrap-async",
 				visitor: {
+					TaggedTemplateExpression(path) {
+						if (
+							path.node.quasi.expressions.length === 0 
+							&& path.node.tag.type === "Identifier" 
+							&& path.node.tag.name === "sprite"
+						) {
+							path.replaceWith(
+								babel.types.identifier(
+									Generator.escape(
+										path.node.quasi.quasis[0].value.raw
+									)
+								)
+							);
+						}
+					},
 					FunctionDeclaration(path) {
 						path.node.async = true;
 					},

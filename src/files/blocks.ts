@@ -110,6 +110,19 @@ export default class CodeParser {
 			return;
 		}
 		switch (node.type) {
+			case "TaggedTemplateExpression": {
+				if (this.isIdentifier(node.tag, "sprite")) {
+					if (node.quasi.expressions.length === 0) {
+						const block = this.block("sprite", true);
+						block.setFieldValue(node.quasi.quasis[0].value.raw, "SPRITE");
+					} else {
+						throw new SyntaxError("Expressions in sprite tag are not supported");
+					}
+				} else {
+					throw new SyntaxError("Unsupported tag");
+				}
+				break;
+			}
 			case "NewExpression": {
 				if (this.isIdentifier(node.callee, "Date")) {
 					if (node.arguments.length === 0) {
@@ -644,8 +657,8 @@ export default class CodeParser {
 					this.parse(object);
 				} else if (object.type === "ThisExpression" && this.isProperty(node, allBlocks)) {
 					this.block(this.getPropertyContents(property));
-				} else if (object.type === "MemberExpression") {
-					if (object.object.type === "ThisExpression" && this.isProperty(object, ["effects"])) {
+				} else if (object.type === "MemberExpression" && this.isProperty(object, ["effects"])) {
+					if (object.object.type === "ThisExpression") {
 						const block = this.block("getEffect");
 						this.connection = block.getInput("EFFECT")!.connection!;
 						if (property.type === "Identifier") {
@@ -655,13 +668,28 @@ export default class CodeParser {
 						} else {
 							this.parse(property);
 						}
-					}
-					if (property.type === "Identifier" && object.property.type === "Identifier" && object.property.name === "effects") {
+					} else {
 						const block = this.block("property");
-						block.setFieldValue(`effects.${property.name}`, "PROPERTY");
+						if (property.type === "Identifier") {
+							block.setFieldValue("effects." + property.name, "PROPERTY");
+						} else {
+							block.setFieldValue("effects." + property.value, "PROPERTY");
+						}
 						this.connection = block.getInput("SPRITE")!.connection!;
 						this.parse(object.object);
 					}
+				} else if (this.isProperty(node, [
+					"x",
+					"y",
+					"size",
+					"direction",
+					"volume",
+					"penSize",
+				])) {
+					const block = this.block("property");
+					block.setFieldValue(this.getPropertyContents(property), "PROPERTY");
+					this.connection = block.getInput("SPRITE")!.connection!;
+					this.parse(object);
 				} else if (object.type === "Identifier") {
 					if (object.name === "Scrap") {
 						if (this.isProperty(node, ["isTurbo"])) {
@@ -675,14 +703,11 @@ export default class CodeParser {
 						} else {
 							throw new SyntaxError("Unsupported Math constant");
 						}
-					} else if (this.entities.some(n => object.name === n.name)) {
-						if (property.type === "Identifier") {
-							const block = this.block("property");
-							block.setFieldValue(property.name, "PROPERTY");
-							this.connection = block.getInput("SPRITE")!.connection!;
-							this.parse(object);
-						}
+					} else {
+						throw new SyntaxError("Unsupported object");
 					}
+				} else {
+					throw new SyntaxError("Unsupported sprite property");
 				}
 				break;
 			}
@@ -839,16 +864,12 @@ export default class CodeParser {
 				break;
 			}
 			case "Identifier": {
-				if (this.entities.some(entity => entity.name === node.name)) {
-					this.block("sprite", true).setFieldValue(node.name, "SPRITE");
+				const variable = this.workspace.getAllVariables().find(variable => variable.name === node.name);
+				if (variable) {
+					const block = this.block("getVariable");
+					block.setFieldValue(variable.getId(), "VAR");
 				} else {
-					const variable = this.workspace.getAllVariables().find(variable => variable.name === node.name);
-					if (variable) {
-						const block = this.block("getVariable");
-						block.setFieldValue(variable.getId(), "VAR");
-					} else {
-						this.block("parameter").setFieldValue(node.name, "VAR");
-					}
+					this.block("parameter").setFieldValue(node.name, "VAR");
 				}
 
 				break;

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.1] - 2023-11-10
+
+### Changed
+
+- variables and entities no longer require valid identifiers (e.g. `1` is now a valid variable name)
+
 ## [3.2.0] - 2023-11-09
 
 ### Added

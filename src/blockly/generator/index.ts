@@ -101,7 +101,7 @@ class Generator extends Blockly.CodeGenerator {
 				if (this.entity) {
 					return `await this.declareVariable(${JSON.stringify(variable.name)}, "${variable.type}");`
 				}
-				return `/** @type {${variable.type || "*"}} */\nlet ${variable.name};`
+				return `/** @type {${variable.type || "*"}} */\nlet ${Generator.escape(variable.name)};`
 			}
 		);
 
@@ -110,6 +110,22 @@ class Generator extends Blockly.CodeGenerator {
 		}
 
 		this.isInitialized = true;
+	}
+
+	private static readonly bad = /(^[^a-zA-Z_])|([^a-zA-Z_0-9])/g;
+
+	public static escape(string: string) {
+		const result = string.replace(this.bad, this.dollar);
+
+		if (this.ReservedWords.includes(result)) {
+			return `$${result}$`;
+		}
+
+		return result;
+	}
+
+	private static dollar(bad: string) {
+		return `$${bad.charCodeAt(0)}$`;
 	}
 
 	get protection() {
@@ -156,7 +172,7 @@ class Generator extends Blockly.CodeGenerator {
 		this.nameDB_?.reset();
 
 		if (this.entity) {
-			let code = `const ${this.entity.name} = new Scrap.`;
+			let code = `const ${Generator.escape(this.entity.name)} = new Scrap.`;
 
 			const params = [
 				this.getURLsFor(this.entity.costumes),
@@ -372,7 +388,11 @@ Generator.blocks.continue = function () {
 };
 
 Generator.blocks.sprite = function (block: Blockly.Block) {
-	return [block.getFieldValue("SPRITE"), Order.ATOMIC];
+	const name = block.getFieldValue("SPRITE");
+	if (name === "this" || this.entity) {
+		return [name, Order.ATOMIC];
+	}
+	return ["sprite`" + name + "`", Order.ATOMIC];
 };
 
 Generator.blocks.clone = function (block: Blockly.Block, generator) {

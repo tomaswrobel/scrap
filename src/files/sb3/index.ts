@@ -220,7 +220,7 @@ class SB3 {
                 return this.unknown("event_whengreaterthan [volume]", "command");
             }
         };
-        this.transformers.event_whenthisspriteclicked = data => {
+        this.transformers.event_whenthisspriteclicked = () => {
             const block = this.entity.codeWorkspace.newBlock("whenMouse");
             block.getInput("EVENT")!.connection!.connect(
                 this.entity.codeWorkspace.newBlock("event")!.outputConnection!
@@ -285,6 +285,23 @@ class SB3 {
         this.transformers.control_start_as_clone = this.override({
             opcode: "whenCloned"
         });
+        this.transformers.control_create_clone_of = data => {
+            const field = this.target.blocks[data.inputs.CLONE_OPTION[1] as string].fields.CLONE_OPTION[0];
+            const block = this.entity.codeWorkspace.newBlock("clone");
+            const sprite = this.entity.codeWorkspace.newBlock("sprite");
+
+            sprite.setShadow(true);
+            if (field !== "_myself_") {
+                sprite.setFieldValue(field, "SPRITE");
+            }
+
+            block.getInput("SPRITE")!.connection!.connect(sprite.outputConnection!);
+
+            return block;
+        };
+        this.transformers.control_delete_this_clone = () => (
+            this.entity.codeWorkspace.newBlock("delete")
+        );
         this.transformers.control_forever = data => {
             const block = this.entity.codeWorkspace.newBlock("while");
 
@@ -767,15 +784,6 @@ class SB3 {
 
     reporter(name: string) {
         return () => this.entity.codeWorkspace.newBlock(name);
-    }
-
-    next(block: Blockly.Block, data: Block) {
-        if (data.next) {
-            block.nextConnection!.connect(
-                this.block(this.target.blocks[data.next]).previousConnection!
-            );
-        }
-        return block;
     }
 
     block(data: Block, isInput?: boolean): Blockly.Block {
