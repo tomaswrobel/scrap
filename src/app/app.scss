@@ -29,7 +29,7 @@ iframe {
 	margin-bottom: $gap;
 }
 
-#app > ul {
+#root > ul {
 	grid-area: nav;
 	list-style-type: none;
 	margin: 0;
@@ -71,7 +71,7 @@ iframe {
 	}
 }
 
-#app > ul > li {
+#root > ul > li {
 	float: left;
 
 	> a {
@@ -229,7 +229,7 @@ body {
 	font-family: sans-serif;
 }
 
-#app {
+#root {
 	height: 100vh;
 	width: 100vw;
 	display: grid;
@@ -263,4 +263,25 @@ body {
 	margin-right: 20px;
 	margin-bottom: 20px;
 	justify-self: end;
+}
+
+body[data-loading]::after {
+	content: attr(data-loading);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.75);
+	color: #fff;
+	z-index: 10000;
+	width: 100%;
+	height: 100%;
+}
+
+.prism-code-editor {
+	max-height: 100%;
 }

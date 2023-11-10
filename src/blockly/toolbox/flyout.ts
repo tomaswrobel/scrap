@@ -176,7 +176,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 				if (targetBlock && !this.blockIsRecyclable_(targetBlock)) {
 					return false;
 				}
-			}F
+			}
 		}
 		return true;
 	}

@@ -2,6 +2,7 @@ import * as Blockly from "blockly/core";
 import * as blocks from "./blocks/*.ts";
 import * as fields from "./fields/*.ts";
 import * as mutators from "./mutators/*.ts";
+import * as extensions from "./extensions/*.ts";
 
 import "./utils/export_png";
 
@@ -26,6 +27,13 @@ for (const mutator in mutators) {
 		mutators[mutator].MIXIN,
 		undefined,
 		mutators[mutator].blocks
+	);
+}
+
+for (const extension in extensions) {
+	Blockly.Extensions.register(
+		extension, 
+		extensions[extension].default
 	);
 }
 
@@ -95,40 +103,6 @@ for (const type in blocksData) {
 		};
 	}
 }
-
-Blockly.Extensions.register("parent_style", function () {
-	this.onchange = () => {
-		const parent = this.getParent();
-		if (parent) {
-			this.setStyle(parent.getStyleName());
-			this.onchange = null;
-		}
-	};
-});
-
-Blockly.Extensions.registerMixin("foreach_contextmenu", {
-	customContextMenu(options) {
-		options.push({
-			text: "Rename variable...",
-			callback: () => {
-				this.setFieldValue(
-					window.prompt("New name:", this.getFieldValue("VAR")),
-					"VAR"
-				);
-			},
-			enabled: true,
-		});
-	},
-});
-
-Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "function";
-Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = "function";
-Blockly.Msg.MATH_MODULO_TITLE = "%1 mod %2";
-
-delete Blockly.Blocks.controls_if;
-delete Blockly.Blocks.controls_if_else;
-delete Blockly.Blocks.controls_if_elseif;
-delete Blockly.Blocks.controls_if_if;
 
 Blockly.FlyoutButton.TEXT_MARGIN_X = 20;
 Blockly.FlyoutButton.TEXT_MARGIN_Y = 10;

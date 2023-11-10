@@ -3,8 +3,8 @@
 		"message0": "%{BKY_VARIABLES_SET}",
 		"args0": [
 			{
-				"type": "field_variable",
-				"name": "VAR"
+				"type": "input_dummy",
+				"name": "DUMMY"
 			},
 			{
 				"type": "input_value",
@@ -15,14 +15,16 @@
 		"nextStatement": null,
 		"style": "variable_blocks",
 		"extensions": [
+			"var_menu",
 			"setVar"
-		]
+		],
+		"inputsInline": true
 	},
 	"getVariable": {
 		"message0": "%1",
 		"args0": [
 			{
-				"type": "field_variable",
+				"type": "field_label_serializable",
 				"name": "VAR"
 			}
 		],
@@ -36,8 +38,8 @@
 		"message0": "change %1 by %2",
 		"args0": [
 			{
-				"type": "field_variable",
-				"name": "VAR"
+				"type": "input_dummy",
+				"name": "DUMMY"
 			},
 			{
 				"type": "input_value",
@@ -47,31 +49,43 @@
 		],
 		"previousStatement": null,
 		"nextStatement": null,
-		"style": "variable_blocks"
+		"style": "variable_blocks",
+		"extensions": [
+			"var_menu"
+		],
+		"inputsInline": true
 	},
 	"showVariable": {
 		"message0": "show variable %1",
 		"args0": [
 			{
-				"type": "field_variable",
-				"name": "VAR"
+				"type": "input_dummy",
+				"name": "DUMMY"
 			}
 		],
 		"previousStatement": null,
 		"nextStatement": null,
-		"style": "variable_blocks"
+		"style": "variable_blocks",
+		"extensions": [
+			"var_menu"
+		],
+		"inputsInline": true
 	},
 	"hideVariable": {
 		"message0": "hide variable %1",
 		"args0": [
 			{
-				"type": "field_variable",
-				"name": "VAR"
+				"type": "input_dummy",
+				"name": "DUMMY"
 			}
 		],
 		"previousStatement": null,
 		"nextStatement": null,
-		"style": "variable_blocks"
+		"style": "variable_blocks",
+		"extensions": [
+			"var_menu"
+		],
+		"inputsInline": true
 	},
 	"function_header": {
 		"message0": "function's parameters",
@@ -984,8 +998,7 @@
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "MESSAGE",
-				"check": "String"
+				"name": "MESSAGE"
 			}
 		],
 		"nextStatement": null,
@@ -2076,6 +2089,10 @@
 						"abs"
 					],
 					[
+						"round",
+						"round"
+					],
+					[
 						"floor",
 						"floor"
 					],
@@ -2245,6 +2262,30 @@
 		],
 		"output": [
 			"Array"
+		],
+		"style": "Iterables"
+	},
+	"join": {
+		"inputsInline": true,
+		"message0": "join %1 with %2",
+		"args0": [
+			{
+				"name": "ITERABLE",
+				"type": "input_value",
+				"check": [
+					"Array"
+				]
+			},
+			{
+				"name": "SEPARATOR",
+				"type": "input_value",
+				"check": [
+					"String"
+				]
+			}
+		],
+		"output": [
+			"String"
 		],
 		"style": "Iterables"
 	},

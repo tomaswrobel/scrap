@@ -196,10 +196,18 @@ export default async function transform(code: string, minified = false) {
 							} else {
 								return;
 							}
+							if (variables.has(path.node.left.name)) {
+								var target: babel.types.Expression = babel.types.thisExpression();
+							} else {
+								var target: babel.types.Expression = babel.types.memberExpression(
+									babel.types.thisExpression(),
+									babel.types.identifier("stage")
+								);
+							}
 							path.replaceWith(
 								babel.types.callExpression(
 									babel.types.memberExpression(
-										babel.types.thisExpression(),
+										target,
 										babel.types.identifier(path.node.operator === "=" ? "setVariable" : "changeVariable")
 									),
 									[
@@ -251,6 +259,57 @@ export default async function transform(code: string, minified = false) {
 									babel.types.callExpression(
 										babel.types.memberExpression(
 											babel.types.thisExpression(),
+											babel.types.identifier("getVariable")
+										),
+										[
+											babel.types.stringLiteral(path.node.name),
+										]
+									)
+								)
+							);
+						} else if (window.app.entities[0].variables.some((variable) => variable[0] === path.node.name)) {
+							// Check if there is no function with the parameter
+							let parent = path.parentPath;
+							while (parent && parent.node.type !== "FunctionDeclaration" && parent.node.type !== "FunctionExpression") {
+								parent = parent.parentPath!;
+							}
+							if (parent && parent.node.type === "FunctionDeclaration") {
+								if (parent.node.params.some((param) => param.type === "Identifier" && param.name === path.node.name)) {
+									return;
+								}
+							}
+
+							// Check for for...of loops
+							parent = path.parentPath;
+							while (parent && parent.node.type !== "ForOfStatement") {
+								parent = parent.parentPath!;
+							}
+							if (parent && parent.node.type === "ForOfStatement") {
+								if (parent.node.left.type === "Identifier" && parent.node.left.name === path.node.name) {
+									return;
+								}
+							}
+
+							// Check for try...catch blocks
+							parent = path.parentPath;
+							while (parent && parent.node.type !== "TryStatement") {
+								parent = parent.parentPath!;
+							}
+
+							if (parent && parent.node.type === "TryStatement") {
+								if (parent.node.handler && parent.node.handler.param && parent.node.handler.param.type === "Identifier" && parent.node.handler.param.name === path.node.name) {
+									return;
+								}
+							}
+
+							path.replaceWith(
+								babel.types.awaitExpression(
+									babel.types.callExpression(
+										babel.types.memberExpression(
+											babel.types.memberExpression(
+												babel.types.thisExpression(),
+												babel.types.identifier("stage")
+											),
 											babel.types.identifier("getVariable")
 										),
 										[

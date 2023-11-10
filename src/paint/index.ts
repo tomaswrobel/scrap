@@ -2,7 +2,6 @@ import {Pen, Line, Rectangle, Ellipse, Eraser, Fill, type Tool, Triangle} from "
 import type {Entity} from "../entities";
 import Component from "../tab";
 import "./paint.scss";
-import type App from "../app";
 import {MediaList} from "../media-list";
 import {bind} from "../decorators";
 
@@ -25,7 +24,7 @@ export default class Paint implements Component {
 
 	cropWorker = new Worker(new URL("./crop.worker.ts", import.meta.url));
 
-	constructor(readonly app: App) {
+	constructor() {
 		this.container.classList.add("paint", "tab-content");
 		this.toolContainer.classList.add("tools");
 		this.controls.classList.add("controls");
@@ -183,8 +182,8 @@ export default class Paint implements Component {
 		});
 	}
 
-	render(entity: Entity, element: Element) {
-		this.update(entity);
+	render(element: Element) {
+		this.update();
 		element.appendChild(this.container);
 	}
 
@@ -209,45 +208,45 @@ export default class Paint implements Component {
 		document.removeEventListener("mouseup", this.mouseUp);
 	}
 
-	update(entity: Entity) {
+	update() {
 		this.mediaList?.dispose();
 
-		this.mediaList = new MediaList(MediaList.COSTUME, entity.costumes);
+		this.mediaList = new MediaList(MediaList.COSTUME, window.app.current.costumes);
 
 		this.mediaList.addEventListener("select", async e => {
 			const {detail: file} = e as CustomEvent<File>;
-			entity.current = entity.costumes.indexOf(file);
-			entity.update();
+			window.app.current.current = window.app.current.costumes.indexOf(file);
+			window.app.current.update();
 			await this.load((e as CustomEvent<File>).detail);
 			this.setChanged(false);
 		});
 
 		this.mediaList.render(this.container);
 
-		this.load(entity.costumes[0]);
+		this.load(window.app.current.costumes[0]);
 
 		this.saveButton.onclick = async () => {
 			if (this.changed && this.file) {
 				this.setChanged(false);
 				const file = await this.save(this.file.name);
-				const index = entity.costumes.indexOf(this.file);
+				const index = window.app.current.costumes.indexOf(this.file);
 
 				if (index === -1) {
 					throw new Error("Costume not found");
 				}
 
-				entity.costumes[index] = file;
-				this.update(entity);
+				window.app.current.costumes[index] = file;
+				this.update();
 			}
 		};
 
 		this.cancelButton.onclick = () => {
 			if (this.changed) {
 				this.setChanged(false);
-				this.load(entity.costumes[entity.current]);
+				this.load(window.app.current.costumes[window.app.current.current]);
 			}
 		};
 
-		entity.update();
+		window.app.current.update();
 	}
 }

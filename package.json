@@ -45,7 +45,7 @@
 		"jszip": "3.10.1",
 		"parley.js": "2.0.0",
 		"prism-code-editor": "2.2.0",
-		"scrap-engine": "1.8.2",
+		"scrap-engine": "1.8.3",
 		"wavesurfer.js": "7.4.5"
 	},
 	"staticFiles": {

@@ -14,8 +14,6 @@ import "prism-code-editor/themes/vs-code-light.css";
 
 // Importing types
 import type TabComponent from "../tab";
-import type App from "../app";
-import type {Entity} from "../entities";
 
 export default class Code implements TabComponent {
     editor?: PrismEditor;
@@ -23,11 +21,11 @@ export default class Code implements TabComponent {
     // DOM
     container = document.createElement("div");
 
-    constructor(readonly app: App) {
+    constructor() {
         this.container.classList.add("tab-content");
     }
 
-    render(entity: Entity, parent: HTMLElement) {
+    render(parent: HTMLElement) {
         parent.append(this.container);
 
         this.editor = createEditor(
@@ -43,15 +41,15 @@ export default class Code implements TabComponent {
 
         import("./extensions").then(module => {
             module.addExtensions(this.editor!);
-            this.update(entity);
+            this.update();
         });
     }
 
-    update(entity: Entity) {
+    update() {
         this.editor!.setOptions({
-            value: entity.code,
+            value: window.app.current.code,
             onUpdate(value) {
-                entity.code = value;
+                window.app.current.code = value;
             },
         });
     }

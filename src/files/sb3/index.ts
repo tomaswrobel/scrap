@@ -1,16 +1,13 @@
 import JSZip from "jszip";
-import {Entity, Sprite, Stage} from "../../entities";
+import {Sprite, Stage} from "../../entities";
 import type {Project, Target, Block, Input} from "./types";
-import type App from "../../app";
 import * as Blockly from "blockly/core";
 
 class SB3 {
     target!: Target;
-    entity!: Entity;
+    transformers: Record<string, (data: Block) => Promise<Blockly.Block> | Blockly.Block> = {};
 
-    transformers: Record<string, (data: Block) => Blockly.Block> = {};
-
-    constructor(private app: App) {
+    constructor() {
         this.transformers.motion_movesteps = this.override({
             opcode: "move"
         });
@@ -77,18 +74,18 @@ class SB3 {
         this.transformers.looks_hide = this.override({
             opcode: "hide"
         });
-        this.transformers.looks_changeeffectby = this.transformers.looks_seteffectto = data => {
+        this.transformers.looks_changeeffectby = this.transformers.looks_seteffectto = async data => {
             const effect = this.effect(data);
 
             if (!effect) {
                 return this.unknown(`${data.opcode} [${data.fields.EFFECT[0]}]`, "command");
             }
 
-            const block = this.entity.codeWorkspace.newBlock(data.opcode === "looks_seteffectto" ? "setEffect" : "changeEffect");
+            const value = await this.input(data.inputs.VALUE);
+
+            const block = window.app.current.codeWorkspace.newBlock(data.opcode === "looks_seteffectto" ? "setEffect" : "changeEffect");
             block.getInput("EFFECT")!.connection!.connect(effect);
-            block.getInput("CHANGE")!.connection!.connect(
-                this.input(data.inputs.VALUE)!.outputConnection!
-            );
+            block.getInput("CHANGE")!.connection!.connect(value!.outputConnection!);
 
             return block;
         };
@@ -105,11 +102,16 @@ class SB3 {
             opcode: "setSize",
         });
         this.transformers.looks_size = this.reporter("size");
-        this.transformers.looks_costume = this.transformers.looks_backdrop = data => {
-            const block = this.entity.codeWorkspace.newBlock("costume_menu");
+        this.transformers.looks_costume = data => {
+            const block = window.app.current.codeWorkspace.newBlock("costume_menu");
             block.setFieldValue(this.assetMap[data.fields.COSTUME[0]], "NAME");
             return block;
         };
+        this.transformers.looks_backdrops = data => {
+            const block = window.app.current.codeWorkspace.newBlock("costume_menu");
+            block.setFieldValue(this.assetMap[data.fields.BACKDROP[0]], "NAME");
+            return block;
+        }
         this.transformers.looks_switchcostumeto = this.override({
             opcode: "switchCostumeTo",
         });
@@ -124,25 +126,25 @@ class SB3 {
         });
         this.transformers.looks_gotofrontback = data => {
             return data.fields.FRONT_BACK[0] === "front"
-                ? this.entity.codeWorkspace.newBlock("goToFront")
-                : this.entity.codeWorkspace.newBlock("goToBack")
+                ? window.app.current.codeWorkspace.newBlock("goToFront")
+                : window.app.current.codeWorkspace.newBlock("goToBack")
                 ;
         };
         this.transformers.looks_goforwardbackwardlayers = data => {
             return data.fields.FORWARD_BACKWARD[0] === "forward"
-                ? this.entity.codeWorkspace.newBlock("goForward")
-                : this.entity.codeWorkspace.newBlock("goBackward")
+                ? window.app.current.codeWorkspace.newBlock("goForward")
+                : window.app.current.codeWorkspace.newBlock("goBackward")
                 ;
         };
         this.transformers.looks_costumenumbername = data => (
             data.fields.NUMBER_NAME[0] === "number"
-                ? this.entity.codeWorkspace.newBlock("costumeNumber")
-                : this.entity.codeWorkspace.newBlock("costumeName")
+                ? window.app.current.codeWorkspace.newBlock("costumeNumber")
+                : window.app.current.codeWorkspace.newBlock("costumeName")
         );
         this.transformers.looks_backdropnumbername = data => (
             data.fields.NUMBER_NAME[0] === "number"
-                ? this.entity.codeWorkspace.newBlock("backdropNumber")
-                : this.entity.codeWorkspace.newBlock("backdropName")
+                ? window.app.current.codeWorkspace.newBlock("backdropNumber")
+                : window.app.current.codeWorkspace.newBlock("backdropName")
         );
         this.transformers.looks_nextbackdrop = this.override({
             opcode: "nextBackdrop",
@@ -150,7 +152,7 @@ class SB3 {
 
         // Sounds
         this.transformers.sound_sounds_menu = data => {
-            const block = this.entity.codeWorkspace.newBlock("sound");
+            const block = window.app.current.codeWorkspace.newBlock("sound");
             const name = data.fields.SOUND_MENU[0];
             const file = this.target.sounds.find(sound => sound.name === name)!;
             block.setFieldValue(`${name}.${file!.dataFormat}`, "NAME");
@@ -209,28 +211,27 @@ class SB3 {
         this.transformers.event_whenflagclicked = this.override({
             opcode: "whenFlag"
         });
-        this.transformers.event_whengreaterthan = data => {
+        this.transformers.event_whengreaterthan = async data => {
             if (data.fields.WHENGREATERTHANMENU[0] === "TIMER") {
-                const block = this.entity.codeWorkspace.newBlock("whenTimerElapsed");
-                block.getInput("TIMER")!.connection!.connect(
-                    this.input(data.inputs.VALUE)!.outputConnection!
-                );
+                const block = window.app.current.codeWorkspace.newBlock("whenTimerElapsed");
+                const value = await this.input(data.inputs.VALUE);
+                block.getInput("TIMER")!.connection!.connect(value!.outputConnection!);
                 return block;
             } else {
                 return this.unknown("event_whengreaterthan [volume]", "command");
             }
         };
         this.transformers.event_whenthisspriteclicked = () => {
-            const block = this.entity.codeWorkspace.newBlock("whenMouse");
+            const block = window.app.current.codeWorkspace.newBlock("whenMouse");
             block.getInput("EVENT")!.connection!.connect(
-                this.entity.codeWorkspace.newBlock("event")!.outputConnection!
+                window.app.current.codeWorkspace.newBlock("event")!.outputConnection!
             );
             return block;
         };
         this.transformers.event_whenstageclicked = this.transformers.event_whenthisspriteclicked;
         this.transformers.event_whenbroadcastreceived = data => {
-            const block = this.entity.codeWorkspace.newBlock("whenReceiveMessage");
-            const message = this.entity.codeWorkspace.newBlock("iterables_string");
+            const block = window.app.current.codeWorkspace.newBlock("whenReceiveMessage");
+            const message = window.app.current.codeWorkspace.newBlock("iterables_string");
             message.setFieldValue(data.fields.BROADCAST_OPTION[0], "TEXT");
             message.setShadow(true);
             block.getInput("MESSAGE")!.connection!.connect(message.outputConnection!);
@@ -256,11 +257,11 @@ class SB3 {
                 DURATION: ["SECS"]
             }
         });
-        this.transformers.control_repeat_until = data => {
-            const block = this.entity.codeWorkspace.newBlock("while");
-            const not = this.entity.codeWorkspace.newBlock("not");
+        this.transformers.control_repeat_until = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("while");
+            const not = window.app.current.codeWorkspace.newBlock("not");
 
-            const condition = this.input(data.inputs.CONDITION);
+            const condition = await this.input(data.inputs.CONDITION);
             if (condition) {
                 not.getInput("BOOL")!.connection!.connect(condition.outputConnection!);
             }
@@ -268,9 +269,8 @@ class SB3 {
             block.getInput("CONDITION")!.connection!.connect(not.outputConnection!);
 
             if ("SUBSTACK" in data.inputs) {
-                block.getInput("STACK")!.connection!.connect(
-                    this.input(data.inputs.SUBSTACK, true)!.previousConnection!
-                );
+                const inner = await this.input(data.inputs.SUBSTACK, true);
+                block.getInput("STACK")!.connection!.connect(inner!.previousConnection!);
             }
 
             return block;
@@ -287,12 +287,14 @@ class SB3 {
         });
         this.transformers.control_create_clone_of = data => {
             const field = this.target.blocks[data.inputs.CLONE_OPTION[1] as string].fields.CLONE_OPTION[0];
-            const block = this.entity.codeWorkspace.newBlock("clone");
-            const sprite = this.entity.codeWorkspace.newBlock("sprite");
+            const block = window.app.current.codeWorkspace.newBlock("clone");
+            const sprite = window.app.current.codeWorkspace.newBlock("sprite");
 
             sprite.setShadow(true);
             if (field !== "_myself_") {
                 sprite.setFieldValue(field, "SPRITE");
+            } else {
+                sprite.setFieldValue("this", "SPRITE");
             }
 
             block.getInput("SPRITE")!.connection!.connect(sprite.outputConnection!);
@@ -300,18 +302,19 @@ class SB3 {
             return block;
         };
         this.transformers.control_delete_this_clone = () => (
-            this.entity.codeWorkspace.newBlock("delete")
+            window.app.current.codeWorkspace.newBlock("delete")
         );
-        this.transformers.control_forever = data => {
-            const block = this.entity.codeWorkspace.newBlock("while");
+        this.transformers.control_forever = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("while");
 
             if ("SUBSTACK" in data.inputs) {
+                const inner = await this.input(data.inputs.SUBSTACK, true);
                 block.getInput("STACK")!.connection!.connect(
-                    this.input(data.inputs.SUBSTACK, true)!.previousConnection!
+                    inner!.previousConnection!
                 );
             }
 
-            const trueBlock = this.entity.codeWorkspace.newBlock("boolean");
+            const trueBlock = window.app.current.codeWorkspace.newBlock("boolean");
             trueBlock.setFieldValue("true", "BOOL");
 
             block.getInput("CONDITION")!.connection!.connect(trueBlock.outputConnection!);
@@ -338,15 +341,43 @@ class SB3 {
         });
 
         // Sensing
+        this.transformers.sensing_of = async data => {
+            const fieldValue = this.target.blocks[data.inputs.OBJECT[1] as string].fields.OBJECT[0];
+
+            if (fieldValue === "_stage_") {
+                return this.unknown("sensing_of [_stage_]", "reporter");
+            }
+
+            const block = window.app.current.codeWorkspace.newBlock("property");
+
+            switch (data.fields.PROPERTY[0]) {
+                case "x position":
+                    block.setFieldValue("x", "PROPERTY");
+                    break;
+                case "y position":
+                    block.setFieldValue("y", "PROPERTY");
+                    break;
+                case "direction":
+                case "size":
+                case "volume":
+                    block.setFieldValue(data.fields.PROPERTY[0], "PROPERTY");
+                    break;
+                default:
+                    block.dispose(false);
+                    return this.unknown(`sensing_of [${data.fields.PROPERTY[0]}]`, "reporter");
+            }
+
+            return block;
+        }
         this.transformers.sensing_touchingobject = data => {
             const fieldValue = this.target.blocks[data.inputs.TOUCHINGOBJECTMENU[1] as string].fields.TOUCHINGOBJECTMENU[0];
 
             if (fieldValue === "_edge_") {
-                return this.entity.codeWorkspace.newBlock("isTouchingEdge");
+                return window.app.current.codeWorkspace.newBlock("isTouchingEdge");
             } else if (fieldValue === "_mouse_") {
-                return this.entity.codeWorkspace.newBlock("isTouchingMouse");
+                return window.app.current.codeWorkspace.newBlock("isTouchingMouse");
             } else {
-                const block = this.entity.codeWorkspace.newBlock("isTouching");
+                const block = window.app.current.codeWorkspace.newBlock("isTouching");
                 block.getInput("SPRITE")!.connection!.connect(this.setSprite(fieldValue));
                 return block;
             }
@@ -358,20 +389,20 @@ class SB3 {
             // Scrap does not have "distance to [object]" block,
             // rather it has "distance to [x: number] [y: number]" block.
             const fieldValue = this.target.blocks[data.inputs.DISTANCETOMENU[1] as string].fields.DISTANCETOMENU[0];
-            const block = this.entity.codeWorkspace.newBlock("distanceTo");
+            const block = window.app.current.codeWorkspace.newBlock("distanceTo");
             if (fieldValue === "_mouse_") {
                 block.getInput("X")!.connection!.connect(
-                    this.entity.codeWorkspace.newBlock("mouseX")!.outputConnection!
+                    window.app.current.codeWorkspace.newBlock("mouseX")!.outputConnection!
                 );
                 block.getInput("Y")!.connection!.connect(
-                    this.entity.codeWorkspace.newBlock("mouseY")!.outputConnection!
+                    window.app.current.codeWorkspace.newBlock("mouseY")!.outputConnection!
                 );
             } else {
-                const x = this.entity.codeWorkspace.newBlock("property");
+                const x = window.app.current.codeWorkspace.newBlock("property");
                 x.setFieldValue("x", "PROPERTY");
                 x.getInput("SPRITE")!.connection!.connect(this.setSprite(fieldValue));
 
-                const y = this.entity.codeWorkspace.newBlock("property");
+                const y = window.app.current.codeWorkspace.newBlock("property");
                 y.setFieldValue("y", "PROPERTY");
                 y.getInput("SPRITE")!.connection!.connect(this.setSprite(fieldValue));
 
@@ -380,25 +411,22 @@ class SB3 {
             }
             return block;
         };
-        this.transformers.sensing_askandwait = data => {
-            this.helperVariable("scratch_answer", "String");
-            const block = this.entity.codeWorkspace.newBlock("setVariable");
-            const ask = this.entity.codeWorkspace.newBlock("ask");
-            ask.getInput("QUESTION")!.connection!.connect(
-                this.input(data.inputs.QUESTION)!.outputConnection!
-            );
-            block.setFieldValue("scratch_answer", "VAR");
+        this.transformers.sensing_askandwait = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("setVariable");
+            const ask = window.app.current.codeWorkspace.newBlock("ask");
+            const question = await this.input(data.inputs.QUESTION);
+            ask.getInput("QUESTION")!.connection!.connect(question!.outputConnection!);
             block.getInput("VALUE")!.connection!.connect(ask.outputConnection!);
+            block.setFieldValue(this.helperVariable("answer", "String"), "VAR");
             return block;
         };
         this.transformers.sensing_answer = () => {
-            this.helperVariable("scratch_answer", "String");
-            const block = this.entity.codeWorkspace.newBlock("getVariable");
-            block.setFieldValue("scratch_answer", "VAR");
+            const block = window.app.current.codeWorkspace.newBlock("getVariable");
+            block.setFieldValue(this.helperVariable("answer", "String"), "VAR");
             return block;
         };
         this.transformers.sensing_keyoptions = data => {
-            const block = this.entity.codeWorkspace.newBlock("key");
+            const block = window.app.current.codeWorkspace.newBlock("key");
 
             switch (data.fields.KEY_OPTION[0]) {
                 case "space":
@@ -433,13 +461,13 @@ class SB3 {
         this.transformers.sensing_mousex = this.reporter("mouseX");
         this.transformers.sensing_mousey = this.reporter("mouseY");
         this.transformers.sensing_setdragmode = data => {
-            const block = this.entity.codeWorkspace.newBlock("setDragMode");
+            const block = window.app.current.codeWorkspace.newBlock("setDragMode");
             if (data.fields.DRAG_MODE[0] === "draggable") {
-                const trueBlock = this.entity.codeWorkspace.newBlock("boolean");
+                const trueBlock = window.app.current.codeWorkspace.newBlock("boolean");
                 trueBlock.setFieldValue("true", "BOOL");
                 block.getInput("DRAGGABLE")!.connection!.connect(trueBlock.outputConnection!);
             } else if (data.fields.DRAG_MODE[0] === "not draggable") {
-                const falseBlock = this.entity.codeWorkspace.newBlock("boolean");
+                const falseBlock = window.app.current.codeWorkspace.newBlock("boolean");
                 falseBlock.setFieldValue("false", "BOOL");
                 block.getInput("DRAGGABLE")!.connection!.connect(falseBlock.outputConnection!);
             }
@@ -450,37 +478,38 @@ class SB3 {
             opcode: "resetTimer"
         });
 
+        // Operators
         this.transformers.operator_add = this.operator("arithmetics", "+");
         this.transformers.operator_subtract = this.operator("arithmetics", "-");
         this.transformers.operator_multiply = this.operator("arithmetics", "*");
         this.transformers.operator_divide = this.operator("arithmetics", "/");
 
-        this.transformers.operator_random = data => {
-            const fromParam = this.entity.codeWorkspace.newBlock("parameter");
+        this.transformers.operator_random = async data => {
+            const fromParam = window.app.current.codeWorkspace.newBlock("parameter");
             fromParam.setFieldValue("__from__", "VAR");
 
-            const toParam = this.entity.codeWorkspace.newBlock("parameter");
+            const toParam = window.app.current.codeWorkspace.newBlock("parameter");
             toParam.setFieldValue("__to__", "VAR");
 
-            const multiply = this.entity.codeWorkspace.newBlock("arithmetics");
+            const multiply = window.app.current.codeWorkspace.newBlock("arithmetics");
             multiply.setFieldValue("*", "OP");
 
-            const add = this.entity.codeWorkspace.newBlock("arithmetics");
+            const add = window.app.current.codeWorkspace.newBlock("arithmetics");
             add.setFieldValue("+", "OP");
 
-            const subtract = this.entity.codeWorkspace.newBlock("arithmetics");
+            const subtract = window.app.current.codeWorkspace.newBlock("arithmetics");
             subtract.setFieldValue("-", "OP");
 
-            const floor = this.entity.codeWorkspace.newBlock("math");
+            const floor = window.app.current.codeWorkspace.newBlock("math");
             floor.setFieldValue("floor", "OP");
 
-            const one = this.entity.codeWorkspace.newBlock("math_number");
+            const one = window.app.current.codeWorkspace.newBlock("math_number");
             one.setFieldValue("1", "NUM");
 
-            const returnBlock = this.entity.codeWorkspace.newBlock("return");
+            const returnBlock = window.app.current.codeWorkspace.newBlock("return");
             returnBlock.loadExtraState!({output: "Number"});
 
-            const random = this.entity.codeWorkspace.newBlock("random");
+            const random = window.app.current.codeWorkspace.newBlock("random");
 
             // Connections
             multiply.getInput("A")!.connection!.connect(random.outputConnection!);
@@ -513,7 +542,7 @@ class SB3 {
                 returnBlock.getInput("VALUE")!.connection!.connect(add.outputConnection!);
             }
 
-            const block = this.entity.codeWorkspace.newBlock("call");
+            const block = window.app.current.codeWorkspace.newBlock("call");
             block.loadExtraState!({
                 name,
                 params: [
@@ -523,12 +552,11 @@ class SB3 {
                 returnType: "Number"
             });
 
-            block.getInput("PARAM_0")!.connection!.connect(
-                this.input(data.inputs.FROM)!.outputConnection!
-            );
-            block.getInput("PARAM_1")!.connection!.connect(
-                this.input(data.inputs.TO)!.outputConnection!
-            );
+            const from = await this.input(data.inputs.FROM);
+            const to = await this.input(data.inputs.TO);
+
+            block.getInput("PARAM_0")!.connection!.connect(from!.outputConnection!);
+            block.getInput("PARAM_1")!.connection!.connect(to!.outputConnection!);
 
             return block;
         };
@@ -547,21 +575,20 @@ class SB3 {
         });
 
         // Scratch uses 1-based indexing, while Scrap uses 0-based indexing.
-        this.transformers.operator_letter_of = data => {
-            const block = this.entity.codeWorkspace.newBlock("item");
-            const minus = this.entity.codeWorkspace.newBlock("arithmetics");
+        this.transformers.operator_letter_of = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("item");
+            const minus = window.app.current.codeWorkspace.newBlock("arithmetics");
+            const one = window.app.current.codeWorkspace.newBlock("math_number");
+            const letter = await this.input(data.inputs.LETTER);
+            const string = await this.input(data.inputs.STRING);
+
             minus.setFieldValue("-", "OP");
-            const one = this.entity.codeWorkspace.newBlock("math_number");
             one.setFieldValue("1", "NUM");
-            minus.getInput("A")!.connection!.connect(
-                this.input(data.inputs.LETTER)!.outputConnection!
-            );
+            minus.getInput("A")!.connection!.connect(letter!.outputConnection!);
             minus.getInput("B")!.connection!.connect(one.outputConnection!);
 
             block.getInput("INDEX")!.connection!.connect(minus.outputConnection!);
-            block.getInput("ITERABLE")!.connection!.connect(
-                this.input(data.inputs.STRING)!.outputConnection!
-            );
+            block.getInput("ITERABLE")!.connection!.connect(string!.outputConnection!);
 
             return block;
         };
@@ -572,19 +599,134 @@ class SB3 {
                 STRING: ["ITERABLE"]
             }
         });
+
+        this.transformers.operator_mod = this.operator("arithmetics", "%");
+        this.transformers.operator_round = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("math");
+            block.setFieldValue("round", "OP");
+            const value = await this.input(data.inputs.NUM);
+            block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+            return block;
+        };
+        this.transformers.operator_mathop = async data => {
+            switch (data.fields.OPERATOR[0]) {
+                case "abs":
+                case "floor":
+                case "sqrt":
+                case "sin":
+                case "cos":
+                case "tan":
+                case "asin":
+                case "acos":
+                case "atan": {
+                    const block = window.app.current.codeWorkspace.newBlock("math");
+                    block.setFieldValue(data.fields.OPERATOR[0], "OP");
+                    const value = await this.input(data.inputs.NUM);
+                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    return block;
+                }
+                case "ceiling": {
+                    const block = window.app.current.codeWorkspace.newBlock("math");
+                    block.setFieldValue("ceil", "OP");
+                    const value = await this.input(data.inputs.NUM);
+                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    return block;
+                }
+                case "ln": {
+                    const block = window.app.current.codeWorkspace.newBlock("math");
+                    block.setFieldValue("log", "OP");
+                    const value = await this.input(data.inputs.NUM);
+                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    return block;
+                }
+                case "log": {
+                    const block = window.app.current.codeWorkspace.newBlock("math");
+                    block.setFieldValue("log10", "OP");
+                    const value = await this.input(data.inputs.NUM);
+                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    return block;
+                }
+                case "e ^": {
+                    const block = window.app.current.codeWorkspace.newBlock("math");
+                    block.setFieldValue("exp", "OP");
+                    const value = await this.input(data.inputs.NUM);
+                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    return block;
+                }
+                case "10 ^": {
+                    const block = window.app.current.codeWorkspace.newBlock("arithmetics");
+                    block.setFieldValue("**", "OP");
+                    const value = await this.input(data.inputs.NUM);
+                    const ten = window.app.current.codeWorkspace.newBlock("math_number");
+                    ten.setFieldValue("10", "NUM");
+                    block.getInput("A")!.connection!.connect(ten.outputConnection!);
+                    block.getInput("B")!.connection!.connect(value!.outputConnection!);
+                    return block;
+                }
+                default:
+                    return this.unknown(`operator_mathop [${data.fields.OPERATOR[0]}]`, "reporter");
+            }
+        };
+        this.transformers.operator_join = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("join");
+            const array = window.app.current.codeWorkspace.newBlock("array");
+
+            array.loadExtraState!({
+                items: ["single", "single"]
+            });
+
+            const A = await this.input(data.inputs.STRING1);
+            const B = await this.input(data.inputs.STRING2);
+            array.getInput("ADD0")!.connection!.connect(A!.outputConnection!);
+            array.getInput("ADD1")!.connection!.connect(B!.outputConnection!);
+
+            const string = window.app.current.codeWorkspace.newBlock("iterables_string");
+            string.setFieldValue("", "TEXT");
+
+            block.getInput("SEPARATOR")!.connection!.connect(string.outputConnection!);
+            block.getInput("ITERABLE")!.connection!.connect(array.outputConnection!);
+
+            return block;
+        };
+
+        // Variables
+        this.transformers.data_setvariableto = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("setVariable");
+            const value = await this.input(data.inputs.VALUE);
+            block.getInput("VALUE")!.connection!.connect(value!.outputConnection!);
+            block.setFieldValue(data.fields.VARIABLE[0], "VAR");
+            return block;
+        };
+        this.transformers.data_changevariableby = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("changeVariable");
+            const value = await this.input(data.inputs.VALUE);
+            block.getInput("VALUE")!.connection!.connect(value!.outputConnection!);
+            block.setFieldValue(data.fields.VARIABLE[0], "VAR");
+            return block;
+        };
+        this.transformers.data_showvariable = data => {
+            const block = window.app.current.codeWorkspace.newBlock("showVariable");
+            block.setFieldValue(data.fields.VARIABLE[0], "VAR");
+            return block;
+        };
+        this.transformers.data_hidevariable = data => {
+            const block = window.app.current.codeWorkspace.newBlock("hideVariable");
+            block.setFieldValue(data.fields.VARIABLE[0], "VAR");
+            return block;
+        };
     }
 
     effect(data: Block) {
-        const block = this.entity.codeWorkspace.newBlock("effect");
+        const block = window.app.current.codeWorkspace.newBlock("effect");
 
         switch (data.fields.EFFECT[0]) {
-            case "COLOR":
+            case "color":
                 block.setFieldValue("color", "EFFECT");
                 break;
-            case "GHOST":
+            case "ghost":
                 block.setFieldValue("ghost", "EFFECT");
                 break;
-            case "BRIGHTNESS":
+            case "brightness":
                 block.setFieldValue("brightness", "EFFECT");
                 break;
             default:
@@ -599,15 +741,16 @@ class SB3 {
 
     operator(type: "compare" | "arithmetics" | "operation", operator: string) {
         const input = type === "arithmetics" ? "NUM" : "OPERAND";
-        return (data: Block) => {
-            const block = this.entity.codeWorkspace.newBlock(type);
+        return async (data: Block) => {
+            const block = window.app.current.codeWorkspace.newBlock(type);
             block.setFieldValue(operator, "OP");
-            block.getInput("A")!.connection!.connect(
-                this.input(data.inputs[`${input}1`])!.outputConnection!
-            );
-            block.getInput("B")!.connection!.connect(
-                this.input(data.inputs[`${input}2`])!.outputConnection!
-            );
+            
+            const A = await this.input(data.inputs[`${input}1`]);
+            const B = await this.input(data.inputs[`${input}2`]);
+
+            block.getInput("A")!.connection!.connect(A!.outputConnection!);
+            block.getInput("B")!.connection!.connect(B!.outputConnection!);
+
             return block;
         };
     }
@@ -621,14 +764,14 @@ class SB3 {
 
         for (const target of project.targets) {
             this.isTargetCompatible(target);
-            this.app.current = this.entity = target.isStage
+            window.app.current = target.isStage
                 ? new Stage()
                 : new Sprite(target.name);
             this.target = target;
-            this.entity.costumes = [];
+            window.app.current.costumes = [];
             for (const costume of target.costumes) {
                 const filename = `${costume.assetId}.${costume.dataFormat}`;
-                this.entity.costumes.push(
+                window.app.current.costumes.push(
                     new File(
                         [await zip.file(filename)!.async("blob")],
                         `${costume.name}.${costume.dataFormat}`,
@@ -637,11 +780,11 @@ class SB3 {
                 );
                 this.assetMap[costume.name] = `${costume.name}.${costume.dataFormat}`;
             }
-            this.entity.update();
-            this.entity.sounds = [];
+            window.app.current.update();
+            window.app.current.sounds = [];
             for (const sound of target.sounds) {
                 const filename = `${sound.assetId}.${sound.dataFormat}`;
-                this.entity.sounds.push(
+                window.app.current.sounds.push(
                     new File(
                         [await zip.file(filename)!.async("blob")],
                         `${sound.name}.${sound.dataFormat}`,
@@ -649,26 +792,29 @@ class SB3 {
                     )
                 );
             }
-            this.entity.codeWorkspace.clear();
+            window.app.current.codeWorkspace.clear();
             for (const id in target.variables) {
-                this.entity.codeWorkspace.createVariable(target.variables[id][0], null, id);
+                window.app.current.variables.push([target.variables[id][0], ""]);
             }
             if (!target.isStage) {
                 for (const id in project.targets[0].variables) {
-                    this.entity.codeWorkspace.createVariable(project.targets[0].variables[id][0], null, id);
+                    window.app.current.codeWorkspace.createVariable(project.targets[0].variables[id][0], null, id);
                 }
             }
+
             this.provided = {};
+            this.helped = {};
+
             for (const block of Object.values(target.blocks)) {
                 if (block.topLevel) {
-                    this.block(block);
+                    await this.block(block);
                 }
             }
             if (target.isStage) {
-                this.app.entities.unshift(this.entity);
-                this.entity.render(this.app.stagePanel);
+                window.app.entities.unshift(window.app.current);
+                window.app.current.render(window.app.stagePanel);
             } else {
-                this.app.addSprite(this.entity as Sprite);
+                window.app.addSprite(window.app.current as Sprite);
             }
         }
     }
@@ -689,27 +835,29 @@ class SB3 {
     }
 
     private setSprite(name: string) {
-        const block = this.entity.codeWorkspace.newBlock("sprite");
+        const block = window.app.current.codeWorkspace.newBlock("sprite");
         block.setFieldValue(name, "SPRITE");
         block.setShadow(true);
         return block.outputConnection!;
     }
 
+    private helped!: Record<string, string>;
+
     private helperVariable(id: string, type: string) {
-        if (!this.entity.codeWorkspace.getVariableById(id)) {
-            this.entity.codeWorkspace.createVariable(
-                Blockly.Variables.generateUniqueName(this.entity.codeWorkspace),
-                type,
-                id
+        if (!(id in this.helped)) {
+            const name = Blockly.Variables.generateUniqueNameFromOptions(
+                "a",
+                window.app.current.variables.map(e => e[0])
             );
-            return true;
+            this.helped[id] = name;
+            window.app.current.variables.push([name, type]);
         }
-        return false;
+        return this.helped[id];
     }
 
-    input([shadow, data]: Input, command = false) {
+    async input([shadow, data]: Input, command = false) {
         if (typeof data === "string") {
-            const block = this.block(
+            const block = await this.block(
                 this.target.blocks[data],
                 !command
             );
@@ -725,27 +873,27 @@ class SB3 {
             case 6:
             case 7:
             case 8: {
-                const block = this.entity.codeWorkspace.newBlock("math_number");
+                const block = window.app.current.codeWorkspace.newBlock("math_number");
                 block.setFieldValue(+data[1], "NUM");
                 block.setShadow(shadow === 1);
                 return block;
             }
             case 9: {
-                const block = this.entity.codeWorkspace.newBlock("color");
+                const block = window.app.current.codeWorkspace.newBlock("color");
                 block.setFieldValue(data[1], "COLOR");
                 block.setShadow(shadow === 1);
                 return block;
             }
             case 10:
             case 11: {
-                const block = this.entity.codeWorkspace.newBlock("iterables_string");
+                const block = window.app.current.codeWorkspace.newBlock("iterables_string");
                 block.setFieldValue(data[1], "TEXT");
                 block.setShadow(shadow === 1);
                 return block;
             }
             case 12: {
-                const block = this.entity.codeWorkspace.newBlock("getVariable");
-                block.setFieldValue(data[2], "VAR");
+                const block = window.app.current.codeWorkspace.newBlock("getVariable");
+                block.setFieldValue(data[1], "VAR");
                 block.setShadow(shadow === 1);
                 return block;
             }
@@ -761,8 +909,8 @@ class SB3 {
      * @param config The renaming configuration.
      */
     override({opcode, inputs = {}, extraState}: SB3.Override) {
-        return (data: Block) => {
-            const block = this.entity.codeWorkspace.newBlock(opcode ?? data.opcode);
+        return async (data: Block) => {
+            const block = window.app.current.codeWorkspace.newBlock(opcode ?? data.opcode);
 
             if (extraState) {
                 block.loadExtraState!(extraState);
@@ -770,7 +918,7 @@ class SB3 {
 
             for (const [name, input] of Object.entries(data.inputs)) {
                 const {connection} = block.getInput(name in inputs ? inputs[name][0] : name)!;
-                const inner = this.input(input, name in inputs ? inputs[name][1] : false);
+                const inner = await this.input(input, name in inputs ? inputs[name][1] : false);
 
                 if (inner && inner.previousConnection) {
                     connection!.connect(inner.previousConnection);
@@ -783,27 +931,37 @@ class SB3 {
     }
 
     reporter(name: string) {
-        return () => this.entity.codeWorkspace.newBlock(name);
+        return () => window.app.current.codeWorkspace.newBlock(name);
     }
 
-    block(data: Block, isInput?: boolean): Blockly.Block {
+    async block(data: Block, isInput?: boolean) {
         if (data.opcode in this.transformers) {
-            var block = this.transformers[data.opcode](data);
+            var block = await this.transformers[data.opcode](data);
         } else {
-            var block = this.unknown(data.opcode, isInput ? "reporter" : "command");
+            var block = await this.unknown(data.opcode, isInput ? "reporter" : "command");
         }
+
         if (data.next) {
-            block.nextConnection!.connect(
-                this.block(this.target.blocks[data.next]).previousConnection!
-            );
+            const next = await this.block(this.target.blocks[data.next]);
+            block.nextConnection!.connect(next.previousConnection!);
         }
-        return block;
+
+        return new Promise<Blockly.Block>(resolve => {
+            setTimeout(() => {
+                resolve(block);
+            });
+        });
     }
 
     unknown(opcode: string, shape: "reporter" | "command") {
-        const block = this.entity.codeWorkspace.newBlock("unknown");
+        const block = window.app.current.codeWorkspace.newBlock("unknown");
         block.loadExtraState!({shape, opcode});
-        return block;
+        
+        return new Promise<Blockly.Block>(resolve => {
+            setTimeout(() => {
+                resolve(block);
+            });
+        });
     }
 
     provided!: Record<string, string>;
@@ -819,7 +977,7 @@ class SB3 {
         }
 
         const name = `scratch_${init.name}_${Date.now().toString(36)}`;
-        let block = this.entity.codeWorkspace.newBlock("function");
+        let block = window.app.current.codeWorkspace.newBlock("function");
 
         block.loadExtraState!({
             name,

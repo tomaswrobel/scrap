@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly/core';
 
-interface UnknownBlock extends Blockly.BlockSvg {
+export interface UnknownBlock extends Blockly.BlockSvg {
     shape: "command" | "reporter";
     opcode: string;
     updateShape(): void;

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0] - 2023-11-10
+
+### Added
+
+- `join` block
+- Much better SB3 compatibility (variables, operators, etc.)
+
+### Changed
+
+- Variables are no longer stored in Blockly workspace
+- Blockly extensions live in a separate folder now
+
+### Fixed
+
+- Unknown blocks are now correctly shaped
+- `think` block now accepts any type of input
+
 ## [3.2.1] - 2023-11-10
 
 ### Changed
@@ -407,7 +424,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.1.2...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.3.0...HEAD
+[3.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.3.0
+[3.2.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.2.1
+[3.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.2.0
 [3.1.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.1.2
 [3.1.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.1.1
 [3.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.1.0

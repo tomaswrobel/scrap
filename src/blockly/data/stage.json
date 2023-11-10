@@ -874,6 +874,20 @@
             },
             {
                 "kind": "block",
+                "type": "join",
+                "inputs": {
+                    "SEPARATOR": {
+                        "shadow": {
+                            "type": "iterables_string",
+                            "fields": {
+                                "TEXT": ", "
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
                 "type": "includes"
             },
             {

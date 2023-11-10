@@ -1,6 +1,6 @@
 import * as Blockly from "blockly/core";
 import {parse} from "doctrine";
-import {Types, Error, allBlocks} from "../blockly";
+import {Types, Error, allBlocks, Generator} from "../blockly";
 import type {Entity} from "../entities";
 import {Identifier, type CallExpression, type MemberExpression, type Node, StringLiteral, IfStatement} from "@babel/types";
 import {bind} from "../decorators";
@@ -14,6 +14,7 @@ export default class CodeParser {
 	}
 
 	async codeToBlock(code: string) {
+		window.app.current.variables = [];
 		const babel = await import("@babel/core");
 		const tree = await babel.parseAsync(code, {});
 
@@ -222,7 +223,7 @@ export default class CodeParser {
 					}
 				}
 
-				this.workspace.createVariable(id.name, varType || null);
+				window.app.current.variables.push([Generator.unescape(id.name), varType]);
 
 				break;
 			}
@@ -540,6 +541,12 @@ export default class CodeParser {
 						this.connection = block.getInput("ITERABLE")!.connection!;
 						this.parse(node.callee.object);
 						this.parseArguments(block, node.arguments);
+					} else if (this.isProperty(node.callee, ["join"])) {
+						const block = this.block("join");
+						this.connection = block.getInput("ITERABLE")!.connection!;
+						this.parse(node.callee.object);
+						this.connection = block.getInput("SEPARATOR")!.connection!;
+						this.parse(node.arguments[0]);
 					} else if (this.isProperty(node.callee, [
 						"getFullYear",
 						"getMonth",
@@ -802,13 +809,11 @@ export default class CodeParser {
 				const block = this.block(operator === "=" ? "setVariable" : "changeVariable");
 				this.comments(block, node);
 
-				const variable = this.workspace.getAllVariables().find(variable => variable.name === left.name);
-
-				if (!variable) {
+				if (!window.app.current.variables.some(variable => variable[0] === left.name)) {
 					throw new SyntaxError(`Variable ${left.name} is not defined`);
 				}
 
-				block.setFieldValue(variable.getId(), "VAR");
+				block.setFieldValue(left.name, "VAR");
 
 				this.connection = block.getInput("VALUE")!.connection!;
 
@@ -864,14 +869,7 @@ export default class CodeParser {
 				break;
 			}
 			case "Identifier": {
-				const variable = this.workspace.getAllVariables().find(variable => variable.name === node.name);
-				if (variable) {
-					const block = this.block("getVariable");
-					block.setFieldValue(variable.getId(), "VAR");
-				} else {
-					this.block("parameter").setFieldValue(node.name, "VAR");
-				}
-
+				this.block(window.app.current.variables.some(variable => variable[0] === node.name) ? "getVariable" : "parameter").setFieldValue(node.name, "VAR");
 				break;
 			}
 			default:

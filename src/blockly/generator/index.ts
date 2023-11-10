@@ -13,6 +13,7 @@ import {Block} from "blockly/core";
 import {Sprite, type Entity} from "../../entities";
 import {TryBlock} from "../mutators/mutator_try.ts";
 import {ArrayBlock} from "../mutators/mutator_array.ts";
+import {UnknownBlock} from "../blocks/unknown.ts";
 import ProcedureBlock from "../utils/procedure_block";
 import {CallBlock} from "../mutators/mutator_call.ts";
 
@@ -40,7 +41,8 @@ interface BlockCallback<T extends Blockly.Block = any> {
  */
 class Generator extends Blockly.CodeGenerator {
 	static blocks: Record<string, BlockCallback> = {};
-	static ReservedWords = Object.getOwnPropertyNames(globalThis);
+	static ReservedWords = Object.getOwnPropertyNames(window);
+	entity?: Entity;
 
 	// Directly copied from Blockly's JavaScript generator.
 	ORDER_OVERRIDES = [
@@ -70,7 +72,7 @@ class Generator extends Blockly.CodeGenerator {
 		[Order.LOGICAL_OR, Order.LOGICAL_OR],
 	];
 
-	constructor(readonly entity?: Entity, readonly useBlobURLs = true) {
+	constructor(readonly useBlobURLs = true) {
 		// "ScrapScript" is a ES5 subset. However it supports
 		// ES2015 spread operator and for-of loops.
 		// ScrapScript cannot be run in a browser.
@@ -86,22 +88,12 @@ class Generator extends Blockly.CodeGenerator {
 	init(workspace: Blockly.Workspace) {
 		super.init(workspace);
 
-		if (!this.nameDB_) {
-			this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_);
-		} else {
-			this.nameDB_.reset();
-		}
-
-		this.nameDB_.setVariableMap(workspace.getVariableMap());
-		this.nameDB_.populateVariables(workspace);
-		this.nameDB_.populateProcedures(workspace);
-
-		const vars = workspace.getAllVariables().map(
-			variable => {
+		const vars = (this.entity || window.app.current).variables.map(
+			([name, type]) => {
 				if (this.entity) {
-					return `await this.declareVariable(${JSON.stringify(variable.name)}, "${variable.type}");`
+					return `await this.declareVariable(${JSON.stringify(name)}, "${type || "Any"}");`
 				}
-				return `/** @type {${variable.type || "*"}} */\nlet ${Generator.escape(variable.name)};`
+				return `/** @type {${type || "*"}} */\nlet ${Generator.escape(name)};`
 			}
 		);
 
@@ -119,6 +111,16 @@ class Generator extends Blockly.CodeGenerator {
 
 		if (this.ReservedWords.includes(result)) {
 			return `$${result}$`;
+		}
+
+		return result;
+	}
+
+	public static unescape(string: string) {
+		const result = string.replace(/\$(\d+)\$/g, (_, code) => String.fromCharCode(Number(code)));
+
+		if (result[0] === "$" && result[result.length - 1] === "$" && result.length > 1) {
+			return result.slice(1, -1);
 		}
 
 		return result;
@@ -183,7 +185,7 @@ class Generator extends Blockly.CodeGenerator {
 				code += "Sprite";
 				params.push(JSON.stringify(this.entity.init));
 				code += `(${params},${this.entity.current});\n`;
-				code += `${this.entity.name}.addTo(Stage);\n`;
+				code += `${Generator.escape(this.entity.name)}.addTo(Stage);\n`;
 			} else {
 				code += `Stage(${params},${this.entity.current});\n`;
 			}
@@ -195,7 +197,7 @@ class Generator extends Blockly.CodeGenerator {
 					code += "\n\n\n";
 				}
 				code += this.prefixLines(result, this.INDENT);
-				code += `}).call(${this.entity.name});\n`;
+				code += `}).call(${Generator.escape(this.entity.name)});\n`;
 			}
 
 			return super.finish(code);
@@ -236,12 +238,15 @@ class Generator extends Blockly.CodeGenerator {
 		this.definitions_[name] = definition;
 	}
 
-	get names() {
-		return this.nameDB_!;
-	}
-
 	scrubNakedValue() {
 		return "";
+	}
+
+	variableTarget(name: string) {
+		if (this.entity!.variables.some(t => name === t[0])) {
+			return "await this";
+		}
+		return "await this.stage";
 	}
 }
 
@@ -297,41 +302,46 @@ Generator.ReservedWords.unshift(
 	"Color"
 );
 
-Generator.blocks.unknown = () => "";
+Generator.blocks.unknown = function (block: UnknownBlock) {
+	if (block.shape === "reporter") {
+		return [`/* this.${block.opcode}() */`, Order.ATOMIC];
+	}
+	return `/* this.${block.opcode}(); */\n`;
+}
 
 Generator.blocks.setVariable = function (block: Blockly.Block, generator) {
 	if (generator.entity) {
-		return `await this.setVariable("${block.getField("VAR")!.getText()}", ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"});\n`;
+		return `${generator.variableTarget(block.getFieldValue("VAR"))}.setVariable("${block.getFieldValue("VAR")}", ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"});\n`;
 	}
-	return `${block.getField("VAR")!.getText()} = ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
+	return `${Generator.escape(block.getFieldValue("VAR"))} = ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
 };
 
 Generator.blocks.getVariable = function (block: Blockly.Block, generator) {
 	if (generator.entity) {
-		return [`await this.getVariable("${block.getField("VAR")!.getText()}")`, Order.MEMBER];
+		return [`${generator.variableTarget(block.getFieldValue("VAR"))}.getVariable("${block.getFieldValue("VAR")}")`, Order.MEMBER];
 	}
-	return [block.getField("VAR")!.getText(), Order.ATOMIC];
+	return [Generator.escape(block.getFieldValue("VAR")), Order.ATOMIC];
 };
 
 Generator.blocks.changeVariable = function (block: Blockly.Block, generator) {
 	if (generator.entity) {
-		return `await this.changeVariable("${block.getField("VAR")!.getText()}", ${generator.valueToCode(block, "VALUE", Order.NONE) || "0"});\n`;
+		return `${generator.variableTarget(block.getFieldValue("VAR"))}.changeVariable("${block.getFieldValue("VAR")}", ${generator.valueToCode(block, "VALUE", Order.NONE) || "0"});\n`;
 	}
-	return `${block.getField("VAR")!.getText()} += ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
+	return `${Generator.escape(block.getFieldValue("VAR"))} += ${generator.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
 };
 
 Generator.blocks.showVariable = function (block: Blockly.Block, generator) {
 	if (generator.entity) {
-		return `await this.showVariable("${block.getField("VAR")!.getText()}");\n`;
+		return `${generator.variableTarget(block.getFieldValue("VAR"))}.showVariable("${block.getFieldValue("VAR")}");\n`;
 	}
-	return `this.showVariable(${block.getField("VAR")!.getText()});\n`;
+	return `this.showVariable(${Generator.escape(block.getFieldValue("VAR"))});\n`;
 };
 
 Generator.blocks.hideVariable = function (block: Blockly.Block, generator) {
 	if (generator.entity) {
-		return `await this.hideVariable("${block.getField("VAR")!.getText()}");\n`;
+		return `${generator.variableTarget(block.getFieldValue("VAR"))}.hideVariable("${block.getFieldValue("VAR")}");\n`;
 	}
-	return `this.hideVariable(${block.getField("VAR")!.getText()});\n`;
+	return `this.hideVariable(${Generator.escape(block.getFieldValue("VAR"))});\n`;
 };
 
 Generator.blocks.color = Generator.blocks.hex = function (block: Blockly.Block) {
@@ -360,7 +370,7 @@ Generator.blocks.costume_menu = Generator.blocks.sound = function (block: Blockl
 
 Generator.blocks.repeat = function (block: Blockly.Block, generator) {
 	const times = generator.valueToCode(block, "TIMES", Order.NONE) || "0";
-	const i = Blockly.Variables.generateUniqueName(block.workspace);
+	const i = Blockly.Variables.generateUniqueNameFromOptions("i", window.app.current.variables.map(t => t[0]));
 	return `for (let ${i} = 0; ${i} < ${times}; ${i}++) {${generator.protection}\n${generator.statementToCode(block, "STACK")}}\n`;
 };
 
@@ -387,9 +397,9 @@ Generator.blocks.continue = function () {
 	return "continue;\n";
 };
 
-Generator.blocks.sprite = function (block: Blockly.Block) {
+Generator.blocks.sprite = function (block: Blockly.Block, generator) {
 	const name = block.getFieldValue("SPRITE");
-	if (name === "this" || this.entity) {
+	if (name === "this" || generator.entity) {
 		return [name, Order.ATOMIC];
 	}
 	return ["sprite`" + name + "`", Order.ATOMIC];
@@ -401,7 +411,7 @@ Generator.blocks.clone = function (block: Blockly.Block, generator) {
 };
 
 Generator.blocks.parameter = function (block: Blockly.Block) {
-	return [block.getField("VAR")!.getText(), Order.ATOMIC];
+	return [Generator.escape(block.getFieldValue("VAR")), Order.ATOMIC];
 };
 
 Generator.blocks.event = function (block: Blockly.Block) {
@@ -461,7 +471,7 @@ Generator.blocks.controls_if = function (block, generator) {
 };
 
 Generator.blocks.foreach = function (block: Blockly.Block, generator) {
-	const item = block.getField("VAR")!.getText();
+	const item = Generator.escape(block.getFieldValue("VAR"));
 	const iterable = generator.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
 	return `for (const ${item} of ${iterable}) {${generator.protection}\n${generator.statementToCode(block, "DO")}}\n`;
 };
@@ -497,6 +507,12 @@ Generator.blocks.reverse = function (block: Blockly.Block, generator) {
 	return [`${array}.reverse()`, Order.MEMBER];
 };
 
+Generator.blocks.join = function (block: Blockly.Block, generator) {
+	const array = generator.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const separator = generator.valueToCode(block, "SEPARATOR", Order.NONE) || '""';
+	return [`${array}.join(${separator})`, Order.MEMBER];
+};
+
 Generator.blocks.includes = function (block: Blockly.Block, generator) {
 	const array = generator.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	const item = generator.valueToCode(block, "ITEM", Order.NONE) || "null";
@@ -525,7 +541,7 @@ Generator.blocks.number = function (block: Blockly.Block, generator) {
 };
 
 Generator.blocks.function = function (block: ProcedureBlock, generator) {
-	const name = generator.names.getName(block.getFieldValue("NAME"), Blockly.Names.NameType.PROCEDURE);
+	const name = Generator.escape(block.getFieldValue("NAME"));
 	const type = block.getFieldValue("TYPE");
 	const comment = block.getCommentText();
 	const nextBlock = block.getNextBlock();
@@ -538,8 +554,9 @@ Generator.blocks.function = function (block: ProcedureBlock, generator) {
 	}
 
 	for (const param of block.params) {
-		params.push(param.name);
-		code += ` * @param {${param.type || "*"}} ${param.name}\n`;
+		const name = Generator.escape(param.name);
+		code += ` * @param {${param.type || "*"}} ${name}\n`;
+		params.push(name);
 	}
 
 	code += ` * @returns {${type || "void"}}\n */\n`;
@@ -563,7 +580,7 @@ Generator.blocks.motion_angle = function (block: Blockly.Block) {
 };
 
 Generator.blocks.call = function (block: CallBlock, generator) {
-	let code = generator.names.getName(block.getFieldValue("NAME"), Blockly.Names.NameType.PROCEDURE);
+	let code = Generator.escape(block.getFieldValue("NAME"));
 	const args = block.params_.map((_, i) => generator.valueToCode(block, "PARAM_" + i, Order.NONE) || "null");
 	if (generator.entity) {
 		args.unshift("this");

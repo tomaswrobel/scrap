@@ -1,10 +1,7 @@
-import type App from "./app";
 import {Entity} from "./entity";
 
 export default interface TabComponent {
-	render(entity: Entity, parent: HTMLElement): void;
-	update(entity: Entity): void;
+	render(parent: HTMLElement): void;
+	update(): void;
 	dispose(): void;
-
-	app: App;
 }

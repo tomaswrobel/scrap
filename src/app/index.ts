@@ -1,5 +1,4 @@
 import {Entity, Sprite, Stage} from "../entities";
-import * as Blockly from "blockly/core";
 import Workspace from "../workspace";
 import Component from "../tab";
 import Paint from "../paint";
@@ -21,7 +20,7 @@ const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", 
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
 
 export default class App {
-	container = document.getElementById("app")!;
+	container = document.getElementById("root")!;
 	add = document.getElementById("add")!;
 
 	generator = new Generator();
@@ -42,27 +41,25 @@ export default class App {
 	buttons = new Map<string, HTMLButtonElement>();
 	activeTab = "Blocks";
 
-	sounds = new Sound(this);
-	workspace = new Workspace(this);
-	code = new Code(this);
-	paint = new Paint(this);
+	workspace = new Workspace();
+	code = new Code();
 
 	tabBar = document.getElementById("tabs")!;
 
 	entities = new Array<Entity>();
-	current: Entity;
+	current!: Entity;
 
 	spritePanel = document.querySelector(".sprites")!;
 	stagePanel = document.querySelector(".stage")!;
 
-	scratchFiles = new SB3(this);
+	scratchFiles = new SB3();
 
-	constructor() {
+	start() {
 		this.entities.push((this.current = new Stage()));
 		this.tabs.set("Blocks", this.workspace);
 		this.tabs.set("JavaScript", this.code);
-		this.tabs.set("Costumes", this.paint);
-		this.tabs.set("Sounds", this.sounds);
+		this.tabs.set("Costumes", new Paint());
+		this.tabs.set("Sounds", new Sound());
 
 		for (const [name, tab] of this.tabs) {
 			const button = document.createElement("button");
@@ -78,7 +75,11 @@ export default class App {
 					try {
 						await parser.codeToBlock(this.current.code);
 					} catch (e) {
-						window.alert(e);
+						await Parley.fire({
+							title: "Error",
+							body: String(e),
+							input: "none"
+						});
 						return;
 					}
 					this.current.code = "";
@@ -97,7 +98,7 @@ export default class App {
 
 				button.classList.add("selected");
 
-				tab.render(this.current, this.container);
+				tab.render(this.container);
 			});
 
 			this.buttons.set(name, button);
@@ -121,15 +122,16 @@ export default class App {
 		});
 
 		this.current.render(this.stagePanel);
-		this.initDynamicMenus();
-
-		this.workspace.render(this.current, this.container);
+		this.workspace.render(this.container);
 
 		this.output.addEventListener("load", async () => {
 			const document = this.output.contentDocument!;
 
+			const engine = document.createElement("script");
+			engine.textContent = engineScript;
+
 			const script = document.createElement("script");
-			let code = engineScript;
+			let code = "";
 
 			try {
 				for (const entity of this.entities) {
@@ -141,7 +143,7 @@ export default class App {
 			} catch (e) {
 				window.alert(e);
 			}
-			document.body.appendChild(script);
+			document.body.append(engine, script);
 		});
 
 		this.add.addEventListener("click", () => {
@@ -196,67 +198,18 @@ export default class App {
 		if (tab === this.workspace && !entity.blocks) {
 			tab.dispose();
 			this.activeTab = "JavaScript";
-			this.code.render(entity, this.container);
+			this.code.render(this.container);
 		} else if (tab === this.code && entity.blocks) {
 			tab.dispose();
 			this.activeTab = "Blocks";
-			this.workspace.render(entity, this.container);
+			this.workspace.render(this.container);
 		} else {
-			tab.update(entity);
+			tab.update();
 		}
 		for (const s of this.tabBar.getElementsByClassName("selected")) {
 			s.classList.remove("selected");
 		}
 		this.buttons.get(this.activeTab)!.classList.add("selected");
-	}
-
-	initDynamicMenus() {
-		const app = this;
-		Blockly.Blocks.sprite = {
-			init(this: Blockly.Block) {
-				this.setOutput(true, "Sprite");
-				this.setStyle("variable_blocks");
-				if (this.workspace instanceof Blockly.WorkspaceSvg) {
-					this.appendDummyInput().appendField(
-						new Blockly.FieldDropdown(() => {
-							const result = app.entities.map<[string, string]>(e => [e.name, e.name]);
-							result[0] = ["myself", "this"];
-							return result;
-						}),
-						"SPRITE"
-					);
-					this.onchange = () => {
-						const parent = this.getParent();
-						if (parent) {
-							this.setStyle(parent.getStyleName());
-							this.onchange = null;
-						}
-					};
-				} else {
-					this.appendDummyInput().appendField(
-						new Blockly.FieldTextInput(),
-						"SPRITE"
-					);
-				}
-			},
-		};
-		Blockly.Extensions.register("costume_menu", function (this: Blockly.Block) {
-			const input = this.getInput("DUMMY")!;
-			const menu = new Blockly.FieldDropdown(() => {
-				return app.current.costumes.map<[string, string]>(e => [e.name, e.name]);
-			});
-			input.appendField(menu, "NAME");
-		});
-		Blockly.Extensions.register("sound_menu", function (this: Blockly.Block) {
-			const input = this.getInput("DUMMY")!;
-			const menu = new Blockly.FieldDropdown(() => {
-				if (!app.current.sounds.length) {
-					return [["", ""]];
-				}
-				return app.current.sounds.map<[string, string]>(e => [e.name, e.name]);
-			});
-			input.appendField(menu, "NAME");
-		});
 	}
 
 	addSprite(sprite: Sprite) {
@@ -289,6 +242,7 @@ export default class App {
 			return;
 		}
 
+		this.showLoader("Loading project");
 		const zip = await JSZip.loadAsync(file);
 		const json = JSON.parse(await zip.file("project.json")!.async("string"));
 
@@ -307,7 +261,9 @@ export default class App {
 			}
 		}
 
+		this.current = this.entities[0];
 		this.stagePanel.dispatchEvent(new MouseEvent("click"));
+		this.hideLoader();
 	}
 
 	async openSB3(file?: File | null) {
@@ -315,6 +271,7 @@ export default class App {
 			return;
 		}
 
+		this.showLoader("Transforming project");
 		this.entities = [];
 		this.spritePanel.innerHTML = "";
 		this.stagePanel.innerHTML = '<span class="name">Stage</span>';
@@ -329,6 +286,9 @@ export default class App {
 				input: "none"
 			});
 		}
+
+		this.current = this.entities[0];
+		this.hideLoader();
 	}
 
 	async export() {
@@ -358,5 +318,13 @@ ${scripts.trimEnd()}
 </body>`);
 
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
+	}
+
+	hideLoader() {
+		document.body.removeAttribute("data-loading");
+	}
+
+	showLoader(reason: string) {
+		document.body.dataset.loading = reason;
 	}
 }

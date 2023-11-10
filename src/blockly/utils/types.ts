@@ -29,9 +29,20 @@ Blockly.defineBlocksWithJsonArray(
 );
 
 Blockly.Extensions.register("getVar", function (this: Blockly.Block) {
-	this.getField("VAR")!.setValidator(id => {
-		this.setOutput(true, this.workspace.getVariableById(id)!.type);
-		return id;
+	this.getField("VAR")!.setValidator(name => {
+		for (const [variable, type] of window.app.current.variables) {
+			if (variable === name) {
+				this.setOutput(true, type || null);
+				return name;
+			}
+		}
+		for (const [variable, type] of window.app.entities[0].variables) {
+			if (variable === name) {
+				this.setOutput(true, type || null);
+				return name;
+			}
+		}
+		return name;
 	});
 });
 
@@ -39,11 +50,11 @@ Blockly.Extensions.register("setVar", function (this: Blockly.Block) {
 	const input = this.getInput("VALUE")!;
 	const field = this.getField("VAR")!;
 
-	const onChange = (id: string) => {
-		const {type} = this.workspace.getVariableById(id)!;
+	const onChange = (name: string) => {
+		const [, type] = window.app.current.variables.find(([e]) => e === name) || [];
 
-		if (!(type in TypeToShadow)) {
-			return id;
+		if (!type || !(type in TypeToShadow)) {
+			return name;
 		}
 
 		const old = input.connection!.targetBlock();
@@ -68,7 +79,7 @@ Blockly.Extensions.register("setVar", function (this: Blockly.Block) {
 
 		input.connection!.connect(block.outputConnection!);
 
-		return id;
+		return name;
 	};
 
 	field.setValidator(onChange);

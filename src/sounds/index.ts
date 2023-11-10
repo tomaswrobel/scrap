@@ -1,5 +1,4 @@
 import WaveSurfer from "wavesurfer.js";
-import type App from "../app";
 import type {Entity} from "../entities";
 import TabComponent from "../tab";
 import "./sounds.scss";
@@ -17,7 +16,7 @@ export default class Sound implements TabComponent {
 	current?: number;
 	mediaList?: MediaList;
 
-	constructor(readonly app: App) {
+	constructor() {
 		this.container.classList.add("sound", "tab-content");
 		this.container.appendChild(this.waves);
 		this.waves.classList.add("waves");
@@ -26,15 +25,15 @@ export default class Sound implements TabComponent {
 		});
 	}
 
-	render(entity: Entity, parent: HTMLElement) {
+	render(parent: HTMLElement) {
 		parent.appendChild(this.container);
-		this.update(entity);
+		this.update();
 	}
 
-	update(entity: Entity) {
+	update() {
 		this.mediaList?.dispose();
-		this.wavesurfer.loadBlob(entity.sounds[0]);
-		this.mediaList = new MediaList(MediaList.SOUND, entity.sounds);
+		this.wavesurfer.loadBlob(window.app.current.sounds[0]);
+		this.mediaList = new MediaList(MediaList.SOUND, window.app.current.sounds);
 
 		this.mediaList.addEventListener("select", async e => {
 			const {detail: file} = e as CustomEvent<File>;

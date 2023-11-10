@@ -2,7 +2,8 @@ import App from "./app";
 import "parley.js/dist/default.css";
 import {version, displayName} from "../package.json";
 
-const app = new App();
+window.app = new App();
+window.app.start();
 document.title = `${displayName} v${version}`;
 
 if ("serviceWorker" in navigator) {
@@ -24,7 +25,7 @@ if ("launchQueue" in window) {
             const fileHandle = launchParams.files[0];
 
             if (isFile(fileHandle)) {
-                app.open(await fileHandle.getFile());
+                window.app.open(await fileHandle.getFile());
             }
         }
     });

@@ -15,6 +15,7 @@ const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
 class Entity {
 	// Costumes & Sounds are stored as files
 	costumes: File[] = [];
+	variables: [string, string][] = [];
 	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
 	// Thumbnail of the entity
@@ -25,9 +26,9 @@ class Entity {
 	/** Helper workspace for generating code. */
 	codeWorkspace = new Blockly.Workspace();
 	/** Generator used for preview in an iframe */
-	private outputGenerator = new Generator(this, true);
+	protected outputGenerator = new Generator(true);
 	/** Generator used in exported HTML file */
-	private exportGenerator = new Generator(this, false);
+	protected exportGenerator = new Generator(false);
 
 	code = "this.whenLoaded(function () {});";
 	blocks = true;
@@ -54,23 +55,13 @@ class Entity {
 	constructor(initialCostume: File, public name: string) {
 		this.codeWorkspace.newBlock("whenLoaded");
 		this.costumes.push(initialCostume);
+		this.outputGenerator.entity = this;
+		this.exportGenerator.entity = this;
 		this.outputGenerator.INDENT = "";
 		this.thumbnail.alt = "";
 		this.update();
 	}
-
-	/**
-	 * Copy variables into my workspace.
-	 * @param models Variable models to copy
-	 */
-	updateVariables(models: Blockly.VariableModel[]) {
-		const map = this.codeWorkspace.getVariableMap();
-		map.clear();
-		for (const variable of models) {
-			map.createVariable(variable.name, variable.type, variable.getId());
-		}
-	}
-
+	
 	/**
 	 * Get the URLs of the files.
 	 * If {@link zip} provided, the
@@ -171,6 +162,7 @@ class Entity {
 			code: this.code,
 			blocks: this.blocks,
 			current: this.current,
+			variables: this.variables
 		};
 	}
 
@@ -183,6 +175,7 @@ class Entity {
 		entity.code = json.code;
 		entity.blocks = json.blocks;
 		entity.current = json.current;
+		entity.variables = json.variables;
 		return entity;
 	}
 
@@ -228,6 +221,7 @@ class Sprite extends Entity {
 
 	constructor(name: string) {
 		super(new File([scrappy], "scrappy.svg", {type: "image/svg+xml"}), name);
+		this.variables.push(["My variable", "Number"]);
 	}
 
 	override render(parent: Element) {
@@ -262,12 +256,13 @@ class Sprite extends Entity {
 	}
 }
 
-const stage =
-	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
+const stage = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
 
 class Stage extends Entity {
 	constructor() {
 		super(new File([stage], "stage.svg", {type: "image/svg+xml"}), "Stage");
+		this.outputGenerator.entity = this;
+		this.exportGenerator.entity = this;
 	}
 
 	override render(parent: Element): HTMLElement {
