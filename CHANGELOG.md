@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.4.0] - 2023-11-11
+
+### Fixed
+
+- When mixing blocks & code, global variables are now correctly handled (via parsing the code)
+- Ask block now uses variable correctly.
+- Global variables bugs
+- Escaping Scrap names did not work correctly in many cases.
+- Await is now added to event handlers. Historically, Scrap Engine did not have await in event handlers, but it was added in v1.
+- Scrap 3 has been really unstable, and this release changes that. (I hope so.)
+
+### Changed
+
+- Scratch's classic fields are no longer treated as strings, since they can be numbers as well.
+- SB3 compatibility lives in one file now. The typings were moved to the `SB3` namespace / class.
+- Scrap Engine update
+
+### Added
+
+- Scratch's procedures are now FULLY supported.
+- A lot of comments to make the code more readable. (I'm sorry for the mess, but I'm not used to writing comments. If you have any problems understanding the code, please let me know.)
+- VS Code settings for comments in JSON files.
+- README.md now acknowledges the fact that Scrap does not use Scratch's code at all. (It is not a fork of Scratch.)
+
+### Removed
+
+- function's label field - this was a historical thing, since Scrap v1 did support generators and it was used to distinguish between generators and functions.
+
 ## [3.3.0] - 2023-11-10
 
 ### Added
@@ -424,7 +452,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.3.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.4.0...HEAD
+[3.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.0
 [3.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.3.0
 [3.2.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.2.1
 [3.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.2.0

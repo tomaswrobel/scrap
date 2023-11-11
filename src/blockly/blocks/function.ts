@@ -12,7 +12,7 @@ export default <Partial<ProcedureBlock>>{
 		this.setCommentText("Describe this function...");
 		this.appendDummyInput("DUMMY")
 			.appendField(new Blockly.FieldDropdown(Types.map(type => [type || "void", type] as [string, string])), "TYPE")
-			.appendField("function", "label")
+			.appendField("function")
 			.appendField(new Blockly.FieldTextInput("foo"), "NAME");
 		this.setMutator(
 			new Blockly.icons.MutatorIcon(
@@ -30,13 +30,7 @@ export default <Partial<ProcedureBlock>>{
 	},
 	loadExtraState(this: ProcedureBlock, state: any) {
 		this.params = state.params;
-		const input = this.getInput("DUMMY")!;
 		this.setFieldValue(state.name, "NAME");
-		if (!this.getField("TYPE")) {
-			input.insertFieldAt(0, new Blockly.FieldDropdown(Types.map(type => [type || "void", type] as [string, string])), "TYPE");
-		}
-
-		this.setFieldValue("function", "label");
 		this.setFieldValue(state.returnType, "TYPE");
 
 		this.updateShape();
@@ -45,9 +39,16 @@ export default <Partial<ProcedureBlock>>{
 		this.params = [];
 
 		for (let block = topBlock.getNextBlock(), i = 0; block; block = block.getNextBlock(), i++) {
-			const check = block.type.slice("function_param_".length);
-			const name = block.getFieldValue("NAME");
-			this.params.push({type: check, name});
+			if (block.type === "text_or_number_param") {
+				this.params.push({
+					type: ["String", "Number"], 
+					name: block.getFieldValue("NAME")
+				});
+			} else {
+				const check = block.type.slice("function_param_".length);
+				const name = block.getFieldValue("NAME");
+				this.params.push({type: check, name});
+			}
 		}
 
 		this.updateShape();
@@ -59,7 +60,7 @@ export default <Partial<ProcedureBlock>>{
 		let connection = containerBlock.nextConnection;
 
 		for (const {name, type} of this.params) {
-			const block = workspace.newBlock("function_param_" + type);
+			const block = workspace.newBlock(typeof type === "object" ? "text_or_number_param" : "function_param_" + type);
 			block.initSvg?.();
 			block.setFieldValue(name, "NAME");
 			connection.connect(block.previousConnection);

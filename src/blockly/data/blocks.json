@@ -1,4 +1,8 @@
+// Here you can find definitions the statically defined blocks
+// If you look for other blocks, check out the blockly/blocks folder
+// which contains the dynamically loaded blocks
 {
+	// Variables getters / setters
 	"setVariable": {
 		"message0": "%{BKY_VARIABLES_SET}",
 		"args0": [
@@ -55,6 +59,7 @@
 		],
 		"inputsInline": true
 	},
+	// Variables showing / hiding
 	"showVariable": {
 		"message0": "show variable %1",
 		"args0": [
@@ -87,11 +92,39 @@
 		],
 		"inputsInline": true
 	},
+	// Blocks for function's mutator
+	// Some of them are defined in blockly/utils/types.ts
 	"function_header": {
 		"message0": "function's parameters",
 		"style": "procedure_blocks",
 		"nextStatement": null
 	},
+	// Scratch 3 does not distinguish between text and number parameters
+	"text_or_number_param": {
+		"inputsInline": true,
+		"message0": "Scratch parameter %1",
+		"args0": [
+			{
+				"type": "field_input",
+				"name": "NAME"
+			}
+		],
+		"style": "procedure_blocks",
+		"nextStatement": null,
+		"previousStatement": null
+	},
+	"parameter": {
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_label_serializable",
+				"name": "VAR"
+			}
+		],
+		"style": "variable_blocks",
+		"output": null
+	},
+	// Call function block
 	"call": {
 		"message0": "%1",
 		"args0": [
@@ -107,6 +140,48 @@
 		"mutator": "mutator_call",
 		"inputsInline": true
 	},
+	// Mutator blocks for if / else / else uf
+	"controls_if_if": {
+		"message0": "%{BKY_CONTROLS_IF_IF_TITLE_IF}",
+		"nextStatement": null,
+		"enableContextMenu": false,
+		"style": "Controls",
+		"tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}"
+	},
+	"controls_if_elseif": {
+		"message0": "%{BKY_CONTROLS_IF_ELSEIF_TITLE_ELSEIF}",
+		"previousStatement": null,
+		"nextStatement": null,
+		"enableContextMenu": false,
+		"style": "Controls",
+		"tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}"
+	},
+	"controls_if_else": {
+		"message0": "%{BKY_CONTROLS_IF_ELSE_TITLE_ELSE}",
+		"previousStatement": null,
+		"enableContextMenu": false,
+		"style": "Controls",
+		"tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}"
+	},
+	// Mutator blocks for array
+	"array_mutator_item_single": {
+		"message0": "single item",
+		"style": "Iterables",
+		"nextStatement": null,
+		"previousStatement": null
+	},
+	"array_mutator_item_iterable": {
+		"message0": "spread iterable",
+		"style": "Iterables",
+		"nextStatement": null,
+		"previousStatement": null
+	},
+	"array_mutator_items": {
+		"message0": "items",
+		"style": "Iterables",
+		"nextStatement": null
+	},
+	// Dropdowns
 	"key": {
 		"message0": "%1",
 		"args0": [
@@ -439,67 +514,6 @@
 			"parent_style"
 		]
 	},
-	"parameter": {
-		"message0": "%1",
-		"args0": [
-			{
-				"type": "field_label_serializable",
-				"name": "VAR"
-			}
-		],
-		"style": "variable_blocks",
-		"output": null
-	},
-	"controls_if_if": {
-		"message0": "%{BKY_CONTROLS_IF_IF_TITLE_IF}",
-		"nextStatement": null,
-		"enableContextMenu": false,
-		"style": "Controls",
-		"tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}"
-	},
-	"controls_if_elseif": {
-		"message0": "%{BKY_CONTROLS_IF_ELSEIF_TITLE_ELSEIF}",
-		"previousStatement": null,
-		"nextStatement": null,
-		"enableContextMenu": false,
-		"style": "Controls",
-		"tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}"
-	},
-	"controls_if_else": {
-		"message0": "%{BKY_CONTROLS_IF_ELSE_TITLE_ELSE}",
-		"previousStatement": null,
-		"enableContextMenu": false,
-		"style": "Controls",
-		"tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}"
-	},
-	"array_mutator_item_single": {
-		"message0": "single item",
-		"style": "Iterables",
-		"nextStatement": null,
-		"previousStatement": null
-	},
-	"array_mutator_item_iterable": {
-		"message0": "spread iterable",
-		"style": "Iterables",
-		"nextStatement": null,
-		"previousStatement": null
-	},
-	"array_mutator_items": {
-		"message0": "items",
-		"style": "Iterables",
-		"nextStatement": null
-	},
-	"motion_angle": {
-		"message0": "%1",
-		"args0": [
-			{
-				"type": "field_angle",
-				"name": "VALUE"
-			}
-		],
-		"output": "Number",
-		"style": "Motion"
-	},
 	"costume_menu": {
 		"message0": "%1",
 		"args0": [
@@ -511,56 +525,10 @@
 		"output": "String",
 		"style": "Looks",
 		"extensions": [
+			// This will inject a field with 
+			// the costumes into the dummy input
 			"costume_menu"
 		]
-	},
-	"switchBackdropTo": {
-		"message0": "switch backdrop to %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "COSTUME",
-				"check": "String"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Looks"
-	},
-	"nextBackdrop": {
-		"message0": "next backdrop",
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Looks"
-	},
-	"effect": {
-		"message0": "%1",
-		"args0": [
-			{
-				"type": "field_dropdown",
-				"name": "EFFECT",
-				"options": [
-					[
-						"color",
-						"color"
-					],
-					[
-						"ghost",
-						"ghost"
-					],
-					[
-						"grayscale",
-						"grayscale"
-					],
-					[
-						"brightness",
-						"brightness"
-					]
-				]
-			}
-		],
-		"output": "String",
-		"style": "Looks"
 	},
 	"sound": {
 		"message0": "%1",
@@ -576,69 +544,7 @@
 			"sound_menu"
 		]
 	},
-	"playSound": {
-		"message0": "play sound %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "SOUND",
-				"check": "String"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Sounds"
-	},
-	"playSoundUntilDone": {
-		"message0": "play sound %1 until done",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "SOUND",
-				"check": "String"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Sounds"
-	},
-	"setVolume": {
-		"message0": "set volume to %1 %%",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "VOLUME",
-				"check": "Number"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Sounds"
-	},
-	"changeVolume": {
-		"message0": "change volume by %1 %%",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "VOLUME",
-				"check": "Number"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Sounds"
-	},
-	"volume": {
-		"message0": "volume",
-		"output": "Number",
-		"style": "Sounds"
-	},
-	"stopSounds": {
-		"message0": "stop my sounds",
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Sounds"
-	},
+	// Basic values (always shadow blocks)
 	"color": {
 		"message0": "%1",
 		"args0": [
@@ -646,17 +552,6 @@
 				"type": "field_colour_hsv_sliders",
 				"name": "COLOR",
 				"colour": "#ff0000"
-			}
-		],
-		"output": "Color",
-		"style": "Pen"
-	},
-	"hex": {
-		"message0": "# %1",
-		"args0": [
-			{
-				"type": "field_hex",
-				"name": "COLOR"
 			}
 		],
 		"output": "Color",
@@ -673,6 +568,34 @@
 		"output": "Number",
 		"style": "Operators"
 	},
+	"motion_angle": {
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_angle",
+				"name": "VALUE"
+			}
+		],
+		"output": "Number",
+		"style": "Motion"
+	},
+	"text_or_number": {
+		"inputsInline": true,
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_input",
+				"name": "VALUE",
+				"text": ""
+			}
+		],
+		"output": [
+			"String",
+			"Number"
+		],
+		"style": "Operators"
+	},
+	// Motion
 	"move": {
 		"inputsInline": true,
 		"message0": "move %1 steps",
@@ -943,6 +866,7 @@
 		"args0": [],
 		"style": "Motion"
 	},
+	// Looks
 	"sayWait": {
 		"inputsInline": true,
 		"message0": "say %1 for %2 seconds",
@@ -1043,6 +967,35 @@
 		"previousStatement": null,
 		"style": "Looks"
 	},
+	"effect": {
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "EFFECT",
+				"options": [
+					[
+						"color",
+						"color"
+					],
+					[
+						"ghost",
+						"ghost"
+					],
+					[
+						"grayscale",
+						"grayscale"
+					],
+					[
+						"brightness",
+						"brightness"
+					]
+				]
+			}
+		],
+		"output": "String",
+		"style": "Looks"
+	},
 	"switchCostumeTo": {
 		"inputsInline": true,
 		"message0": "switch costume to %1",
@@ -1063,6 +1016,25 @@
 		"nextStatement": null,
 		"previousStatement": null,
 		"args0": [],
+		"style": "Looks"
+	},
+	"switchBackdropTo": {
+		"message0": "switch backdrop to %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "COSTUME",
+				"check": "String"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "Looks"
+	},
+	"nextBackdrop": {
+		"message0": "next backdrop",
+		"previousStatement": null,
+		"nextStatement": null,
 		"style": "Looks"
 	},
 	"show": {
@@ -1192,6 +1164,71 @@
 		"args0": [],
 		"style": "Looks"
 	},
+	// Sounds
+	"playSound": {
+		"message0": "play sound %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "SOUND",
+				"check": "String"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "Sounds"
+	},
+	"playSoundUntilDone": {
+		"message0": "play sound %1 until done",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "SOUND",
+				"check": "String"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "Sounds"
+	},
+	"setVolume": {
+		"message0": "set volume to %1 %%",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "VOLUME",
+				"check": "Number"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "Sounds"
+	},
+	"changeVolume": {
+		"message0": "change volume by %1 %%",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "VOLUME",
+				"check": "Number"
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "Sounds"
+	},
+	"volume": {
+		"message0": "volume",
+		"output": "Number",
+		"style": "Sounds"
+	},
+	"stopSounds": {
+		"message0": "stop my sounds",
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "Sounds"
+	},
+	// Pen
 	"rgb": {
 		"inputsInline": true,
 		"message0": "RGB %1 %2 %3",
@@ -1304,6 +1341,7 @@
 		"previousStatement": null,
 		"style": "Pen"
 	},
+	// Events
 	"whenLoaded": {
 		"inputsInline": true,
 		"message0": "when loaded",
@@ -1437,6 +1475,7 @@
 		"previousStatement": null,
 		"style": "Events"
 	},
+	// Control
 	"wait": {
 		"inputsInline": true,
 		"message0": "wait %1 seconds",
@@ -1548,6 +1587,7 @@
 		"mutator": "mutator_if",
 		"style": "Controls"
 	},
+	// <Mutator blocks>
 	"try": {
 		"message0": "try",
 		"style": "Controls",
@@ -1580,6 +1620,7 @@
 		"style": "Controls",
 		"previousStatement": "finally"
 	},
+	// </Mutator blocks>
 	"tryCatch": {
 		"inputsInline": true,
 		"message0": "try",
@@ -1627,6 +1668,10 @@
 		"previousStatement": null,
 		"style": "Controls"
 	},
+	// Unlike Scratch,
+	// this block can delete 
+	// both clones and the original sprite,
+	// depending where it is placed.
 	"delete": {
 		"inputsInline": true,
 		"message0": "delete",
@@ -1634,6 +1679,12 @@
 		"previousStatement": null,
 		"style": "Controls"
 	},
+	// This block was hard to implement.
+	// Basically, it throws an error
+	// which cannot be caught by the program.
+	// This causes the program to stop running.
+	// However, "stop my scripts"
+	// will never be implemented.
 	"stop": {
 		"message0": "stop all scripts",
 		"previousStatement": null,
@@ -1697,6 +1748,11 @@
 		"output": "Number",
 		"style": "Sensing"
 	},
+	// Unlike Scratch (but just like Snap!),
+	// this block returns the answer.
+	// Scrap sprires does not have an "answer"
+	// property. SB3 compatibility layer
+	// can handle this.
 	"ask": {
 		"inputsInline": true,
 		"message0": "ask %1 and wait",
@@ -1896,6 +1952,7 @@
 		"output": "Boolean",
 		"style": "Sensing"
 	},
+	// Operators
 	"arithmetics": {
 		"inputsInline": true,
 		"message0": "%1 %2 %3",
@@ -2205,6 +2262,7 @@
 		"output": "Number",
 		"style": "Operators"
 	},
+	// Iterables
 	"iterables_string": {
 		"inputsInline": true,
 		"message0": "%1",

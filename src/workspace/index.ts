@@ -85,19 +85,19 @@ export default class Workspace implements Component {
 				}
 
 				if (window.app.current instanceof Sprite) {
-					for (const variable of window.app.entities[0].variables) {
+					for (const variable of window.app.globalVariables) {
 						json.push({
 							kind: "block",
 							type: "getVariable",
 							fields: {
-								VAR: variable[0]
+								VAR: variable
 							}
 						});
 					}
 				}
 
 				if (json.length > 1) {
-					const VAR = window.app.current.variables[0][0];
+					const [VAR] = window.app.current.variables[0] || window.app.globalVariables;
 
 					if (!VAR) {
 						return json;

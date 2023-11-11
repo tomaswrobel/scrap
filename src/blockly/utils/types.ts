@@ -36,7 +36,7 @@ Blockly.Extensions.register("getVar", function (this: Blockly.Block) {
 				return name;
 			}
 		}
-		for (const [variable, type] of window.app.entities[0].variables) {
+		for (const [variable, type] of window.app.globalVariables) {
 			if (variable === name) {
 				this.setOutput(true, type || null);
 				return name;

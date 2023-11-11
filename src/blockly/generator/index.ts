@@ -565,7 +565,7 @@ Generator.blocks.function = function (block: ProcedureBlock, generator) {
 		code += "async ";
 	}
 
-	code += `${block.getFieldValue("label")} ${name}(${params.join(", ")}) {\n`;
+	code += `function ${name}(${params.join(", ")}) {\n`;
 
 	if (nextBlock) {
 		code += generator.prefixLines(generator.blockToCode(nextBlock) as string, generator.INDENT);
@@ -578,6 +578,16 @@ Generator.blocks.function = function (block: ProcedureBlock, generator) {
 Generator.blocks.motion_angle = function (block: Blockly.Block) {
 	return [block.getFieldValue("VALUE"), Order.ATOMIC];
 };
+
+Generator.blocks.text_or_number = function (block: Blockly.Block) {
+	const value = block.getFieldValue("VALUE");
+
+	if (!isNaN(Number(value))) {
+		return [value, Order.ATOMIC];
+	}
+
+	return [JSON.stringify(value), Order.ATOMIC];
+}
 
 Generator.blocks.call = function (block: CallBlock, generator) {
 	let code = Generator.escape(block.getFieldValue("NAME"));

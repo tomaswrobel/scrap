@@ -5,6 +5,6 @@ export function isProcedureBlock(block: Block): block is ProcedureBlock {
 }
 
 export default interface ProcedureBlock extends BlockSvg {
-	params: {type: string; name: string}[];
+	params: {type: string | string[]; name: string}[];
 	updateShape(): void;
 }

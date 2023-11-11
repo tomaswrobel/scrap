@@ -20,6 +20,7 @@ import {Generator, Types} from "../blockly";
 export default async function transform(code: string, minified = false) {
 	const babel = await import("@babel/core");
 	const variables = new Set<string>();
+	await window.app.setGlobalVariables();
 
 	return babel.transformAsync(code, {
 		minified,
@@ -29,8 +30,8 @@ export default async function transform(code: string, minified = false) {
 				visitor: {
 					TaggedTemplateExpression(path) {
 						if (
-							path.node.quasi.expressions.length === 0 
-							&& path.node.tag.type === "Identifier" 
+							path.node.quasi.expressions.length === 0
+							&& path.node.tag.type === "Identifier"
 							&& path.node.tag.name === "sprite"
 						) {
 							path.replaceWith(
@@ -177,7 +178,7 @@ export default async function transform(code: string, minified = false) {
 											babel.types.identifier("declareVariable")
 										),
 										[
-											babel.types.stringLiteral(declaration.id.name),
+											babel.types.stringLiteral(Generator.unescape(declaration.id.name)),
 											babel.types.stringLiteral(varType || "Any"),
 										]
 									)
@@ -211,7 +212,7 @@ export default async function transform(code: string, minified = false) {
 										babel.types.identifier(path.node.operator === "=" ? "setVariable" : "changeVariable")
 									),
 									[
-										babel.types.stringLiteral(path.node.left.name),
+										babel.types.stringLiteral(Generator.unescape(path.node.left.name)),
 										right,
 									]
 								)
@@ -262,12 +263,12 @@ export default async function transform(code: string, minified = false) {
 											babel.types.identifier("getVariable")
 										),
 										[
-											babel.types.stringLiteral(path.node.name),
+											babel.types.stringLiteral(Generator.unescape(path.node.name)),
 										]
 									)
 								)
 							);
-						} else if (window.app.entities[0].variables.some((variable) => variable[0] === path.node.name)) {
+						} else if (window.app.globalVariables.some((e) => Generator.escape(e) === path.node.name)) {
 							// Check if there is no function with the parameter
 							let parent = path.parentPath;
 							while (parent && parent.node.type !== "FunctionDeclaration" && parent.node.type !== "FunctionExpression") {
@@ -313,7 +314,7 @@ export default async function transform(code: string, minified = false) {
 											babel.types.identifier("getVariable")
 										),
 										[
-											babel.types.stringLiteral(path.node.name),
+											babel.types.stringLiteral(Generator.unescape(path.node.name)),
 										]
 									)
 								)

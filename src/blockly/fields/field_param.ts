@@ -15,7 +15,7 @@
 import * as Blockly from "blockly/core";
 
 export default class FieldParam extends Blockly.Field<string> {
-	constructor(defaultVarName = "i", type?: string) {
+	constructor(defaultVarName = "i", type?: string | string[]) {
 		super(type ? `${defaultVarName}:${type}` : defaultVarName);
 	}
 
@@ -35,7 +35,7 @@ export default class FieldParam extends Blockly.Field<string> {
 		if (this.value_?.indexOf(":") === -1) {
 			return null;
 		}
-		return this.value_!.split(":")[1];
+		return this.value_!.split(":")[1].split(",")
 	}
 
 	CURSOR = "COPY";

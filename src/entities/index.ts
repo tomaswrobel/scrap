@@ -216,12 +216,11 @@ class Sprite extends Entity {
 		size: 100,
 		rotationStyle: 0,
 		visible: true,
-		draggable: true
+		draggable: false
 	};
 
 	constructor(name: string) {
 		super(new File([scrappy], "scrappy.svg", {type: "image/svg+xml"}), name);
-		this.variables.push(["My variable", "Number"]);
 	}
 
 	override render(parent: Element) {

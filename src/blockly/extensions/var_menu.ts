@@ -6,7 +6,7 @@ export default function (this: Blockly.Block) {
         const vars = window.app.current.variables.map<[string, string]>(([e]) => [e, e]);
 
         if (window.app.current.name !== "Stage") {
-            for (const [variable] of window.app.entities[0].variables) {
+            for (const variable of window.app.globalVariables) {
                 vars.push([variable, variable]);
             }
         }

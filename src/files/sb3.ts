@@ -1,11 +1,10 @@
 import JSZip from "jszip";
-import {Sprite, Stage} from "../../entities";
-import type {Project, Target, Block, Input} from "./types";
+import {Sprite, Stage} from "../entities";
 import * as Blockly from "blockly/core";
 
 class SB3 {
-    target!: Target;
-    transformers: Record<string, (data: Block) => Promise<Blockly.Block> | Blockly.Block> = {};
+    target!: SB3.Target;
+    transformers: Record<string, (data: SB3.Block) => Promise<Blockly.Block> | Blockly.Block> = {};
 
     constructor() {
         this.transformers.motion_movesteps = this.override({
@@ -111,7 +110,7 @@ class SB3 {
             const block = window.app.current.codeWorkspace.newBlock("costume_menu");
             block.setFieldValue(this.assetMap[data.fields.BACKDROP[0]], "NAME");
             return block;
-        }
+        };
         this.transformers.looks_switchcostumeto = this.override({
             opcode: "switchCostumeTo",
         });
@@ -368,7 +367,7 @@ class SB3 {
             }
 
             return block;
-        }
+        };
         this.transformers.sensing_touchingobject = data => {
             const fieldValue = this.target.blocks[data.inputs.TOUCHINGOBJECTMENU[1] as string].fields.TOUCHINGOBJECTMENU[0];
 
@@ -412,17 +411,19 @@ class SB3 {
             return block;
         };
         this.transformers.sensing_askandwait = async data => {
+            const name = this.helperVariable("answer", "String");
             const block = window.app.current.codeWorkspace.newBlock("setVariable");
+            block.setFieldValue(name, "VAR");
             const ask = window.app.current.codeWorkspace.newBlock("ask");
             const question = await this.input(data.inputs.QUESTION);
             ask.getInput("QUESTION")!.connection!.connect(question!.outputConnection!);
             block.getInput("VALUE")!.connection!.connect(ask.outputConnection!);
-            block.setFieldValue(this.helperVariable("answer", "String"), "VAR");
             return block;
         };
         this.transformers.sensing_answer = () => {
+            const name = this.helperVariable("answer", "String");
             const block = window.app.current.codeWorkspace.newBlock("getVariable");
-            block.setFieldValue(this.helperVariable("answer", "String"), "VAR");
+            block.setFieldValue(name, "VAR");
             return block;
         };
         this.transformers.sensing_keyoptions = data => {
@@ -714,9 +715,65 @@ class SB3 {
             block.setFieldValue(data.fields.VARIABLE[0], "VAR");
             return block;
         };
+
+        // Functions
+        this.transformers.procedures_definition = def => {
+            const data = this.target.blocks[def.inputs.custom_block[1] as string];
+            const name = data.mutation!.proccode.replace(/%[bns]/g, "()").trim();
+            const block = window.app.current.codeWorkspace.newBlock("function");
+            const paramNames: string[] = JSON.parse(data.mutation!.argumentnames);
+            const paramTypes = (data.mutation!.proccode.match(/%[bns]/g) ?? []).map(e => (
+                e[1] === "s" ? ["String", "Number"] : e[1] === "b" ? "Boolean" : "Number"
+            ));
+            
+            block.loadExtraState!({
+                name,
+                returnType: "",
+                params: paramNames.map((name, i) => ({
+                    name,
+                    type: paramTypes[i]
+                }))
+            });
+
+            return block;
+        };
+        this.transformers.procedures_call = async data => {
+            const name = data.mutation!.proccode.replace(/%[nbs]/g, "()").trim();
+            const call = window.app.current.codeWorkspace.newBlock("call");
+            const types = (data.mutation!.proccode.match(/%[bns]/g) ?? []).map(e => ({
+                type: e[1] === "s" ? ["String", "Number"] : e[1] === "b" ? "Boolean" : "Number"
+            }));
+            const args: string[] = JSON.parse(data.mutation!.argumentids);
+
+            call.loadExtraState!({
+                name,
+                params: types,
+            });
+
+            for (let i = 0; i < args.length; i++) {
+                const content = data.inputs[args[i]];
+                if (content) { // Boolean inputs can be empty
+                    const value = await this.input(content);
+                    call.getInput(`PARAM_${i}`)!.connection!.connect(value!.outputConnection!);
+                }
+            }
+
+            return call;
+        };
+        this.transformers.argument_reporter_string_number = data => {
+            const block = window.app.current.codeWorkspace.newBlock("parameter");
+            block.setFieldValue(data.fields.VALUE[0], "VAR");
+            return block;
+        };
+        this.transformers.argument_reporter_boolean = data => {
+            const block = window.app.current.codeWorkspace.newBlock("parameter");
+            block.setFieldValue(data.fields.VALUE[0], "VAR");
+            block.setOutput(true, "Boolean");
+            return block;
+        };
     }
 
-    effect(data: Block) {
+    effect(data: SB3.Block) {
         const block = window.app.current.codeWorkspace.newBlock("effect");
 
         switch (data.fields.EFFECT[0]) {
@@ -741,10 +798,10 @@ class SB3 {
 
     operator(type: "compare" | "arithmetics" | "operation", operator: string) {
         const input = type === "arithmetics" ? "NUM" : "OPERAND";
-        return async (data: Block) => {
+        return async (data: SB3.Block) => {
             const block = window.app.current.codeWorkspace.newBlock(type);
             block.setFieldValue(operator, "OP");
-            
+
             const A = await this.input(data.inputs[`${input}1`]);
             const B = await this.input(data.inputs[`${input}2`]);
 
@@ -759,7 +816,7 @@ class SB3 {
 
     async transform(file: File) {
         const zip = await JSZip.loadAsync(file);
-        const project: Project = JSON.parse(await zip.file("project.json")!.async("text"));
+        const project: SB3.Project = JSON.parse(await zip.file("project.json")!.async("text"));
         this.isProjectCompatible(project);
 
         for (const target of project.targets) {
@@ -796,30 +853,27 @@ class SB3 {
             for (const id in target.variables) {
                 window.app.current.variables.push([target.variables[id][0], ""]);
             }
-            if (!target.isStage) {
-                for (const id in project.targets[0].variables) {
-                    window.app.current.codeWorkspace.createVariable(project.targets[0].variables[id][0], null, id);
-                }
-            }
 
             this.provided = {};
             this.helped = {};
+
+            if (target.isStage) {
+                window.app.entities.unshift(window.app.current);
+                window.app.current.render(window.app.stagePanel);
+                await window.app.setGlobalVariables();
+            } else {
+                window.app.addSprite(window.app.current as Sprite);
+            }
 
             for (const block of Object.values(target.blocks)) {
                 if (block.topLevel) {
                     await this.block(block);
                 }
             }
-            if (target.isStage) {
-                window.app.entities.unshift(window.app.current);
-                window.app.current.render(window.app.stagePanel);
-            } else {
-                window.app.addSprite(window.app.current as Sprite);
-            }
         }
     }
 
-    isProjectCompatible(project: Project) {
+    isProjectCompatible(project: SB3.Project) {
         if (project.extensions.length > 0) {
             if (project.extensions.length === 1 && project.extensions[0] === "pen") {
                 return;
@@ -828,7 +882,7 @@ class SB3 {
         }
     }
 
-    isTargetCompatible(target: Target) {
+    isTargetCompatible(target: SB3.Target) {
         if (Object.keys(target.lists).length) {
             throw "Scrap does not support lists.";
         }
@@ -855,7 +909,7 @@ class SB3 {
         return this.helped[id];
     }
 
-    async input([shadow, data]: Input, command = false) {
+    async input([shadow, data]: SB3.Input, command = false) {
         if (typeof data === "string") {
             const block = await this.block(
                 this.target.blocks[data],
@@ -884,7 +938,12 @@ class SB3 {
                 block.setShadow(shadow === 1);
                 return block;
             }
-            case 10:
+            case 10: {
+                const block = window.app.current.codeWorkspace.newBlock("text_or_number");
+                block.setFieldValue(data[1], "VALUE");
+                block.setShadow(shadow === 1);
+                return block;
+            }
             case 11: {
                 const block = window.app.current.codeWorkspace.newBlock("iterables_string");
                 block.setFieldValue(data[1], "TEXT");
@@ -909,7 +968,7 @@ class SB3 {
      * @param config The renaming configuration.
      */
     override({opcode, inputs = {}, extraState}: SB3.Override) {
-        return async (data: Block) => {
+        return async (data: SB3.Block) => {
             const block = window.app.current.codeWorkspace.newBlock(opcode ?? data.opcode);
 
             if (extraState) {
@@ -934,7 +993,7 @@ class SB3 {
         return () => window.app.current.codeWorkspace.newBlock(name);
     }
 
-    async block(data: Block, isInput?: boolean) {
+    async block(data: SB3.Block, isInput?: boolean) {
         if (data.opcode in this.transformers) {
             var block = await this.transformers[data.opcode](data);
         } else {
@@ -956,7 +1015,7 @@ class SB3 {
     unknown(opcode: string, shape: "reporter" | "command") {
         const block = window.app.current.codeWorkspace.newBlock("unknown");
         block.loadExtraState!({shape, opcode});
-        
+
         return new Promise<Blockly.Block>(resolve => {
             setTimeout(() => {
                 resolve(block);
@@ -1005,6 +1064,83 @@ declare namespace SB3 {
             type: string;
         }[];
         name: string;
+    }
+}
+
+declare namespace SB3 {
+    type Variable = [string, string | number, true?];
+    type Input = [1 | 2, string | SimpleBlock | null];
+    type Field = [string, string | null];
+
+    type SimpleBlock =
+        | [4, `${number}`]
+        | [5, `${number}`]
+        | [6, `${number}`]
+        | [7, `${number}`]
+        | [8, `${number}`]
+        | [9, `#${string}`]
+        | [10, string]
+        | [11, string, string]
+        | [12, string, string]
+        | [13, string, string]
+        ;
+
+    interface Mutation {
+        tagName: "mutation";
+        children: [];
+        proccode: string;
+        argumentids: string;
+        argumentnames: string;
+        argumentdefaults: string;
+        warp: `${boolean}`;
+    }
+
+    interface Block {
+        opcode: string;
+        next: string | null;
+        parent: string | null;
+        inputs: Record<string, Input>;
+        fields: Record<string, Field>;
+        shadow: boolean;
+        topLevel: boolean;
+        mutation?: Mutation;
+    }
+
+    interface Costume {
+        name: string;
+        dataFormat: "png" | "svg" | "jpg" | "bmp" | "gif";
+        assetId: string;
+    }
+
+    interface Sound {
+        name: string;
+        dataFormat: "wav" | "mp3" | "m4a" | "ogg";
+        assetId: string;
+    }
+
+    interface Target {
+        name: string;
+        isStage: boolean;
+        variables: Record<string, Variable>;
+        lists: Record<string, unknown>;
+        costumes: Costume[];
+        currentCostume: number;
+        sounds: Sound[];
+        blocks: Record<string, Block>;
+    }
+
+    interface Stage extends Target {
+        name: "string";
+        isStage: true;
+    }
+
+    interface Sprite extends Target {
+        isStage: false;
+    }
+
+    interface Project {
+        targets: (Stage | Sprite)[];
+        extensions: string[];
     }
 }
 

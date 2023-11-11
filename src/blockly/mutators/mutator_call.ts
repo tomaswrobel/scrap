@@ -2,7 +2,7 @@ import * as Blockly from "blockly/core";
 import {TypeToShadow, Types} from "../utils/types";
 
 export type CallExtraState = {
-	params?: {type: string}[];
+	params?: {type: string | string[]}[];
 	returnType?: string;
 	name?: string;
 };
@@ -12,7 +12,7 @@ export interface CallBlockMixin extends CallBlockMixinType {}
 export type CallBlockMixinType = typeof MIXIN;
 
 export const MIXIN = {
-	params_: [] as {type: string}[],
+	params_: [] as {type: string | string[]}[],
 	returnType_: "",
 	name_: "unnamed",
 
@@ -44,7 +44,16 @@ export const MIXIN = {
 			const input = this.appendValueInput(`PARAM_${i}`);
 			input.setCheck(type);
 
-			if (type in TypeToShadow) {
+			if (typeof type === "object") {
+				const block = this.workspace.newBlock("text_or_number");
+				block.setShadow(true);
+
+				if (block instanceof Blockly.BlockSvg) {
+					block.initSvg();
+				}
+
+				input.connection!.connect(block.outputConnection!);
+			} else if (type in TypeToShadow && type !== "Boolean") {
 				const block = this.workspace.newBlock(TypeToShadow[type]);
 				block.setShadow(true);
 
@@ -59,11 +68,11 @@ export const MIXIN = {
 	},
 
 	saveExtraState(this: CallBlock) {
-		const params = this.params_.map(({type}) => ({type}));
-		const returnType = this.returnType_;
-		const name = this.name_;
-
-		return {params, returnType, name};
+		return {
+			params: this.params_, 
+			returnType: this.returnType_, 
+			name: this.name_
+		};
 	},
 
 	loadExtraState(this: CallBlock, state: CallExtraState) {

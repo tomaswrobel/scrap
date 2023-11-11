@@ -71,7 +71,7 @@ export default class App {
 
 				if (tab === this.workspace && !this.current.blocks) {
 					this.current.blocks = true;
-					const parser = new CodeParser(this.current.codeWorkspace, this.entities);
+					const parser = new CodeParser(this.current.codeWorkspace);
 					try {
 						await parser.codeToBlock(this.current.code);
 					} catch (e) {
@@ -186,7 +186,9 @@ export default class App {
 			saveAs(await zip.generateAsync({type: "blob"}), "project.scrap");
 		});
 
-		this.addSprite(new Sprite("Scrappy"));
+		const scrappy = new Sprite("Scrappy");
+		scrappy.variables.push(["My variable", "Number"]);
+		this.addSprite(scrappy);
 	}
 
 	select(entity: Entity) {
@@ -205,6 +207,13 @@ export default class App {
 			this.workspace.render(this.container);
 		} else {
 			tab.update();
+		}
+		if (entity instanceof Sprite) {
+			this.setGlobalVariables().then(() => {
+				if (entity.blocks) {
+					this.workspace.workspace.refreshToolboxSelection();
+				}
+			});
 		}
 		for (const s of this.tabBar.getElementsByClassName("selected")) {
 			s.classList.remove("selected");
@@ -262,6 +271,7 @@ export default class App {
 		}
 
 		this.current = this.entities[0];
+		await this.setGlobalVariables();
 		this.stagePanel.dispatchEvent(new MouseEvent("click"));
 		this.hideLoader();
 	}
@@ -276,7 +286,7 @@ export default class App {
 		this.spritePanel.innerHTML = "";
 		this.stagePanel.innerHTML = '<span class="name">Stage</span>';
 
-		try {	
+		try {
 			await this.scratchFiles.transform(file);
 			this.stagePanel.dispatchEvent(new MouseEvent("click"));
 		} catch (e) {
@@ -289,6 +299,48 @@ export default class App {
 
 		this.current = this.entities[0];
 		this.hideLoader();
+	}
+
+	globalVariables = new Array<string>();
+
+	private async getGlobalVariables() {
+		const [stage] = this.entities;
+
+		if (stage.blocks) {
+			return stage.variables.map(v => v[0]);
+		}
+
+		const babel = await import("@babel/core");
+		const tree = await babel.parseAsync(stage.code);
+
+		if (!tree) {
+			return [];
+		}
+
+		const variables = new Array<string>();
+
+		for (const statement of tree.program.body) {
+			if (statement.type !== "VariableDeclaration") {
+				continue;
+			}
+
+			if (statement.kind !== "let") {
+				continue;
+			}
+
+			for (const declaration of statement.declarations) {
+				if (declaration.id.type !== "Identifier") {
+					continue;
+				}
+				variables.push(Generator.unescape(declaration.id.name));
+			}
+		}
+
+		return variables;
+	}
+
+	async setGlobalVariables() {
+		this.globalVariables = await this.getGlobalVariables();
 	}
 
 	async export() {

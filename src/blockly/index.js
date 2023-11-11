@@ -52,6 +52,7 @@ for (const type in blocksData) {
 		...blocksData[type],
 	});
 
+	// Many blocks follow the Scrap Engine API, so we can generate them automatically
 	const args0 = blocksData[type].args0;
 	const isEvent = !(
 		"output" in blocksData[type] || "previousStatement" in blocksData[type]
@@ -70,6 +71,8 @@ for (const type in blocksData) {
 				});
 
 				if (isEvent) {
+					// We lie to end users 
+					// so they do not need to use await
 					let arg = "function () {";
 
 					if (generator.entity) {
@@ -90,9 +93,9 @@ for (const type in blocksData) {
 					args.push(arg + "}");
 				}
 
-				code = `${
-					!generator.entity || isEvent ? "" : "await "
-				}${code}(${args.join(", ")})`;
+				// 1. add await if this is real output
+				// 2. add arguments
+				code = `${!generator.entity ? "" : "await "}${code}(${args.join(", ")})`;
 			}
 
 			if (block.outputConnection) {
@@ -104,6 +107,7 @@ for (const type in blocksData) {
 	}
 }
 
+// Just to make it look better
 Blockly.FlyoutButton.TEXT_MARGIN_X = 20;
 Blockly.FlyoutButton.TEXT_MARGIN_Y = 10;
 

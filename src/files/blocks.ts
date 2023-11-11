@@ -1,7 +1,6 @@
 import * as Blockly from "blockly/core";
 import {parse} from "doctrine";
 import {Types, Error, allBlocks, Generator} from "../blockly";
-import type {Entity} from "../entities";
 import {Identifier, type CallExpression, type MemberExpression, type Node, StringLiteral, IfStatement} from "@babel/types";
 import {bind} from "../decorators";
 
@@ -9,7 +8,7 @@ export default class CodeParser {
 	connection: Blockly.Connection | null;
 	functions = new Map<string, any>();
 
-	constructor(readonly workspace: Blockly.Workspace, readonly entities: Entity[]) {
+	constructor(readonly workspace: Blockly.Workspace) {
 		this.connection = null;
 	}
 
@@ -476,14 +475,14 @@ export default class CodeParser {
 				const block = this.workspace.newBlock("function");
 
 				const extraState = {
-					name: id.name,
+					name: Generator.unescape(id.name),
 					params: params.map(param => {
 						if (param.type !== "Identifier") {
 							throw new SyntaxError("Only simple identifiers are supported");
 						}
 
 						return {
-							name: param.name,
+							name: Generator.unescape(param.name),
 							type: typeMap.get(param.name) || "",
 						};
 					}),
