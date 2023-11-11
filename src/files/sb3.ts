@@ -2,6 +2,10 @@ import JSZip from "jszip";
 import {Sprite, Stage} from "../entities";
 import * as Blockly from "blockly/core";
 
+const illegalRe = /[\/\?<>\\:\*\|":#]+/g;
+const controlRe = /[\x00-\x1f\x80-\x9f]/g;
+const reservedRe = /^\.+$/;
+
 class SB3 {
     target!: SB3.Target;
     transformers: Record<string, (data: SB3.Block) => Promise<Blockly.Block> | Blockly.Block> = {};
@@ -107,21 +111,57 @@ class SB3 {
             return block;
         };
         this.transformers.looks_backdrops = data => {
-            const block = window.app.current.codeWorkspace.newBlock("costume_menu");
+            const block = window.app.current.codeWorkspace.newBlock("backdrop_menu");
             block.setFieldValue(this.assetMap[data.fields.BACKDROP[0]], "NAME");
             return block;
         };
-        this.transformers.looks_switchcostumeto = this.override({
-            opcode: "switchCostumeTo",
-        });
+        this.transformers.looks_switchcostumeto = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("switchCostumeTo");
+            const input = await this.input(data.inputs.COSTUME);
+
+            if (input!.outputConnection!.getCheck()![0] === "Number") {
+                const one = window.app.current.codeWorkspace.newBlock("math_number");
+                one.setFieldValue("1", "NUM");
+
+                const subtract = window.app.current.codeWorkspace.newBlock("arithmetics");
+                subtract.setFieldValue("-", "OP");
+
+                subtract.getInput("A")!.connection!.connect(input!.outputConnection!);
+                subtract.getInput("B")!.connection!.connect(one.outputConnection!);
+
+                block.getInput("COSTUME")!.connection!.connect(subtract.outputConnection!);
+            } else {
+                block.getInput("COSTUME")!.connection!.connect(input!.outputConnection!);
+            }
+
+            return block;
+        };
         this.transformers.looks_nextcostume = this.override({
             opcode: "nextCostume",
         });
-        this.transformers.looks_switchbackdropto = this.override({
-            opcode: "switchBackdropTo",
-            inputs: {
-                BACKDROP: ["COSTUME"]
+        this.transformers.looks_switchbackdropto = async data => {
+            const block = window.app.current.codeWorkspace.newBlock("switchBackdropTo");
+            const input = await this.input(data.inputs.BACKDROP);
+
+            if (input!.outputConnection!.getCheck()![0] === "Number") {
+                const one = window.app.current.codeWorkspace.newBlock("math_number");
+                one.setFieldValue("1", "NUM");
+
+                const subtract = window.app.current.codeWorkspace.newBlock("arithmetics");
+                subtract.setFieldValue("-", "OP");
+
+                subtract.getInput("A")!.connection!.connect(input!.outputConnection!);
+                subtract.getInput("B")!.connection!.connect(one.outputConnection!);
+
+                block.getInput("COSTUME")!.connection!.connect(subtract.outputConnection!);
+            } else {
+                block.getInput("COSTUME")!.connection!.connect(input!.outputConnection!);
             }
+
+            return block;
+        };
+        this.transformers.looks_switchbackdroptoandwait = this.override({
+            opcode: "switchBackdropToWait"
         });
         this.transformers.looks_gotofrontback = data => {
             return data.fields.FRONT_BACK[0] === "front"
@@ -135,16 +175,41 @@ class SB3 {
                 : window.app.current.codeWorkspace.newBlock("goBackward")
                 ;
         };
-        this.transformers.looks_costumenumbername = data => (
-            data.fields.NUMBER_NAME[0] === "number"
-                ? window.app.current.codeWorkspace.newBlock("costumeNumber")
-                : window.app.current.codeWorkspace.newBlock("costumeName")
-        );
-        this.transformers.looks_backdropnumbername = data => (
-            data.fields.NUMBER_NAME[0] === "number"
-                ? window.app.current.codeWorkspace.newBlock("backdropNumber")
-                : window.app.current.codeWorkspace.newBlock("backdropName")
-        );
+        this.transformers.looks_costumenumbername = data => {
+            if (data.fields.NUMBER_NAME[0] === "number") { // Scratch uses 1-based indexing
+                const one = window.app.current.codeWorkspace.newBlock("math_number");
+                one.setFieldValue("1", "NUM");
+
+                const add = window.app.current.codeWorkspace.newBlock("arithmetics");
+                add.setFieldValue("+", "OP");
+
+                const block = window.app.current.codeWorkspace.newBlock("costumeNumber");
+
+                add.getInput("A")!.connection!.connect(one.outputConnection!);
+                add.getInput("B")!.connection!.connect(block.outputConnection!);
+
+                return add;
+            }
+            return this.provideAsset("costumeName");
+        };
+        this.transformers.looks_backdropnumbername = data => {
+            if (data.fields.NUMBER_NAME[0] === "number") { // Scratch uses 1-based indexing
+                const one = window.app.current.codeWorkspace.newBlock("math_number");
+                one.setFieldValue("1", "NUM");
+
+                const add = window.app.current.codeWorkspace.newBlock("arithmetics");
+                add.setFieldValue("+", "OP");
+
+                const block = window.app.current.codeWorkspace.newBlock("backdropNumber");
+
+                add.getInput("A")!.connection!.connect(one.outputConnection!);
+                add.getInput("B")!.connection!.connect(block.outputConnection!);
+
+                return add;
+            }
+
+            return this.provideAsset("backdropName");
+        };
         this.transformers.looks_nextbackdrop = this.override({
             opcode: "nextBackdrop",
         });
@@ -248,6 +313,42 @@ class SB3 {
                 BROADCAST_INPUT: ["MESSAGE"]
             }
         });
+        this.transformers.event_whenbackdropswitchesto = data => {
+            const block = window.app.current.codeWorkspace.newBlock("whenBackdropChangesTo");
+            const backdrop = window.app.current.codeWorkspace.newBlock("backdrop_menu");
+            backdrop.setFieldValue(this.assetMap[data.fields.BACKDROP[0]], "NAME");
+            backdrop.setShadow(true);
+            block.getInput("BACKDROP")!.connection!.connect(backdrop.outputConnection!);
+            return block;
+        };
+        this.transformers.event_whenkeypressed = data => {
+            const key = window.app.current.codeWorkspace.newBlock("key");
+
+            switch (data.fields.KEY_OPTION[0]) {
+                case "space":
+                    key.setFieldValue("Space", "KEY");
+                    break;
+                case "left arrow":
+                    key.setFieldValue("ArrowLeft", "KEY");
+                    break;
+                case "right arrow":
+                    key.setFieldValue("ArrowRight", "KEY");
+                    break;
+                case "up arrow":
+                    key.setFieldValue("ArrowUp", "KEY");
+                    break;
+                case "down arrow":
+                    key.setFieldValue("ArrowDown", "KEY");
+                    break;
+                default:
+                    key.setFieldValue(data.fields.KEY_OPTION[0], "KEY");
+                    break;
+            }
+
+            const block = window.app.current.codeWorkspace.newBlock("whenKeyPressed");
+            block.getInput("KEY")!.connection!.connect(key.outputConnection!);
+            return block;
+        };
 
         // Control
         this.transformers.control_wait = this.override({
@@ -522,20 +623,21 @@ class SB3 {
             add.getInput("A")!.connection!.connect(floor.outputConnection!);
             add.getInput("B")!.connection!.connect(one.outputConnection!);
 
-            const name = this.provide({
+            const name = this.provide(returnBlock, {
                 args: [
                     {
                         name: "__from__",
-                        type: "number"
+                        type: "Number"
                     },
                     {
                         name: "__to__",
-                        type: "number"
+                        type: "Number"
                     }
                 ],
                 name: "random",
-                returns: "Number"
-            }, returnBlock);
+                returns: "Number",
+                comment: "Returns a random number between\n__from__ and __to__ inclusive.\n(JavaScript does not have such a function.)"
+            });
 
             if (returnBlock.disposed) {
                 add.dispose(false);
@@ -725,7 +827,7 @@ class SB3 {
             const paramTypes = (data.mutation!.proccode.match(/%[bns]/g) ?? []).map(e => (
                 e[1] === "s" ? ["String", "Number"] : e[1] === "b" ? "Boolean" : "Number"
             ));
-            
+
             block.loadExtraState!({
                 name,
                 returnType: "",
@@ -828,14 +930,17 @@ class SB3 {
             window.app.current.costumes = [];
             for (const costume of target.costumes) {
                 const filename = `${costume.assetId}.${costume.dataFormat}`;
+                const name = costume.name
+                    .replace(illegalRe, "_")
+                    .replace(controlRe, "_")
+                    .replace(reservedRe, "_");
                 window.app.current.costumes.push(
                     new File(
                         [await zip.file(filename)!.async("blob")],
-                        `${costume.name}.${costume.dataFormat}`,
+                        this.assetMap[costume.name] = `${name}.${costume.dataFormat}`,
                         {type: `image/${costume.dataFormat}${costume.dataFormat === "svg" ? "+xml" : ""}`}
                     )
                 );
-                this.assetMap[costume.name] = `${costume.name}.${costume.dataFormat}`;
             }
             window.app.current.update();
             window.app.current.sounds = [];
@@ -982,7 +1087,40 @@ class SB3 {
                 if (inner && inner.previousConnection) {
                     connection!.connect(inner.previousConnection);
                 } else if (inner && inner.outputConnection) {
-                    connection!.connect(inner.outputConnection);
+                    const didConnect = connection!.connect(inner.outputConnection);
+
+                    // Scratch is not strongly typed, so we need to convert the type
+                    if (!didConnect) {
+                        switch (connection!.getCheck()![0]) {
+                            case "Number": {
+                                const block = window.app.current.codeWorkspace.newBlock("number");
+                                block.getInput("VALUE")!.connection!.connect(inner.outputConnection);
+
+                                connection!.connect(block.outputConnection!);
+                                break;
+                            }
+                            case "String": {
+                                const block = window.app.current.codeWorkspace.newBlock("string");
+                                block.getInput("VALUE")!.connection!.connect(inner.outputConnection);
+
+                                connection!.connect(block.outputConnection!);
+                                break;
+                            }
+                            case "Boolean": {
+                                const block = window.app.current.codeWorkspace.newBlock("compare");
+                                block.setFieldValue("==", "OP");
+
+                                const trueBlock = window.app.current.codeWorkspace.newBlock("iterables_string");
+                                trueBlock.setFieldValue("true", "TEXT");
+
+                                block.getInput("A")!.connection!.connect(trueBlock.outputConnection!);
+                                block.getInput("B")!.connection!.connect(inner.outputConnection);
+
+                                connection!.connect(block.outputConnection!);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             return block;
@@ -1029,7 +1167,7 @@ class SB3 {
      * However, it is sometimes possible to emulate the block using a function.
      * This is a helper function to create a function that can be used to emulate a block.
      */
-    provide(init: SB3.Provide, _block: Blockly.Block) {
+    provide(_block: Blockly.Block, init: SB3.Provide) {
         if (init.name in this.provided) {
             _block.dispose(false);
             return this.provided[init.name];
@@ -1045,8 +1183,67 @@ class SB3 {
         });
 
         block.nextConnection!.connect(_block.previousConnection!);
-
         return this.provided[init.name] = name;
+    }
+
+    /**
+     * Sometimes, user wants to know costume or backdrop name.
+     * However, Scrap renames the assets to a valid filename.
+     * @param type The type of asset to provide.
+     * @returns Call block that calls the provided function.
+     */
+    provideAsset(type: string) {
+        const block = window.app.current.codeWorkspace.newBlock("controls_if");
+        block.loadExtraState!({
+            hasElse: true,
+            elseIfCount: this.target.costumes.length - 1
+        });
+
+        for (let i = 0; i < this.target.costumes.length; i++) {
+            const equals = window.app.current.codeWorkspace.newBlock("compare");
+            equals.setFieldValue("==", "OP");
+
+            const assetBlock = window.app.current.codeWorkspace.newBlock(type);
+            const nameBlock = window.app.current.codeWorkspace.newBlock("iterables_string");
+
+            nameBlock.setFieldValue(this.assetMap[this.target.costumes[i].name], "TEXT");
+            equals.getInput("A")!.connection!.connect(assetBlock.outputConnection!);
+            equals.getInput("B")!.connection!.connect(nameBlock.outputConnection!);
+
+            block.getInput(`IF${i}`)!.connection!.connect(equals.outputConnection!);
+
+            const returnBlock = window.app.current.codeWorkspace.newBlock("return");
+            returnBlock.loadExtraState!({
+                output: "String"
+            });
+
+            returnBlock.getInput("VALUE")!.connection!.targetBlock()!.setFieldValue(this.target.costumes[i].name, "TEXT");
+            block.getInput(`DO${i}`)!.connection!.connect(returnBlock.previousConnection!);
+        }
+
+        const throwBlock = window.app.current.codeWorkspace.newBlock("throw");
+        const error = window.app.current.codeWorkspace.newBlock("iterables_string");
+        error.setFieldValue("Invalid costume name", "TEXT");
+        error.setShadow(true);
+
+        throwBlock.getInput("ERROR")!.connection!.connect(error.outputConnection!);
+        block.getInput("ELSE")!.connection!.connect(throwBlock.previousConnection!);
+
+        const name = this.provide(block, {
+            args: [],
+            name: type,
+            returns: "String",
+            comment: "Returns the name of the asset before renaming."
+        });
+
+        const call = window.app.current.codeWorkspace.newBlock("call");
+        call.loadExtraState!({
+            name,
+            params: [],
+            returnType: "String"
+        });
+
+        return call;
     }
 }
 
@@ -1058,6 +1255,7 @@ declare namespace SB3 {
     }
 
     interface Provide {
+        comment: string;
         returns: string;
         args: {
             name: string;

@@ -209,7 +209,7 @@ export default class CodeParser {
 										if (Types.indexOf(paramType!.name) !== -1) {
 											varType = paramType!.name;
 										} else {
-											throw new SyntaxError(`Unsupported type ${paramType!.type}. ${Error}`);
+											throw new SyntaxError(`Unsupported type ${paramType!.name}. ${Error}`);
 										}
 									} else if (paramType!.type === "ArrayType") {
 										varType = "Array";
@@ -449,7 +449,7 @@ export default class CodeParser {
 										if (Types.indexOf(paramType!.name) !== -1) {
 											typeMap.set(name!, paramType!.name);
 										} else {
-											throw new SyntaxError(`Unsupported type ${paramType!.type}. ${Error}`);
+											throw new SyntaxError(`Unsupported type ${paramType!.name}. ${Error}`);
 										}
 									} else if (paramType!.type === "ArrayType") {
 										typeMap.set(name!, "Array");
@@ -808,11 +808,13 @@ export default class CodeParser {
 				const block = this.block(operator === "=" ? "setVariable" : "changeVariable");
 				this.comments(block, node);
 
-				if (!window.app.current.variables.some(variable => variable[0] === left.name)) {
-					throw new SyntaxError(`Variable ${left.name} is not defined`);
+				const name = Generator.unescape(left.name);
+
+				if (!window.app.current.variables.some(variable => variable[0] === name) && !window.app.globalVariables.includes(name)) {
+					throw new SyntaxError(`Variable ${name} is not defined`);
 				}
 
-				block.setFieldValue(left.name, "VAR");
+				block.setFieldValue(name, "VAR");
 
 				this.connection = block.getInput("VALUE")!.connection!;
 

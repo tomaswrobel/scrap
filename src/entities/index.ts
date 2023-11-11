@@ -57,7 +57,6 @@ class Entity {
 		this.costumes.push(initialCostume);
 		this.outputGenerator.entity = this;
 		this.exportGenerator.entity = this;
-		this.outputGenerator.INDENT = "";
 		this.thumbnail.alt = "";
 		this.update();
 	}
@@ -80,7 +79,7 @@ class Entity {
 					{} as Record<string, string>
 				),
 				null,
-				"\t"
+				4
 			);
 		}
 
@@ -97,7 +96,7 @@ class Entity {
 				};
 			}, {} as Record<string, string>),
 			null,
-			"\t"
+			4
 		);
 	}
 

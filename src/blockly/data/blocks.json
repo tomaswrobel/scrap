@@ -530,6 +530,23 @@
 			"costume_menu"
 		]
 	},
+	"backdrop_menu": {
+		"message0": "%1",
+		"args0": [
+			{
+				"type": "input_dummy",
+				"name": "DUMMY"
+			}
+		],
+		"output": "String",
+		"style": "variable_blocks",
+		"extensions": [
+			// This will inject a field with 
+			// the backdrops into the dummy input
+			"backdrop_menu",
+			"parent_style"
+		]
+	},
 	"sound": {
 		"message0": "%1",
 		"args0": [
@@ -1003,7 +1020,10 @@
 			{
 				"type": "input_value",
 				"name": "COSTUME",
-				"check": "String"
+				"check": [
+					"String",
+					"Number"
+				]
 			}
 		],
 		"previousStatement": null,
@@ -1018,13 +1038,33 @@
 		"args0": [],
 		"style": "Looks"
 	},
+	"switchBackdropToWait": {
+		"message0": "switch backdrop to %1 and wait",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "BACKDROP",
+				"check": [
+					"String",
+					"Number"
+				]
+			}
+		],
+		"previousStatement": null,
+		"nextStatement": null,
+		"style": "Looks",
+		"inputsInline": true
+	},
 	"switchBackdropTo": {
 		"message0": "switch backdrop to %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "COSTUME",
-				"check": "String"
+				"check": [
+					"String", 
+					"Number"
+				]
 			}
 		],
 		"previousStatement": null,
@@ -1035,6 +1075,7 @@
 		"message0": "next backdrop",
 		"previousStatement": null,
 		"nextStatement": null,
+		"args0": [],
 		"style": "Looks"
 	},
 	"show": {
@@ -1121,14 +1162,14 @@
 		"output": "Number",
 		"style": "Looks"
 	},
-	"costume": {
-		"message0": "costume",
-		"output": "Number",
+	"costumeName": {
+		"message0": "costume name",
+		"output": "String",
 		"style": "Looks"
 	},
-	"backdrop": {
-		"message0": "backdrop",
-		"output": "Number",
+	"backdropName": {
+		"message0": "backdrop name",
+		"output": "String",
 		"style": "Looks"
 	},
 	"costumeNumber": {
@@ -1351,6 +1392,19 @@
 	"whenFlag": {
 		"inputsInline": true,
 		"message0": "when flag clicked",
+		"nextStatement": null,
+		"style": "Events"
+	},
+	"whenBackdropChangesTo": {
+		"inputsInline": true,
+		"message0": "when backdrop changes to %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "BACKDROP",
+				"check": "String"
+			}
+		],
 		"nextStatement": null,
 		"style": "Events"
 	},

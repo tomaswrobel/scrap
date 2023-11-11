@@ -71,7 +71,6 @@ export default <Partial<ReturnBlock>>{
 			const block = this.workspace.newBlock(TypeToShadow[type]);
 			block.setShadow(true);
 			block.initSvg?.();
-			block.render?.();
 
 			input.connection!.connect(block.outputConnection!);
 		}

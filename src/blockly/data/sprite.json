@@ -392,6 +392,36 @@
             },
             {
                 "kind": "block",
+                "type": "switchBackdropTo",
+                "inputs": {
+                    "COSTUME": {
+                        "shadow": {
+                            "type": "backdrop_menu"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "switchBackdropToWait",
+                "inputs": {
+                    "BACKDROP": {
+                        "shadow": {
+                            "type": "backdrop_menu"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "nextBackdrop"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
                 "type": "show"
             },
             {
@@ -464,7 +494,11 @@
             },
             {
                 "kind": "block",
-                "type": "costume"
+                "type": "costumeName"
+            },
+            {
+                "kind": "block",
+                "type": "costumeNumber"
             },
             {
                 "kind": "block",
@@ -692,6 +726,17 @@
                             "fields": {
                                 "NUM": 1
                             }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "whenBackdropChangesTo",
+                "inputs": {
+                    "BACKDROP": {
+                        "shadow": {
+                            "type": "backdrop_menu"
                         }
                     }
                 }

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.4.1] - 2023-11-11
+
+## Fixed
+
+- backdrop / costume accessors now work correctly.
+- conversion from JS to blocks now handles variables correctly.
+
+## Added
+
+- User can now export the project with CDN links to Scrap Engine, minimizing the size of the project.
+
 ## [3.4.0] - 2023-11-11
 
 ### Fixed
@@ -452,7 +463,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.4.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.4.1...HEAD
+[3.4.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.1
 [3.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.0
 [3.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.3.0
 [3.2.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.2.1

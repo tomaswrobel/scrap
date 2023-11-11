@@ -1,4 +1,5 @@
 import {Entity, Sprite, Stage} from "../entities";
+import {version} from "scrap-engine/package.json";
 import Workspace from "../workspace";
 import Component from "../tab";
 import Paint from "../paint";
@@ -18,6 +19,7 @@ import SB3 from "../files/sb3";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
+const engineCDN = "https://unpkg.com/scrap-engine@" + version;
 
 export default class App {
 	container = document.getElementById("root")!;
@@ -344,9 +346,26 @@ export default class App {
 	}
 
 	async export() {
+		const type = await Parley.fire({
+			title: "Export",
+			body: "How do you want to include the engine?",
+			input: "select",
+			inputOptions: {
+				"inline": "Inline (larger file size)",
+				"external": "External (requires internet connection to run)"
+			}
+		});
+
+		if (type === false) {
+			return;
+		}
+
 		const zip = new JSZip();
 
-		zip.file("engine.js", engineScript);
+		if (type === "inline") {
+			zip.file("engine.js", engineScript);
+			zip.file("style.css", engineStyle);
+		}
 
 		let scripts = "";
 
@@ -355,15 +374,13 @@ export default class App {
 			scripts += `\t<script src="${e.name}/script.js"></script>\n`;
 		}
 
-		zip.file("style.css", engineStyle);
-
 		zip.file("index.html", `<!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Scrap Project</title>
 	<meta charset="utf-8">
-	<link href="style.css" rel="stylesheet">
-	<script src="engine.js"></script>
+	<link href="${type === "inline" ? "style.css" : engineCDN + "/dist/style.css"}" rel="stylesheet">
+	<script src="${type === "inline" ? "engine.js" : engineCDN + "/dist/engine.js"}"></script>
 </head>
 <body>
 ${scripts.trimEnd()}

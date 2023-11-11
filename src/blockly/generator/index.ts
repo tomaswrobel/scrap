@@ -82,7 +82,7 @@ class Generator extends Blockly.CodeGenerator {
 		this.addReservedWords(`${Generator.ReservedWords}`);
 
 		this.forBlock = Generator.blocks as Blockly.CodeGenerator["forBlock"];
-		this.INDENT = "\t";
+		this.INDENT = "    ";
 	}
 
 	init(workspace: Blockly.Workspace) {
@@ -183,11 +183,11 @@ class Generator extends Blockly.CodeGenerator {
 
 			if (this.entity instanceof Sprite) {
 				code += "Sprite";
-				params.push(JSON.stringify(this.entity.init));
-				code += `(${params},${this.entity.current});\n`;
+				params.push(JSON.stringify(this.entity.init, null, this.INDENT));
+				code += `(${params.join(", ")}, ${this.entity.current});\n`;
 				code += `${Generator.escape(this.entity.name)}.addTo(Stage);\n`;
 			} else {
-				code += `Stage(${params},${this.entity.current});\n`;
+				code += `Stage(${params.join(", ")}, ${this.entity.current});\n`;
 			}
 
 			if (result || definitions) {
@@ -217,7 +217,7 @@ class Generator extends Blockly.CodeGenerator {
 					{} as Record<string, string>
 				),
 				null,
-				"\t"
+				this.INDENT
 			);
 		} else {
 			return JSON.stringify(
@@ -229,7 +229,7 @@ class Generator extends Blockly.CodeGenerator {
 					{} as Record<string, string>
 				),
 				null,
-				"\t"
+				this.INDENT
 			);
 		}
 	}
@@ -364,10 +364,9 @@ Generator.blocks.key = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("KEY")), Order.ATOMIC];
 };
 
-Generator.blocks.costume_menu = Generator.blocks.sound = function (block: Blockly.Block) {
+Generator.blocks.costume_menu = Generator.blocks.backdrop_menu = Generator.blocks.sound = function (block: Blockly.Block) {
 	return [JSON.stringify(block.getFieldValue("NAME")), Order.ATOMIC];
 };
-
 Generator.blocks.repeat = function (block: Blockly.Block, generator) {
 	const times = generator.valueToCode(block, "TIMES", Order.NONE) || "0";
 	const i = Blockly.Variables.generateUniqueNameFromOptions("i", window.app.current.variables.map(t => t[0]));
@@ -581,6 +580,10 @@ Generator.blocks.motion_angle = function (block: Blockly.Block) {
 
 Generator.blocks.text_or_number = function (block: Blockly.Block) {
 	const value = block.getFieldValue("VALUE");
+
+	if (value === "") {
+		return ['""', Order.ATOMIC];
+	}
 
 	if (!isNaN(Number(value))) {
 		return [value, Order.ATOMIC];

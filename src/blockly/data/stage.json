@@ -49,7 +49,18 @@
                 "inputs": {
                     "COSTUME": {
                         "shadow": {
-                            "type": "costume_menu"
+                            "type": "backdrop_menu"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "switchBackdropToWait",
+                "inputs": {
+                    "BACKDROP": {
+                        "shadow": {
+                            "type": "backdrop_menu"
                         }
                     }
                 }
@@ -71,7 +82,11 @@
             },
             {
                 "kind": "block",
-                "type": "backdrop"
+                "type": "backdropName"
+            },
+            {
+                "kind": "block",
+                "type": "backdropNumber"
             }
         ]
     },
@@ -219,6 +234,17 @@
                             "fields": {
                                 "NUM": 1
                             }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "whenBackdropChangesTo",
+                "inputs": {
+                    "BACKDROP": {
+                        "shadow": {
+                            "type": "backdrop_menu"
                         }
                     }
                 }
