@@ -11,8 +11,10 @@ Welcome to the official repository of **Scrap** - the tool designed to simplify 
   - [Installation](#installation)
   - [Usage](#usage)
 - [Features](#features)
+- [Recommended Browsers](#recommended-browsers)
 - [Roadmap](#roadmap)
 - [Scrap Logo Explanation](#scrap-logo-explanation)
+- [Under the Hood](#under-the-hood)
 - [License](#license)
 
 ## Introduction
@@ -27,15 +29,44 @@ Scratch is an excellent platform for beginners to get started with programming, 
 
 - **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by [Prism Code Editor](https://prism-code-editor.netlify.app).
 
-- **SB3 Support** (INCOMPLETE) - Scrap supports the SB3 file format, which is the default file format used by Scratch 3.0. This allows you to import your Scratch projects into Scrap and continue working on them.
+- **SB3 Support** \[*incomplete*\] - Scrap supports the SB3 file format, which is the default file format used by Scratch 3.0. This allows you to import your Scratch projects into Scrap and continue working on them.
 
 - **No Scratch's code in use** - Although Scrap shares a visual resemblance with Scratch, it doesn't use any of Scratch's code. I know Scratch's code is open-source, but I didn't want to use it because I wanted to make Scrap a bit more unique.
+
+- **Any modern web browser** - Scrap is a web application that runs in your web browser. This means you can use Scrap on any modern web browser, including Google Chrome, Mozilla Firefox, Microsoft Edge, Opera, and more. Scrap is **NOT** supported on Internet Explorer and Edge Legacy.
+
+## Recommended Browsers
+
+All modern web browsers should work fine with Scrap. If you use Chromium-based browsers, such as **Google Chrome**, **Microsoft Edge**, or **Opera**, you'll get the best experience. If you use Firefox, you'll get a slightly worse experience, but it should still work fine. If you use any other browser, Scrap should still work fine, but I haven't tested it on any other browser than the ones mentioned above.
+
+This is the Scrap's browser support matrix:
+
+| Browser           | Supported? | Notes                                 |
+| ----------------- | ---------- | ------------------------------------- |
+| Microsoft Edge    | Yes        | Haven't you switched from Chrome yet? |
+| Google Chrome     | Yes        | Recommended                           |
+| Opera / Opera GX  | Yes        | Recommended                           |
+| Arc Browser       | Yes        | Recommended                           |
+| Mozilla Firefox   | Yes        | Works, but not recommended            |
+| Safari            | Not really | It should work, but not tested        |
+| Internet Explorer | Not at all | Not supported                         |
+| Edge Legacy       | No         | Not supported                         |
+
+"Supported" means that I will accept bug reports for that browser. If you use another one, I won't accept bug reports for it.
+
+Other modern browsers should work fine, but it will most likely miss some features, such as:
+- PWA support
+- Service Worker support
+- Eye Dropper tool inside the color fields
+- HTML Input styling (range, color)
+
+In the worst case, Scrap will not work at all. You'll get non-sensical errors, and the interface will be broken. This will most likely happen on older browsers, such as Internet Explorer and Edge Legacy.
 
 ## Getting Started
 
 ### Installation
 
-> **NOTE**: If you just want to use Scrap, you can access it online at [scrap.tomaswrobel.com](https://scrap.tomaswrobel.com). You don't need to install anything to use Scrap online. (Although you can install it as a Progressive Web App if you have a Chromium-based browser.)
+> **NOTE**: If you just want to use Scrap, you can access it online at [scrap.tomaswrobel.dev](https://scrap.tomaswrobel.dev). You don't need to install anything to use Scrap online.
 
 To get started with Scrap, you need to have Node.js installed on your machine. If you don't have it yet, you can download and install it from the official [Node.js website](https://nodejs.org/).
 
@@ -71,13 +102,24 @@ Scrap is still in its early stages of development. Here's what's planned for the
 
 The logo for Scrap shares a visual resemblance with the Scratch logo as a deliberate homage. Here's what you need to know:
 
-- **Font Choice**: Scrap uses the "Black Boys on Mopeds" font, the same as Scratch's logo, which is freeware and freely usable.
+- **Font Choice**: Scrap uses the "Black Boys on Mopeds" font, the same as Scratch's logo, which is freeware and freely usable &ndash; for non-commercial purposes.
 
 - **No Copyright Infringement**: Scrap respects copyright laws and does not infringe on Scratch's intellectual property. The similarity is a tribute, not a copy.
 
 - **Non-Commercial**: Scrap is a non-commercial project, and its logo is used to recognize Scratch's influence on its mission to help beginners transition from Scratch to JavaScript.
 
 In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.
+
+## Under the Hood
+
+For more info, you can take a look at the [blog post](https://tomaswrobel.dev/blog/scrap.mdx) I wrote about Scrap's development.
+
+**Microsoft**: Scrap is written in **TypeScript**. It doesn't use any framework. I use **Visual Studio Code** as my code editor. I develop with the help of **GitHub**, and its Copilot. Also, I use **GitHub Actions** to automate the build and deployment process. The resulting code is hosted on **GitHub Pages**. Primarily, I develop on **Windows 11** and test on **Microsoft Edge**.
+
+**Google**: Scrap wouldn't be possible without **Blockly**. (In fact, Scratch relies on Blockly too.) When I'm at school, I use a **Chromebok** to take notes and, when the teacher isn't looking, to code Scrap.
+
+**Others**: Thanks to all developers of the libraries I use. Thank you Scratch for being so bad so I had to make Scrap. (Just kidding, I love Scratch.) Thank you, **you**, for reading this. Thank you, **you**, for using Scrap. Thank you, **you**, for contributing to Scrap.
+
 
 ## License
 
