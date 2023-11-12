@@ -1,4 +1,4 @@
-@import "../theme";
+@import "../globals";
 
 .media-list {
     display: flex;
@@ -9,7 +9,7 @@
     padding: 10px;
     background: $background;
 
-    + .fab {
+    +.fab {
         margin-bottom: 10px;
     }
 }
@@ -22,7 +22,7 @@
     border-radius: 10px;
     border: 2px solid hsla(0, 0%, 0%, 0.15);
 
-    > img {
+    >img {
         display: block;
         margin: auto;
         height: 60px;

@@ -1,7 +1,8 @@
 import line from "./icons/line.svg";
-import pen from "./icons/pen.svg";
+import brush from "./icons/brush.svg";
 import fill from "./icons/fill.svg";
 import eraser from "./icons/eraser.svg";
+import marquee from "./icons/marquee.svg";
 
 /**
  * A tool that can be used to draw on the canvas.
@@ -12,11 +13,21 @@ export abstract class Tool {
 	/** The canvas context used to draw on */
 	ctx?: CanvasRenderingContext2D;
 
-	startX?: number;
-	startY?: number;
+	startX = NaN;
+	startY = NaN;
+	lastX = NaN;
+	lastY = NaN;
+	width = 1;
 
-	/** Whether or not this tool requires a layer to be drawn on */
-	needsLayer = true;
+	/** 
+	 * Whether or not this tool requires a layer to be drawn on.
+	 *
+	 * If true, the layer will be created when this tool is selected.
+	 * After the tool ends, the layer becomes movable.
+	 * 
+	 * If false, the tool will draw directly on the canvas.
+	 */
+	movable = true;
 
 	readonly ICON_WIDTH = 24;
 	readonly ICON_HEIGHT = 24;
@@ -24,7 +35,36 @@ export abstract class Tool {
 	/**
 	 * Selects this tool and returns an iterable of elements to be added to the tool container.
 	 */
-	abstract select(): IterableIterator<Node | string>;
+	*select(): Generator<Node> {
+		this.button.classList.add("selected");
+
+		const input = document.createElement("input");
+
+		input.type = "range";
+		input.min = "1";
+		input.max = "20";
+		input.id = "width";
+		input.style.setProperty("--min", "1");
+		input.style.setProperty("--max", "20");
+		input.value = this.width.toString();
+		input.style.setProperty("--value", input.value);
+		const unit = document.createElement("span");
+		unit.classList.add("unit");
+		unit.textContent = input.value;
+
+		input.addEventListener("input", () => {
+			input.style.setProperty("--value", input.value);
+			this.width = Number.parseInt(input.value);
+			unit.textContent = input.value;
+		});
+
+		const label = document.createElement("span");
+		label.textContent = "Stroke width: ";
+
+		yield label;
+		yield input;
+		yield unit;
+	}
 
 	/**
 	 * Finishes drawing on the canvas
@@ -37,7 +77,10 @@ export abstract class Tool {
 	 * @param x current x position
 	 * @param y current y position
 	 */
-	abstract step(x: number, y: number): void;
+	step(x: number, y: number) {
+		this.lastX = x;
+		this.lastY = y;
+	}
 
 	/**
 	 * Deselect this tool
@@ -53,13 +96,56 @@ export abstract class Tool {
 	 * @param x The starting x position
 	 * @param y The starting y position
 	 */
-	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number): void {
+	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		ctx.strokeStyle = color;
 		ctx.fillStyle = color;
 
 		this.startX = x;
 		this.startY = y;
 		this.ctx = ctx;
+	}
+
+	constructor(title: string, img?: Pick<HTMLImageElement, "alt" | "src">) {
+		this.button.type = "button";
+		this.button.title = title;
+
+		img && this.button.appendChild(
+			Object.assign(
+				new Image(this.ICON_WIDTH, this.ICON_HEIGHT),
+				img
+			)
+		);
+	}
+}
+
+export abstract class DrawingTool extends Tool {
+	width = 1;
+
+	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
+		super.start(ctx, color, x, y);
+		ctx.lineWidth = this.width;
+
+		ctx.lineCap = "round";
+		ctx.lineJoin = "round";
+
+		ctx.beginPath();
+		ctx.moveTo(x, y);
+	}
+
+	end(ctx: CanvasRenderingContext2D) {
+		ctx.drawImage(this.ctx!.canvas, 0, 0);
+
+		this.startX = NaN;
+		this.startY = NaN;
+		this.lastX = NaN;
+		this.lastY = NaN;
+		this.ctx = undefined;
+	}
+
+	step(x: number, y: number) {
+		super.step(x, y);
+		this.ctx!.lineTo(x, y);
+		this.ctx!.stroke();
 	}
 }
 
@@ -72,8 +158,8 @@ export abstract class ShapeTool extends Tool {
 	 */
 	outline = false;
 
-	constructor() {
-		super();
+	constructor(title: string) {
+		super(title);
 		const shape = this.shape();
 		shape.style.fill = "#575E75";
 		this.button.appendChild(this.wrap(shape));
@@ -93,23 +179,18 @@ export abstract class ShapeTool extends Tool {
 		return root;
 	}
 
-	*select() {
+	*select(): Generator<Node> {
 		this.button.classList.add("selected");
 
 		const filled = document.createElement("button");
-		filled.classList.add("selected");
-		const filledShape = this.shape();
-		filledShape.style.fill = "#575E75";
-		filledShape.style.transform = "scale(0.9)";
-		filledShape.style.transformOrigin = "center";
+		filled.classList.add("selected", "fill", "shape-button");
+		filled.type = "button";
+		filled.title = "Filled";
 
 		const outline = document.createElement("button");
-		const outlinedShape = this.shape();
-		outlinedShape.style.stroke = "#575E75";
-		outlinedShape.style.strokeWidth = "3";
-		outlinedShape.style.fill = "none";
-		outlinedShape.style.transform = "scale(0.9)";
-		outlinedShape.style.transformOrigin = "center";
+		outline.classList.add("outline", "shape-button");
+		outline.type = "button";
+		outline.title = "Outlined";
 
 		outline.addEventListener("click", () => {
 			filled.classList.remove("selected");
@@ -123,20 +204,28 @@ export abstract class ShapeTool extends Tool {
 			this.outline = false;
 		});
 
-		filled.appendChild(this.wrap(filledShape));
-		outline.appendChild(this.wrap(outlinedShape));
+		filled.appendChild(this.wrap(this.shape()));
+		outline.appendChild(this.wrap(this.shape()));
 
 		yield filled;
 		yield outline;
+		yield* super.select();
+	}
+
+	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
+		super.start(ctx, color, x, y);
+		ctx.lineCap = "square";
+		ctx.lineJoin = "miter";
+		ctx.closePath();
 	}
 
 	/**
 	 * Merges the drawing into the canvas
 	 * @param ctx The canvas context to draw on
 	 */
-	end(ctx: CanvasRenderingContext2D): void {
-		ctx.drawImage(this.ctx!.canvas, 0, 0);
-		delete this.ctx;
+	end(_ctx: CanvasRenderingContext2D) {
+		// Actually, since my shape is drawn when the moving ends,
+		// I don't need to do anything here.
 	}
 
 	/**
@@ -145,78 +234,41 @@ export abstract class ShapeTool extends Tool {
 	abstract shape(): SVGElement;
 }
 
-export abstract class DrawingTool extends Tool {
-	width = 1;
-
-	constructor(img: string) {
-		super();
-		const image = new Image(this.ICON_WIDTH, this.ICON_HEIGHT);
-		image.src = img;
-		this.button.appendChild(image);
-	}
-
-	*select() {
-		this.button.classList.add("selected");
-
-		const input = document.createElement("input");
-
-		input.type = "range";
-		input.min = "1";
-		input.max = "10";
-		input.value = this.width.toString();
-
-		input.addEventListener("input", () => {
-			this.width = Number.parseInt(input.value);
+export class Brush extends DrawingTool {
+	constructor() {
+		super("Draw freely", {
+			src: brush,
+			alt: "Brush"
 		});
-
-		yield "Width: ";
-		yield input;
-	}
-
-	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
-		super.start(ctx, color, x, y);
-		ctx.lineWidth = this.width;
-		ctx.lineCap = "round";
-		ctx.lineJoin = "round";
-
-		ctx.beginPath();
-		ctx.moveTo(x, y);
-	}
-
-	end(ctx: CanvasRenderingContext2D) {
-		ctx.drawImage(this.ctx!.canvas, 0, 0);
-		delete this.ctx;
-		delete this.startX;
-		delete this.startY;
-	}
-
-	step(x: number, y: number): void {
-		this.ctx!.lineTo(x, y);
-		this.ctx!.stroke();
 	}
 }
 
-export class Pen extends DrawingTool {
+export class Line extends Tool {
 	constructor() {
-		super(pen);
-	}
-}
-
-export class Line extends DrawingTool {
-	constructor() {
-		super(line);
+		super("Draw straight lines", {
+			src: line,
+			alt: "Line"
+		});
 	}
 
 	step(x: number, y: number) {
+		this.lastX = x;
+		this.lastY = y;
+
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 		this.ctx!.beginPath();
-		this.ctx!.moveTo(this.startX!, this.startY!);
-		this.ctx!.lineTo(x, y);
+		this.ctx!.moveTo(this.startX, this.startY);
+		this.ctx!.lineTo(this.lastX, this.lastY);
 		this.ctx!.stroke();
 	}
+
+	end(_ctx: CanvasRenderingContext2D) {}
 }
 
 export class Rectangle extends ShapeTool {
+	constructor() {
+		super("Draw rectangles.");
+	}
 	shape() {
 		const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 		rect.setAttribute("x", "0");
@@ -226,17 +278,22 @@ export class Rectangle extends ShapeTool {
 		return rect;
 	}
 	step(x: number, y: number) {
+		super.step(x, y);
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 
 		if (this.outline) {
-			this.ctx!.strokeRect(this.startX!, this.startY!, x - this.startX!, y - this.startY!);
+			this.ctx!.strokeRect(this.startX, this.startY, x - this.startX, y - this.startY);
 		} else {
-			this.ctx!.fillRect(this.startX!, this.startY!, x - this.startX!, y - this.startY!);
+			this.ctx!.fillRect(this.startX, this.startY, x - this.startX, y - this.startY);
 		}
 	}
 }
 
 export class Ellipse extends ShapeTool {
+	constructor() {
+		super("Draw ellipses.");
+	}
+
 	shape() {
 		const ellipse = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
 		ellipse.setAttribute("cx", `${this.ICON_WIDTH / 2}`);
@@ -247,14 +304,15 @@ export class Ellipse extends ShapeTool {
 	}
 
 	step(x: number, y: number) {
+		super.step(x, y);
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 
 		this.ctx!.beginPath();
 		this.ctx!.ellipse(
-			this.startX! + (x - this.startX!) / 2,
-			this.startY! + (y - this.startY!) / 2,
-			Math.abs(x - this.startX!) / 2,
-			Math.abs(y - this.startY!) / 2,
+			this.startX + (x - this.startX) / 2,
+			this.startY + (y - this.startY) / 2,
+			Math.abs(x - this.startX) / 2,
+			Math.abs(y - this.startY) / 2,
 			0,
 			0,
 			2 * Math.PI
@@ -265,6 +323,10 @@ export class Ellipse extends ShapeTool {
 }
 
 export class Triangle extends ShapeTool {
+	constructor() {
+		super("Draw triangles.");
+	}
+
 	shape() {
 		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		path.setAttribute(
@@ -275,12 +337,13 @@ export class Triangle extends ShapeTool {
 	}
 
 	step(x: number, y: number) {
+		super.step(x, y);
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 
 		this.ctx!.beginPath();
-		this.ctx!.moveTo(this.startX!, this.startY!);
+		this.ctx!.moveTo(this.startX + (x - this.startX) / 2, this.startY);
 		this.ctx!.lineTo(x, y);
-		this.ctx!.lineTo(2 * this.startX! - x, y);
+		this.ctx!.lineTo(this.startX, y);
 		this.ctx!.closePath();
 
 		this.ctx![this.outline ? "stroke" : "fill"]();
@@ -288,34 +351,38 @@ export class Triangle extends ShapeTool {
 }
 
 export class Fill extends Tool {
-	lastX?: number;
-	lastY?: number;
 	color?: string;
+
+	/**
+	 * If worker works too long,
+	 * app will show loading.
+	 * 
+	 * This property holds the timeout
+	 * necessary to the effect described above.
+	 */
+	done = NaN;
 
 	end(ctx: CanvasRenderingContext2D) {
 		const data = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
-		const {data: target} = ctx.getImageData(this.lastX!, this.lastY!, 1, 1);
 
-		// ignore transparent pixels
-		if (target[3] === 0) {
-			return;
-		}
+		this.done = window.setTimeout(
+			() => {
+				if (!this.done) {
+					window.app.showLoader("Filling...");
+				}
+			},
+			500
+		);
 
 		this.worker.postMessage({
-			imageData: data,
-			target,
+			data,
 			color: this.color,
 			x: this.lastX,
 			y: this.lastY,
 		});
 	}
 
-	step(x: number, y: number): void {
-		this.lastX = x;
-		this.lastY = y;
-	}
-
-	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number): void {
+	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		this.ctx = ctx;
 		this.color = color;
 		this.lastX = x;
@@ -329,27 +396,89 @@ export class Fill extends Tool {
 	worker = new Worker(new URL("./fill.worker.ts", import.meta.url));
 
 	constructor() {
-		super();
-		const img = new Image(this.ICON_WIDTH, this.ICON_HEIGHT);
-		img.src = fill;
-		this.button.appendChild(img);
+		super("Fill area with the same color", {
+			alt: "Fill",
+			src: fill
+		});
 
 		this.worker.onmessage = e => {
 			this.ctx!.putImageData(e.data, 0, 0);
+			window.clearTimeout(this.done);
+			window.app.hideLoader();
 		};
 
-		this.needsLayer = false;
+		this.movable = false;
 	}
 }
 
 export class Eraser extends DrawingTool {
-	step(x: number, y: number): void {
-		this.ctx!.clearRect(x - this.width / 2, y - this.width / 2, this.width, this.width);
+	step(x: number, y: number) {
+		this.ctx!.globalCompositeOperation = 'destination-out';
+		super.step(x, y);
 	}
 
 	constructor() {
-		super(eraser);
+		super("Erase pixels", {
+			alt: "Eraser",
+			src: eraser
+		});
 		// Modify the canvas directly
-		this.needsLayer = false;
+		this.movable = false;
+	}
+
+	end(ctx: CanvasRenderingContext2D) {
+		ctx.globalCompositeOperation = 'source-over';
+
+		this.startX = NaN;
+		this.startY = NaN;
+		this.lastX = NaN;
+		this.lastY = NaN;
+		this.ctx = undefined;
+
+		return false;
+	}
+}
+
+export class Select extends Tool {
+	*select(): Generator<Node> {
+		this.button.classList.add("selected");
+	}
+
+	start(ctx: CanvasRenderingContext2D, _color: string, x: number, y: number) {
+		this.startX = x;
+		this.startY = y;
+		this.ctx = ctx;
+
+		ctx.strokeStyle = "grey";
+		ctx.lineWidth = 2;
+		ctx.setLineDash([3]);
+	}
+
+	end(ctx: CanvasRenderingContext2D) {
+		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
+		this.ctx!.drawImage(ctx.canvas, 0, 0);
+		ctx.clearRect(
+			Math.min(this.startX, this.lastX),
+			Math.min(this.startY, this.lastY),
+			Math.abs(this.lastX - this.startX),
+			Math.abs(this.lastY - this.startY)
+		);
+	}
+
+	step(x: number, y: number) {
+		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
+		this.ctx!.strokeRect(
+			this.startX,
+			this.startY,
+			(this.lastX = x) - this.startX,
+			(this.lastY = y) - this.startY
+		);
+	}
+
+	constructor() {
+		super("Select an area", {
+			alt: "Select",
+			src: marquee
+		});
 	}
 }

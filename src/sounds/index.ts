@@ -1,5 +1,4 @@
 import WaveSurfer from "wavesurfer.js";
-import type {Entity} from "../entities";
 import TabComponent from "../tab";
 import "./sounds.scss";
 import {MediaList} from "../media-list";
@@ -13,6 +12,7 @@ export default class Sound implements TabComponent {
 		normalize: true,
 		height: "auto",
 	});
+	name = "Sounds";
 	current?: number;
 	mediaList?: MediaList;
 
@@ -25,8 +25,8 @@ export default class Sound implements TabComponent {
 		});
 	}
 
-	render(parent: HTMLElement) {
-		parent.appendChild(this.container);
+	render() {
+		window.app.container.appendChild(this.container);
 		this.update();
 	}
 

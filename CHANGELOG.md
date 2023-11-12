@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5.0] - 2023-11-12
+
+### Fixed
+
+- Paint Editor now displays stage as it is displayed in the output
+- Many accessibilty issues
+- Scrap Engine update - point in direction now works correctly.
+- SB3 compatibility - `setRotationStyle` block now works correctly.
+- README.md note for end users
+
+## Added
+
+- Styling of color & range input in Paint Editor
+- Select tool in Paint Editor
+- Paint editor now allows you to move shapes you have drawn.
+- Some comments
+- PWA can now handles SB3 files.
+
+## Changed
+
+- The way how triangles are drawn in Paint Editor
+
 ## [3.4.1] - 2023-11-11
 
 ## Fixed
@@ -463,7 +485,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.4.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.5.0...HEAD
+[3.5.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.5.0
+[3.4.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.2
 [3.4.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.1
 [3.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.0
 [3.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.3.0

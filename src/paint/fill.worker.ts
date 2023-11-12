@@ -1,12 +1,16 @@
-onmessage = function (e) {
-	const data: ImageData = e.data.imageData;
-	const target: ImageData["data"] = e.data.target;
+self.onmessage = function (e) {
+	const data: ImageData = e.data.data;
 	const color: string = e.data.color;
+	const index = (e.data.y * data.width + e.data.x) * 4;
+	const targetR = data.data[index];
+    const targetG = data.data[index + 1];
+    const targetB = data.data[index + 2];
+    const targetA = data.data[index + 3];
 	const stack: [number, number][] = [[e.data.x, e.data.y]];
 
-	const r = parseInt(color.slice(1, 3), 16);
-	const g = parseInt(color.slice(3, 5), 16);
-	const b = parseInt(color.slice(5, 7), 16);
+	const r = Number.parseInt(color.slice(1, 3), 16);
+	const g = Number.parseInt(color.slice(3, 5), 16);
+	const b = Number.parseInt(color.slice(5, 7), 16);
 
 	while (stack.length > 0) {
 		if (self.closed) {
@@ -24,7 +28,7 @@ onmessage = function (e) {
 			data.data[index + 3] = 255;
 		}
 
-		if (pixel[0] === target[0] && pixel[1] === target[1] && pixel[2] === target[2] && pixel[3] === target[3]) {
+		if (pixel[0] === targetR && pixel[1] === targetG && pixel[2] === targetB && pixel[3] === targetA) {
 			data.data[index + 3] = 0;
 
 			if (x > 0) {
@@ -45,5 +49,5 @@ onmessage = function (e) {
 		}
 	}
 
-	postMessage(data);
+	self.postMessage(data);
 };

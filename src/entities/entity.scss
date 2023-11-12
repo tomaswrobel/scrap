@@ -1,4 +1,4 @@
-@import "../theme";
+@import "../globals";
 
 .sprites {
     display: flex;
@@ -10,7 +10,7 @@
 }
 
 .stage {
-    > img { 
+    >img {
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 8px;
         width: 90%;

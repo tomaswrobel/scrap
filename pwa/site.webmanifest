@@ -23,6 +23,9 @@
             "accept": {
                 "application/zip": [
                     ".scrap"
+                ],
+                "application/x.scratch.sb3": [
+                    ".sb3"
                 ]
             }
         }

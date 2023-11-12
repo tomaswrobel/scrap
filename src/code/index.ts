@@ -14,9 +14,12 @@ import "prism-code-editor/themes/vs-code-light.css";
 
 // Importing types
 import type TabComponent from "../tab";
+import {Generator} from "../blockly";
 
 export default class Code implements TabComponent {
+    generator = new Generator();
     editor?: PrismEditor;
+    name = "Code";
 
     // DOM
     container = document.createElement("div");
@@ -25,8 +28,8 @@ export default class Code implements TabComponent {
         this.container.classList.add("tab-content");
     }
 
-    render(parent: HTMLElement) {
-        parent.append(this.container);
+    render() {
+        window.app.container.append(this.container);
 
         this.editor = createEditor(
             this.container,
@@ -43,6 +46,14 @@ export default class Code implements TabComponent {
             module.addExtensions(this.editor!);
             this.update();
         });
+    }
+
+    async prerender() {
+        if (window.app.current.blocks) {
+            window.app.current.blocks = false;
+            window.app.current.code = this.generator.workspaceToCode(window.app.current.codeWorkspace);
+            window.app.current.workspace = {};
+        }
     }
 
     update() {

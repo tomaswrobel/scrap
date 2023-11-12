@@ -4,7 +4,11 @@ type CropEvent = MessageEvent<{
 	height: number;
 }>;
 
-onmessage = function ({data: {width, height, imageData: {data}}}: CropEvent) {
+self.onmessage = function (e) {
+	const width = e.data.width as number;
+	const height = e.data.height as number;
+	const {data} = e.data.imageData as ImageData;
+
 	let minX = width;
 	let minY = height;
 
@@ -24,7 +28,7 @@ onmessage = function ({data: {width, height, imageData: {data}}}: CropEvent) {
 		}
 	}
 
-	postMessage({
+	self.postMessage({
 		x: minX,
 		y: minY,
 		width: maxX - minX,

@@ -5,18 +5,31 @@ import * as Parley from "parley.js";
 import Component from "../tab";
 import "./style.scss";
 import {bind} from "../decorators";
+import CodeParser from "../files/blocks";
 
 export default class Workspace implements Component {
 	container = document.createElement("div");
 	workspace!: Blockly.WorkspaceSvg;
+	name = "Blocks";
 
 	constructor() {
 		this.container.classList.add("blockly", "tab-content");
 		Blockly.setParentContainer(this.container);
 	}
+
+	async prerender() {
+		if (!window.app.current.blocks) {
+			window.app.showLoader("Compiling code...");
+			const parser = new CodeParser(window.app.current.codeWorkspace);
+			window.app.current.blocks = true;
+			await parser.codeToBlock(window.app.current.code);
+			window.app.current.code = "";
+			window.app.hideLoader();
+		}
+	}
 	
-	render(parent: HTMLElement) {
-		parent.appendChild(this.container);
+	render() {
+		window.app.container.appendChild(this.container);
 
 		this.workspace = Blockly.inject(this.container, {
 			theme,

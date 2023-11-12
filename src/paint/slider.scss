@@ -1,0 +1,90 @@
+/*
+ * Made with the help of https://toughengineer.github.io/demo/slider-styler
+ * Transformed into SCSS, dropped support for -ms- (Edge Legacy & IE)
+ * (Nobody uses them + I couldn't use CSS variables)
+ */
+@import "../globals";
+
+$default: linear-gradient(#{$primary}, #{$primary});
+$darken: darken($color: $primary, $amount: 10%);
+$hover: linear-gradient(#{$darken}, #{$darken});
+
+.paint input[type=range] {
+    height: 24px;
+    appearance: none;
+
+    // --min, --max & --value must be set via script
+    $range: calc(var(--max) - var(--min));
+    $ratio: calc((var(--value) - var(--min)) / $range);
+    $sx: calc(0.5 * 2em + $ratio * (100% - 2em));
+
+    &:focus {
+        outline: none;
+    }
+
+    // WebKit
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 1em;
+        background: $primary;
+        border: none;
+        box-shadow: 0 0 2px black;
+        margin-top: calc(max((0.75em - 1px - 1px) * 0.5, 0px) - 1.5em * 0.5);
+    }
+
+    &:hover::-webkit-slider-thumb {
+        background: $darken;
+    }
+
+    &::-webkit-slider-runnable-track {
+        height: 0.75em;
+        border: 1px solid #b2b2b2;
+        border-radius: 0.5em;
+        background: #efefef;
+        box-shadow: none;
+    }
+
+    &::-webkit-slider-runnable-track {
+        background: #{$default} 0/#{$sx} 100% no-repeat,
+        #efefef;
+    }
+
+    &:hover::-webkit-slider-runnable-track {
+        background: #{$hover} 0/#{$sx} 100% no-repeat,
+        #e5e5e5;
+    }
+
+    // Firefox
+    &::-moz-range-thumb {
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 1em;
+        background: $primary;
+        border: none;
+        box-shadow: 0 0 2px black;
+    }
+
+    &:hover:-moz-range-thumb {
+        background: $darken;
+    }
+
+    &::-moz-range-track {
+        height: max(calc(0.75em - 1px - 1px), 0px);
+        border: 1px solid #b2b2b2;
+        border-radius: 0.5em;
+        background: #efefef;
+        box-shadow: none;
+    }
+
+    &::-moz-range-track {
+        background: #{$default} 0/#{$sx} 100% no-repeat,
+        #efefef;
+    }
+
+    &:hover::-moz-range-track {
+        background: #{$hover} 0/#{$sx} 100% no-repeat,
+        #e5e5e5;
+    }
+}

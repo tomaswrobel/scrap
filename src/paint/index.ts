@@ -1,5 +1,4 @@
-import {Pen, Line, Rectangle, Ellipse, Eraser, Fill, type Tool, Triangle} from "../paint/tools";
-import type {Entity} from "../entities";
+import {Brush, Line, Rectangle, Ellipse, Eraser, Fill, type Tool, Triangle, Select} from "../paint/tools";
 import Component from "../tab";
 import "./paint.scss";
 import {MediaList} from "../media-list";
@@ -22,6 +21,8 @@ export default class Paint implements Component {
 	mediaList?: MediaList;
 	file?: File;
 
+	name = "Costumes";
+
 	cropWorker = new Worker(new URL("./crop.worker.ts", import.meta.url));
 
 	constructor() {
@@ -40,7 +41,8 @@ export default class Paint implements Component {
 		this.layer.height = this.canvas.height;
 		this.layer.style.pointerEvents = "none";
 
-		this.addTool(new Pen());
+		this.addTool(new Select());
+		this.addTool(new Brush());
 		this.addTool(new Line());
 		this.addTool(new Rectangle());
 		this.addTool(new Ellipse());
@@ -50,11 +52,21 @@ export default class Paint implements Component {
 
 		const colorInput = document.createElement("input");
 		colorInput.type = "color";
+		colorInput.value = "#ff0000";
+		colorInput.classList.add("color");
+
+		const colorDiv = document.createElement("div");
+		colorDiv.style.backgroundColor = "#ff0000";
+		colorDiv.classList.add("color");
+
+		colorInput.oninput = () => {
+			colorDiv.style.backgroundColor = colorInput.value;
+		};
 
 		this.canvas.addEventListener("mousedown", e => {
 			if (this.currentTool) {
 				this.mouseDown = true;
-				if (this.currentTool.needsLayer) {
+				if (this.currentTool.movable) {
 					this.canvasContainer.appendChild(this.layer);
 					var ctx = this.layer.getContext("2d")!;
 				} else {
@@ -78,10 +90,12 @@ export default class Paint implements Component {
 
 		this.saveButton.style.aspectRatio = "unset";
 		this.cancelButton.style.aspectRatio = "unset";
+		this.saveButton.type = "button";
+		this.cancelButton.type = "button";
 
 		this.setChanged(false);
 
-		this.container.append(this.toolContainer, this.canvasContainer, this.controls, colorInput);
+		this.container.append(this.toolContainer, this.canvasContainer, this.controls, colorInput, colorDiv);
 	}
 
 	@bind
@@ -94,20 +108,119 @@ export default class Paint implements Component {
 
 	@bind
 	mouseUp() {
+		document.removeEventListener("mousemove", this.mouseMove);
+		document.removeEventListener("mouseup", this.mouseUp);
 		this.mouseDown = false;
 		if (this.currentTool) {
 			this.currentTool.end(this.context);
-			if (this.currentTool.needsLayer) {
+			if (this.currentTool.movable) {
+				const width = Math.round(Math.abs(this.currentTool.lastX - this.currentTool.startX));
+				const height = Math.round(Math.abs(this.currentTool.lastY - this.currentTool.startY));
+
+				if (width && height) {
+					const x = Math.round(Math.min(this.currentTool.lastX, this.currentTool.startX));
+					const y = Math.round(Math.min(this.currentTool.lastY, this.currentTool.startY));
+
+					const canvas = document.createElement("canvas");
+					canvas.width = width;
+					canvas.height = height;
+					canvas.style.cursor = "move";
+
+					canvas.getContext("2d")!.drawImage(
+						this.layer,
+						x,
+						y,
+						width,
+						height,
+						0,
+						0,
+						width,
+						height
+					);
+					canvas.style.position = "absolute";
+					canvas.style.left = x + "px";
+					canvas.style.top = y + "px";
+					canvas.style.outline = "3px dashed #575E75";
+
+					const bbox = this.canvas.getBoundingClientRect();
+
+					let startX = 0, startY = 0;
+					const mouseDown = (e: MouseEvent) => {
+						document.removeEventListener("mousedown", mouseDown);
+						if (e.target !== canvas) {
+							const x = parseInt(canvas.style.left.replace("px", ""));
+							const y = parseInt(canvas.style.top.replace("px", ""));
+
+							this.canvasContainer.removeChild(canvas);
+							this.context.drawImage(canvas, x, y);
+
+							this.currentTool!.lastX = NaN;
+							this.currentTool!.lastY = NaN;
+							this.currentTool!.startX = NaN;
+							this.currentTool!.startY = NaN;
+
+							this.setChanged(true);
+						} else {
+							startX = e.offsetX;
+							startY = e.offsetY;
+							document.addEventListener("mousemove", mouseMove);
+							document.addEventListener("mouseup", mouseUp);
+						}
+					};
+
+					function mouseMove(e: MouseEvent) {
+						const x = e.pageX - bbox.left - window.scrollX - startX;
+						const y = e.pageY - bbox.top - window.scrollY - startY;
+
+						// Make sure the image doesn't go out of bounds
+						let clipLeft = 0, clipTop = 0, clipRight = 0, clipBottom = 0;
+
+						if (x < 0) {
+							clipLeft = -x;
+						}
+						
+						if (x + canvas.width > bbox.width) {
+							clipRight = x + canvas.width - bbox.width;
+						}
+
+						if (y < 0) {
+							clipTop = -y;
+						}
+
+						if (y + canvas.height > bbox.height) {
+							clipBottom = y + canvas.height - bbox.height;
+						}
+
+						if (clipLeft || clipTop || clipRight || clipBottom) {
+							canvas.style.clipPath = `inset(${clipTop - 3}px ${clipRight - 3}px ${clipBottom - 3}px ${clipLeft - 3}px)`;
+						} else {
+							canvas.style.clipPath = "unset";
+						}
+
+						canvas.style.left = x + "px";
+						canvas.style.top = y + "px";
+					}
+
+					function mouseUp() {
+						document.removeEventListener("mousemove", mouseMove);
+						document.removeEventListener("mouseup", mouseUp);
+						document.addEventListener("mousedown", mouseDown);
+					};
+
+					document.addEventListener("mousedown", mouseDown);
+					this.canvasContainer.appendChild(canvas);
+				}
+
 				this.layer.getContext("2d")!.clearRect(0, 0, this.layer.width, this.layer.height);
 				this.canvasContainer.removeChild(this.layer);
+			} else {
+				this.setChanged(true);
 			}
 		}
-		this.setChanged(true);
-		document.removeEventListener("mousemove", this.mouseMove);
-		document.removeEventListener("mouseup", this.mouseUp);
 	}
 
 	async load(file: File) {
+		window.app.showLoader("Loading costume...");
 		const reader = new FileReader();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -115,10 +228,14 @@ export default class Paint implements Component {
 			reader.onload = () => {
 				const image = new Image();
 				image.onload = () => {
-					// Center the image
-					const x = (this.canvas.width - image.width) / 2;
-					const y = (this.canvas.height - image.height) / 2;
-					this.context.drawImage(image, x, y);
+					if (window.app.current.name === "Stage") {
+						this.context.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+					} else {
+						// Center the image
+						const x = (this.canvas.width - image.width) / 2;
+						const y = (this.canvas.height - image.height) / 2;
+						this.context.drawImage(image, x, y);
+					}
 					resolve();
 				};
 				image.src = reader.result as string;
@@ -128,6 +245,7 @@ export default class Paint implements Component {
 		});
 
 		this.file = file;
+		window.setTimeout(window.app.hideLoader, 100);
 	}
 
 	crop() {
@@ -182,9 +300,9 @@ export default class Paint implements Component {
 		});
 	}
 
-	render(element: Element) {
+	render() {
 		this.update();
-		element.appendChild(this.container);
+		window.app.container.appendChild(this.container);
 	}
 
 	setChanged(changed: boolean) {
@@ -227,6 +345,7 @@ export default class Paint implements Component {
 
 		this.saveButton.onclick = async () => {
 			if (this.changed && this.file) {
+				window.app.showLoader("Saving costume...");
 				this.setChanged(false);
 				const file = await this.save(this.file.name);
 				const index = window.app.current.costumes.indexOf(this.file);
@@ -237,6 +356,7 @@ export default class Paint implements Component {
 
 				window.app.current.costumes[index] = file;
 				this.update();
+				window.app.hideLoader();
 			}
 		};
 

@@ -25,7 +25,13 @@ if ("launchQueue" in window) {
             const fileHandle = launchParams.files[0];
 
             if (isFile(fileHandle)) {
-                window.app.open(await fileHandle.getFile());
+                if (fileHandle.name.endsWith(".sb3")) {
+                    window.app.open(await fileHandle.getFile());
+                } else if (fileHandle.name.endsWith(".scrap")) {
+                    window.app.import(await fileHandle.getFile());
+                } else {
+                    alert("Unsupported file type");
+                }
             }
         }
     });

@@ -4,5 +4,8 @@ declare module "*.svg" {
 }
 
 declare interface Window {
+    /**
+     * Scrap App instance
+     */
     app: import("./app").default;
 }

@@ -1,7 +1,6 @@
 import {Entity, Sprite, Stage} from "../entities";
 import {version} from "scrap-engine/package.json";
 import Workspace from "../workspace";
-import Component from "../tab";
 import Paint from "../paint";
 import Code from "../code";
 
@@ -12,10 +11,10 @@ import "./app.scss";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
 import {Generator} from "../blockly";
-import CodeParser from "../files/blocks";
 import Sound from "../sounds";
 
 import SB3 from "../files/sb3";
+import Tabs from "../tabs";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -24,8 +23,6 @@ const engineCDN = "https://unpkg.com/scrap-engine@" + version;
 export default class App {
 	container = document.getElementById("root")!;
 	add = document.getElementById("add")!;
-
-	generator = new Generator();
 
 	output = document.querySelector("iframe")!;
 	play = document.getElementById("play")!;
@@ -39,14 +36,9 @@ export default class App {
 	paced = document.getElementById("paced")!;
 	turbo = document.getElementById("turbo")!;
 
-	tabs = new Map<string, Component>();
-	buttons = new Map<string, HTMLButtonElement>();
-	activeTab = "Blocks";
-
+	tabs!: Tabs;
 	workspace = new Workspace();
 	code = new Code();
-
-	tabBar = document.getElementById("tabs")!;
 
 	entities = new Array<Entity>();
 	current!: Entity;
@@ -58,54 +50,7 @@ export default class App {
 
 	start() {
 		this.entities.push((this.current = new Stage()));
-		this.tabs.set("Blocks", this.workspace);
-		this.tabs.set("JavaScript", this.code);
-		this.tabs.set("Costumes", new Paint());
-		this.tabs.set("Sounds", new Sound());
-
-		for (const [name, tab] of this.tabs) {
-			const button = document.createElement("button");
-			button.textContent = name;
-			button.classList.toggle("selected", name === this.activeTab);
-
-			button.addEventListener("click", async () => {
-				if (this.activeTab === name) return;
-
-				if (tab === this.workspace && !this.current.blocks) {
-					this.current.blocks = true;
-					const parser = new CodeParser(this.current.codeWorkspace);
-					try {
-						await parser.codeToBlock(this.current.code);
-					} catch (e) {
-						await Parley.fire({
-							title: "Error",
-							body: String(e),
-							input: "none"
-						});
-						return;
-					}
-					this.current.code = "";
-				} else if (tab === this.code && this.current.blocks) {
-					this.current.blocks = false;
-					this.current.code = this.generator.workspaceToCode(this.current.codeWorkspace);
-					this.current.workspace = {};
-				}
-
-				this.tabs.get(this.activeTab)!.dispose();
-				this.activeTab = name;
-
-				for (const s of this.tabBar.getElementsByClassName("selected")) {
-					s.classList.remove("selected");
-				}
-
-				button.classList.add("selected");
-
-				tab.render(this.container);
-			});
-
-			this.buttons.set(name, button);
-			this.tabBar.appendChild(button);
-		}
+		this.tabs = new Tabs(this.workspace, this.code, new Paint(), new Sound());
 
 		this.play.addEventListener("click", () => {
 			this.output.src = this.output.src;
@@ -124,7 +69,6 @@ export default class App {
 		});
 
 		this.current.render(this.stagePanel);
-		this.workspace.render(this.container);
 
 		this.output.addEventListener("load", async () => {
 			const document = this.output.contentDocument!;
@@ -173,7 +117,7 @@ export default class App {
 		});
 
 		this.sb3.addEventListener("change", () => {
-			this.openSB3(this.sb3.files![0]);
+			this.import(this.sb3.files![0]);
 		});
 
 		this.html.addEventListener("click", () => {
@@ -197,19 +141,16 @@ export default class App {
 		if (this.current === entity) {
 			return;
 		}
-		const tab = this.tabs.get(this.activeTab)!;
 		this.current = entity;
-		if (tab === this.workspace && !entity.blocks) {
-			tab.dispose();
-			this.activeTab = "JavaScript";
-			this.code.render(this.container);
-		} else if (tab === this.code && entity.blocks) {
-			tab.dispose();
-			this.activeTab = "Blocks";
-			this.workspace.render(this.container);
-		} else {
-			tab.update();
+
+		if (entity.blocks && this.tabs.active === this.code) {
+			this.tabs.set(this.workspace);
+		} else if (!entity.blocks && this.tabs.active === this.workspace) {
+			this.tabs.set(this.code);
+		} else if (this.tabs.active) {
+			this.tabs.active.update();
 		}
+
 		if (entity instanceof Sprite) {
 			this.setGlobalVariables().then(() => {
 				if (entity.blocks) {
@@ -217,10 +158,6 @@ export default class App {
 				}
 			});
 		}
-		for (const s of this.tabBar.getElementsByClassName("selected")) {
-			s.classList.remove("selected");
-		}
-		this.buttons.get(this.activeTab)!.classList.add("selected");
 	}
 
 	addSprite(sprite: Sprite) {
@@ -278,7 +215,7 @@ export default class App {
 		this.hideLoader();
 	}
 
-	async openSB3(file?: File | null) {
+	async import(file?: File | null) {
 		if (!file) {
 			return;
 		}

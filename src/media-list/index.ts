@@ -15,6 +15,7 @@ export class MediaList extends EventTarget {
 
         this.fab.classList.add("fab");
         this.fab.textContent = "+";
+        this.fab.title = "Upload media...";
         this.fab.style.gridArea = type.gridArea;
 
         const input = document.createElement("input");

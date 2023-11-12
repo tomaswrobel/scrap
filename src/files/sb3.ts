@@ -50,9 +50,16 @@ class SB3 {
         this.transformers.motion_ifonedgebounce = this.override({
             opcode: "ifOnEdgeBounce"
         });
-        this.transformers.motion_setrotationstyle = this.override({
-            opcode: "setRotationStyle"
-        });
+        this.transformers.motion_setrotationstyle = data => {
+            const block = window.app.current.codeWorkspace.newBlock("setRotationStyle");
+            const value = window.app.current.codeWorkspace.newBlock("rotationStyle");
+
+            value.setFieldValue(data.fields.STYLE[0], "STYLE");
+            value.setShadow(true);
+
+            block.getInput("STYLE")!.connection!.connect(value.outputConnection!);
+            return block;
+        };
 
         this.transformers.motion_xposition = this.reporter("x");
         this.transformers.motion_yposition = this.reporter("y");
@@ -287,9 +294,11 @@ class SB3 {
         };
         this.transformers.event_whenthisspriteclicked = () => {
             const block = window.app.current.codeWorkspace.newBlock("whenMouse");
-            block.getInput("EVENT")!.connection!.connect(
-                window.app.current.codeWorkspace.newBlock("event")!.outputConnection!
-            );
+            const event = window.app.current.codeWorkspace.newBlock("event");
+
+            event.setShadow(true);
+            block.getInput("EVENT")!.connection!.connect(event.outputConnection!);
+
             return block;
         };
         this.transformers.event_whenstageclicked = this.transformers.event_whenthisspriteclicked;
