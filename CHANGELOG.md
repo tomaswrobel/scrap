@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.0] - 2023-11-16
+
+### Fixed
+
+- When transforming JS to blocks, the `tryCatch` block no longer ignores the try block.
+- Many problems with variables, parameters and its encodings
+- Collecting types of global variables
+
+### Added
+
+- Mutator for `parameter` block so it can store the type of the parameter.
+- Dialogs blocks - `prompt`, `alert`, `confirm`
+- Partial support for Scratch's `control_stop` block
+
+### Changed
+
+- File structure (utils.ts in `files` folder)
+
+### Removed
+
+- `getVariable` block was removed in favor of `parameter` block.
+
 ## [3.5.0] - 2023-11-12
 
 ### Fixed
@@ -485,7 +507,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.5.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.6.0...HEAD
+[3.6.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.6.0
 [3.5.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.5.0
 [3.4.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.2
 [3.4.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.1

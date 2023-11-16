@@ -1,8 +1,10 @@
 import * as Blockly from "blockly/core";
 import {parse} from "doctrine";
-import {Types, Error, allBlocks, Generator} from "../blockly";
+import {Types, Error, allBlocks} from "../blockly";
 import {Identifier, type CallExpression, type MemberExpression, type Node, StringLiteral, IfStatement} from "@babel/types";
 import {bind} from "../decorators";
+import {unescape} from "./utils";
+import FieldParam from "../blockly/fields/field_param";
 
 export default class CodeParser {
 	connection: Blockly.Connection | null;
@@ -10,6 +12,64 @@ export default class CodeParser {
 
 	constructor(readonly workspace: Blockly.Workspace) {
 		this.connection = null;
+	}
+
+	static async parseVariables(code: string) {
+		const babel = await import("@babel/core");
+		const tree = await babel.parseAsync(code, {});
+
+		if (!tree) {
+			return [];
+		}
+
+		const variables = new Array<[string, string]>();
+
+		for (const statement of tree.program.body) {
+			if (statement.type !== "VariableDeclaration") {
+				continue;
+			}
+
+			if (statement.kind !== "let") {
+				continue;
+			}
+
+			let varType = "";
+
+			const comments = statement.leadingComments;
+
+			if (comments) {
+				for (const {type, value} of comments) {
+					if (type === "CommentBlock" && value[0] === "*") {
+						const {tags} = parse(`/*${value}*/`, {
+							unwrap: true,
+							tags: ["type"],
+							recoverable: true,
+						});
+
+						for (const {title, type: paramType} of tags) {
+							if (title === "type") {
+								if (paramType!.type === "NameExpression") {
+									if (Types.indexOf(paramType!.name) !== -1) {
+										varType = paramType!.name;
+									}
+								} else if (paramType!.type === "ArrayType") {
+									varType = "Array";
+								}
+							}
+						}
+					}
+				}
+			}
+
+			for (const declaration of statement.declarations) {
+				if (declaration.id.type !== "Identifier") {
+					continue;
+				}
+				variables.push([unescape(declaration.id.name), varType]);
+			}
+		}
+
+		return variables;
 	}
 
 	async codeToBlock(code: string) {
@@ -196,7 +256,7 @@ export default class CodeParser {
 
 				if (leadingComments) {
 					for (const {type, value} of leadingComments) {
-						if (type === "CommentBlock") {
+						if (type === "CommentBlock" && value[0] === "*") {
 							const {tags} = parse(`/*${value}*/`, {
 								unwrap: true,
 								tags: ["type"],
@@ -222,7 +282,7 @@ export default class CodeParser {
 					}
 				}
 
-				window.app.current.variables.push([Generator.unescape(id.name), varType]);
+				window.app.current.variables.push([unescape(id.name), varType]);
 
 				break;
 			}
@@ -240,6 +300,9 @@ export default class CodeParser {
 			case "TryStatement": {
 				const block = this.block("tryCatch");
 
+				this.connection = block.getInput("TRY")!.connection!;
+				this.parse(node.block);
+
 				if (node.handler && node.finalizer) {
 					const {param, body} = node.handler;
 
@@ -248,7 +311,7 @@ export default class CodeParser {
 					}
 
 					block.loadExtraState!({
-						catch: param ? param.name : true,
+						catch: param ? unescape(param.name) : true,
 						finally: true,
 					});
 
@@ -265,7 +328,7 @@ export default class CodeParser {
 					}
 
 					block.loadExtraState!({
-						catch: param ? param.name : true,
+						catch: param ? unescape(param.name) : true,
 						finally: false,
 					});
 
@@ -475,14 +538,14 @@ export default class CodeParser {
 				const block = this.workspace.newBlock("function");
 
 				const extraState = {
-					name: Generator.unescape(id.name),
+					name: unescape(id.name),
 					params: params.map(param => {
 						if (param.type !== "Identifier") {
 							throw new SyntaxError("Only simple identifiers are supported");
 						}
 
 						return {
-							name: Generator.unescape(param.name),
+							name: unescape(param.name),
 							type: typeMap.get(param.name) || "",
 						};
 					}),
@@ -525,7 +588,12 @@ export default class CodeParser {
 				break;
 			case "CallExpression": {
 				if (node.callee.type === "MemberExpression") {
-					if (this.isIdentifier(node.callee.object, "Scrap") && this.isProperty(node.callee, ["delete"])) {
+					if (this.isIdentifier(node.callee.object, "window") && this.isProperty(node.callee, ["alert", "prompt", "confirm"])) {
+						const block = this.block(this.getPropertyContents(node.callee.property));
+						this.connection = block.getInput("TEXT")!.connection!;
+						this.parse(node.arguments[0]);
+						this.connection = block.nextConnection;
+					} else if (this.isIdentifier(node.callee.object, "Scrap") && this.isProperty(node.callee, ["delete"])) {
 						const block = this.block("stop");
 						this.comments(block, node);
 						this.connection = null;
@@ -807,14 +875,7 @@ export default class CodeParser {
 
 				const block = this.block(operator === "=" ? "setVariable" : "changeVariable");
 				this.comments(block, node);
-
-				const name = Generator.unescape(left.name);
-
-				if (!window.app.current.variables.some(variable => variable[0] === name) && !window.app.globalVariables.includes(name)) {
-					throw new SyntaxError(`Variable ${name} is not defined`);
-				}
-
-				block.setFieldValue(name, "VAR");
+				block.setFieldValue(unescape(left.name), "VAR");
 
 				this.connection = block.getInput("VALUE")!.connection!;
 
@@ -870,7 +931,27 @@ export default class CodeParser {
 				break;
 			}
 			case "Identifier": {
-				this.block(window.app.current.variables.some(variable => variable[0] === node.name) ? "getVariable" : "parameter").setFieldValue(node.name, "VAR");
+				const block = this.block("parameter");
+
+				let isVariable = false
+					|| window.app.current.variables.some(([name]) => name === node.name)
+					|| window.app.globalVariables.some(([name]) => name === node.name);
+
+				// Check for field_param, since it's not a variable
+				// TODO: optimize
+
+				for (let current = block; current; current = current.getSurroundParent()!) {
+					for (const input of current.inputList) {
+						for (const field of input.fieldRow) {
+							if (field instanceof FieldParam && field.getText() === node.name) {
+								isVariable = false;
+							}
+						}
+					}
+				}
+
+				block.loadExtraState!({isVariable});
+				block.setFieldValue(unescape(node.name), "VAR");
 				break;
 			}
 			default:

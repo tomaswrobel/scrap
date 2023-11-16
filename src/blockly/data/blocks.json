@@ -20,23 +20,9 @@
 		"style": "variable_blocks",
 		"extensions": [
 			"var_menu",
-			"setVar"
+			"setvar_menu"
 		],
 		"inputsInline": true
-	},
-	"getVariable": {
-		"message0": "%1",
-		"args0": [
-			{
-				"type": "field_label_serializable",
-				"name": "VAR"
-			}
-		],
-		"output": null,
-		"style": "variable_blocks",
-		"extensions": [
-			"getVar"
-		]
 	},
 	"changeVariable": {
 		"message0": "change %1 by %2",
@@ -122,6 +108,7 @@
 			}
 		],
 		"style": "variable_blocks",
+		"mutator": "mutator_parameter",
 		"output": null
 	},
 	// Call function block
@@ -1744,6 +1731,7 @@
 		"previousStatement": null,
 		"style": "Controls"
 	},
+	// Sensing
 	"isTouching": {
 		"inputsInline": true,
 		"message0": "touching %1?",
@@ -1804,7 +1792,7 @@
 	},
 	// Unlike Scratch (but just like Snap!),
 	// this block returns the answer.
-	// Scrap sprires does not have an "answer"
+	// Scrap does not have an "answer"
 	// property. SB3 compatibility layer
 	// can handle this.
 	"ask": {
@@ -2003,6 +1991,46 @@
 	},
 	"isTurbo": {
 		"message0": "is turbo mode?",
+		"output": "Boolean",
+		"style": "Sensing"
+	},
+	"alert": {
+		"inputsInline": true,
+		"message0": "alert %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "TEXT",
+				"check": "String"
+			}
+		],
+		"nextStatement": null,
+		"previousStatement": null,
+		"style": "Sensing"
+	},
+	"prompt": {
+		"inputsInline": true,
+		"message0": "prompt %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "TEXT",
+				"check": "String"
+			}
+		],
+		"output": "String",
+		"style": "Sensing"
+	},
+	"confirm": {
+		"inputsInline": true,
+		"message0": "confirm %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "TEXT",
+				"check": "String"
+			}
+		],
 		"output": "Boolean",
 		"style": "Sensing"
 	},

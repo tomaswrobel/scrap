@@ -87,26 +87,24 @@ export default class Workspace implements Component {
 					}
 				];
 
-				for (const variable of window.app.current.variables) {
+				function addVariable([name, type]: [string, string]) {
 					json.push({
 						kind: "block",
-						type: "getVariable",
+						type: "parameter",
 						fields: {
-							VAR: variable[0]
+							VAR: name
+						},
+						extraState: {
+							type,
+							isVariable: true
 						}
 					});
 				}
 
+				window.app.current.variables.forEach(addVariable);
+
 				if (window.app.current instanceof Sprite) {
-					for (const variable of window.app.globalVariables) {
-						json.push({
-							kind: "block",
-							type: "getVariable",
-							fields: {
-								VAR: variable
-							}
-						});
-					}
+					window.app.globalVariables.forEach(addVariable);
 				}
 
 				if (json.length > 1) {

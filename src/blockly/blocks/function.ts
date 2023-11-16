@@ -1,3 +1,25 @@
+/**
+ * @license MIT
+ * @fileoverview Defines the call mutator.
+ * @author Tomáš Wróbel
+ * 
+ * Similar to variables, Scrap does not use Blockly's built-in
+ * functions. Instead, it uses its own function blocks.
+ * It is independent from the Blockly's procedure system.
+ * 
+ * The benefit of the Blockly's procedure system is that
+ * it is more flexible and allows for more workspaces.
+ * However, Scrap does not need that flexibility.
+ * It would require bigger bundle size, too.
+ * 
+ * So instead, Scrap uses its own function blocks, which
+ * works similarly to legacy Blockly's procedure system.
+ * 
+ * This block definition is used by the function block.
+ * It ensures following:
+ * * The function block has a name and a return type.
+ * * The function block has parameters.
+ */
 import * as Blockly from "blockly/core";
 import {Types} from "../utils/types";
 import ProcedureBlock from "../utils/procedure_block";
@@ -38,7 +60,7 @@ export default <Partial<ProcedureBlock>>{
 	compose(this: ProcedureBlock, topBlock: Blockly.Block) {
 		this.params = [];
 
-		for (let block = topBlock.getNextBlock(), i = 0; block; block = block.getNextBlock(), i++) {
+		for (let block = topBlock.getNextBlock(); block; block = block.getNextBlock()) {
 			if (block.type === "text_or_number_param") {
 				this.params.push({
 					type: ["String", "Number"], 

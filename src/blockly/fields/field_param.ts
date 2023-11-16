@@ -68,7 +68,7 @@ export default class FieldParam extends Blockly.Field<string> {
 				const transformY = transform?.match(/translate\(\d+,(\d+)/)?.[1] ?? 0;
 				const {x, y} = this.sourceBlock_!.getRelativeToSurfaceXY().translate(+transformX, +transformY);
 				
-				block.setOutput(true, this.getType_()); // Set the type of the parameter.
+				block.loadExtraState!({type: this.getType_()}); // Set the type of the parameter.
 				block.setFieldValue(this.getText(), "VAR"); // Set the name of the parameter.
 				block.moveBy(x, y); // Move the block to the position of the field.
 				block.initSvg(); // Initialize the block.
@@ -91,7 +91,7 @@ export default class FieldParam extends Blockly.Field<string> {
 		if (this.fieldGroup_ && workspace instanceof Blockly.WorkspaceSvg) {
 			const block = workspace.newBlock("parameter");
 			block.setFieldValue(this.getText(), "VAR");
-			block.setOutput(true, this.getType_());
+			block.loadExtraState!({type: this.getType_()});
 			block.setShadow(true);
 			block.initSvg();
 			block.renderEfficiently();

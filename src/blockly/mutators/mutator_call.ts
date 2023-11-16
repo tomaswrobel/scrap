@@ -1,3 +1,33 @@
+/**
+ * @license MIT
+ * @fileoverview Defines the call mutator.
+ * @author Tomáš Wróbel
+ * 
+ * Similar to variables, Scrap does not use Blockly's built-in
+ * functions. Instead, it uses its own function blocks.
+ * It is independent from the Blockly's procedure system.
+ * 
+ * The benefit of the Blockly's procedure system is that
+ * it is more flexible and allows for more workspaces.
+ * However, Scrap does not need that flexibility.
+ * It would require bigger bundle size, too.
+ * 
+ * So instead, Scrap uses its own function blocks, which
+ * works similarly to legacy Blockly's procedure system.
+ * 
+ * This mutator is used by the call block. Since Scrap
+ * is strongly typed, the call block needs to know the
+ * types of the parameters and the return type.
+ * It is handled by this mutator, but it is necessary
+ * to update the call block's shape in sync with
+ * corresponding definitions.
+ * 
+ * This mutator ensures following:
+ * * The call block has a name and a return type.
+ * * The call block has parameters.
+ * * Parameters are of a specific type.
+ * * Corresponding shadow blocks are used inside the parameters.
+ */
 import * as Blockly from "blockly/core";
 import {TypeToShadow, Types} from "../utils/types";
 
@@ -44,7 +74,7 @@ export const MIXIN = {
 			const input = this.appendValueInput(`PARAM_${i}`);
 			input.setCheck(type);
 
-			if (typeof type === "object") {
+			if (typeof type === "object") { // Array
 				const block = this.workspace.newBlock("text_or_number");
 				block.setShadow(true);
 

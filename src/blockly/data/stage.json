@@ -493,6 +493,52 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "alert",
+                "inputs": {
+                    "TEXT": {
+                        "shadow": {
+                            "type": "iterables_string",
+                            "fields": {
+                                "TEXT": "Hello!"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "prompt",
+                "inputs": {
+                    "TEXT": {
+                        "shadow": {
+                            "type": "iterables_string",
+                            "fields": {
+                                "TEXT": "What's your name?"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "confirm",
+                "inputs": {
+                    "TEXT": {
+                        "shadow": {
+                            "type": "iterables_string",
+                            "fields": {
+                                "TEXT": "Are you sure?"
+                            }
+                        }
+                    }
+                }
             }
         ]
     },

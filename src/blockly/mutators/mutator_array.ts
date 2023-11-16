@@ -1,3 +1,14 @@
+/**
+ * @license MIT
+ * @fileoverview Defines the array mutator.
+ * @author Tomáš Wróbel
+ * 
+ * Array block is different from the Blockly's list block.
+ * It supports two types of items: single and iterable.
+ * Single items are just values, while iterable items
+ * are either strings or arrays - they are expanded
+ * into multiple items (via JavaScript's spread operator).
+ */
 import * as Blockly from "blockly/core";
 
 export type ArrayBlock = Blockly.BlockSvg & ArrayBlockMixin;

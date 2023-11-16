@@ -10,11 +10,11 @@ import * as Parley from "parley.js";
 import "./app.scss";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
-import {Generator} from "../blockly";
 import Sound from "../sounds";
 
 import SB3 from "../files/sb3";
 import Tabs from "../tabs";
+import CodeParser from "../files/blocks";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -240,46 +240,16 @@ export default class App {
 		this.hideLoader();
 	}
 
-	globalVariables = new Array<string>();
+	globalVariables = new Array<[string, string]>();
 
-	private async getGlobalVariables() {
+	async setGlobalVariables() {
 		const [stage] = this.entities;
 
 		if (stage.blocks) {
-			return stage.variables.map(v => v[0]);
+			this.globalVariables = stage.variables;
+		} else {
+			this.globalVariables = await CodeParser.parseVariables(stage.code);
 		}
-
-		const babel = await import("@babel/core");
-		const tree = await babel.parseAsync(stage.code);
-
-		if (!tree) {
-			return [];
-		}
-
-		const variables = new Array<string>();
-
-		for (const statement of tree.program.body) {
-			if (statement.type !== "VariableDeclaration") {
-				continue;
-			}
-
-			if (statement.kind !== "let") {
-				continue;
-			}
-
-			for (const declaration of statement.declarations) {
-				if (declaration.id.type !== "Identifier") {
-					continue;
-				}
-				variables.push(Generator.unescape(declaration.id.name));
-			}
-		}
-
-		return variables;
-	}
-
-	async setGlobalVariables() {
-		this.globalVariables = await this.getGlobalVariables();
 	}
 
 	async export() {

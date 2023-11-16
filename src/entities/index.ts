@@ -5,6 +5,7 @@ import fs from "fs";
 import "./entity.scss";
 import path from "path";
 import transform from "../files/javascript";
+import {reserved} from "../files/utils";
 
 const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
 
@@ -15,6 +16,10 @@ const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
 class Entity {
 	// Costumes & Sounds are stored as files
 	costumes: File[] = [];
+	/**
+	 * Variables are stored as an array of
+	 * [name, type] tuples.
+	 */
 	variables: [string, string][] = [];
 	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
@@ -242,7 +247,7 @@ class Sprite extends Entity {
 		};
 
 		input.onblur = () => {
-			if (Generator.ReservedWords.indexOf(input.value) === -1) {
+			if (reserved.indexOf(input.value) === -1) {
 				span.textContent = input.value;
 				this.name = input.value;
 			}

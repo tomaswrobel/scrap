@@ -118,5 +118,5 @@ export * as stage from "./data/stage.json";
 export * as theme from "./data/theme.json";
 export * from "./utils/types.ts";
 
-export {default as plugins} from "./toolbox/index.ts";
+export {default as plugins} from "./toolbox";
 export {allBlocks, Generator, Order};

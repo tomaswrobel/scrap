@@ -1,5 +1,6 @@
 import {parse} from "doctrine";
-import {Generator, Types} from "../blockly";
+import {Types} from "../blockly";
+import {checkForScope, escape, unescape} from "./utils";
 
 /**
  * Transform ScrapScript code to JavaScript.
@@ -36,7 +37,7 @@ export default async function transform(code: string, minified = false) {
 						) {
 							path.replaceWith(
 								babel.types.identifier(
-									Generator.escape(
+									escape(
 										path.node.quasi.quasis[0].value.raw
 									)
 								)
@@ -178,7 +179,7 @@ export default async function transform(code: string, minified = false) {
 											babel.types.identifier("declareVariable")
 										),
 										[
-											babel.types.stringLiteral(Generator.unescape(declaration.id.name)),
+											babel.types.stringLiteral(unescape(declaration.id.name)),
 											babel.types.stringLiteral(varType || "Any"),
 										]
 									)
@@ -212,7 +213,7 @@ export default async function transform(code: string, minified = false) {
 										babel.types.identifier(path.node.operator === "=" ? "setVariable" : "changeVariable")
 									),
 									[
-										babel.types.stringLiteral(Generator.unescape(path.node.left.name)),
+										babel.types.stringLiteral(unescape(path.node.left.name)),
 										right,
 									]
 								)
@@ -221,38 +222,8 @@ export default async function transform(code: string, minified = false) {
 					},
 					Identifier(path) {
 						if (variables.has(path.node.name)) {
-							// Check if there is no function with the parameter
-							let parent = path.parentPath;
-							while (parent && parent.node.type !== "FunctionDeclaration" && parent.node.type !== "FunctionExpression") {
-								parent = parent.parentPath!;
-							}
-							if (parent && parent.node.type === "FunctionDeclaration") {
-								if (parent.node.params.some((param) => param.type === "Identifier" && param.name === path.node.name)) {
-									return;
-								}
-							}
-
-							// Check for for...of loops
-							parent = path.parentPath;
-							while (parent && parent.node.type !== "ForOfStatement") {
-								parent = parent.parentPath!;
-							}
-							if (parent && parent.node.type === "ForOfStatement") {
-								if (parent.node.left.type === "Identifier" && parent.node.left.name === path.node.name) {
-									return;
-								}
-							}
-
-							// Check for try...catch blocks
-							parent = path.parentPath;
-							while (parent && parent.node.type !== "TryStatement") {
-								parent = parent.parentPath!;
-							}
-
-							if (parent && parent.node.type === "TryStatement") {
-								if (parent.node.handler && parent.node.handler.param && parent.node.handler.param.type === "Identifier" && parent.node.handler.param.name === path.node.name) {
-									return;
-								}
+							if (checkForScope(path)) {
+								return;
 							}
 
 							path.replaceWith(
@@ -263,44 +234,14 @@ export default async function transform(code: string, minified = false) {
 											babel.types.identifier("getVariable")
 										),
 										[
-											babel.types.stringLiteral(Generator.unescape(path.node.name)),
+											babel.types.stringLiteral(unescape(path.node.name)),
 										]
 									)
 								)
 							);
-						} else if (window.app.globalVariables.some((e) => Generator.escape(e) === path.node.name)) {
-							// Check if there is no function with the parameter
-							let parent = path.parentPath;
-							while (parent && parent.node.type !== "FunctionDeclaration" && parent.node.type !== "FunctionExpression") {
-								parent = parent.parentPath!;
-							}
-							if (parent && parent.node.type === "FunctionDeclaration") {
-								if (parent.node.params.some((param) => param.type === "Identifier" && param.name === path.node.name)) {
-									return;
-								}
-							}
-
-							// Check for for...of loops
-							parent = path.parentPath;
-							while (parent && parent.node.type !== "ForOfStatement") {
-								parent = parent.parentPath!;
-							}
-							if (parent && parent.node.type === "ForOfStatement") {
-								if (parent.node.left.type === "Identifier" && parent.node.left.name === path.node.name) {
-									return;
-								}
-							}
-
-							// Check for try...catch blocks
-							parent = path.parentPath;
-							while (parent && parent.node.type !== "TryStatement") {
-								parent = parent.parentPath!;
-							}
-
-							if (parent && parent.node.type === "TryStatement") {
-								if (parent.node.handler && parent.node.handler.param && parent.node.handler.param.type === "Identifier" && parent.node.handler.param.name === path.node.name) {
-									return;
-								}
+						} else if (window.app.globalVariables.some(([e]) => escape(e) === path.node.name)) {
+							if (checkForScope(path)) {
+								return;
 							}
 
 							path.replaceWith(
@@ -314,7 +255,7 @@ export default async function transform(code: string, minified = false) {
 											babel.types.identifier("getVariable")
 										),
 										[
-											babel.types.stringLiteral(Generator.unescape(path.node.name)),
+											babel.types.stringLiteral(unescape(path.node.name)),
 										]
 									)
 								)

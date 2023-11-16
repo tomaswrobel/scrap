@@ -255,10 +255,10 @@ class SB3 {
         });
         this.transformers.sound_volume = this.reporter("volume"),
 
-            // Pen
-            this.transformers.pen_clear = this.override({
-                opcode: "penClear"
-            });
+        // Pen
+        this.transformers.pen_clear = this.override({
+            opcode: "penClear"
+        });
         this.transformers.pen_stamp = this.override({
             opcode: "stamp"
         });
@@ -385,6 +385,17 @@ class SB3 {
             return block;
         };
         this.transformers.control_wait_until = this.transformers.control_repeat_until;
+        this.transformers.control_stop = data => {
+            const options = data.fields.STOP_OPTION[0];
+
+            if (options === "all") {
+                return window.app.current.codeWorkspace.newBlock("stop");
+            } else if (options === "this script") {
+                return window.app.current.codeWorkspace.newBlock("return");
+            } else {
+                return this.unknown(`control_stop [${options}]`, "command");
+            }
+        };
         this.transformers.control_repeat = this.override({
             opcode: "repeat",
             inputs: {
@@ -532,7 +543,8 @@ class SB3 {
         };
         this.transformers.sensing_answer = () => {
             const name = this.helperVariable("answer", "String");
-            const block = window.app.current.codeWorkspace.newBlock("getVariable");
+            const block = window.app.current.codeWorkspace.newBlock("parameter");
+            block.loadExtraState!({type: "String"});
             block.setFieldValue(name, "VAR");
             return block;
         };
@@ -597,9 +609,11 @@ class SB3 {
 
         this.transformers.operator_random = async data => {
             const fromParam = window.app.current.codeWorkspace.newBlock("parameter");
+            fromParam.loadExtraState!({type: "Number"});
             fromParam.setFieldValue("__from__", "VAR");
 
             const toParam = window.app.current.codeWorkspace.newBlock("parameter");
+            toParam.loadExtraState!({type: "Number"});
             toParam.setFieldValue("__to__", "VAR");
 
             const multiply = window.app.current.codeWorkspace.newBlock("arithmetics");
@@ -878,6 +892,7 @@ class SB3 {
         };
         this.transformers.argument_reporter_boolean = data => {
             const block = window.app.current.codeWorkspace.newBlock("parameter");
+            block.loadExtraState!({type: "Boolean"});
             block.setFieldValue(data.fields.VALUE[0], "VAR");
             block.setOutput(true, "Boolean");
             return block;
@@ -1065,7 +1080,8 @@ class SB3 {
                 return block;
             }
             case 12: {
-                const block = window.app.current.codeWorkspace.newBlock("getVariable");
+                const block = window.app.current.codeWorkspace.newBlock("parameter");
+                block.loadExtraState!({isVariable: true});
                 block.setFieldValue(data[1], "VAR");
                 block.setShadow(shadow === 1);
                 return block;
