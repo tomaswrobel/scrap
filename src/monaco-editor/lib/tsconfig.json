@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "noLib": true,
+        "composite": true
+    },
+    "files": [
+        "static.d.ts",
+        "runtime.d.ts",
+        "example.ts",
+    ]
+}

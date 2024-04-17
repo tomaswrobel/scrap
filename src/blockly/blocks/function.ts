@@ -1,6 +1,6 @@
 /**
  * @license MIT
- * @fileoverview Defines the call mutator.
+ * @fileoverview Defines the function mutator.
  * @author Tomáš Wróbel
  * 
  * Similar to variables, Scrap does not use Blockly's built-in
@@ -14,97 +14,120 @@
  * 
  * So instead, Scrap uses its own function blocks, which
  * works similarly to legacy Blockly's procedure system.
- * 
- * This block definition is used by the function block.
- * It ensures following:
- * * The function block has a name and a return type.
- * * The function block has parameters.
  */
-import * as Blockly from "blockly/core";
-import {Types} from "../utils/types";
-import ProcedureBlock from "../utils/procedure_block";
+import * as Blockly from "blockly";
 
-export default <Partial<ProcedureBlock>>{
-	params: [],
+export type FunctionBlock = Blockly.BlockSvg & FunctionBlockMixin;
+export interface FunctionBlockMixin extends FunctionBlockMixinType {}
+export type FunctionBlockMixinType = typeof MIXIN;
+export type FunctionTypeAnnotation = Blockly.serialization.blocks.State | null;
 
-	init(this: ProcedureBlock) {
-		this.inputsInline = true;
-		this.setNextStatement(true, null);
-		this.setStyle("procedure_blocks");
-		this.setCommentText("Describe this function...");
-		this.appendDummyInput("DUMMY")
-			.appendField(new Blockly.FieldDropdown(Types.map(type => [type || "void", type] as [string, string])), "TYPE")
-			.appendField("function")
-			.appendField(new Blockly.FieldTextInput("foo"), "NAME");
-		this.setMutator(
-			new Blockly.icons.MutatorIcon(
-				Types.map(type => "function_param_" + type),
-				this
-			)
-		);
-	},
-	saveExtraState(this: ProcedureBlock) {
-		return {
-			name: this.getFieldValue("NAME"),
-			returnType: this.getFieldValue("TYPE"),
-			params: this.params,
-		};
-	},
-	loadExtraState(this: ProcedureBlock, state: any) {
-		this.params = state.params;
-		this.setFieldValue(state.name, "NAME");
-		this.setFieldValue(state.returnType, "TYPE");
+const dom = Blockly.utils.xml.createElement("shadow");
+dom.setAttribute("type", "type");
 
-		this.updateShape();
-	},
-	compose(this: ProcedureBlock, topBlock: Blockly.Block) {
-		this.params = [];
+export const MIXIN = {
+    params: new Array<string>(),
+    returns: false,
 
-		for (let block = topBlock.getNextBlock(); block; block = block.getNextBlock()) {
-			if (block.type === "text_or_number_param") {
-				this.params.push({
-					type: ["String", "Number"], 
-					name: block.getFieldValue("NAME")
-				});
-			} else {
-				const check = block.type.slice("function_param_".length);
-				const name = block.getFieldValue("NAME");
-				this.params.push({type: check, name});
-			}
-		}
+    saveExtraState(this: FunctionBlock) {
+        return {
+            params: this.params,
+            returns: this.returns
+        };
+    },
 
-		this.updateShape();
-	},
-	decompose(this: ProcedureBlock, ws: Blockly.Workspace) {
-		const workspace = ws as Blockly.WorkspaceSvg;
-		const containerBlock = workspace.newBlock("function_header");
-		containerBlock.initSvg?.();
-		let connection = containerBlock.nextConnection;
+    loadExtraState(this: FunctionBlock, state: any) {
+        this.params = state.params || [];
+        this.returns = state.returns || false;
+        this.updateShape();
+    },
 
-		for (const {name, type} of this.params) {
-			const block = workspace.newBlock(typeof type === "object" ? "text_or_number_param" : "function_param_" + type);
-			block.initSvg?.();
-			block.setFieldValue(name, "NAME");
-			connection.connect(block.previousConnection);
-			connection = block.nextConnection;
-		}
+    compose(this: FunctionBlock, topBlock: Blockly.Block) {
+        this.returns = false;
+        this.params = [];
 
-		return containerBlock;
-	},
-	updateShape(this: ProcedureBlock) {
-		const input = this.getInput("DUMMY")!;
+        for (let block = topBlock.getNextBlock(); block; block = block.getNextBlock()) {
+            if (block.type === "function_returns") {
+                this.returns = true;
+            } else {
+                this.params.push(block.getFieldValue("NAME"));
+            }
+        }
 
-		for (let i = 0; input.removeField("PARAM_" + i, true); i++);
+        this.updateShape();
+    },
 
-		for (let i = 0; i < this.params.length; i++) {
-			input.appendField(
-				Blockly.fieldRegistry.fromJson({
-					type: "field_param",
-					var: this.params[i].name,
-					varType: this.params[i].type,
-				})!,
-				`PARAM_${i}`
-			);
-		}
-	},
+    decompose(this: FunctionBlock, workspace: Blockly.WorkspaceSvg) {
+        const containerBlock = workspace.newBlock("function_header");
+        containerBlock.initSvg?.();
+        let connection = containerBlock.nextConnection;
+
+        for (const name of this.params) {
+            const block = workspace.newBlock("function_param");
+            block.initSvg?.();
+            block.setFieldValue(name, "NAME");
+            connection.connect(block.previousConnection);
+            connection = block.nextConnection;
+        }
+
+        if (this.returns) {
+            const block = workspace.newBlock("function_returns");
+            block.initSvg?.();
+            block.previousConnection.connect(connection);
+        }
+
+        return containerBlock;
+    },
+
+    updateShape(this: FunctionBlock) {
+        let input = this.getInput("RETURNS");
+
+        if (input && !this.returns) {
+            this.removeInput("RETURNS");
+            input = null;
+        }
+
+        for (var i = 0; i < this.params.length; i++) {
+            const typed = this.getInput("PARAM_" + i);
+
+            if (!typed) {
+                const block = this.workspace.newBlock("typed");
+                block.getInput("TYPE")!.setShadowDom(dom);
+                block.setFieldValue(this.params[i], "PARAM");
+                block.initSvg?.();
+                block.render?.();
+
+                this.appendValueInput("PARAM_" + i).connection!.connect(
+                    block.outputConnection!
+                );
+            } else {
+                const block = typed.connection!.targetBlock()!;
+                const value = block.getFieldValue("PARAM");
+
+                block.setFieldValue(`${this.params[i]}:${value.split(":")[1] || "any"}`, "PARAM");
+            }
+
+            if (input) {
+                this.moveInputBefore("PARAM_" + i, "RETURNS");
+            }
+        }
+
+        while (true) {
+            const input = this.getInput("PARAM_" + i);
+            if (!input) {
+                break;
+            }
+            input.connection!.targetBlock()!.dispose(false);
+            this.removeInput("PARAM_" + i);
+        }
+
+        if (!input && this.returns) {
+            this.appendValueInput("RETURNS")
+                .setCheck("type")
+                .setShadowDom(dom)
+                .appendField("returns");
+        }
+    }
 };
+
+export const blocks = ["function_param", "function_returns"];

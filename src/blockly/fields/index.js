@@ -1,0 +1,1 @@
+export default /** @type {Record<string, {default: typeof import("blockly").Field}>} */ (require("./*.ts"));

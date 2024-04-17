@@ -1,18 +1,16 @@
 import * as Blockly from 'blockly/core';
 
-export interface UnknownBlock extends Blockly.BlockSvg {
-    shape: "command" | "reporter";
-    opcode: string;
-    updateShape(): void;
-}
+export type UnknownBlock = Blockly.BlockSvg & UnknownBlockMixin;
+export interface UnknownBlockMixin extends UnknownBlockMixinType {}
+export type UnknownBlockMixinType = typeof MIXIN;
 
 const COMMENT = `This is a Scrap-incompatible 
 block imported from Scratch. 
 This block and any blocks 
 connected to will not be executed.`;
 
-export default <Partial<UnknownBlock>>{
-    shape: "command",
+export const MIXIN = {
+    shape: "command" as "command" | "reporter",
     opcode: "unknown",
 
     init(this: UnknownBlock) {
@@ -37,10 +35,10 @@ export default <Partial<UnknownBlock>>{
 
     updateShape(this: UnknownBlock) {
         if (this.shape === "command") {
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
+            this.setPreviousStatement(true, "any");
+            this.setNextStatement(true, "any");
         } else {
-            this.setOutput(true, null);
+            this.setOutput(true, "any");
         }
         this.setFieldValue(this.opcode, "OPCODE");
     },

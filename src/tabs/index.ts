@@ -34,7 +34,7 @@ class Tabs {
             try {
                 await component.prerender();
             } catch (error) {
-                window.app.hideLoader();
+                app.hideLoader();
                 await new Promise(resolve => setTimeout(resolve, 100));
                 await Parley.fire({
                     title: "Error",

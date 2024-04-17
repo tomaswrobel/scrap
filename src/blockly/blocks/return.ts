@@ -1,50 +1,38 @@
-import * as Blockly from "blockly/core";
-import {TypeToShadow} from "../utils/types";
+import * as Blockly from "blockly";
+import {TypeToShadow} from "../types";
 
-interface ReturnBlock extends Blockly.BlockSvg {
-	addValue(type: string): void;
-}
+export type ReturnBlock = Blockly.BlockSvg & ReturnBlockMixin;
+export interface ReturnBlockMixin extends ReturnBlockMixinType {}
+export type ReturnBlockMixinType = typeof MIXIN;
+export type ReturnBlockOutput = string[] | false;
 
-export default <Partial<ReturnBlock>>{
+export const MIXIN = {
 	init(this: ReturnBlock) {
 		this.inputsInline = true;
-		this.setStyle("procedure_blocks");
+		this.setStyle("Functions");
 		this.appendDummyInput().appendField("return");
-		this.setPreviousStatement(true, null);
+		this.setPreviousStatement(true, "any");
 	},
 
 	saveExtraState(this: ReturnBlock) {
-		const input = this.getInput("VALUE");
-
 		return {
-			output: input ? input.connection!.getCheck()![0] : false,
+			output: this.getInput("VALUE")?.connection?.getCheck() || false
 		};
 	},
 
-	loadExtraState(this: ReturnBlock, state: any) {
-		const {output} = this.saveExtraState!();
+	loadExtraState(this: ReturnBlock, state: Record<"output", ReturnBlockOutput>) {
+		const {output} = this.saveExtraState();
 
-		if (output !== state.output) {
+		if (!this.isEqual(output, state.output)) {
 			const input = this.getInput("VALUE");
 
 			if (input) {
 				const block = input.connection!.targetBlock();
 				input.connection!.disconnect();
 				this.removeInput("VALUE");
-
-				if (state.output !== false) {
-					this.addValue(state.output);
-				}
-
-				if (block) {
-					const check = block.outputConnection!.getCheck();
-
-					if (!check || check.includes(state.output)) {
-						this.getInput("VALUE")!.connection!.connect(block.outputConnection!);
-					}
-				}
-			} else if (state.output !== false) {
-				this.addValue(state.output);
+				this.addValue(state.output, block);
+			} else {
+				this.addValue(state.output, null);
 			}
 		}
 	},
@@ -56,23 +44,40 @@ export default <Partial<ReturnBlock>>{
 			if (parent.type === "function") {
 				const type = parent.getFieldValue("TYPE");
 				this.loadExtraState!({output: type});
+			} else {
+
 			}
 		}
 	},
 
-	addValue(this: ReturnBlock, type) {
-		const input = this.appendValueInput("VALUE").setCheck(type);
+	addValue(this: ReturnBlock, check: ReturnBlockOutput, block: Blockly.Block | null) {
+		if (check) {
+			const input = this.appendValueInput("VALUE").setCheck(check);
+			const type = check.length === 1 ? check[0] : "any";
 
-		if (Array.isArray(type)) {
-			type = type[0];
-		}
+			if (type in TypeToShadow) {
+				input.connection!.setShadowState({
+					type: TypeToShadow[type]
+				});
+			}
 
-		if (type in TypeToShadow) {
-			const block = this.workspace.newBlock(TypeToShadow[type]);
-			block.setShadow(true);
-			block.initSvg?.();
-
-			input.connection!.connect(block.outputConnection!);
+			if (block) {
+				input.connection!.connect(block.outputConnection!);
+			}
 		}
 	},
+
+	isEqual(check1: ReturnBlockOutput, check2: ReturnBlockOutput) {
+		if (check1 === check2) {
+			return true;
+		}
+
+		if (check1 && check2) {
+			if (check1.length === check2.length) {
+				return check1.every(p => check2.includes(p));
+			}
+		}
+
+		return false;
+	}
 };

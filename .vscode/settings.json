@@ -2,9 +2,9 @@
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
     "typescript.format.semicolons": "insert",
-
     "editor.formatOnSave": true,
     "files.associations": {
-        "*.json": "jsonc"
-    }
+        "*.json": "jsonc",
+    },
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

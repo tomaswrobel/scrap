@@ -1,18 +1,7 @@
 {
     "name": "scrap",
-    "base": "zelos",
     "startHats": true,
     "blockStyles": {
-        "logic_blocks": {
-            "colourPrimary": "#59C059",
-            "colourSecondary": "#46B946",
-            "colourTertiary": "#389438"
-        },
-        "colour_blocks": {
-            "colourPrimary": "#0fBD8C",
-            "colourSecondary": "#0DA57A",
-            "colourTertiary": "#0B8E69"
-        },
         "Motion": {
             "colourPrimary": "#4C97FF",
             "colourSecondary": "#4280D7",
@@ -57,6 +46,16 @@
             "colourPrimary": "#CF63CF",
             "colourSecondary": "#C94FC9",
             "colourTertiary": "#BD42BD"
+        },
+        "Variables": {
+            "colourPrimary": "#FF8C1A",
+            "colourSecondary": "#FF8000",
+            "colourTertiary": "#DB6E00"
+        },
+        "Functions": {
+            "colourPrimary": "#FF6680",
+            "colourSecondary": "#FF4D6A",
+            "colourTertiary": "#FF3355"
         }
     },
     "categoryStyles": {
@@ -67,7 +66,7 @@
             "colour": "#9966FF"
         },
         "pen": {
-            "colour": "#0fBD8C"
+            "colour": "#0FBD8C"
         },
         "events": {
             "colour": "#FFBF00"
@@ -86,6 +85,12 @@
         },
         "sounds": {
             "colour": "#CF63CF"
+        },
+        "variables": {
+            "colour": "#FF8C1A"
+        },
+        "functions": {
+            "colour": "#FF6680"
         }
     },
     "componentStyles": {

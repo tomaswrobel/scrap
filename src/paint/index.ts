@@ -17,7 +17,7 @@ export default class Paint implements Component {
 	saveButton = document.createElement("button");
 	currentTool?: Tool;
 	mouseDown = false;
-	changed!: boolean;
+	changed?: boolean;
 	mediaList?: MediaList;
 	file?: File;
 
@@ -178,7 +178,7 @@ export default class Paint implements Component {
 						if (x < 0) {
 							clipLeft = -x;
 						}
-						
+
 						if (x + canvas.width > bbox.width) {
 							clipRight = x + canvas.width - bbox.width;
 						}
@@ -220,7 +220,7 @@ export default class Paint implements Component {
 	}
 
 	async load(file: File) {
-		window.app.showLoader("Loading costume...");
+		app.showLoader("Loading costume...");
 		const reader = new FileReader();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -228,7 +228,7 @@ export default class Paint implements Component {
 			reader.onload = () => {
 				const image = new Image();
 				image.onload = () => {
-					if (window.app.current.name === "Stage") {
+					if (app.current.name === "Stage") {
 						this.context.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
 					} else {
 						// Center the image
@@ -245,7 +245,7 @@ export default class Paint implements Component {
 		});
 
 		this.file = file;
-		window.setTimeout(window.app.hideLoader, 100);
+		window.setTimeout(app.hideLoader, 100);
 	}
 
 	crop() {
@@ -302,7 +302,7 @@ export default class Paint implements Component {
 
 	render() {
 		this.update();
-		window.app.container.appendChild(this.container);
+		app.container.appendChild(this.container);
 	}
 
 	setChanged(changed: boolean) {
@@ -329,44 +329,44 @@ export default class Paint implements Component {
 	update() {
 		this.mediaList?.dispose();
 
-		this.mediaList = new MediaList(MediaList.COSTUME, window.app.current.costumes);
+		this.mediaList = new MediaList(MediaList.COSTUME, app.current.costumes);
 
 		this.mediaList.addEventListener("select", async e => {
 			const {detail: file} = e as CustomEvent<File>;
-			window.app.current.current = window.app.current.costumes.indexOf(file);
-			window.app.current.update();
+			app.current.current = app.current.costumes.indexOf(file);
+			app.current.update();
 			await this.load((e as CustomEvent<File>).detail);
 			this.setChanged(false);
 		});
 
 		this.mediaList.render(this.container);
 
-		this.load(window.app.current.costumes[0]);
+		this.load(app.current.costumes[0]);
 
 		this.saveButton.onclick = async () => {
 			if (this.changed && this.file) {
-				window.app.showLoader("Saving costume...");
+				app.showLoader("Saving costume...");
 				this.setChanged(false);
 				const file = await this.save(this.file.name);
-				const index = window.app.current.costumes.indexOf(this.file);
+				const index = app.current.costumes.indexOf(this.file);
 
 				if (index === -1) {
 					throw new Error("Costume not found");
 				}
 
-				window.app.current.costumes[index] = file;
+				app.current.costumes[index] = file;
 				this.update();
-				window.app.hideLoader();
+				app.hideLoader();
 			}
 		};
 
 		this.cancelButton.onclick = () => {
 			if (this.changed) {
 				this.setChanged(false);
-				this.load(window.app.current.costumes[window.app.current.current]);
+				this.load(app.current.costumes[app.current.current]);
 			}
 		};
 
-		window.app.current.update();
+		app.current.update();
 	}
 }

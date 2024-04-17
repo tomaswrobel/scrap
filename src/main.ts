@@ -1,10 +1,6 @@
-import App from "./app";
+import {App} from "./app";
 import "parley.js/dist/default.css";
-import {version, displayName} from "../package.json";
-
-window.app = new App();
-window.app.start();
-document.title = `${displayName} v${version}`;
+import {version} from "../package.json";
 
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
@@ -15,24 +11,27 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-if ("launchQueue" in window) {
-    function isFile(file: FileSystemHandle): file is FileSystemFileHandle {
-        return file.kind === "file";
-    }
+// Enable opening files via PWA
+window.launchQueue?.setConsumer(async launchParams => {
+	function isFile(file: FileSystemHandle): file is FileSystemFileHandle {
+		return file.kind === "file";
+	}
 
-    window.launchQueue!.setConsumer(async launchParams => {
-        if (launchParams.files.length > 0) {
-            const fileHandle = launchParams.files[0];
+	if (launchParams.files.length > 0) {
+		const fileHandle = launchParams.files[0];
 
-            if (isFile(fileHandle)) {
-                if (fileHandle.name.endsWith(".sb3")) {
-                    window.app.open(await fileHandle.getFile());
-                } else if (fileHandle.name.endsWith(".scrap")) {
-                    window.app.import(await fileHandle.getFile());
-                } else {
-                    alert("Unsupported file type");
-                }
-            }
-        }
-    });
-}
+		if (isFile(fileHandle)) {
+			if (fileHandle.name.endsWith(".sb3")) {
+				app.open(await fileHandle.getFile());
+			} else if (fileHandle.name.endsWith(".scrap")) {
+				app.import(await fileHandle.getFile());
+			} else {
+				window.alert("Unsupported file type");
+			}
+		}
+	}
+});
+
+window.app = new App();
+window.app.start();
+document.title = `Scrap - Editor v${version}`;

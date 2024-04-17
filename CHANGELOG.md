@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2024-4-17
+
+### Added
+
+- Scrap now uses TypeScript instead of JavaScript
+- Scrap now ships with Monaco Editor, supporting:
+    - TypeScript intellisense
+        - Scrap does not use the default implementation:
+            - to align with TypeScript version
+            - to allow some modifications (e.g. lib.d.ts)
+    - color pickers
+    - colorization identical to the blocks
+- script variables (`let`, `var` and `const`)
+
+### Changed
+
+- engine version
+- file structure
+
 ## [3.6.0] - 2023-11-16
 
 ### Fixed

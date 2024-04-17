@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "composite": true,
+        "noLib": true,
+        "types": [
+            "../../monaco-editor/lib/static.d.ts"
+        ]
+    },
+    "files": [
+        "runtime.ts",
+        "templates.d.ts"
+    ]
+}

@@ -1,0 +1,1 @@
+declare const __SPRITE__: "__SPRITES__";

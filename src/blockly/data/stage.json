@@ -7,18 +7,18 @@
         "contents": [
             {
                 "kind": "block",
-                "type": "changeEffect",
+                "type": "set",
                 "inputs": {
-                    "EFFECT": {
+                    "VAR": {
                         "shadow": {
                             "type": "effect"
                         }
                     },
-                    "CHANGE": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
-                                "NUM": 25
+                                "NUM": 100
                             }
                         }
                     }
@@ -26,18 +26,18 @@
             },
             {
                 "kind": "block",
-                "type": "setEffect",
+                "type": "change",
                 "inputs": {
-                    "EFFECT": {
+                    "VAR": {
                         "shadow": {
                             "type": "effect"
                         }
                     },
-                    "CHANGE": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
-                                "NUM": 100
+                                "NUM": 10
                             }
                         }
                     }
@@ -71,22 +71,18 @@
             },
             {
                 "kind": "block",
-                "type": "getEffect",
-                "inputs": {
-                    "EFFECT": {
-                        "shadow": {
-                            "type": "effect"
-                        }
-                    }
+                "type": "effect"
+            },
+            {
+                "kind": "block",
+                "type": "backdrop"
+            },
+            {
+                "kind": "block",
+                "type": "backdrop",
+                "fields": {
+                    "VALUE": "index"
                 }
-            },
-            {
-                "kind": "block",
-                "type": "backdropName"
-            },
-            {
-                "kind": "block",
-                "type": "backdropNumber"
             }
         ]
     },
@@ -127,9 +123,14 @@
             },
             {
                 "kind": "block",
-                "type": "setVolume",
+                "type": "set",
                 "inputs": {
-                    "VOLUME": {
+                    "VAR": {
+                        "shadow": {
+                            "type": "volume"
+                        }
+                    },
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
@@ -141,9 +142,14 @@
             },
             {
                 "kind": "block",
-                "type": "changeVolume",
+                "type": "set",
                 "inputs": {
-                    "VOLUME": {
+                    "VAR": {
+                        "shadow": {
+                            "type": "volume"
+                        }
+                    },
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
@@ -435,14 +441,7 @@
             },
             {
                 "kind": "block",
-                "type": "property",
-                "inputs": {
-                    "SPRITE": {
-                        "shadow": {
-                            "type": "sprite"
-                        }
-                    }
-                }
+                "type": "property"
             },
             {
                 "kind": "block",
@@ -910,6 +909,26 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "LABEL",
+                "text": "Types"
+            },
+            {
+                "kind": "block",
+                "type": "type"
+            },
+            {
+                "kind": "block",
+                "type": "generic"
+            },
+            {
+                "kind": "block",
+                "type": "union"
             }
         ]
     },
@@ -928,9 +947,15 @@
                 "extraState": {
                     "items": [
                         "single",
-                        "single",
                         "single"
                     ]
+                },
+                "inputs": {
+                    "TYPE": {
+                        "shadow": {
+                            "type": "type"
+                        }
+                    }
                 }
             },
             {

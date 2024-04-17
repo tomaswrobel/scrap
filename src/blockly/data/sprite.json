@@ -159,53 +159,110 @@
             },
             {
                 "kind": "block",
-                "type": "changeX",
+                "type": "set",
                 "inputs": {
-                    "X": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
                                 "NUM": 10
                             }
                         }
-                    }
-                }
-            },
-            {
-                "kind": "block",
-                "type": "setX",
-                "inputs": {
-                    "X": {
+                    },
+                    "VAR": {
                         "shadow": {
-                            "type": "math_number"
+                            "type": "x"
                         }
                     }
                 }
             },
             {
                 "kind": "block",
-                "type": "changeY",
+                "type": "set",
                 "inputs": {
-                    "Y": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
                                 "NUM": 10
                             }
                         }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "y"
+                        }
                     }
                 }
             },
             {
                 "kind": "block",
-                "type": "setY",
+                "type": "change",
                 "inputs": {
-                    "Y": {
+                    "VALUE": {
                         "shadow": {
-                            "type": "math_number"
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 10
+                            }
+                        }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "x"
                         }
                     }
                 }
+            },
+            {
+                "kind": "block",
+                "type": "change",
+                "inputs": {
+                    "VALUE": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 10
+                            }
+                        }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "y"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "setRotationStyle",
+                "inputs": {
+                    "STYLE": {
+                        "shadow": {
+                            "type": "rotationStyle"
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "ifOnEdgeBounce"
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "block",
+                "type": "x"
+            },
+            {
+                "kind": "block",
+                "type": "y"
+            },
+            {
+                "kind": "block",
+                "type": "direction"
             },
             {
                 "kind": "sep",
@@ -327,37 +384,14 @@
             },
             {
                 "kind": "block",
-                "type": "changeEffect",
+                "type": "set",
                 "inputs": {
-                    "EFFECT": {
+                    "VAR": {
                         "shadow": {
                             "type": "effect"
                         }
                     },
-                    "CHANGE": {
-                        "shadow": {
-                            "type": "math_number",
-                            "fields": {
-                                "NUM": 25
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                "kind": "block",
-                "type": "clearEffects"
-            },
-            {
-                "kind": "block",
-                "type": "setEffect",
-                "inputs": {
-                    "EFFECT": {
-                        "shadow": {
-                            "type": "effect"
-                        }
-                    },
-                    "CHANGE": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
@@ -366,6 +400,29 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "block",
+                "type": "change",
+                "inputs": {
+                    "VAR": {
+                        "shadow": {
+                            "type": "effect"
+                        }
+                    },
+                    "VALUE": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 10
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "kind": "block",
+                "type": "clearEffects"
             },
             {
                 "kind": "sep",
@@ -434,28 +491,38 @@
             },
             {
                 "kind": "block",
-                "type": "setSize",
+                "type": "set",
                 "inputs": {
-                    "SIZE": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
                                 "NUM": 100
                             }
                         }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "size"
+                        }
                     }
                 }
             },
             {
                 "kind": "block",
-                "type": "changeSize",
+                "type": "change",
                 "inputs": {
-                    "SIZE": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
                                 "NUM": 10
                             }
+                        }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "size"
                         }
                     }
                 }
@@ -486,6 +553,10 @@
             },
             {
                 "kind": "block",
+                "type": "effect"
+            },
+            {
+                "kind": "block",
                 "type": "visible"
             },
             {
@@ -493,22 +564,29 @@
                 "type": "size"
             },
             {
-                "kind": "block",
-                "type": "costumeName"
+                "kind": "sep",
+                "gap": 40
             },
             {
                 "kind": "block",
-                "type": "costumeNumber"
+                "type": "costume"
             },
             {
                 "kind": "block",
-                "type": "getEffect",
-                "inputs": {
-                    "EFFECT": {
-                        "shadow": {
-                            "type": "effect"
-                        }
-                    }
+                "type": "costume",
+                "fields": {
+                    "VALUE": "index"
+                }
+            },
+            {
+                "kind": "block",
+                "type": "backdrop"
+            },
+            {
+                "kind": "block",
+                "type": "backdrop",
+                "fields": {
+                    "VALUE": "index"
                 }
             }
         ]
@@ -550,9 +628,14 @@
             },
             {
                 "kind": "block",
-                "type": "setVolume",
+                "type": "set",
                 "inputs": {
-                    "VOLUME": {
+                    "VAR": {
+                        "shadow": {
+                            "type": "volume"
+                        }
+                    },
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
@@ -564,9 +647,14 @@
             },
             {
                 "kind": "block",
-                "type": "changeVolume",
+                "type": "set",
                 "inputs": {
-                    "VOLUME": {
+                    "VAR": {
+                        "shadow": {
+                            "type": "volume"
+                        }
+                    },
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
@@ -651,36 +739,54 @@
             },
             {
                 "kind": "block",
-                "type": "setPenColor",
+                "type": "set",
                 "inputs": {
-                    "COLOR": {
+                    "VALUE": {
                         "shadow": {
-                            "type": "color"
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 100
+                            }
+                        }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "penSize"
                         }
                     }
                 }
             },
             {
                 "kind": "block",
-                "type": "changePenSize",
+                "type": "change",
                 "inputs": {
-                    "SIZE": {
+                    "VALUE": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
                                 "NUM": 1
                             }
                         }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "penSize"
+                        }
                     }
                 }
             },
             {
                 "kind": "block",
-                "type": "setPenSize",
+                "type": "set",
                 "inputs": {
-                    "SIZE": {
+                    "VALUE": {
                         "shadow": {
-                            "type": "math_number"
+                            "type": "color"
+                        }
+                    },
+                    "VAR": {
+                        "shadow": {
+                            "type": "penColor"
                         }
                     }
                 }
@@ -1016,18 +1122,15 @@
             },
             {
                 "kind": "block",
-                "type": "property",
-                "inputs": {
-                    "SPRITE": {
-                        "shadow": {
-                            "type": "sprite"
-                        }
-                    }
-                }
+                "type": "property"
             },
             {
                 "kind": "block",
                 "type": "isTurbo"
+            },
+            {
+                "kind": "block",
+                "type": "draggable"
             },
             {
                 "kind": "sep",
@@ -1035,9 +1138,14 @@
             },
             {
                 "kind": "block",
-                "type": "setDraggable",
+                "type": "set",
                 "inputs": {
-                    "DRAGGABLE": {
+                    "VAR": {
+                        "shadow": {
+                            "type": "draggable"
+                        }
+                    },
+                    "VALUE": {
                         "block": {
                             "kind": "block",
                             "type": "boolean"
@@ -1507,6 +1615,26 @@
                         }
                     }
                 }
+            },
+            {
+                "kind": "sep",
+                "gap": 40
+            },
+            {
+                "kind": "LABEL",
+                "text": "Types"
+            },
+            {
+                "kind": "block",
+                "type": "type"
+            },
+            {
+                "kind": "block",
+                "type": "generic"
+            },
+            {
+                "kind": "block",
+                "type": "union"
             }
         ]
     },
@@ -1525,9 +1653,15 @@
                 "extraState": {
                     "items": [
                         "single",
-                        "single",
                         "single"
                     ]
+                },
+                "inputs": {
+                    "TYPE": {
+                        "shadow": {
+                            "type": "type"
+                        }
+                    }
                 }
             },
             {

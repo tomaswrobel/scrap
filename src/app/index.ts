@@ -2,7 +2,7 @@ import {Entity, Sprite, Stage} from "../entities";
 import {version} from "scrap-engine/package.json";
 import Workspace from "../workspace";
 import Paint from "../paint";
-import Code from "../code";
+import CodeEditor from "../code/editor";
 
 import fs from "fs";
 import * as Parley from "parley.js";
@@ -12,15 +12,15 @@ import JSZip from "jszip";
 import {saveAs} from "file-saver";
 import Sound from "../sounds";
 
-import SB3 from "../files/sb3";
+import SB3 from "../code/transformers/sb3";
 import Tabs from "../tabs";
-import CodeParser from "../files/blocks";
+import Blocks from "../code/transformers/blocks";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
 const engineCDN = "https://unpkg.com/scrap-engine@" + version;
 
-export default class App {
+export class App {
 	container = document.getElementById("root")!;
 	add = document.getElementById("add")!;
 
@@ -38,7 +38,7 @@ export default class App {
 
 	tabs!: Tabs;
 	workspace = new Workspace();
-	code = new Code();
+	code = new CodeEditor();
 
 	entities = new Array<Entity>();
 	current!: Entity;
@@ -77,7 +77,7 @@ export default class App {
 			engine.textContent = engineScript;
 
 			const script = document.createElement("script");
-			let code = "";
+			let code = "var $ = {};\n\n";
 
 			try {
 				for (const entity of this.entities) {
@@ -133,14 +133,23 @@ export default class App {
 		});
 
 		const scrappy = new Sprite("Scrappy");
-		scrappy.variables.push(["My variable", "Number"]);
+		scrappy.variables.push(["My variable", "number"]);
 		this.addSprite(scrappy);
 	}
 
-	select(entity: Entity) {
+	static create() {
+
+	}
+
+	async select(entity: Entity) {
 		if (this.current === entity) {
 			return;
 		}
+
+		if (!this.current.blocks) {
+			this.current.variables = await Blocks.getVariables(this.current.code);
+		}
+
 		this.current = entity;
 
 		if (entity.blocks && this.tabs.active === this.code) {
@@ -149,14 +158,6 @@ export default class App {
 			this.tabs.set(this.code);
 		} else if (this.tabs.active) {
 			this.tabs.active.update();
-		}
-
-		if (entity instanceof Sprite) {
-			this.setGlobalVariables().then(() => {
-				if (entity.blocks) {
-					this.workspace.workspace.refreshToolboxSelection();
-				}
-			});
 		}
 	}
 
@@ -174,6 +175,7 @@ export default class App {
 		};
 
 		this.entities.push(sprite);
+		this.code.updateLib();
 
 		if (this.workspace.workspace) {
 			select();
@@ -210,7 +212,6 @@ export default class App {
 		}
 
 		this.current = this.entities[0];
-		await this.setGlobalVariables();
 		this.stagePanel.dispatchEvent(new MouseEvent("click"));
 		this.hideLoader();
 	}
@@ -240,18 +241,6 @@ export default class App {
 		this.hideLoader();
 	}
 
-	globalVariables = new Array<[string, string]>();
-
-	async setGlobalVariables() {
-		const [stage] = this.entities;
-
-		if (stage.blocks) {
-			this.globalVariables = stage.variables;
-		} else {
-			this.globalVariables = await CodeParser.parseVariables(stage.code);
-		}
-	}
-
 	async export() {
 		const type = await Parley.fire({
 			title: "Export",
@@ -274,7 +263,7 @@ export default class App {
 			zip.file("style.css", engineStyle);
 		}
 
-		let scripts = "";
+		let scripts = "\t<script>var $ = {};</script>\n";
 
 		for (const e of this.entities) {
 			await e.export(zip);

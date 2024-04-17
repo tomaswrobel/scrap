@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Loading...</title>
+	<title>Scrap - Loading...</title>
 	<link rel="apple-touch-icon" sizes="180x180" href="pwa/apple-touch-icon.png" />
 	<link rel="icon" type="image/png" sizes="32x32" href="pwa/favicon-32x32.png" />
 	<link rel="icon" type="image/png" sizes="16x16" href="pwa/favicon-16x16.png" />
@@ -12,14 +11,13 @@
 	<meta name="theme-color" content="#2fbf71" />
 	<meta name="description" content="Scrap is an IDE designed to simplify the transition from Scratch to JavaScript." />
 </head>
-
 <body>
 	<div id="root">
-		<iframe width="480" data-mode="paced" height="360" name="output" src="src/output/index.html" title="Output"></iframe>
+		<iframe width="480" data-mode="paced" height="360" name="output" src="src/output/index.html"
+			title="Output"></iframe>
 		<!-- Nav -->
 		<ul>
 			<li>
-				<!-- Logo is injected here -->
 				<a href="/" aria-label="Scrap"></a>
 			</li>
 
@@ -76,53 +74,66 @@
 			<span class="name">Stage</span>
 		</div>
 	</div>
-	<dialog class="parley" id="about">
+	<dialog class="parley" id="about" style="width: 500px;">
 		<h2>
 			About Scrap
 		</h2>
 		<div style="text-align: left;">
 			<p>
-				Scrap is a tool by <a href="https://tomaswrobel.dev" target="_blank">Tomáš Wróbel</a> designed to simplify the transition from
-				Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve into JavaScript, Scrap is here
+				Scrap is a tool by <a href="https://tomaswrobel.dev" target="_blank">Tomáš Wróbel</a> designed to
+				simplify the transition from
+				Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve
+				into JavaScript, Scrap is here
 				to help bridge the gap and make your learning journey smoother.
 			</p>
 			<h3>Open-Source</h3>
 			<p>
-				Since Scrap is open-source, you can see how it works and even contribute to its development. The source code is available on
+				Since Scrap is open-source, you can see how it works and even contribute to its development. The source
+				code is available on
 				<a href="https://github.com/tomas-wrobel/scrap">GitHub</a>
 			</p>
 			<h3>Inspiration</h3>
 			<p>
-				The name Scrap is a combination of the words <a href="https://scratch.mit.edu/" target="_blank">Scratch</a> and
-				<a href="https://snap.berkeley.edu/" target="_blank">Snap</a>, two block-based programming languages that inspired me to create Scrap.
-				Snap gave me an idea to make the IDE advanced and powerful, while Scratch inspired me to make it intuitive and easy to use.
+				The name Scrap is a combination of the words <a href="https://scratch.mit.edu/"
+					target="_blank">Scratch</a> and
+				<a href="https://snap.berkeley.edu/" target="_blank">Snap</a>, two block-based programming languages
+				that inspired me to create Scrap.
+				Snap gave me an idea to make the IDE advanced and powerful, while Scratch inspired me to make it
+				intuitive and easy to use.
 			</p>
 			<p>
-				The design is heavily inspired by Scratch not to lose familiar environment. The logo for Scrap shares a visual resemblance with the
+				The design is heavily inspired by Scratch not to lose familiar environment. The logo for Scrap shares a
+				visual resemblance with the
 				Scratch logo as a deliberate homage. Here's what you need to know:
 			</p>
 			<ul>
 				<li>
-					<strong>Font Choice</strong>: Scrap uses the <q>Black Boys on Mopeds</q> font, the same as Scratch's logo, which is freeware and
+					<strong>Font Choice</strong>: Scrap uses the <q>Black Boys on Mopeds</q> font, the same as Scratch's
+					logo, which is freeware and
 					freely usable.
 				</li>
 				<li>
-					<strong>No Copyright Infringement</strong>: Scrap respects copyright laws and does not infringe on Scratch's intellectual
+					<strong>No Copyright Infringement</strong>: Scrap respects copyright laws and does not infringe on
+					Scratch's intellectual
 					property. The similarity is a tribute, not a copy.
 				</li>
 				<li>
-					<strong>Non-Commercial</strong>: Scrap is a non-commercial project, and its logo is used to recognize Scratch's influence on its
+					<strong>Non-Commercial</strong>: Scrap is a non-commercial project, and its logo is used to
+					recognize Scratch's influence on its
 					mission to help beginners transition from Scratch to JavaScript.
 				</li>
 			</ul>
-			<p>In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.</p>
+			<p>In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.
+			</p>
 			<h3>Technology</h3>
 			<p>
-				Scrap is not a programming language, it uses technology based on <a href="https://blocklike.org" target="_blank">BlockLike.js</a> as
+				Scrap is not a programming language, it uses technology based on <a href="https://blocklike.org"
+					target="_blank">BlockLike.js</a> as
 				an engine (not VM).
 			</p>
 			<p>
-				It uses <a href="https://developers.google.com/blockly" target="_blank">Blockly</a> as a block editor. The code editor is powered by
+				It uses <a href="https://developers.google.com/blockly" target="_blank">Blockly</a> as a block editor.
+				The code editor is powered by
 				<a href="https://prism-code-editor.netlify.app/" target="_blank">Prism Code Editor</a>
 			</p>
 			<p>
@@ -136,7 +147,6 @@
 			</div>
 		</form>
 	</dialog>
-	<script type="module" src="src/main.ts"></script>
+	<script src="./src/main.ts" type="module"></script>
 </body>
-
 </html>

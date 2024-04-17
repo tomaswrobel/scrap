@@ -1,11 +1,11 @@
 import {stage, sprite, theme, plugins, Types} from "../blockly";
+import Blocks from "../code/transformers/blocks";
 import {Stage, Sprite} from "../entities";
-import * as Blockly from "blockly/core";
+import * as Blockly from "blockly";
 import * as Parley from "parley.js";
 import Component from "../tab";
-import "./style.scss";
 import {bind} from "../decorators";
-import CodeParser from "../files/blocks";
+import "./style.scss";
 
 export default class Workspace implements Component {
 	container = document.createElement("div");
@@ -18,29 +18,36 @@ export default class Workspace implements Component {
 	}
 
 	async prerender() {
-		if (!window.app.current.blocks) {
-			window.app.showLoader("Compiling code...");
-			const parser = new CodeParser(window.app.current.codeWorkspace);
-			window.app.current.blocks = true;
-			await parser.codeToBlock(window.app.current.code);
-			window.app.current.code = "";
-			window.app.hideLoader();
+		if (!app.current.blocks) {
+			app.showLoader("Compiling code...");
+			app.current.blocks = true;
+			app.current.variables = [];
+			await Blocks.processEntity(
+				app.current
+			);
+			app.current.code = "";
+			app.hideLoader();
 		}
 	}
-	
+
 	render() {
-		window.app.container.appendChild(this.container);
+		app.container.appendChild(this.container);
 
 		this.workspace = Blockly.inject(this.container, {
 			theme,
-			renderer: "zelos",
+			renderer: "scrap",
 			toolbox: {
 				kind: "categoryToolbox",
-				contents: window.app.current instanceof Stage ? stage : sprite,
+				contents: app.current instanceof Stage ? stage : sprite,
 			},
 			media: "blockly-media/",
 			zoom: {
 				startScale: 0.65,
+			},
+			move: {
+				drag: false,
+				wheel: true,
+				scrollbars: true
 			},
 			trashcan: false,
 			oneBasedIndex: false,
@@ -52,7 +59,7 @@ export default class Workspace implements Component {
 			const name = await Parley.fire({
 				input: "text",
 				title: "Create Variable",
-				body: window.app.current instanceof Stage
+				body: app.current instanceof Stage
 					? "You are creating global variable"
 					: "To create a global variable, select the stage."
 			});
@@ -72,22 +79,58 @@ export default class Workspace implements Component {
 				return;
 			}
 
-			window.app.current.variables.push([name, type]);
+			app.current.variables.push([name, type]);
 			this.workspace.refreshToolboxSelection();
 		});
 
 		this.workspace.registerToolboxCategoryCallback(
 			"TYPED_VARIABLE",
 			() => {
-				const json: Blockly.utils.toolbox.FlyoutItemInfoArray = [
+				const json = ["const", "let", "var"].map<Blockly.utils.toolbox.FlyoutItemInfo>(
+					(kind, i) => ({
+						kind: "block",
+						type: "variable",
+						fields: {kind},
+						inputs: {
+							VAR: {
+								block: {
+									type: "typed",
+									inputs: {
+										TYPE: {
+											shadow: {
+												type: "type",
+												fields: {
+													TYPE: "number"
+												}
+											}
+										}
+									}
+								}
+							},
+							VALUE: {
+								shadow: {
+									type: "math_number",
+									fields: {
+										NUM: i + 1
+									}
+								}
+							}
+						},
+					})
+				);
+				json.push(
+					{
+						kind: "sep",
+						gap: 40
+					},
 					{
 						kind: "button",
 						text: "Create Variable",
 						callbackkey: "createVariableButton",
 					}
-				];
+				);
 
-				function addVariable([name, type]: [string, string]) {
+				function addVariable([name, type]: [string, string | string[]]) {
 					json.push({
 						kind: "block",
 						type: "parameter",
@@ -101,30 +144,55 @@ export default class Workspace implements Component {
 					});
 				}
 
-				window.app.current.variables.forEach(addVariable);
+				app.current.variables.forEach(addVariable);
 
-				if (window.app.current instanceof Sprite) {
-					window.app.globalVariables.forEach(addVariable);
+				if (app.current instanceof Sprite) {
+					app.entities[0].variables.forEach(addVariable);
 				}
 
-				if (json.length > 1) {
-					const [VAR] = window.app.current.variables[0] || window.app.globalVariables;
+				if (json.length > 5) {
+					const [VAR, type] = app.current.variables[0] || app.entities[0].variables[0] || [];
 
 					if (!VAR) {
 						return json;
 					}
 
 					json.splice(
-						1, 0,
+						5, 0,
 						{
 							kind: "block",
-							type: "setVariable",
-							fields: {VAR}
+							type: "set",
+							inputs: {
+								VAR: {
+									shadow: {
+										type: "parameter",
+										fields: {
+											VAR
+										},
+										extraState: {
+											type,
+											isVariable: true
+										}
+									}
+								}
+							}
 						},
 						{
 							kind: "block",
-							type: "changeVariable",
+							type: "change",
 							inputs: {
+								VAR: {
+									shadow: {
+										type: "parameter",
+										fields: {
+											VAR
+										},
+										extraState: {
+											type,
+											isVariable: true
+										}
+									}
+								},
 								VALUE: {
 									shadow: {
 										type: "math_number",
@@ -133,8 +201,7 @@ export default class Workspace implements Component {
 										}
 									}
 								}
-							},
-							fields: {VAR}
+							}
 						},
 						{
 							kind: "block",
@@ -161,12 +228,12 @@ export default class Workspace implements Component {
 		if (e instanceof Blockly.Events.UiBase) {
 			return;
 		}
-		window.app.current.workspace = Blockly.serialization.workspaces.save(this.workspace);
+		app.current.workspace = Blockly.serialization.workspaces.save(this.workspace);
 	}
 
 	update() {
 		this.workspace.removeChangeListener(this.changed);
-		const contents = window.app.current instanceof Stage ? stage : sprite;
+		const contents = app.current instanceof Stage ? stage : sprite;
 
 		this.workspace.updateToolbox({
 			kind: "categoryToolbox",
@@ -175,17 +242,20 @@ export default class Workspace implements Component {
 				{
 					kind: "category",
 					name: "Variables",
-					categorystyle: "variable_category",
+					categorystyle: "variables",
 					custom: "TYPED_VARIABLE",
 				},
 				{
 					kind: "category",
 					name: "Functions",
-					categorystyle: "procedure_category",
+					categorystyle: "functions",
 					contents: [
 						{
 							"kind": "block",
-							"type": "function"
+							"type": "function",
+							"fields": {
+								"NAME": "foo"
+							}
 						},
 						{
 							"kind": "block",
@@ -196,11 +266,10 @@ export default class Workspace implements Component {
 			],
 		});
 
-		Blockly.serialization.workspaces.load(window.app.current.workspace, this.workspace);
-		this.workspace.addChangeListener(this.changed);
-
+		Blockly.serialization.workspaces.load(app.current.workspace, this.workspace);
 		this.workspace.cleanUp();
 		this.workspace.refreshToolboxSelection();
+		this.workspace.addChangeListener(this.changed);
 	}
 	dispose() {
 		this.container.remove();

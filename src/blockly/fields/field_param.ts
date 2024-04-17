@@ -12,10 +12,10 @@
  * Values are stored in the format "name:type".
  * Text is stored in the format "name".
  */
-import * as Blockly from "blockly/core";
+import * as Blockly from "blockly";
 
 export default class FieldParam extends Blockly.Field<string> {
-	constructor(defaultVarName = "i", type?: string | string[]) {
+	constructor(defaultVarName = "i", type?: string | string[], readonly readonly = false) {
 		super(type ? `${defaultVarName}:${type}` : defaultVarName);
 	}
 
@@ -31,11 +31,15 @@ export default class FieldParam extends Blockly.Field<string> {
 	 * Extracts the type of the parameter from the value.
 	 * @returns The type of the parameter.
 	 */
-	protected getType_() {
-		if (this.value_?.indexOf(":") === -1) {
-			return null;
+	getType() {
+		if (this.value_!.indexOf(":") === -1) {
+			return "any";
 		}
-		return this.value_!.split(":")[1].split(",")
+		return this.value_!.split(":")[1].split(",");
+	}
+
+	setType(newType: string | string[]) {
+		this.setValue(`${this.value_!.split(":")[0]}:${newType}`);
 	}
 
 	CURSOR = "COPY";
@@ -67,8 +71,11 @@ export default class FieldParam extends Blockly.Field<string> {
 				const transformX = transform?.match(/translate\((\d+)/)?.[1] ?? 0;
 				const transformY = transform?.match(/translate\(\d+,(\d+)/)?.[1] ?? 0;
 				const {x, y} = this.sourceBlock_!.getRelativeToSurfaceXY().translate(+transformX, +transformY);
-				
-				block.loadExtraState!({type: this.getType_()}); // Set the type of the parameter.
+
+				block.loadExtraState!({
+					type: this.getType(), // Set the type of the parameter.
+					isConstant: this.readonly, // Set the block as constant if the field is readonly.
+				});
 				block.setFieldValue(this.getText(), "VAR"); // Set the name of the parameter.
 				block.moveBy(x, y); // Move the block to the position of the field.
 				block.initSvg(); // Initialize the block.
@@ -91,7 +98,7 @@ export default class FieldParam extends Blockly.Field<string> {
 		if (this.fieldGroup_ && workspace instanceof Blockly.WorkspaceSvg) {
 			const block = workspace.newBlock("parameter");
 			block.setFieldValue(this.getText(), "VAR");
-			block.loadExtraState!({type: this.getType_()});
+			block.loadExtraState!({type: this.getType()});
 			block.setShadow(true);
 			block.initSvg();
 			block.renderEfficiently();

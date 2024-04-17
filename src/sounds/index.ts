@@ -26,14 +26,14 @@ export default class Sound implements TabComponent {
 	}
 
 	render() {
-		window.app.container.appendChild(this.container);
+		app.container.appendChild(this.container);
 		this.update();
 	}
 
 	update() {
 		this.mediaList?.dispose();
-		this.wavesurfer.loadBlob(window.app.current.sounds[0]);
-		this.mediaList = new MediaList(MediaList.SOUND, window.app.current.sounds);
+		this.wavesurfer.loadBlob(app.current.sounds[0]);
+		this.mediaList = new MediaList(MediaList.SOUND, app.current.sounds);
 
 		this.mediaList.addEventListener("select", async e => {
 			const {detail: file} = e as CustomEvent<File>;

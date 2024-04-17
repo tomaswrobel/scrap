@@ -1,52 +1,78 @@
-// Here you can find definitions the statically defined blocks
-// If you look for other blocks, check out the blockly/blocks folder
-// which contains the dynamically loaded blocks
-{
-	// Variables getters / setters
-	"setVariable": {
-		"message0": "%{BKY_VARIABLES_SET}",
+[
+	{
+		"type": "declarations",
+		"message0": "declarations",
+		"nextStatement": "any",
+		"style": "Variables"
+	},
+	{
+		"type": "set",
+		"inputsInline": true,
+		"message0": "set %1 to %2",
 		"args0": [
-			{
-				"type": "input_dummy",
-				"name": "DUMMY"
-			},
 			{
 				"type": "input_value",
-				"name": "VALUE"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "variable_blocks",
-		"extensions": [
-			"var_menu",
-			"setvar_menu"
-		],
-		"inputsInline": true
-	},
-	"changeVariable": {
-		"message0": "change %1 by %2",
-		"args0": [
-			{
-				"type": "input_dummy",
-				"name": "DUMMY"
+				"name": "VAR",
+				"check": "Variable"
 			},
 			{
 				"type": "input_value",
 				"name": "VALUE",
-				"check": "Number"
+				"check": "any"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "variable_blocks",
+		"previousStatement": "any",
+		"nextStatement": "any",
+		"style": "Functions",
 		"extensions": [
-			"var_menu"
-		],
-		"inputsInline": true
+			"set"
+		]
 	},
-	// Variables showing / hiding
-	"showVariable": {
+	{
+		"type": "variable",
+		"message0": "%1 %2 = %3",
+		"style": "Functions",
+		"previousStatement": "any",
+		"nextStatement": "any",
+		"inputsInline": true,
+		"args0": [
+			{
+				"type": "field_label_serializable",
+				"name": "kind"
+			},
+			{
+				"type": "input_value",
+				"name": "VAR"
+			},
+			{
+				"type": "input_value",
+				"name": "VALUE",
+				"check": "any"
+			}
+		]
+	},
+	{
+		"type": "change",
+		"inputsInline": true,
+		"message0": "change %1 by %2",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "VAR",
+				"check": "Variable"
+			},
+			{
+				"type": "input_value",
+				"name": "VALUE",
+				"check": "any"
+			}
+		],
+		"previousStatement": "any",
+		"nextStatement": "any",
+		"style": "Functions"
+	},
+	{
+		"type": "showVariable",
 		"message0": "show variable %1",
 		"args0": [
 			{
@@ -54,15 +80,16 @@
 				"name": "DUMMY"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "variable_blocks",
+		"previousStatement": "any",
+		"nextStatement": "any",
+		"style": "Variables",
 		"extensions": [
-			"var_menu"
+			"variable"
 		],
 		"inputsInline": true
 	},
-	"hideVariable": {
+	{
+		"type": "hideVariable",
 		"message0": "hide variable %1",
 		"args0": [
 			{
@@ -70,23 +97,22 @@
 				"name": "DUMMY"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "variable_blocks",
+		"previousStatement": "any",
+		"nextStatement": "any",
+		"style": "Variables",
 		"extensions": [
-			"var_menu"
+			"variable"
 		],
 		"inputsInline": true
 	},
-	// Blocks for function's mutator
-	// Some of them are defined in blockly/utils/types.ts
-	"function_header": {
+	{
+		"type": "function_header",
 		"message0": "function's parameters",
-		"style": "procedure_blocks",
-		"nextStatement": null
+		"style": "Functions",
+		"nextStatement": "any"
 	},
-	// Scratch 3 does not distinguish between text and number parameters
-	"text_or_number_param": {
+	{
+		"type": "text_or_number_param",
 		"inputsInline": true,
 		"message0": "Scratch parameter %1",
 		"args0": [
@@ -95,11 +121,12 @@
 				"name": "NAME"
 			}
 		],
-		"style": "procedure_blocks",
-		"nextStatement": null,
-		"previousStatement": null
+		"style": "Functions",
+		"nextStatement": "any",
+		"previousStatement": "any"
 	},
-	"parameter": {
+	{
+		"type": "parameter",
 		"message0": "%1",
 		"args0": [
 			{
@@ -107,12 +134,48 @@
 				"name": "VAR"
 			}
 		],
-		"style": "variable_blocks",
-		"mutator": "mutator_parameter",
-		"output": null
+		"style": "Variables",
+		"mutator": "parameter",
+		"output": "any"
 	},
-	// Call function block
-	"call": {
+	{
+		"type": "function_param",
+		"inputsInline": true,
+		"message0": "parameter %1",
+		"args0": [
+			{
+				"type": "field_identifier",
+				"name": "NAME",
+				"value": "param"
+			}
+		],
+		"style": "Functions",
+		"nextStatement": "any",
+		"previousStatement": "any"
+	},
+	{
+		"type": "function_returns",
+		"message0": "returns",
+		"previousStatement": "any",
+		"style": "Functions"
+	},
+	{
+		"type": "function",
+		"inputsInline": true,
+		"message0": "function %1",
+		"args0": [
+			{
+				"type": "field_identifier",
+				"name": "NAME",
+				"check": "String"
+			}
+		],
+		"nextStatement": "any",
+		"style": "Functions",
+		"mutator": "function"
+	},
+	{
+		"type": "call",
 		"message0": "%1",
 		"args0": [
 			{
@@ -121,55 +184,59 @@
 				"text": "foo"
 			}
 		],
-		"style": "procedure_blocks",
-		"previousStatement": null,
-		"nextStatement": null,
-		"mutator": "mutator_call",
+		"style": "Functions",
+		"previousStatement": "any",
+		"nextStatement": "any",
+		"mutator": "call",
 		"inputsInline": true
 	},
-	// Mutator blocks for if / else / else uf
-	"controls_if_if": {
+	{
+		"type": "controls_if_if",
 		"message0": "%{BKY_CONTROLS_IF_IF_TITLE_IF}",
-		"nextStatement": null,
+		"nextStatement": "any",
 		"enableContextMenu": false,
 		"style": "Controls",
 		"tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}"
 	},
-	"controls_if_elseif": {
+	{
+		"type": "controls_if_elseif",
 		"message0": "%{BKY_CONTROLS_IF_ELSEIF_TITLE_ELSEIF}",
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"enableContextMenu": false,
 		"style": "Controls",
 		"tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}"
 	},
-	"controls_if_else": {
+	{
+		"type": "controls_if_else",
 		"message0": "%{BKY_CONTROLS_IF_ELSE_TITLE_ELSE}",
-		"previousStatement": null,
+		"previousStatement": "any",
 		"enableContextMenu": false,
 		"style": "Controls",
 		"tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}"
 	},
-	// Mutator blocks for array
-	"array_mutator_item_single": {
+	{
+		"type": "array_item_single",
 		"message0": "single item",
 		"style": "Iterables",
-		"nextStatement": null,
-		"previousStatement": null
+		"nextStatement": "any",
+		"previousStatement": "any"
 	},
-	"array_mutator_item_iterable": {
+	{
+		"type": "array_item_iterable",
 		"message0": "spread iterable",
 		"style": "Iterables",
-		"nextStatement": null,
-		"previousStatement": null
+		"nextStatement": "any",
+		"previousStatement": "any"
 	},
-	"array_mutator_items": {
+	{
+		"type": "array_items",
 		"message0": "items",
 		"style": "Iterables",
-		"nextStatement": null
+		"nextStatement": "any"
 	},
-	// Dropdowns
-	"key": {
+	{
+		"type": "key",
 		"message0": "%1",
 		"args0": [
 			{
@@ -495,61 +562,11 @@
 				]
 			}
 		],
-		"output": "String",
-		"style": "variable_blocks",
-		"extensions": [
-			"parent_style"
-		]
+		"output": "string",
+		"style": "Sensing"
 	},
-	"costume_menu": {
-		"message0": "%1",
-		"args0": [
-			{
-				"type": "input_dummy",
-				"name": "DUMMY"
-			}
-		],
-		"output": "String",
-		"style": "Looks",
-		"extensions": [
-			// This will inject a field with 
-			// the costumes into the dummy input
-			"costume_menu"
-		]
-	},
-	"backdrop_menu": {
-		"message0": "%1",
-		"args0": [
-			{
-				"type": "input_dummy",
-				"name": "DUMMY"
-			}
-		],
-		"output": "String",
-		"style": "variable_blocks",
-		"extensions": [
-			// This will inject a field with 
-			// the backdrops into the dummy input
-			"backdrop_menu",
-			"parent_style"
-		]
-	},
-	"sound": {
-		"message0": "%1",
-		"args0": [
-			{
-				"type": "input_dummy",
-				"name": "DUMMY"
-			}
-		],
-		"output": "String",
-		"style": "Sounds",
-		"extensions": [
-			"sound_menu"
-		]
-	},
-	// Basic values (always shadow blocks)
-	"color": {
+	{
+		"type": "color",
 		"message0": "%1",
 		"args0": [
 			{
@@ -561,7 +578,8 @@
 		"output": "Color",
 		"style": "Pen"
 	},
-	"math_number": {
+	{
+		"type": "math_number",
 		"message0": "%1",
 		"args0": [
 			{
@@ -569,10 +587,11 @@
 				"name": "NUM"
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Operators"
 	},
-	"motion_angle": {
+	{
+		"type": "motion_angle",
 		"message0": "%1",
 		"args0": [
 			{
@@ -580,83 +599,88 @@
 				"name": "VALUE"
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Motion"
 	},
-	"text_or_number": {
+	{
+		"type": "text_or_number",
 		"inputsInline": true,
 		"message0": "%1",
 		"args0": [
 			{
 				"type": "field_input",
 				"name": "VALUE",
-				"text": ""
+				"text": "0"
 			}
 		],
 		"output": [
-			"String",
-			"Number"
+			"string",
+			"number"
 		],
 		"style": "Operators"
 	},
-	// Motion
-	"move": {
+	{
+		"type": "move",
 		"inputsInline": true,
 		"message0": "move %1 steps",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "STEPS",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"turnLeft": {
+	{
+		"type": "turnLeft",
 		"inputsInline": true,
 		"message0": "turn left %1 degress",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "DEGREES",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"turnRight": {
+	{
+		"type": "turnRight",
 		"inputsInline": true,
 		"message0": "turn right %1 degress",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "DEGREES",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"pointInDirection": {
+	{
+		"type": "pointInDirection",
 		"inputsInline": true,
 		"message0": "point in direction %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "DIRECTION",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"pointTowards": {
+	{
+		"type": "pointTowards",
 		"inputsInline": true,
 		"message0": "point towards %1",
 		"args0": [
@@ -666,49 +690,52 @@
 				"check": "Sprite"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"pointTo": {
+	{
+		"type": "pointTo",
 		"inputsInline": true,
 		"message0": "point to x: %1 y: %2",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "X",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "Y",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"goTo": {
+	{
+		"type": "goTo",
 		"inputsInline": true,
 		"message0": "go to x: %1 y: %2",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "X",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "Y",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"goTowards": {
+	{
+		"type": "goTowards",
 		"inputsInline": true,
 		"message0": "go towards %1",
 		"args0": [
@@ -718,109 +745,64 @@
 				"check": "Sprite"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"glide": {
+	{
+		"type": "glide",
 		"inputsInline": true,
 		"message0": "glide %1 secs to x: %2 y: %3",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "SECS",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "X",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "Y",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"changeX": {
-		"inputsInline": true,
-		"message0": "change x by %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "X",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Motion"
-	},
-	"setX": {
-		"inputsInline": true,
-		"message0": "set x to %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "X",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Motion"
-	},
-	"changeY": {
-		"inputsInline": true,
-		"message0": "change y by %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "Y",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Motion"
-	},
-	"setY": {
-		"inputsInline": true,
-		"message0": "set y to %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "Y",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Motion"
-	},
-	"x": {
+	{
+		"type": "x",
 		"inputsInline": true,
 		"message0": "x position",
-		"output": "Number",
+		"output": [
+			"number",
+			"Variable"
+		],
 		"style": "Motion"
 	},
-	"y": {
+	{
+		"type": "y",
 		"inputsInline": true,
 		"message0": "y position",
-		"output": "Number",
+		"output": [
+			"number",
+			"Variable"
+		],
 		"style": "Motion"
 	},
-	"direction": {
+	{
+		"type": "direction",
 		"inputsInline": true,
 		"message0": "direction",
-		"output": "Number",
+		"output": "number",
 		"style": "Motion"
 	},
-	"rotationStyle": {
+	{
+		"type": "rotationStyle",
 		"inputsInline": true,
 		"message0": "%1",
 		"args0": [
@@ -843,10 +825,11 @@
 				]
 			}
 		],
-		"output": "String",
+		"output": "string",
 		"style": "Motion"
 	},
-	"setRotationStyle": {
+	{
+		"type": "setRotationStyle",
 		"inputsInline": true,
 		"message0": "set rotation style %1",
 		"args0": [
@@ -854,124 +837,95 @@
 				"type": "input_value",
 				"name": "STYLE",
 				"check": [
-					"String",
-					"Number"
+					"string",
+					"number"
 				]
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Motion"
 	},
-	"ifOnEdgeBounce": {
+	{
+		"type": "ifOnEdgeBounce",
 		"message0": "if on edge, bounce",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"args0": [],
 		"style": "Motion"
 	},
-	// Looks
-	"sayWait": {
+	{
+		"type": "sayWait",
 		"inputsInline": true,
 		"message0": "say %1 for %2 seconds",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "MESSAGE"
+				"name": "MESSAGE",
+				"check": "any"
 			},
 			{
 				"type": "input_value",
 				"name": "SECS",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks"
 	},
-	"say": {
+	{
+		"type": "say",
 		"inputsInline": true,
 		"message0": "say %1",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "MESSAGE"
+				"name": "MESSAGE",
+				"check": "any"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks"
 	},
-	"thinkWait": {
+	{
+		"type": "thinkWait",
 		"inputsInline": true,
 		"message0": "think %1 for %2 seconds",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "MESSAGE"
+				"name": "MESSAGE",
+				"check": "any"
 			},
 			{
 				"type": "input_value",
 				"name": "SECS",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks"
 	},
-	"think": {
+	{
+		"type": "think",
 		"inputsInline": true,
 		"message0": "think %1",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "MESSAGE"
+				"name": "MESSAGE",
+				"check": "any"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks"
 	},
-	"changeEffect": {
-		"inputsInline": true,
-		"message0": "change %1 effect by %2 %",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "EFFECT",
-				"check": "String"
-			},
-			{
-				"type": "input_value",
-				"name": "CHANGE",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Looks"
-	},
-	"setEffect": {
-		"inputsInline": true,
-		"message0": "set %1 effect to %2 %",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "EFFECT",
-				"check": "String"
-			},
-			{
-				"type": "input_value",
-				"name": "CHANGE",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Looks"
-	},
-	"effect": {
+	{
+		"type": "effect",
 		"message0": "%1",
 		"args0": [
 			{
@@ -979,28 +933,32 @@
 				"name": "EFFECT",
 				"options": [
 					[
-						"color",
+						"color effect",
 						"color"
 					],
 					[
-						"ghost",
+						"ghost effect",
 						"ghost"
 					],
 					[
-						"grayscale",
+						"grayscale effect",
 						"grayscale"
 					],
 					[
-						"brightness",
+						"brightness effect",
 						"brightness"
 					]
 				]
 			}
 		],
-		"output": "String",
+		"output": [
+			"string",
+			"Variable"
+		],
 		"style": "Looks"
 	},
-	"switchCostumeTo": {
+	{
+		"type": "switchCostumeTo",
 		"inputsInline": true,
 		"message0": "switch costume to %1",
 		"args0": [
@@ -1008,420 +966,402 @@
 				"type": "input_value",
 				"name": "COSTUME",
 				"check": [
-					"String",
-					"Number"
+					"string",
+					"number"
 				]
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Looks"
 	},
-	"nextCostume": {
+	{
+		"type": "nextCostume",
 		"inputsInline": true,
 		"message0": "next costume",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"args0": [],
 		"style": "Looks"
 	},
-	"switchBackdropToWait": {
+	{
+		"type": "switchBackdropToWait",
 		"message0": "switch backdrop to %1 and wait",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "BACKDROP",
 				"check": [
-					"String",
-					"Number"
+					"string",
+					"number"
 				]
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Looks",
 		"inputsInline": true
 	},
-	"switchBackdropTo": {
+	{
+		"type": "switchBackdropTo",
 		"message0": "switch backdrop to %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "COSTUME",
 				"check": [
-					"String", 
-					"Number"
+					"string",
+					"number"
 				]
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Looks"
 	},
-	"nextBackdrop": {
+	{
+		"type": "nextBackdrop",
 		"message0": "next backdrop",
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"args0": [],
 		"style": "Looks"
 	},
-	"show": {
+	{
+		"type": "show",
 		"inputsInline": true,
 		"message0": "show",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"args0": [],
 		"style": "Looks"
 	},
-	"hide": {
+	{
+		"type": "hide",
 		"inputsInline": true,
 		"message0": "hide",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"args0": [],
 		"style": "Looks"
 	},
-	"changeSize": {
-		"inputsInline": true,
-		"message0": "change size by %1 %%",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "SIZE",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Looks"
-	},
-	"setSize": {
-		"inputsInline": true,
-		"message0": "set size to %1 %%",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "SIZE",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Looks"
-	},
-	"goForward": {
+	{
+		"type": "goForward",
 		"message0": "go one layer forwards",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks",
 		"args0": []
 	},
-	"goBackward": {
+	{
+		"type": "goBackward",
 		"message0": "go one layer backwards",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks",
 		"args0": []
 	},
-	"goToFront": {
+	{
+		"type": "goToFront",
 		"message0": "go to front",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks",
 		"args0": []
 	},
-	"goToBack": {
+	{
+		"type": "goToBack",
 		"message0": "go to back",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Looks",
 		"args0": []
 	},
-	"visible": {
+	{
+		"type": "visible",
 		"inputsInline": true,
 		"message0": "visible",
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Looks"
 	},
-	"size": {
+	{
+		"type": "size",
 		"inputsInline": true,
 		"message0": "size",
-		"output": "Number",
-		"style": "Looks"
-	},
-	"costumeName": {
-		"message0": "costume name",
-		"output": "String",
-		"style": "Looks"
-	},
-	"backdropName": {
-		"message0": "backdrop name",
-		"output": "String",
-		"style": "Looks"
-	},
-	"costumeNumber": {
-		"inputsInline": true,
-		"message0": "costume #",
-		"output": "Number",
-		"style": "Looks"
-	},
-	"backdropNumber": {
-		"inputsInline": true,
-		"message0": "backdrop #",
-		"output": "Number",
-		"style": "Looks"
-	},
-	"getEffect": {
-		"inputsInline": true,
-		"message0": "effect %1",
-		"output": "Number",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "EFFECT",
-				"check": "String"
-			}
+		"output": [
+			"number",
+			"Variable"
 		],
 		"style": "Looks"
 	},
-	"clearEffects": {
+	{
+		"type": "costume",
+		"message0": "costume %1",
+		"output": [
+			"string",
+			"number",
+			"Variable"
+		],
+		"style": "Looks",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "VALUE",
+				"options": [
+					[
+						"name",
+						"name"
+					],
+					[
+						"index",
+						"index"
+					]
+				]
+			}
+		]
+	},
+	{
+		"type": "backdrop",
+		"message0": "backdrop %1",
+		"output": [
+			"string",
+			"number",
+			"Variable"
+		],
+		"style": "Looks",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "VALUE",
+				"options": [
+					[
+						"name",
+						"name"
+					],
+					[
+						"index",
+						"index"
+					]
+				]
+			}
+		]
+	},
+	{
+		"type": "costume.all",
+		"message0": "all costumes",
+		"output": "Array",
+		"style": "Looks"
+	},
+	{
+		"type": "backdrop.all",
+		"message0": "all backdrops",
+		"output": "Array",
+		"style": "Looks"
+	},
+	{
+		"type": "clearEffects",
 		"inputsInline": true,
 		"message0": "clear effects",
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"args0": [],
 		"style": "Looks"
 	},
-	// Sounds
-	"playSound": {
+	{
+		"type": "playSound",
 		"message0": "play sound %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "SOUND",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Sounds"
 	},
-	"playSoundUntilDone": {
+	{
+		"type": "playSoundUntilDone",
 		"message0": "play sound %1 until done",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "SOUND",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Sounds"
 	},
-	"setVolume": {
-		"message0": "set volume to %1 %%",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "VOLUME",
-				"check": "Number"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Sounds"
-	},
-	"changeVolume": {
-		"message0": "change volume by %1 %%",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "VOLUME",
-				"check": "Number"
-			}
-		],
-		"previousStatement": null,
-		"nextStatement": null,
-		"style": "Sounds"
-	},
-	"volume": {
+	{
+		"type": "volume",
 		"message0": "volume",
-		"output": "Number",
+		"output": [
+			"number",
+			"Variable"
+		],
 		"style": "Sounds"
 	},
-	"stopSounds": {
+	{
+		"type": "stopSounds",
 		"message0": "stop my sounds",
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Sounds"
 	},
-	// Pen
-	"rgb": {
+	{
+		"type": "rgb",
 		"inputsInline": true,
 		"message0": "RGB %1 %2 %3",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "RED",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "GREEN",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "BLUE",
-				"check": "Number"
+				"check": "number"
 			}
 		],
 		"output": "Color",
 		"style": "Pen"
 	},
-	"penClear": {
+	{
+		"type": "color_random",
+		"message0": "random color",
+		"output": "Color",
+		"style": "Pen"
+	},
+	{
+		"type": "penClear",
 		"inputsInline": true,
 		"message0": "clear",
 		"args0": [],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Pen"
 	},
-	"penDown": {
+	{
+		"type": "penDown",
 		"inputsInline": true,
 		"message0": "pen down",
 		"args0": [],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Pen"
 	},
-	"penUp": {
+	{
+		"type": "penUp",
 		"inputsInline": true,
 		"message0": "pen up",
 		"args0": [],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Pen"
 	},
-	"stamp": {
+	{
+		"type": "stamp",
 		"inputsInline": true,
 		"message0": "stamp",
 		"args0": [],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Pen"
 	},
-	"setPenColor": {
-		"inputsInline": true,
-		"message0": "set pen color to %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "COLOR",
-				"check": "Color"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Pen"
-	},
-	"changePenSize": {
-		"inputsInline": true,
-		"message0": "change pen size by %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "SIZE",
-				"check": "Number"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Pen"
-	},
-	"penSize": {
+	{
+		"type": "penSize",
 		"message0": "pen size",
-		"output": "Number",
-		"style": "Pen"
-	},
-	"penColor": {
-		"message0": "pen color",
-		"output": "Color",
-		"style": "Pen"
-	},
-	"isPenDown": {
-		"message0": "is pen down?",
-		"output": "Boolean",
-		"style": "Pen"
-	},
-	"setPenSize": {
-		"inputsInline": true,
-		"message0": "set pen size to %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "SIZE",
-				"check": "Number"
-			}
+		"output": [
+			"number",
+			"Variable"
 		],
-		"nextStatement": null,
-		"previousStatement": null,
 		"style": "Pen"
 	},
-	// Events
-	"whenLoaded": {
+	{
+		"type": "penColor",
+		"message0": "pen color",
+		"output": [
+			"Color",
+			"Variable"
+		],
+		"style": "Pen"
+	},
+	{
+		"type": "isPenDown",
+		"message0": "is pen down?",
+		"output": [
+			"boolean",
+			"Variable"
+		],
+		"style": "Pen"
+	},
+	{
+		"type": "whenLoaded",
 		"inputsInline": true,
 		"message0": "when loaded",
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Events"
 	},
-	"whenFlag": {
+	{
+		"type": "whenFlag",
 		"inputsInline": true,
 		"message0": "when flag clicked",
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Events"
 	},
-	"whenBackdropChangesTo": {
+	{
+		"type": "whenBackdropChangesTo",
 		"inputsInline": true,
 		"message0": "when backdrop changes to %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "BACKDROP",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Events"
 	},
-	"whenKeyPressed": {
+	{
+		"type": "whenKeyPressed",
 		"inputsInline": true,
 		"message0": "when %1 key pressed",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "KEY",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Events"
 	},
-	"whenTimerElapsed": {
+	{
+		"type": "whenTimerElapsed",
 		"inputsInline": true,
 		"message0": "when timer > %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "TIMER",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Events"
 	},
-	"event": {
+	{
+		"type": "event",
 		"message0": "%1",
 		"args0": [
 			{
@@ -1459,177 +1399,191 @@
 				]
 			}
 		],
-		"output": "String",
+		"output": "string",
 		"style": "Events"
 	},
-	"whenMouse": {
+	{
+		"type": "whenMouse",
 		"inputsInline": true,
 		"message0": "when mouse has %1",
 		"args0": [
 			{
 				"type": "input_value",
-				"check": "String",
+				"check": "string",
 				"name": "EVENT"
 			}
 		],
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Events"
 	},
-	"whenReceiveMessage": {
+	{
+		"type": "whenReceiveMessage",
 		"inputsInline": true,
 		"message0": "when I receive %1",
 		"args0": [
 			{
 				"type": "input_value",
-				"check": "String",
+				"check": "string",
 				"name": "MESSAGE"
 			}
 		],
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Events"
 	},
-	"broadcastMessage": {
+	{
+		"type": "broadcastMessage",
 		"inputsInline": true,
 		"message0": "broadcast %1",
 		"args0": [
 			{
 				"type": "input_value",
-				"check": "String",
+				"check": "string",
 				"name": "MESSAGE"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Events"
 	},
-	"broadcastMessageWait": {
+	{
+		"type": "broadcastMessageWait",
 		"inputsInline": true,
 		"message0": "broadcast %1 and wait",
 		"args0": [
 			{
 				"type": "input_value",
-				"check": "String",
+				"check": "string",
 				"name": "MESSAGE"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Events"
 	},
-	// Control
-	"wait": {
+	{
+		"type": "wait",
 		"inputsInline": true,
 		"message0": "wait %1 seconds",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "SECS",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	"repeat": {
+	{
+		"type": "repeat",
 		"inputsInline": true,
 		"message0": "repeat %1 times",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "TIMES",
-				"check": "Number"
+				"check": "number"
 			}
 		],
 		"message1": "%1",
 		"args1": [
 			{
 				"type": "input_statement",
+				"check": "any",
 				"name": "STACK"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	"while": {
+	{
+		"type": "while",
 		"inputsInline": true,
 		"message0": "while %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "CONDITION",
-				"check": "Boolean"
+				"check": "boolean"
 			}
 		],
 		"message1": "%1",
 		"args1": [
 			{
 				"type": "input_statement",
-				"name": "STACK"
+				"name": "STACK",
+				"check": "any"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Controls"
 	},
-	"doWhile": {
+	{
+		"type": "doWhile",
 		"inputsInline": true,
 		"message0": "do",
 		"message1": "%1 while %2",
 		"args1": [
 			{
 				"type": "input_statement",
-				"name": "STACK"
+				"name": "STACK",
+				"check": "any"
 			},
 			{
 				"type": "input_value",
 				"name": "CONDITION",
-				"check": "Boolean"
+				"check": "boolean"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Controls"
 	},
-	"break": {
+	{
+		"type": "break",
 		"inputsInline": true,
 		"message0": "break",
-		"previousStatement": null,
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	"continue": {
+	{
+		"type": "continue",
 		"inputsInline": true,
 		"message0": "continue",
-		"previousStatement": null,
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	"controls_if": {
+	{
+		"type": "controls_if",
 		"inputsInline": true,
 		"message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "IF0",
-				"check": "Boolean"
+				"check": "boolean"
 			}
 		],
 		"message1": "%1",
 		"args1": [
 			{
 				"type": "input_statement",
-				"name": "DO0"
+				"name": "DO0",
+				"check": "any"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
 		"suppressPrefixSuffix": true,
-		"mutator": "mutator_if",
+		"mutator": "if",
 		"style": "Controls"
 	},
-	// <Mutator blocks>
-	"try": {
+	{
+		"type": "try",
 		"message0": "try",
 		"style": "Controls",
 		"nextStatement": [
@@ -1637,65 +1591,73 @@
 			"finally"
 		]
 	},
-	"catch": {
+	{
+		"type": "catch",
 		"message0": "catch",
 		"style": "Controls",
 		"nextStatement": "finally",
 		"previousStatement": "catch"
 	},
-	"catchVar": {
+	{
+		"type": "catchVar",
 		"message0": "catch %1",
 		"args0": [
 			{
-				"type": "field_input",
+				"type": "field_identifier",
 				"name": "ERROR",
-				"text": "error"
+				"value": "error"
 			}
 		],
 		"style": "Controls",
 		"nextStatement": "finally",
 		"previousStatement": "catch"
 	},
-	"finally": {
+	{
+		"type": "finally",
 		"message0": "finally",
 		"style": "Controls",
 		"previousStatement": "finally"
 	},
-	// </Mutator blocks>
-	"tryCatch": {
+	{
+		"type": "tryCatch",
 		"inputsInline": true,
 		"message0": "try",
 		"message1": "%1",
 		"args1": [
 			{
 				"type": "input_statement",
-				"name": "TRY"
+				"name": "TRY",
+				"check": "any"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Controls",
-		"mutator": "mutator_try"
+		"mutator": "try"
 	},
-	"throw": {
+	{
+		"type": "throw",
 		"inputsInline": true,
 		"message0": "throw %1",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "ERROR"
+				"name": "ERROR",
+				"check": "any"
 			}
 		],
-		"previousStatement": null,
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	"whenCloned": {
+	{
+		"type": "whenCloned",
 		"inputsInline": true,
 		"message0": "when I start as a clone",
-		"nextStatement": null,
+		"nextStatement": "any",
 		"style": "Controls"
 	},
-	"clone": {
+	{
+		"type": "clone",
 		"inputsInline": true,
 		"message0": "clone %1",
 		"args0": [
@@ -1705,34 +1667,26 @@
 				"check": "Sprite"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	// Unlike Scratch,
-	// this block can delete 
-	// both clones and the original sprite,
-	// depending where it is placed.
-	"delete": {
+	{
+		"type": "delete",
 		"inputsInline": true,
 		"message0": "delete",
 		"args0": [],
-		"previousStatement": null,
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	// This block was hard to implement.
-	// Basically, it throws an error
-	// which cannot be caught by the program.
-	// This causes the program to stop running.
-	// However, "stop my scripts"
-	// will never be implemented.
-	"stop": {
+	{
+		"type": "stop",
 		"message0": "stop all scripts",
-		"previousStatement": null,
+		"previousStatement": "any",
 		"style": "Controls"
 	},
-	// Sensing
-	"isTouching": {
+	{
+		"type": "isTouching",
 		"inputsInline": true,
 		"message0": "touching %1?",
 		"args0": [
@@ -1742,10 +1696,11 @@
 				"check": "Sprite"
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	"isTouchingBackdropColor": {
+	{
+		"type": "isTouchingBackdropColor",
 		"inputsInline": true,
 		"message0": "touching backdrop color %1?",
 		"args0": [
@@ -1755,178 +1710,122 @@
 				"check": "Color"
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	"isTouchingEdge": {
+	{
+		"type": "isTouchingEdge",
 		"inputsInline": true,
 		"message0": "touching edge?",
 		"args0": [],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	"isTouchingMouse": {
+	{
+		"type": "isTouchingMouse",
 		"inputsInline": true,
 		"message0": "touching mouse-pointer?",
 		"args0": [],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	"distanceTo": {
+	{
+		"type": "distanceTo",
 		"inputsInline": true,
 		"message0": "distance to x: %1 y: %2",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "X",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "Y",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Sensing"
 	},
-	// Unlike Scratch (but just like Snap!),
-	// this block returns the answer.
-	// Scrap does not have an "answer"
-	// property. SB3 compatibility layer
-	// can handle this.
-	"ask": {
+	{
+		"type": "ask",
 		"inputsInline": true,
 		"message0": "ask %1 and wait",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "QUESTION"
+				"name": "QUESTION",
+				"check": "any"
 			}
 		],
-		"output": "String",
+		"output": "string",
 		"style": "Sensing"
 	},
-	"isKeyPressed": {
+	{
+		"type": "isKeyPressed",
 		"inputsInline": true,
 		"message0": "key %1 pressed?",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "KEY",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	"mouseDown": {
+	{
+		"type": "mouseDown",
 		"inputsInline": true,
 		"message0": "mouse down?",
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	"mouseX": {
+	{
+		"type": "mouseX",
 		"inputsInline": true,
 		"message0": "mouse x",
-		"output": "Number",
+		"output": "number",
 		"style": "Sensing"
 	},
-	"mouseY": {
+	{
+		"type": "mouseY",
 		"inputsInline": true,
 		"message0": "mouse y",
-		"output": "Number",
+		"output": "number",
 		"style": "Sensing"
 	},
-	"property": {
+	{
+		"type": "draggable",
 		"inputsInline": true,
-		"message0": "%1 of %2",
-		"args0": [
-			{
-				"type": "field_dropdown",
-				"name": "PROPERTY",
-				"options": [
-					[
-						"x",
-						"x"
-					],
-					[
-						"y",
-						"y"
-					],
-					[
-						"size",
-						"size"
-					],
-					[
-						"direction",
-						"direction"
-					],
-					[
-						"volume",
-						"volume"
-					],
-					[
-						"pen size",
-						"penSize"
-					],
-					[
-						"color effect",
-						"effects.color"
-					],
-					[
-						"ghost effect",
-						"effects.ghost"
-					],
-					[
-						"grayscale effect",
-						"effects.grayscale"
-					],
-					[
-						"brightness effect",
-						"effects.brightness"
-					]
-				]
-			},
-			{
-				"type": "input_value",
-				"name": "SPRITE",
-				"check": "Sprite"
-			}
+		"message0": "draggable",
+		"output": [
+			"boolean",
+			"Variable"
 		],
-		"output": "Number",
 		"style": "Sensing"
 	},
-	"setDraggable": {
-		"inputsInline": true,
-		"message0": "set draggable to %1",
-		"args0": [
-			{
-				"type": "input_value",
-				"name": "DRAGGABLE",
-				"check": "Boolean"
-			}
-		],
-		"nextStatement": null,
-		"previousStatement": null,
-		"style": "Sensing"
-	},
-	"getTimer": {
+	{
+		"type": "getTimer",
 		"inputsInline": true,
 		"message0": "timer",
-		"output": "Number",
+		"output": "number",
 		"style": "Sensing",
 		"args0": []
 	},
-	"resetTimer": {
+	{
+		"type": "resetTimer",
 		"inputsInline": true,
 		"message0": "reset timer",
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Sensing",
 		"args0": []
 	},
-	"date": {
+	{
+		"type": "date",
 		"message0": "%1",
 		"args0": [
 			{
@@ -1937,12 +1836,14 @@
 		"output": "Date",
 		"style": "Sensing"
 	},
-	"today": {
+	{
+		"type": "today",
 		"message0": "today",
 		"output": "Date",
 		"style": "Sensing"
 	},
-	"dateProperty": {
+	{
+		"type": "dateProperty",
 		"inputsInline": true,
 		"message0": "%1 of %2",
 		"args0": [
@@ -1986,56 +1887,60 @@
 				"check": "Date"
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Sensing"
 	},
-	"isTurbo": {
+	{
+		"type": "isTurbo",
 		"message0": "is turbo mode?",
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	"alert": {
+	{
+		"type": "alert",
 		"inputsInline": true,
 		"message0": "alert %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "TEXT",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"nextStatement": null,
-		"previousStatement": null,
+		"nextStatement": "any",
+		"previousStatement": "any",
 		"style": "Sensing"
 	},
-	"prompt": {
+	{
+		"type": "prompt",
 		"inputsInline": true,
 		"message0": "prompt %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "TEXT",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"output": "String",
+		"output": "string",
 		"style": "Sensing"
 	},
-	"confirm": {
+	{
+		"type": "confirm",
 		"inputsInline": true,
 		"message0": "confirm %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "TEXT",
-				"check": "String"
+				"check": "string"
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Sensing"
 	},
-	// Operators
-	"arithmetics": {
+	{
+		"type": "arithmetics",
 		"inputsInline": true,
 		"message0": "%1 %2 %3",
 		"args0": [
@@ -2043,8 +1948,8 @@
 				"type": "input_value",
 				"name": "A",
 				"check": [
-					"Number",
-					"String"
+					"number",
+					"string"
 				]
 			},
 			{
@@ -2060,15 +1965,15 @@
 						"-"
 					],
 					[
-						"×",
+						"*",
 						"*"
 					],
 					[
-						"÷",
+						"/",
 						"/"
 					],
 					[
-						"^",
+						"**",
 						"**"
 					],
 					[
@@ -2081,15 +1986,16 @@
 				"type": "input_value",
 				"name": "B",
 				"check": [
-					"Number",
-					"String"
+					"number",
+					"string"
 				]
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Operators"
 	},
-	"compare": {
+	{
+		"type": "compare",
 		"inputsInline": true,
 		"message0": "%1 %2 %3",
 		"args0": [
@@ -2097,8 +2003,8 @@
 				"type": "input_value",
 				"name": "A",
 				"check": [
-					"Number",
-					"String"
+					"number",
+					"string"
 				]
 			},
 			{
@@ -2135,22 +2041,23 @@
 				"type": "input_value",
 				"name": "B",
 				"check": [
-					"Number",
-					"String"
+					"number",
+					"string"
 				]
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Operators"
 	},
-	"operation": {
+	{
+		"type": "operation",
 		"inputsInline": true,
 		"message0": "%1 %2 %3",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "A",
-				"check": "Boolean"
+				"check": "boolean"
 			},
 			{
 				"type": "field_dropdown",
@@ -2169,26 +2076,28 @@
 			{
 				"type": "input_value",
 				"name": "B",
-				"check": "Boolean"
+				"check": "boolean"
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Operators"
 	},
-	"not": {
+	{
+		"type": "not",
 		"inputsInline": true,
 		"message0": "not %1",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "BOOL",
-				"check": "Boolean"
+				"check": "boolean"
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Operators"
 	},
-	"boolean": {
+	{
+		"type": "boolean",
 		"inputsInline": true,
 		"message0": "%1",
 		"args0": [
@@ -2207,15 +2116,17 @@
 				]
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Operators"
 	},
-	"random": {
+	{
+		"type": "random",
 		"message0": "random",
-		"output": "Number",
+		"output": "number",
 		"style": "Operators"
 	},
-	"math": {
+	{
+		"type": "math",
 		"inputsInline": true,
 		"message0": "%1 of %2",
 		"args0": [
@@ -2284,13 +2195,14 @@
 			{
 				"type": "input_value",
 				"name": "NUM",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Operators"
 	},
-	"constant": {
+	{
+		"type": "constant",
 		"inputsInline": true,
 		"message0": "%1",
 		"args0": [
@@ -2317,35 +2229,39 @@
 				]
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Operators"
 	},
-	"string": {
+	{
+		"type": "string",
 		"inputsInline": true,
 		"message0": "convert %1 to string",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "VALUE"
+				"name": "VALUE",
+				"check": "any"
 			}
 		],
-		"output": "String",
+		"output": "string",
 		"style": "Operators"
 	},
-	"number": {
+	{
+		"type": "number",
 		"inputsInline": true,
 		"message0": "convert %1 to number",
 		"args0": [
 			{
 				"type": "input_value",
-				"name": "VALUE"
+				"name": "VALUE",
+				"check": "any"
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Operators"
 	},
-	// Iterables
-	"iterables_string": {
+	{
+		"type": "iterables_string",
 		"inputsInline": true,
 		"message0": "%1",
 		"args0": [
@@ -2355,13 +2271,22 @@
 				"text": ""
 			}
 		],
-		"output": "String",
+		"output": "string",
 		"style": "Iterables"
 	},
-	"array": {
+	{
+		"type": "array",
+		"align": "RIGHT",
 		"inputsInline": false,
-		"message0": "",
-		"mutator": "mutator_array",
+		"message0": "create array of %1",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "TYPE",
+				"check": "type"
+			}
+		],
+		"mutator": "array",
 		"output": "Array",
 		"extraState": {
 			"items": [
@@ -2372,154 +2297,140 @@
 		},
 		"style": "Iterables"
 	},
-	"length": {
+	{
+		"type": "length",
 		"inputsInline": true,
 		"message0": "length of %1",
 		"args0": [
 			{
 				"name": "ITERABLE",
 				"type": "input_value",
-				"check": [
-					"String",
-					"Array"
-				]
+				"check": "Iterable"
 			}
 		],
-		"output": "Number",
+		"output": "number",
 		"style": "Iterables"
 	},
-	"reverse": {
+	{
+		"type": "reverse",
 		"inputsInline": true,
 		"message0": "reverse array %1",
 		"args0": [
 			{
 				"name": "ITERABLE",
 				"type": "input_value",
-				"check": [
-					"Array"
-				]
+				"check": "Array"
 			}
 		],
-		"output": [
-			"Array"
-		],
+		"output": "Array",
 		"style": "Iterables"
 	},
-	"join": {
+	{
+		"type": "join",
 		"inputsInline": true,
 		"message0": "join %1 with %2",
 		"args0": [
 			{
 				"name": "ITERABLE",
 				"type": "input_value",
-				"check": [
-					"Array"
-				]
+				"check": "Array"
 			},
 			{
 				"name": "SEPARATOR",
 				"type": "input_value",
-				"check": [
-					"String"
-				]
+				"check": "string"
 			}
 		],
 		"output": [
-			"String"
+			"string"
 		],
 		"style": "Iterables"
 	},
-	"includes": {
+	{
+		"type": "includes",
 		"inputsInline": true,
 		"message0": "%1 includes %2",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "ITERABLE",
-				"check": [
-					"String",
-					"Array"
-				]
+				"check": "Iterable"
 			},
 			{
 				"type": "input_value",
-				"name": "ITEM"
+				"name": "ITEM",
+				"check": "any"
 			}
 		],
-		"output": "Boolean",
+		"output": "boolean",
 		"style": "Iterables"
 	},
-	"slice": {
+	{
+		"type": "slice",
 		"inputsInline": true,
 		"message0": "slice %1 from %2 to %3",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "ITERABLE",
-				"check": [
-					"String",
-					"Array"
-				]
+				"check": "Iterable"
 			},
 			{
 				"type": "input_value",
 				"name": "START",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "TO",
-				"check": "Number"
+				"check": "number"
 			}
 		],
-		"output": [
-			"Array",
-			"String"
-		],
+		"output": "Iterable",
 		"style": "Iterables"
 	},
-	"item": {
+	{
+		"type": "item",
 		"inputsInline": true,
 		"message0": "item %1 of %2",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "INDEX",
-				"check": "Number"
+				"check": "number"
 			},
 			{
 				"type": "input_value",
 				"name": "ITERABLE",
-				"check": [
-					"String",
-					"Array"
-				]
+				"check": "Iterable"
 			}
 		],
-		"output": null,
+		"output": [
+			"any",
+			"Variable"
+		],
 		"style": "Iterables"
 	},
-	"indexOf": {
+	{
+		"type": "indexOf",
 		"inputsInline": true,
 		"message0": "in %1 find index of %2",
 		"args0": [
 			{
 				"type": "input_value",
 				"name": "ITERABLE",
-				"check": [
-					"String",
-					"Array"
-				]
+				"check": "Iterable"
 			},
 			{
 				"type": "input_value",
 				"name": "ITEM"
 			}
 		],
-		"output": null,
+		"output": "any",
 		"style": "Iterables"
 	},
-	"foreach": {
+	{
+		"type": "foreach",
 		"inputsInline": true,
 		"message0": "for each %1 in %2",
 		"args0": [
@@ -2531,24 +2442,56 @@
 			{
 				"type": "input_value",
 				"name": "ITERABLE",
-				"check": [
-					"String",
-					"Array"
-				]
+				"check": "Iterable"
 			}
 		],
 		"message1": "%1",
 		"args1": [
 			{
 				"type": "input_statement",
-				"name": "DO"
+				"name": "DO",
+				"check": "any"
 			}
 		],
-		"previousStatement": null,
-		"nextStatement": null,
+		"previousStatement": "any",
+		"nextStatement": "any",
 		"style": "Iterables",
 		"extensions": [
-			"foreach_contextmenu"
+			"foreach"
 		]
+	},
+	{
+		"type": "generic",
+		"message0": "%1 of %2",
+		"style": "Operators",
+		"args0": [
+			{
+				"type": "field_dropdown",
+				"name": "ITERABLE",
+				"options": [
+					[
+						"array",
+						"Array"
+					],
+					[
+						"iterable",
+						"Iterable"
+					]
+				]
+			},
+			{
+				"type": "input_value",
+				"name": "TYPE",
+				"check": "type"
+			}
+		],
+		"output": "type"
+	},
+	{
+		"type": "union:type",
+		"message0": "type",
+		"style": "Operators",
+		"nextStatement": "any",
+		"previousStatement": "any"
 	}
-}
+]

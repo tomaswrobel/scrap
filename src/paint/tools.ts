@@ -368,7 +368,7 @@ export class Fill extends Tool {
 		this.done = window.setTimeout(
 			() => {
 				if (!this.done) {
-					window.app.showLoader("Filling...");
+					app.showLoader("Filling...");
 				}
 			},
 			500
@@ -404,7 +404,7 @@ export class Fill extends Tool {
 		this.worker.onmessage = e => {
 			this.ctx!.putImageData(e.data, 0, 0);
 			window.clearTimeout(this.done);
-			window.app.hideLoader();
+			app.hideLoader();
 		};
 
 		this.movable = false;

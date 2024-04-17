@@ -1,11 +1,10 @@
-import * as Blockly from "blockly/core";
-import {Generator} from "../blockly";
+import * as Blockly from "blockly";
 import JSZip from "jszip";
 import fs from "fs";
 import "./entity.scss";
 import path from "path";
-import transform from "../files/javascript";
-import {reserved} from "../files/utils";
+import {reserved} from "../code/transformers/utils";
+import {TypeScript} from "../code/transformers/typescript";
 
 const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
 
@@ -20,7 +19,7 @@ class Entity {
 	 * Variables are stored as an array of
 	 * [name, type] tuples.
 	 */
-	variables: [string, string][] = [];
+	variables: [string, string | string[]][] = [];
 	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
 	// Thumbnail of the entity
@@ -30,13 +29,11 @@ class Entity {
 	current = 0;
 	/** Helper workspace for generating code. */
 	codeWorkspace = new Blockly.Workspace();
-	/** Generator used for preview in an iframe */
-	protected outputGenerator = new Generator(true);
-	/** Generator used in exported HTML file */
-	protected exportGenerator = new Generator(false);
+	protected generator = new TypeScript(this);
 
 	code = "this.whenLoaded(function () {});";
 	blocks = true;
+	init = {};
 
 	/**
 	 * Get the workspace as JSON.
@@ -58,14 +55,11 @@ class Entity {
 	 * @param name My name (can be changed later)
 	 */
 	constructor(initialCostume: File, public name: string) {
-		this.codeWorkspace.newBlock("whenLoaded");
 		this.costumes.push(initialCostume);
-		this.outputGenerator.entity = this;
-		this.exportGenerator.entity = this;
 		this.thumbnail.alt = "";
 		this.update();
 	}
-	
+
 	/**
 	 * Get the URLs of the files.
 	 * If {@link zip} provided, the
@@ -75,62 +69,39 @@ class Entity {
 	getURLs(type: "costumes" | "sounds", zip?: JSZip) {
 		if (!zip) {
 			// No zip provided
-			return JSON.stringify(
-				this[type].reduce(
-					(urls, s) => ({
-						...urls,
-						[s.name]: URL.createObjectURL(s),
-					}),
-					{} as Record<string, string>
-				),
-				null,
-				4
+			return this[type].reduce(
+				(urls, s) => ({
+					...urls,
+					[s.name]: URL.createObjectURL(s),
+				}),
+				{} as Record<string, string>
 			);
 		}
 
-		// Create folder to prevent name conflicts
-		zip = zip.folder(this.name)!;
-
-		return JSON.stringify(
-			this[type].reduce((urls, s) => {
+		return this[type].reduce(
+			(urls, s) => {
 				zip!.file(s.name, s);
 				return {
 					...urls,
 					// Path to file in zip
 					[s.name]: path.join(this.name, s.name),
 				};
-			}, {} as Record<string, string>),
-			null,
-			4
+			},
+			{} as Record<string, string>
 		);
+	}
+
+	getCode() {
+		return this.blocks ? this.generator.workspaceToCode(this.codeWorkspace) : this.code;
 	}
 
 	async export(zip: JSZip) {
 		zip = zip.folder(this.name)!;
-
-		for (const file of this.costumes) {
-			zip.file(file.name, file);
-		}
-
-		for (const file of this.sounds) {
-			zip.file(file.name, file);
-		}
-
-		if (this.blocks) {
-			zip.file("script.js", this.exportGenerator.workspaceToCode(this.codeWorkspace));
-		} else {
-			const result = await transform(this.code);
-			zip.file("script.js", this.exportGenerator.finish(result?.code || ""));
-		}
+		zip.file("script.js", await this.generator.ready(zip));
 	}
 
 	async preview() {
-		if (this.blocks) {
-			return this.outputGenerator.workspaceToCode(this.codeWorkspace);
-		} else {
-			const result = await transform(this.code, true);
-			return this.outputGenerator.finish(result?.code || "");
-		}
+		return await this.generator.ready();
 	}
 
 	update() {
@@ -213,18 +184,17 @@ class Entity {
 const scrappy = fs.readFileSync(path.join(__dirname, "scrappy.svg"), "utf-8");
 
 class Sprite extends Entity {
-	readonly init = {
-		x: 0,
-		y: 0,
-		direction: 90,
-		size: 100,
-		rotationStyle: 0,
-		visible: true,
-		draggable: false
-	};
-
 	constructor(name: string) {
 		super(new File([scrappy], "scrappy.svg", {type: "image/svg+xml"}), name);
+		this.init = {
+			x: 0,
+			y: 0,
+			direction: 90,
+			size: 100,
+			rotationStyle: 0,
+			visible: true,
+			draggable: false
+		};
 	}
 
 	override render(parent: Element) {
@@ -264,8 +234,6 @@ const stage = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" wid
 class Stage extends Entity {
 	constructor() {
 		super(new File([stage], "stage.svg", {type: "image/svg+xml"}), "Stage");
-		this.outputGenerator.entity = this;
-		this.exportGenerator.entity = this;
 	}
 
 	override render(parent: Element): HTMLElement {

@@ -19,7 +19,7 @@
  * Using Modern DOM API
  * Color Validation
  */
-import * as Blockly from "blockly/core";
+import * as Blockly from "blockly";
 
 export default class FieldString extends Blockly.FieldTextInput {
 	private quoteSize_ = 16;
@@ -80,6 +80,11 @@ export default class FieldString extends Blockly.FieldTextInput {
 			},
 			this.fieldGroup_
 		);
+
+		this.quoteLeft_.style.setProperty("fill", "#A31515");
+		this.quoteRight_.style.setProperty("fill", "#A31515");
+		this.textElement_!.style.setProperty("fill", "#A31515");
+
 		this.quoteLeft_.append('"');
 		this.quoteRight_.append('"');
 	}
