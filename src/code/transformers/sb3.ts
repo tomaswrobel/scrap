@@ -31,12 +31,12 @@ class SB3 {
             opcode: "glide"
         });
         this.transformers.motion_goto_menu = async data => {
-            const block = app.current.codeWorkspace.newBlock("sprite");
+            const block = app.current.workspace.newBlock("sprite");
             block.setFieldValue(data.fields.TO[0], "SPRITE");
             return block;
         };
         this.transformers.motion_goto = async data => {
-            const block = app.current.codeWorkspace.newBlock("goTowards");
+            const block = app.current.workspace.newBlock("goTowards");
             const to = await this.input(data.inputs.TO);
             block.getInput("SPRITE")!.connection!.connect(to!.outputConnection!);
             return block;
@@ -49,7 +49,7 @@ class SB3 {
             opcode: "ifOnEdgeBounce"
         });
         this.transformers.motion_setrotationstyle = data => {
-            const block = app.current.codeWorkspace.newBlock("setRotationStyle");
+            const block = app.current.workspace.newBlock("setRotationStyle");
             block.getInput("STYLE")!.connection!.setShadowState({
                 type: "rotationStyle",
                 fields: {
@@ -88,7 +88,7 @@ class SB3 {
             }
 
             const value = await this.input(data.inputs.VALUE);
-            const block = app.current.codeWorkspace.newBlock(data.opcode === "looks_seteffectto" ? "set" : "change");
+            const block = app.current.workspace.newBlock(data.opcode === "looks_seteffectto" ? "set" : "change");
             block.getInput("VAR")!.connection!.setShadowState({
                 type: "effect",
                 fields: {
@@ -106,24 +106,24 @@ class SB3 {
         this.transformers.looks_setsizeto = this.setter("set", "size", "SIZE");
         this.transformers.looks_size = this.reporter("size");
         this.transformers.looks_costume = data => {
-            const block = app.current.codeWorkspace.newBlock("costume_menu");
+            const block = app.current.workspace.newBlock("costume_menu");
             block.setFieldValue(this.assetMap[data.fields.COSTUME[0]], "NAME");
             return block;
         };
         this.transformers.looks_backdrops = data => {
-            const block = app.current.codeWorkspace.newBlock("backdrop_menu");
+            const block = app.current.workspace.newBlock("backdrop_menu");
             block.setFieldValue(this.assetMap[data.fields.BACKDROP[0]], "NAME");
             return block;
         };
         this.transformers.looks_switchcostumeto = async data => {
-            const block = app.current.codeWorkspace.newBlock("switchCostumeTo");
+            const block = app.current.workspace.newBlock("switchCostumeTo");
             const input = await this.input(data.inputs.COSTUME);
 
             if (input!.outputConnection!.getCheck()![0] === "number") {
-                const one = app.current.codeWorkspace.newBlock("math_number");
+                const one = app.current.workspace.newBlock("math_number");
                 one.setFieldValue("1", "NUM");
 
-                const subtract = app.current.codeWorkspace.newBlock("arithmetics");
+                const subtract = app.current.workspace.newBlock("arithmetics");
                 subtract.setFieldValue("-", "OP");
 
                 subtract.getInput("A")!.connection!.connect(input!.outputConnection!);
@@ -140,14 +140,14 @@ class SB3 {
             opcode: "nextCostume",
         });
         this.transformers.looks_switchbackdropto = async data => {
-            const block = app.current.codeWorkspace.newBlock("switchBackdropTo");
+            const block = app.current.workspace.newBlock("switchBackdropTo");
             const input = await this.input(data.inputs.BACKDROP);
 
             if (input!.outputConnection!.getCheck()![0] === "number") {
-                const one = app.current.codeWorkspace.newBlock("math_number");
+                const one = app.current.workspace.newBlock("math_number");
                 one.setFieldValue("1", "NUM");
 
-                const subtract = app.current.codeWorkspace.newBlock("arithmetics");
+                const subtract = app.current.workspace.newBlock("arithmetics");
                 subtract.setFieldValue("-", "OP");
 
                 subtract.getInput("A")!.connection!.connect(input!.outputConnection!);
@@ -165,25 +165,25 @@ class SB3 {
         });
         this.transformers.looks_gotofrontback = data => {
             return data.fields.FRONT_BACK[0] === "front"
-                ? app.current.codeWorkspace.newBlock("goToFront")
-                : app.current.codeWorkspace.newBlock("goToBack")
+                ? app.current.workspace.newBlock("goToFront")
+                : app.current.workspace.newBlock("goToBack")
                 ;
         };
         this.transformers.looks_goforwardbackwardlayers = data => {
             return data.fields.FORWARD_BACKWARD[0] === "forward"
-                ? app.current.codeWorkspace.newBlock("goForward")
-                : app.current.codeWorkspace.newBlock("goBackward")
+                ? app.current.workspace.newBlock("goForward")
+                : app.current.workspace.newBlock("goBackward")
                 ;
         };
         this.transformers.looks_costumenumbername = data => {
             if (data.fields.NUMBER_NAME[0] === "number") { // Scratch uses 1-based indexing
-                const one = app.current.codeWorkspace.newBlock("math_number");
+                const one = app.current.workspace.newBlock("math_number");
                 one.setFieldValue("1", "NUM");
 
-                const add = app.current.codeWorkspace.newBlock("arithmetics");
+                const add = app.current.workspace.newBlock("arithmetics");
                 add.setFieldValue("+", "OP");
 
-                const block = app.current.codeWorkspace.newBlock("costume");
+                const block = app.current.workspace.newBlock("costume");
                 block.setFieldValue("index", "VALUE");
 
                 add.getInput("A")!.connection!.connect(one.outputConnection!);
@@ -195,13 +195,13 @@ class SB3 {
         };
         this.transformers.looks_backdropnumbername = data => {
             if (data.fields.NUMBER_NAME[0] === "number") { // Scratch uses 1-based indexing
-                const one = app.current.codeWorkspace.newBlock("math_number");
+                const one = app.current.workspace.newBlock("math_number");
                 one.setFieldValue("1", "NUM");
 
-                const add = app.current.codeWorkspace.newBlock("arithmetics");
+                const add = app.current.workspace.newBlock("arithmetics");
                 add.setFieldValue("+", "OP");
 
-                const block = app.current.codeWorkspace.newBlock("backdrop");
+                const block = app.current.workspace.newBlock("backdrop");
                 block.setFieldValue("index", "VALUE");
 
                 add.getInput("A")!.connection!.connect(one.outputConnection!);
@@ -218,7 +218,7 @@ class SB3 {
 
         // Sounds
         this.transformers.sound_sounds_menu = data => {
-            const block = app.current.codeWorkspace.newBlock("sound");
+            const block = app.current.workspace.newBlock("sound");
             const name = data.fields.SOUND_MENU[0];
             const file = this.target.sounds.find(sound => sound.name === name)!;
             block.setFieldValue(`${name}.${file!.dataFormat}`, "NAME");
@@ -266,7 +266,7 @@ class SB3 {
         });
         this.transformers.event_whengreaterthan = async data => {
             if (data.fields.WHENGREATERTHANMENU[0] === "TIMER") {
-                const block = app.current.codeWorkspace.newBlock("whenTimerElapsed");
+                const block = app.current.workspace.newBlock("whenTimerElapsed");
                 const value = await this.input(data.inputs.VALUE);
                 block.getInput("TIMER")!.connection!.connect(value!.outputConnection!);
                 return block;
@@ -275,13 +275,13 @@ class SB3 {
             }
         };
         this.transformers.event_whenthisspriteclicked = () => {
-            const block = app.current.codeWorkspace.newBlock("whenMouse");
+            const block = app.current.workspace.newBlock("whenMouse");
             block.getInput("EVENT")!.connection!.setShadowState({type: "event"});
             return block;
         };
         this.transformers.event_whenstageclicked = this.transformers.event_whenthisspriteclicked;
         this.transformers.event_whenbroadcastreceived = data => {
-            const block = app.current.codeWorkspace.newBlock("whenReceiveMessage");
+            const block = app.current.workspace.newBlock("whenReceiveMessage");
             block.getInput("MESSAGE")!.connection!.setShadowState({
                 type: "iterables_string",
                 fields: {
@@ -303,7 +303,7 @@ class SB3 {
             }
         });
         this.transformers.event_whenbackdropswitchesto = data => {
-            const block = app.current.codeWorkspace.newBlock("whenBackdropChangesTo");
+            const block = app.current.workspace.newBlock("whenBackdropChangesTo");
             block.getInput("BACKDROP")!.connection!.setShadowState({
                 type: "backdrop",
                 fields: {
@@ -313,7 +313,7 @@ class SB3 {
             return block;
         };
         this.transformers.event_whenkeypressed = data => {
-            const key = app.current.codeWorkspace.newBlock("key");
+            const key = app.current.workspace.newBlock("key");
 
             switch (data.fields.KEY_OPTION[0]) {
                 case "space":
@@ -336,7 +336,7 @@ class SB3 {
                     break;
             }
 
-            const block = app.current.codeWorkspace.newBlock("whenKeyPressed");
+            const block = app.current.workspace.newBlock("whenKeyPressed");
             block.getInput("KEY")!.connection!.connect(key.outputConnection!);
             return block;
         };
@@ -349,8 +349,8 @@ class SB3 {
             }
         });
         this.transformers.control_repeat_until = async data => {
-            const block = app.current.codeWorkspace.newBlock("while");
-            const not = app.current.codeWorkspace.newBlock("not");
+            const block = app.current.workspace.newBlock("while");
+            const not = app.current.workspace.newBlock("not");
 
             const condition = await this.input(data.inputs.CONDITION);
             if (condition) {
@@ -371,9 +371,9 @@ class SB3 {
             const options = data.fields.STOP_OPTION[0];
 
             if (options === "all") {
-                return app.current.codeWorkspace.newBlock("stop");
+                return app.current.workspace.newBlock("stop");
             } else if (options === "this script") {
-                return app.current.codeWorkspace.newBlock("return");
+                return app.current.workspace.newBlock("return");
             } else {
                 return this.unknown(`control_stop [${options}]`, "command");
             }
@@ -389,7 +389,7 @@ class SB3 {
         });
         this.transformers.control_create_clone_of = data => {
             const field = this.target.blocks[data.inputs.CLONE_OPTION[1] as string].fields.CLONE_OPTION[0];
-            const block = app.current.codeWorkspace.newBlock("clone");
+            const block = app.current.workspace.newBlock("clone");
             block.getInput("SPRITE")!.connection!.setShadowState({
                 type: "sprite",
                 fields: {
@@ -399,10 +399,10 @@ class SB3 {
             return block;
         };
         this.transformers.control_delete_this_clone = () => (
-            app.current.codeWorkspace.newBlock("delete")
+            app.current.workspace.newBlock("delete")
         );
         this.transformers.control_forever = async data => {
-            const block = app.current.codeWorkspace.newBlock("while");
+            const block = app.current.workspace.newBlock("while");
 
             if ("SUBSTACK" in data.inputs) {
                 const inner = await this.input(data.inputs.SUBSTACK, true);
@@ -411,7 +411,7 @@ class SB3 {
                 );
             }
 
-            const trueBlock = app.current.codeWorkspace.newBlock("boolean");
+            const trueBlock = app.current.workspace.newBlock("boolean");
             trueBlock.setFieldValue("true", "BOOL");
 
             block.getInput("CONDITION")!.connection!.connect(trueBlock.outputConnection!);
@@ -441,7 +441,7 @@ class SB3 {
         this.transformers.sensing_of = async data => {
             const fieldValue = this.target.blocks[data.inputs.OBJECT[1] as string].fields.OBJECT[0];
 
-            const block = app.current.codeWorkspace.newBlock("property");
+            const block = app.current.workspace.newBlock("property");
             block.setFieldValue(fieldValue === "_stage_" ? "Stage" : fieldValue, "SPRITE");
 
             switch (data.fields.PROPERTY[0]) {
@@ -462,11 +462,11 @@ class SB3 {
             const fieldValue = this.target.blocks[data.inputs.TOUCHINGOBJECTMENU[1] as string].fields.TOUCHINGOBJECTMENU[0];
 
             if (fieldValue === "_edge_") {
-                return app.current.codeWorkspace.newBlock("isTouchingEdge");
+                return app.current.workspace.newBlock("isTouchingEdge");
             } else if (fieldValue === "_mouse_") {
-                return app.current.codeWorkspace.newBlock("isTouchingMouse");
+                return app.current.workspace.newBlock("isTouchingMouse");
             } else {
-                const block = app.current.codeWorkspace.newBlock("isTouching");
+                const block = app.current.workspace.newBlock("isTouching");
                 block.getInput("SPRITE")!.connection!.setShadowState({
                     type: "sprite",
                     fields: {
@@ -483,16 +483,16 @@ class SB3 {
             // Scrap does not have "distance to [object]" block,
             // rather it has "distance to [x: number] [y: number]" block.
             const fieldValue = this.target.blocks[data.inputs.DISTANCETOMENU[1] as string].fields.DISTANCETOMENU[0];
-            const block = app.current.codeWorkspace.newBlock("distanceTo");
+            const block = app.current.workspace.newBlock("distanceTo");
             if (fieldValue === "_mouse_") {
                 block.getInput("X")!.connection!.connect(
-                    app.current.codeWorkspace.newBlock("mouseX")!.outputConnection!
+                    app.current.workspace.newBlock("mouseX")!.outputConnection!
                 );
                 block.getInput("Y")!.connection!.connect(
-                    app.current.codeWorkspace.newBlock("mouseY")!.outputConnection!
+                    app.current.workspace.newBlock("mouseY")!.outputConnection!
                 );
             } else {
-                const x = app.current.codeWorkspace.newBlock("property");
+                const x = app.current.workspace.newBlock("property");
                 x.setFieldValue("x", "PROPERTY");
                 x.getInput("SPRITE")!.connection!.setShadowState({
                     type: "sprite",
@@ -501,7 +501,7 @@ class SB3 {
                     }
                 });
 
-                const y = app.current.codeWorkspace.newBlock("property");
+                const y = app.current.workspace.newBlock("property");
                 y.setFieldValue("y", "PROPERTY");
                 y.getInput("SPRITE")!.connection!.setShadowState({
                     type: "sprite",
@@ -519,7 +519,7 @@ class SB3 {
             let name = "";
 
             return () => {
-                const block = app.current.codeWorkspace.newBlock("parameter");
+                const block = app.current.workspace.newBlock("parameter");
                 block.loadExtraState!({type: "string", isVariable: true});
                 block.setFieldValue(
                     name || (
@@ -534,9 +534,9 @@ class SB3 {
             };
         })();
         this.transformers.sensing_askandwait = async data => {
-            const block = app.current.codeWorkspace.newBlock("set");
+            const block = app.current.workspace.newBlock("set");
             block.getInput("VAR")!.connection!.connect(answer().outputConnection!);
-            const ask = app.current.codeWorkspace.newBlock("ask");
+            const ask = app.current.workspace.newBlock("ask");
             const question = await this.input(data.inputs.QUESTION);
             ask.getInput("QUESTION")!.connection!.connect(question!.outputConnection!);
             block.getInput("VALUE")!.connection!.connect(ask.outputConnection!);
@@ -544,7 +544,7 @@ class SB3 {
         };
         this.transformers.sensing_answer = answer;
         this.transformers.sensing_keyoptions = data => {
-            const block = app.current.codeWorkspace.newBlock("key");
+            const block = app.current.workspace.newBlock("key");
 
             switch (data.fields.KEY_OPTION[0]) {
                 case "space":
@@ -579,13 +579,13 @@ class SB3 {
         this.transformers.sensing_mousex = this.reporter("mouseX");
         this.transformers.sensing_mousey = this.reporter("mouseY");
         this.transformers.sensing_setdragmode = data => {
-            const block = app.current.codeWorkspace.newBlock("setDragMode");
+            const block = app.current.workspace.newBlock("setDragMode");
             if (data.fields.DRAG_MODE[0] === "draggable") {
-                const trueBlock = app.current.codeWorkspace.newBlock("boolean");
+                const trueBlock = app.current.workspace.newBlock("boolean");
                 trueBlock.setFieldValue("true", "BOOL");
                 block.getInput("DRAGGABLE")!.connection!.connect(trueBlock.outputConnection!);
             } else if (data.fields.DRAG_MODE[0] === "not draggable") {
-                const falseBlock = app.current.codeWorkspace.newBlock("boolean");
+                const falseBlock = app.current.workspace.newBlock("boolean");
                 falseBlock.setFieldValue("false", "BOOL");
                 block.getInput("DRAGGABLE")!.connection!.connect(falseBlock.outputConnection!);
             }
@@ -603,33 +603,33 @@ class SB3 {
         this.transformers.operator_divide = this.operator("arithmetics", "/");
 
         this.transformers.operator_random = async data => {
-            const fromParam = app.current.codeWorkspace.newBlock("parameter");
+            const fromParam = app.current.workspace.newBlock("parameter");
             fromParam.loadExtraState!({type: "number"});
             fromParam.setFieldValue("__from__", "VAR");
 
-            const toParam = app.current.codeWorkspace.newBlock("parameter");
+            const toParam = app.current.workspace.newBlock("parameter");
             toParam.loadExtraState!({type: "number"});
             toParam.setFieldValue("__to__", "VAR");
 
-            const multiply = app.current.codeWorkspace.newBlock("arithmetics");
+            const multiply = app.current.workspace.newBlock("arithmetics");
             multiply.setFieldValue("*", "OP");
 
-            const add = app.current.codeWorkspace.newBlock("arithmetics");
+            const add = app.current.workspace.newBlock("arithmetics");
             add.setFieldValue("+", "OP");
 
-            const subtract = app.current.codeWorkspace.newBlock("arithmetics");
+            const subtract = app.current.workspace.newBlock("arithmetics");
             subtract.setFieldValue("-", "OP");
 
-            const floor = app.current.codeWorkspace.newBlock("math");
+            const floor = app.current.workspace.newBlock("math");
             floor.setFieldValue("floor", "OP");
 
-            const one = app.current.codeWorkspace.newBlock("math_number");
+            const one = app.current.workspace.newBlock("math_number");
             one.setFieldValue("1", "NUM");
 
-            const returnBlock = app.current.codeWorkspace.newBlock("return");
+            const returnBlock = app.current.workspace.newBlock("return");
             returnBlock.loadExtraState!({output: "number"});
 
-            const random = app.current.codeWorkspace.newBlock("random");
+            const random = app.current.workspace.newBlock("random");
 
             // Connections
             multiply.getInput("A")!.connection!.connect(random.outputConnection!);
@@ -663,7 +663,7 @@ class SB3 {
                 returnBlock.getInput("VALUE")!.connection!.connect(add.outputConnection!);
             }
 
-            const block = app.current.codeWorkspace.newBlock("call");
+            const block = app.current.workspace.newBlock("call");
             block.loadExtraState!({
                 name,
                 params: [
@@ -697,9 +697,9 @@ class SB3 {
 
         // Scratch uses 1-based indexing, while Scrap uses 0-based indexing.
         this.transformers.operator_letter_of = async data => {
-            const block = app.current.codeWorkspace.newBlock("item");
-            const minus = app.current.codeWorkspace.newBlock("arithmetics");
-            const one = app.current.codeWorkspace.newBlock("math_number");
+            const block = app.current.workspace.newBlock("item");
+            const minus = app.current.workspace.newBlock("arithmetics");
+            const one = app.current.workspace.newBlock("math_number");
             const letter = await this.input(data.inputs.LETTER);
             const string = await this.input(data.inputs.STRING);
 
@@ -723,7 +723,7 @@ class SB3 {
 
         this.transformers.operator_mod = this.operator("arithmetics", "%");
         this.transformers.operator_round = async data => {
-            const block = app.current.codeWorkspace.newBlock("math");
+            const block = app.current.workspace.newBlock("math");
             block.setFieldValue("round", "OP");
             const value = await this.input(data.inputs.NUM);
             block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
@@ -740,45 +740,45 @@ class SB3 {
                 case "asin":
                 case "acos":
                 case "atan": {
-                    const block = app.current.codeWorkspace.newBlock("math");
+                    const block = app.current.workspace.newBlock("math");
                     block.setFieldValue(data.fields.OPERATOR[0], "OP");
                     const value = await this.input(data.inputs.NUM);
                     block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
                     return block;
                 }
                 case "ceiling": {
-                    const block = app.current.codeWorkspace.newBlock("math");
+                    const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("ceil", "OP");
                     const value = await this.input(data.inputs.NUM);
                     block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
                     return block;
                 }
                 case "ln": {
-                    const block = app.current.codeWorkspace.newBlock("math");
+                    const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("log", "OP");
                     const value = await this.input(data.inputs.NUM);
                     block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
                     return block;
                 }
                 case "log": {
-                    const block = app.current.codeWorkspace.newBlock("math");
+                    const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("log10", "OP");
                     const value = await this.input(data.inputs.NUM);
                     block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
                     return block;
                 }
                 case "e ^": {
-                    const block = app.current.codeWorkspace.newBlock("math");
+                    const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("exp", "OP");
                     const value = await this.input(data.inputs.NUM);
                     block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
                     return block;
                 }
                 case "10 ^": {
-                    const block = app.current.codeWorkspace.newBlock("arithmetics");
+                    const block = app.current.workspace.newBlock("arithmetics");
                     block.setFieldValue("**", "OP");
                     const value = await this.input(data.inputs.NUM);
-                    const ten = app.current.codeWorkspace.newBlock("math_number");
+                    const ten = app.current.workspace.newBlock("math_number");
                     ten.setFieldValue("10", "NUM");
                     block.getInput("A")!.connection!.connect(ten.outputConnection!);
                     block.getInput("B")!.connection!.connect(value!.outputConnection!);
@@ -789,7 +789,7 @@ class SB3 {
             }
         };
         this.transformers.operator_join = async data => {
-            const block = app.current.codeWorkspace.newBlock("arithmetics");
+            const block = app.current.workspace.newBlock("arithmetics");
             const A = await this.input(data.inputs.STRING1);
             const B = await this.input(data.inputs.STRING2);
             block.getInput("A")!.connection!.connect(A!.outputConnection!);
@@ -800,11 +800,11 @@ class SB3 {
 
         // Variables
         this.transformers.data_setvariableto = this.transformers.data_changevariableby = async data => {
-            const block = app.current.codeWorkspace.newBlock(data.opcode.slice(5, -10));
+            const block = app.current.workspace.newBlock(data.opcode.slice(5, -10));
             const value = await this.input(data.inputs.VALUE);
             block.getInput("VALUE")!.connection!.connect(value!.outputConnection!);
 
-            const variable = app.current.codeWorkspace.newBlock("parameter");
+            const variable = app.current.workspace.newBlock("parameter");
             variable.loadExtraState!({isVariable: true});
             variable.setFieldValue(data.fields.VARIABLE[0], "VAR");
 
@@ -813,12 +813,12 @@ class SB3 {
             return block;
         };
         this.transformers.data_showvariable = data => {
-            const block = app.current.codeWorkspace.newBlock("showVariable");
+            const block = app.current.workspace.newBlock("showVariable");
             block.setFieldValue(data.fields.VARIABLE[0], "VAR");
             return block;
         };
         this.transformers.data_hidevariable = data => {
-            const block = app.current.codeWorkspace.newBlock("hideVariable");
+            const block = app.current.workspace.newBlock("hideVariable");
             block.setFieldValue(data.fields.VARIABLE[0], "VAR");
             return block;
         };
@@ -827,7 +827,7 @@ class SB3 {
         this.transformers.procedures_definition = def => {
             const data = this.target.blocks[def.inputs.custom_block[1] as string];
             const name = data.mutation!.proccode.replace(/%[bns]/g, "()").trim();
-            const block = app.current.codeWorkspace.newBlock("function");
+            const block = app.current.workspace.newBlock("function");
             const paramNames: string[] = JSON.parse(data.mutation!.argumentnames);
             const paramTypes = (data.mutation!.proccode.match(/%[bns]/g) ?? []).map(e => (
                 e[1] === "s" ? ["string", "number"] : e[1] === "b" ? "boolean" : "number"
@@ -846,7 +846,7 @@ class SB3 {
         };
         this.transformers.procedures_call = async data => {
             const name = data.mutation!.proccode.replace(/%[nbs]/g, "()").trim();
-            const call = app.current.codeWorkspace.newBlock("call");
+            const call = app.current.workspace.newBlock("call");
             const types = (data.mutation!.proccode.match(/%[bns]/g) ?? []).map(e => ({
                 type: e[1] === "s" ? ["string", "number"] : e[1] === "b" ? "boolean" : "number"
             }));
@@ -868,12 +868,12 @@ class SB3 {
             return call;
         };
         this.transformers.argument_reporter_string_number = data => {
-            const block = app.current.codeWorkspace.newBlock("parameter");
+            const block = app.current.workspace.newBlock("parameter");
             block.setFieldValue(escape(data.fields.VALUE[0]), "VAR");
             return block;
         };
         this.transformers.argument_reporter_boolean = data => {
-            const block = app.current.codeWorkspace.newBlock("parameter");
+            const block = app.current.workspace.newBlock("parameter");
             block.loadExtraState!({type: "boolean"});
             block.setFieldValue(escape(data.fields.VALUE[0]), "VAR");
             return block;
@@ -883,7 +883,7 @@ class SB3 {
     operator(type: "compare" | "arithmetics" | "operation", operator: string) {
         const input = type === "arithmetics" ? "NUM" : "OPERAND";
         return async (data: SB3.Block) => {
-            const block = app.current.codeWorkspace.newBlock(type);
+            const block = app.current.workspace.newBlock(type);
             block.setFieldValue(operator, "OP");
 
             const A = await this.input(data.inputs[`${input}1`]);
@@ -936,7 +936,7 @@ class SB3 {
                     )
                 );
             }
-            app.current.codeWorkspace.clear();
+            app.current.workspace.clear();
             for (const id in target.variables) {
                 app.current.variables.push([target.variables[id][0], "any"]);
             }
@@ -991,31 +991,31 @@ class SB3 {
             case 6:
             case 7:
             case 8: {
-                const block = app.current.codeWorkspace.newBlock("math_number");
+                const block = app.current.workspace.newBlock("math_number");
                 block.setFieldValue(+data[1], "NUM");
                 block.setShadow(shadow === 1);
                 return block;
             }
             case 9: {
-                const block = app.current.codeWorkspace.newBlock("color");
+                const block = app.current.workspace.newBlock("color");
                 block.setFieldValue(data[1], "COLOR");
                 block.setShadow(shadow === 1);
                 return block;
             }
             case 10: {
-                const block = app.current.codeWorkspace.newBlock("text_or_number");
+                const block = app.current.workspace.newBlock("text_or_number");
                 block.setFieldValue(data[1], "VALUE");
                 block.setShadow(shadow === 1);
                 return block;
             }
             case 11: {
-                const block = app.current.codeWorkspace.newBlock("iterables_string");
+                const block = app.current.workspace.newBlock("iterables_string");
                 block.setFieldValue(data[1], "TEXT");
                 block.setShadow(shadow === 1);
                 return block;
             }
             case 12: {
-                const block = app.current.codeWorkspace.newBlock("parameter");
+                const block = app.current.workspace.newBlock("parameter");
                 block.loadExtraState!({isVariable: true});
                 block.setFieldValue(data[1], "VAR");
                 block.setShadow(shadow === 1);
@@ -1034,7 +1034,7 @@ class SB3 {
      */
     override({opcode, inputs = {}, extraState}: SB3.Override) {
         return async (data: SB3.Block) => {
-            const block = app.current.codeWorkspace.newBlock(opcode ?? data.opcode);
+            const block = app.current.workspace.newBlock(opcode ?? data.opcode);
 
             if (extraState) {
                 block.loadExtraState!(extraState);
@@ -1053,24 +1053,24 @@ class SB3 {
                     if (!didConnect) {
                         switch (connection!.getCheck()![0]) {
                             case "number": {
-                                const block = app.current.codeWorkspace.newBlock("number");
+                                const block = app.current.workspace.newBlock("number");
                                 block.getInput("VALUE")!.connection!.connect(inner.outputConnection);
 
                                 connection!.connect(block.outputConnection!);
                                 break;
                             }
                             case "string": {
-                                const block = app.current.codeWorkspace.newBlock("string");
+                                const block = app.current.workspace.newBlock("string");
                                 block.getInput("VALUE")!.connection!.connect(inner.outputConnection);
 
                                 connection!.connect(block.outputConnection!);
                                 break;
                             }
                             case "boolean": {
-                                const block = app.current.codeWorkspace.newBlock("compare");
+                                const block = app.current.workspace.newBlock("compare");
                                 block.setFieldValue("==", "OP");
 
-                                const trueBlock = app.current.codeWorkspace.newBlock("iterables_string");
+                                const trueBlock = app.current.workspace.newBlock("iterables_string");
                                 trueBlock.setFieldValue("true", "TEXT");
 
                                 block.getInput("A")!.connection!.connect(trueBlock.outputConnection!);
@@ -1089,7 +1089,7 @@ class SB3 {
 
     setter(_: "set" | "change", type: string, VALUE = "VALUE") {
         return async (data: SB3.Block) => {
-            const block = app.current.codeWorkspace.newBlock(_);
+            const block = app.current.workspace.newBlock(_);
             block.getInput("VAR")!.connection!.setShadowState({type});
             const value = await this.input(data.inputs[VALUE]);
 
@@ -1101,7 +1101,7 @@ class SB3 {
     }
 
     reporter(name: string) {
-        return () => app.current.codeWorkspace.newBlock(name);
+        return () => app.current.workspace.newBlock(name);
     }
 
     async block(data: SB3.Block, isInput?: boolean) {
@@ -1124,7 +1124,7 @@ class SB3 {
     }
 
     unknown(opcode: string, shape: "reporter" | "command") {
-        const block = app.current.codeWorkspace.newBlock("unknown");
+        const block = app.current.workspace.newBlock("unknown");
         block.loadExtraState!({shape, opcode});
 
         return new Promise<Blockly.Block>(resolve => {
@@ -1147,7 +1147,7 @@ class SB3 {
         }
 
         const name = `scratch_${init.name}_${Date.now().toString(36)}`;
-        let block = app.current.codeWorkspace.newBlock("function");
+        let block = app.current.workspace.newBlock("function");
 
         block.loadExtraState!({
             name,
@@ -1166,18 +1166,18 @@ class SB3 {
      * @returns Call block that calls the provided function.
      */
     provideAsset(type: string) {
-        const block = app.current.codeWorkspace.newBlock("controls_if");
+        const block = app.current.workspace.newBlock("controls_if");
         block.loadExtraState!({
             hasElse: true,
             elseIfCount: this.target.costumes.length - 1
         });
 
         for (let i = 0; i < this.target.costumes.length; i++) {
-            const equals = app.current.codeWorkspace.newBlock("compare");
+            const equals = app.current.workspace.newBlock("compare");
             equals.setFieldValue("==", "OP");
 
-            const assetBlock = app.current.codeWorkspace.newBlock(type);
-            const nameBlock = app.current.codeWorkspace.newBlock("iterables_string");
+            const assetBlock = app.current.workspace.newBlock(type);
+            const nameBlock = app.current.workspace.newBlock("iterables_string");
 
             nameBlock.setFieldValue(this.assetMap[this.target.costumes[i].name], "TEXT");
             equals.getInput("A")!.connection!.connect(assetBlock.outputConnection!);
@@ -1185,7 +1185,7 @@ class SB3 {
 
             block.getInput(`IF${i}`)!.connection!.connect(equals.outputConnection!);
 
-            const returnBlock = app.current.codeWorkspace.newBlock("return");
+            const returnBlock = app.current.workspace.newBlock("return");
             returnBlock.loadExtraState!({
                 output: "string"
             });
@@ -1194,7 +1194,7 @@ class SB3 {
             block.getInput(`DO${i}`)!.connection!.connect(returnBlock.previousConnection!);
         }
 
-        const throwBlock = app.current.codeWorkspace.newBlock("throw");
+        const throwBlock = app.current.workspace.newBlock("throw");
         throwBlock.getInput("ERROR")!.connection!.setShadowState({
             type: "iterables_string",
             fields: {
@@ -1210,7 +1210,7 @@ class SB3 {
             comment: "Returns the name of the asset before renaming."
         });
 
-        const call = app.current.codeWorkspace.newBlock("call");
+        const call = app.current.workspace.newBlock("call");
         call.loadExtraState!({
             name,
             params: [],

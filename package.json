@@ -2,12 +2,12 @@
 	"name": "scrap",
 	"displayName": "Scrap",
 	"private": true,
-	"version": "4.0.0",
+	"version": "4.1.0",
 	"type": "module",
 	"description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
 	"scripts": {
-		"serve": "parcel serve index.html --no-source-maps",
-		"build": "parcel build index.html --no-source-maps",
+		"serve": "parcel serve index.html",
+		"build": "parcel build index.html",
 		"preview": "python3 -m http.server -d dist"
 	},
 	"author": {

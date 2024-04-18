@@ -28,14 +28,24 @@ interface BlockCallback<T extends Blockly.Block = any> {
 
 /**
  * This generator generates ScrapScript, a
- * JavaScript subset. ScrapScript is used
+ * TypeScript subset. ScrapScript is used
  * to interact with Scrap. It looks like
- * valid JavaScript, but it is not:
+ * runnable JavaScript, but it is not.
  *
- * * `async` and `await` are never present, even where they should be.
- *
- * This generator cannot generate valid JavaScript.
- * To see the magic, check out the files/javascript.ts
+ * 1. ScrapScript must get rid of types.
+ * 2. Must go through process in {@link transform javascript.ts}
+ * 3. The code gets warped in a code like:
+ * ```js
+ * var $ = {};
+ * 
+ * $["Sprite"] = new Sprite({
+ * 		//...
+ * });
+ * 
+ * $["Sprite"].init(async self => {
+ * 		// HERE is the code
+ * });
+ * ```
  */
 class TypeScript extends Blockly.CodeGenerator {
 	static blocks: Record<string, BlockCallback> = {};
@@ -69,11 +79,10 @@ class TypeScript extends Blockly.CodeGenerator {
 	];
 
 	constructor(readonly entity: Entity) {
-		// "ScrapScript" is a ES5 subset. However it supports
-		// ES2015 spread operator and for-of loops.
-		// ScrapScript cannot be run in a browser.
+		// "ScrapScript" is a TypeScript subset. 
+		// It supports ES2015 features
 
-		super("TypeScript");
+		super("ScrapScript");
 		this.isInitialized = false;
 		this.addReservedWords(`${reserved}`);
 
@@ -136,7 +145,8 @@ class TypeScript extends Blockly.CodeGenerator {
 	}
 
 	async ready(zip?: JSZip) {
-		const result = await transform(this.entity);
+		const code = this.entity.code;
+		const result = await transform(typeof code === "string" ? code : this.workspaceToCode(this.entity.workspace));
 		const body = this.prefixLines(result?.code || "", "\t");
 		const isStage = this.entity.name === "Stage";
 		const configuration = {
@@ -147,7 +157,7 @@ class TypeScript extends Blockly.CodeGenerator {
 		};
 		const entity = `$[${JSON.stringify(this.entity.name)}]`;
 		const init = `${entity} = new Scrap.${isStage ? "Stage" : "Sprite"}(${JSON.stringify(configuration, null, "\t")});`;
-		const call = `${entity}.init(async function (self) {${isStage ? "" : "\n\tself.addTo($.Stage);\n"}\n${body}});`;
+		const call = `${entity}.init(async self => {${isStage ? "" : "\n\tself.addTo($.Stage);\n"}\n${body}});`;
 		return init + "\n" + call;
 	}
 

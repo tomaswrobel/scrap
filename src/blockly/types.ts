@@ -11,7 +11,7 @@ export const TypeToShadow: Record<string, string> = {
 	any: "text_or_number"
 };
 
-export function toCheck(block?: Blockly.Block | null): string | string[] {
+export function toCheck(block?: Blockly.Block | null): app.Check {
 	if (!block) {
 		return "any";
 	}

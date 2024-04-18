@@ -18,14 +18,10 @@ export default class Workspace implements Component {
 	}
 
 	async prerender() {
-		if (!app.current.blocks) {
-			app.showLoader("Compiling code...");
-			app.current.blocks = true;
+		if (!app.current.isUsingBlocks()) {
+			app.showLoader("Compiling code");
 			app.current.variables = [];
-			await Blocks.processEntity(
-				app.current
-			);
-			app.current.code = "";
+			await Blocks.processEntity(app.current);
 			app.hideLoader();
 		}
 	}
@@ -130,7 +126,7 @@ export default class Workspace implements Component {
 					}
 				);
 
-				function addVariable([name, type]: [string, string | string[]]) {
+				function addVariable([name, type]: app.Variable) {
 					json.push({
 						kind: "block",
 						type: "parameter",
@@ -228,7 +224,7 @@ export default class Workspace implements Component {
 		if (e instanceof Blockly.Events.UiBase) {
 			return;
 		}
-		app.current.workspace = Blockly.serialization.workspaces.save(this.workspace);
+		app.current.code = Blockly.serialization.workspaces.save(this.workspace);
 	}
 
 	update() {
@@ -251,26 +247,30 @@ export default class Workspace implements Component {
 					categorystyle: "functions",
 					contents: [
 						{
-							"kind": "block",
-							"type": "function",
-							"fields": {
-								"NAME": "foo"
+							kind: "block",
+							type: "function",
+							fields: {
+								NAME: "foo"
 							}
 						},
 						{
-							"kind": "block",
-							"type": "return"
+							kind: "block",
+							type: "return"
 						}
 					]
 				}
 			],
 		});
 
-		Blockly.serialization.workspaces.load(app.current.workspace, this.workspace);
+		Blockly.serialization.workspaces.load(
+			app.current.code as Record<string, any>,
+			this.workspace
+		);
 		this.workspace.cleanUp();
 		this.workspace.refreshToolboxSelection();
 		this.workspace.addChangeListener(this.changed);
 	}
+
 	dispose() {
 		this.container.remove();
 		this.workspace.dispose();

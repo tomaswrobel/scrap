@@ -368,7 +368,7 @@ export class Fill extends Tool {
 		this.done = window.setTimeout(
 			() => {
 				if (!this.done) {
-					app.showLoader("Filling...");
+					app.showLoader("Filling");
 				}
 			},
 			500

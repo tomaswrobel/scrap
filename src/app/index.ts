@@ -14,7 +14,6 @@ import Sound from "../sounds";
 
 import SB3 from "../code/transformers/sb3";
 import Tabs from "../tabs";
-import Blocks from "../code/transformers/blocks";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -35,6 +34,7 @@ export class App {
 
 	paced = document.getElementById("paced")!;
 	turbo = document.getElementById("turbo")!;
+	input = document.querySelector("input")!;
 
 	tabs!: Tabs;
 	workspace = new Workspace();
@@ -48,9 +48,16 @@ export class App {
 
 	scratchFiles = new SB3();
 
-	start() {
-		this.entities.push((this.current = new Stage()));
-		this.tabs = new Tabs(this.workspace, this.code, new Paint(), new Sound());
+	start(version: string) {
+		this.current = new Stage();
+
+		this.entities.push(this.current);
+		this.tabs = new Tabs(
+			this.workspace,
+			this.code,
+			new Paint(),
+			new Sound()
+		);
 
 		this.play.addEventListener("click", () => {
 			this.output.src = this.output.src;
@@ -113,7 +120,7 @@ export class App {
 		});
 
 		this.load.addEventListener("change", () => {
-			this.open(this.load.files![0]);
+			this.open(version, this.load.files![0]);
 		});
 
 		this.sb3.addEventListener("change", () => {
@@ -126,19 +133,21 @@ export class App {
 
 		this.save.addEventListener("click", async () => {
 			const zip = new JSZip();
-			const json = this.entities.map(e => e.save(zip));
-			zip.file("project.json", JSON.stringify(json));
+			const entities = this.entities.map(e => e.save(zip));
+			zip.file("project.json", JSON.stringify({
+				entities,
+				version,
+				name: this.input.value
+			}));
 
-			saveAs(await zip.generateAsync({type: "blob"}), "project.scrap");
+			saveAs(await zip.generateAsync({type: "blob"}), this.input.value + ".scrap");
 		});
 
 		const scrappy = new Sprite("Scrappy");
 		scrappy.variables.push(["My variable", "number"]);
 		this.addSprite(scrappy);
-	}
 
-	static create() {
-
+		document.title = `Scrap - Editor v${version}`;
 	}
 
 	async select(entity: Entity) {
@@ -146,15 +155,12 @@ export class App {
 			return;
 		}
 
-		if (!this.current.blocks) {
-			this.current.variables = await Blocks.getVariables(this.current.code);
-		}
-
+		const blocks = await this.current.dispose();
 		this.current = entity;
 
-		if (entity.blocks && this.tabs.active === this.code) {
+		if (blocks && this.tabs.active === this.code) {
 			this.tabs.set(this.workspace);
-		} else if (!entity.blocks && this.tabs.active === this.workspace) {
+		} else if (!blocks && this.tabs.active === this.workspace) {
 			this.tabs.set(this.code);
 		} else if (this.tabs.active) {
 			this.tabs.active.update();
@@ -164,21 +170,21 @@ export class App {
 	addSprite(sprite: Sprite) {
 		const element = sprite.render(this.spritePanel);
 
-		const select = () => {
+		const select = (e: MouseEvent | false) => {
 			this.stagePanel.classList.remove("selected");
 			for (const s of this.spritePanel.getElementsByClassName("selected")) {
 				s.classList.remove("selected");
 			}
 			element.classList.add("selected");
 
-			this.select(sprite);
+			e && this.select(sprite);
 		};
 
 		this.entities.push(sprite);
 		this.code.updateLib();
 
 		if (this.workspace.workspace) {
-			select();
+			select(false);
 		} else {
 			this.current = sprite;
 			element.classList.add("selected");
@@ -187,20 +193,65 @@ export class App {
 		element.addEventListener("click", select);
 	}
 
-	async open(file?: File | null) {
+	/**
+	 * Select the stage and update the tabs
+	 * Used only when the project is loaded
+	 * by {@link open} and {@link import}
+	 * For other cases, use {@link select}
+	 */
+	private selectStage() {
+		this.stagePanel.classList.add("selected");
+		for (const s of this.spritePanel.getElementsByClassName("selected")) {
+			s.classList.remove("selected");
+		}
+
+		this.current = this.entities[0];
+		const blocks = this.current.isUsingBlocks();
+
+		if (blocks && this.tabs.active === this.code) {
+			this.tabs.set(this.workspace);
+		} else if (blocks && this.tabs.active === this.workspace) {
+			this.tabs.set(this.code);
+		} else if (this.tabs.active) {
+			this.tabs.active.update();
+		}
+	}
+
+	/**
+	 * Load a project from a file
+	 * @param currentVersion Version of the current editor
+	 * @param file SCRAP file to open
+	 */
+	async open(currentVersion: string, file: File | null) {
 		if (!file) {
 			return;
 		}
 
 		this.showLoader("Loading project");
 		const zip = await JSZip.loadAsync(file);
-		const json = JSON.parse(await zip.file("project.json")!.async("string"));
+
+		const {version = "0", entities, name} = JSON.parse(
+			await zip.file("project.json")!.async("string")
+		);
+
+		this.input.value = name;
+
+		// Check if the project is compatible with the current version
+		if (version.split(".")[0] !== currentVersion.split(".")[0]) {
+			await Parley.fire({
+				title: "Error",
+				body: "This project was created with an incompatible version of Scrap",
+				input: "none"
+			});
+			this.hideLoader();
+			return;
+		}
 
 		this.entities = [];
 		this.spritePanel.innerHTML = "";
 		this.stagePanel.innerHTML = '<span class="name">Stage</span>';
 
-		for (const data of json) {
+		for (const data of entities) {
 			const entity = await Entity.load(zip, data);
 
 			if (entity instanceof Stage) {
@@ -212,10 +263,14 @@ export class App {
 		}
 
 		this.current = this.entities[0];
-		this.stagePanel.dispatchEvent(new MouseEvent("click"));
+		this.selectStage();
 		this.hideLoader();
 	}
 
+	/**
+	 * Import a project from a file
+	 * @param file SB3 file to import
+	 */
 	async import(file?: File | null) {
 		if (!file) {
 			return;
@@ -228,7 +283,7 @@ export class App {
 
 		try {
 			await this.scratchFiles.transform(file);
-			this.stagePanel.dispatchEvent(new MouseEvent("click"));
+			this.selectStage();
 		} catch (e) {
 			await Parley.fire({
 				title: "Error",
@@ -241,6 +296,10 @@ export class App {
 		this.hideLoader();
 	}
 
+	/**
+	 * Export the project to a zip file
+	 * containing all the entities and the engine
+	 */
 	async export() {
 		const type = await Parley.fire({
 			title: "Export",
@@ -285,11 +344,26 @@ ${scripts.trimEnd()}
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
 	}
 
+	/**
+	 * Hide the loading indicator
+	 * @see showLoader
+	 */
 	hideLoader() {
 		document.body.removeAttribute("data-loading");
 	}
 
+	/**
+	 * Show a loading indicator
+	 * @param reason Reason for showing the loader
+	 * @see hideLoader
+	 */
 	showLoader(reason: string) {
 		document.body.dataset.loading = reason;
+	}
+
+	dropdowns = document.querySelectorAll<HTMLLIElement>("li.dropdown")!;
+
+	dropdown(i: number) {
+		this.dropdowns[i].classList.toggle("shown");
 	}
 }

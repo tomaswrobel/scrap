@@ -7,7 +7,7 @@ import {getPropertyContents, getType, isIdentifier, isProperty} from "./utils";
 export default class Blocks {
     connection?: Blockly.Connection | null;
     functions = new Map<string, any>();
-    variables: [string, string | string[]][] = [];
+    variables: app.Variable[] = [];
 
     private constructor(
         readonly workspace: Blockly.Workspace,
@@ -16,7 +16,7 @@ export default class Blocks {
 
     static async processEntity(e: Entity) {
         const babel = await import("@babel/core");
-        const tree = await babel.parseAsync(e.code, {
+        const tree = await babel.parseAsync(e.code as string, {
             filename: "script.ts",
             presets: [
                 await import("@babel/preset-typescript")
@@ -24,7 +24,7 @@ export default class Blocks {
         });
 
         if (tree) {
-            const parser = new this(e.codeWorkspace, babel.types);
+            const parser = new this(e.workspace, babel.types);
             tree.program.body.forEach(parser.parse, parser);
             e.variables = parser.variables;
         }
@@ -43,7 +43,7 @@ export default class Blocks {
             return [];
         }
 
-        const variables = new Array<[string, string | string[]]>();
+        const variables = new Array<app.Variable>();
 
         babel.traverse(tree, {
             TSInterfaceDeclaration(path) {
@@ -537,7 +537,7 @@ export default class Blocks {
                 };
 
                 const types = new Array<babel.types.TSType | null>();
-                const savedTypes = new Array<string | string[]>();
+                const savedTypes = new Array<app.Check>();
 
                 for (const param of params) {
                     if (param.type !== "Identifier") {

@@ -98,7 +98,7 @@ export function getPropertyContents(property: babel.types.Node) {
 	}
 }
 
-export function getType(type: babel.types.TSType | null | undefined): string | string[] {
+export function getType(type: babel.types.TSType | null | undefined): app.Check {
 	if (type) switch (type.type) {
 		case "TSArrayType": return "Array";
 		case "TSBooleanKeyword": return "boolean";

@@ -32,8 +32,8 @@ import * as Blockly from "blockly";
 import {TypeToShadow} from "../types";
 
 export type CallExtraState = {
-	params?: (string | string[])[];
-	returnType?: string | string[] | false;
+	params?: app.Check[];
+	returnType?: app.Check | false;
 	name?: string;
 };
 
@@ -42,8 +42,8 @@ export interface CallBlockMixin extends CallBlockMixinType {}
 export type CallBlockMixinType = typeof MIXIN;
 
 export const MIXIN = {
-	params_: [] as (string | string[])[],
-	returnType_: "any" as string | string[] | false,
+	params_: [] as app.Check[],
+	returnType_: "any" as app.Check | false,
 	name_: "unnamed",
 
 	updateShape(this: CallBlock) {

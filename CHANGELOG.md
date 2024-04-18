@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2024-4-18
+
+### Changed
+
+- File format now checks the version of Scrap
+- Parley.js style and animation
+- Project name
+
+### Added
+
+- `app.Check` & `app.Variable` types
+
+### Fixed
+
+- Importing projects
+
 ## [4.0.0] - 2024-4-17
 
 ### Added
@@ -526,7 +542,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v3.6.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.1.0
+[4.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.0.0
 [3.6.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.6.0
 [3.5.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.5.0
 [3.4.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.4.2

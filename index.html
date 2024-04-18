@@ -22,7 +22,7 @@
 			</li>
 
 			<li class="dropdown">
-				<a href="javascript:void(0)">File</a>
+				<a href="javascript:this.app?.dropdown(0)">File</a>
 				<div class="dropdown-content">
 					<label>
 						Open
@@ -38,7 +38,7 @@
 			</li>
 
 			<li class="dropdown">
-				<a href="javascript:void(0)">Mode</a>
+				<a href="javascript:this.app?.dropodown(1)">Mode</a>
 				<div class="dropdown-content">
 					<a href="javascript:void(0)" id="paced">
 						<span class="checkmark">&check;&nbsp;</span>
@@ -53,6 +53,10 @@
 
 			<li>
 				<a href="javascript:void(document.getElementById('about').showModal())">About</a>
+			</li>
+
+			<li>
+				<input type="text" placeholder="Project name" value="Project">
 			</li>
 		</ul>
 

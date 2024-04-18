@@ -8,7 +8,7 @@ export interface ParameterBlockMixin extends ParameterBlockMixinType {}
 export type ParameterBlockMixinType = typeof MIXIN;
 
 export const MIXIN = {
-    type_: "any" as string | string[] | null,
+    type_: "any" as app.Check | null,
     isVariable_: false,
     isConstant_: false,
 

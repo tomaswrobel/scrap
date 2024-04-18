@@ -1,5 +1,10 @@
 declare var app: import("./app").App;
 
+declare module app {
+    type Check = string | string[];
+    type Variable = [name: string, type: Check];
+}
+
 declare module "*.svg" {
     const url: string;
     export default url;

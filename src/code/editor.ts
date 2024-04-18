@@ -40,20 +40,18 @@ class CodeEditor implements TabComponent {
 	}
 
 	async prerender() {
-		if (app.current.blocks) {
+		if (app.current.isUsingBlocks()) {
 			const generator = new TypeScript(app.current);
-			app.current.blocks = false;
 			app.current.code = generator.workspaceToCode(
-				app.current.codeWorkspace
+				app.current.workspace
 			);
-			app.current.workspace = {};
 			app.current.variables = [];
 			this.update();
 		}
 	}
 
 	update() {
-		this.main.setValue(app.current.code);
+		this.main.setValue(app.current.code as string);
 		this.updateLib();
 	}
 
@@ -93,7 +91,7 @@ function reducer(prev: string, entity: Entity) {
 	return `${prev}\t${JSON.stringify(entity.name)}: ${entity.name === "Stage" ? "Stage" : "Sprite"}${getVariables(entity)};\n`;
 }
 
-function mapper([name, type]: [string, string | string[]]) {
+function mapper([name, type]: app.Variable) {
 	return `\t${JSON.stringify(name)}: ${([] as string[]).concat(type).join(" | ")};\n`;
 }
 

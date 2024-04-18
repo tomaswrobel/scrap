@@ -1,14 +1,13 @@
 import {App} from "./app";
-import "parley.js/dist/default.css";
 import {version} from "../package.json";
 
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-        navigator.serviceWorker.register(
-            new URL("../pwa/sw.js", import.meta.url),
-            {type: "module"}
-        );
-    });
+	window.addEventListener("load", function () {
+		navigator.serviceWorker.register(
+			new URL("../pwa/sw.js", import.meta.url),
+			{type: "module"}
+		);
+	});
 }
 
 // Enable opening files via PWA
@@ -22,7 +21,7 @@ window.launchQueue?.setConsumer(async launchParams => {
 
 		if (isFile(fileHandle)) {
 			if (fileHandle.name.endsWith(".sb3")) {
-				app.open(await fileHandle.getFile());
+				app.open(version, await fileHandle.getFile());
 			} else if (fileHandle.name.endsWith(".scrap")) {
 				app.import(await fileHandle.getFile());
 			} else {
@@ -33,5 +32,4 @@ window.launchQueue?.setConsumer(async launchParams => {
 });
 
 window.app = new App();
-window.app.start();
-document.title = `Scrap - Editor v${version}`;
+window.app.start(version);

@@ -15,7 +15,7 @@
 import * as Blockly from "blockly";
 
 export default class FieldParam extends Blockly.Field<string> {
-	constructor(defaultVarName = "i", type?: string | string[], readonly readonly = false) {
+	constructor(defaultVarName = "i", type?: app.Check, readonly readonly = false) {
 		super(type ? `${defaultVarName}:${type}` : defaultVarName);
 	}
 
@@ -38,7 +38,7 @@ export default class FieldParam extends Blockly.Field<string> {
 		return this.value_!.split(":")[1].split(",");
 	}
 
-	setType(newType: string | string[]) {
+	setType(newType: app.Check) {
 		this.setValue(`${this.value_!.split(":")[0]}:${newType}`);
 	}
 

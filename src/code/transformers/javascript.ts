@@ -1,28 +1,28 @@
 import type {types} from "@babel/core";
-import {Entity} from "../../entities";
 import {getPropertyContents, getType, isProperty} from "./utils";
 
 /**
  * Transform ScrapScript code to JavaScript.
  * Specifically, this function:
- * * Adds `async` to all functions
+ * *
+ * * Adds `async` to all function declarations
  * * Adds `await` to all function calls
  * * Adds loop protection to `while` and `for` loops
- * * Adds `this.declareVariable` to all variable declarations
- * * Adds `this.setVariable` to all variable assignments
- * * Adds `this.getVariable` to all variable references
+ * * Adds `self.declareVariable` to all variable declarations
+ * * Adds `self.setVariable` to all variable assignments
+ * * Adds `self.getVariable` to all variable references
+ * * Adds other setters:
+ * 		* `
  * * Makes sure `Scrap.StopError` cannot be caught
  * 
  * Uses Babel to transform the code.
  * @param code The ScrapScript code to transform
- * @param init Initial entity data
- * @param minified Shall the code be minified?
  * @returns Valid JavaScript code
  */
-export default async function transform(entity: Entity) {
+export default async function transform(code: string) {
 	const babel = await import("@babel/core");
-
-	return babel.transformAsync(entity.getCode(), {
+	
+	return babel.transformAsync(code, {
 		filename: "script.ts",
 		presets: [
 			await import("@babel/preset-typescript")

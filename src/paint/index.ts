@@ -220,7 +220,7 @@ export default class Paint implements Component {
 	}
 
 	async load(file: File) {
-		app.showLoader("Loading costume...");
+		app.showLoader("Loading costume");
 		const reader = new FileReader();
 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -345,7 +345,7 @@ export default class Paint implements Component {
 
 		this.saveButton.onclick = async () => {
 			if (this.changed && this.file) {
-				app.showLoader("Saving costume...");
+				app.showLoader("Saving costume");
 				this.setChanged(false);
 				const file = await this.save(this.file.name);
 				const index = app.current.costumes.indexOf(this.file);

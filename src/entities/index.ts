@@ -5,21 +5,24 @@ import "./entity.scss";
 import path from "path";
 import {reserved} from "../code/transformers/utils";
 import {TypeScript} from "../code/transformers/typescript";
+import Blocks from "../code/transformers/blocks";
 
 const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
 
 /**
  * I represent both a sprite and the stage.
  * I am able to generate code, save, and load.
+ * 
+ * My {@link code} could be blocks or TypeScript
  */
 class Entity {
 	// Costumes & Sounds are stored as files
 	costumes: File[] = [];
 	/**
 	 * Variables are stored as an array of
-	 * [name, type] tuples.
+	 * `[name, type]` tuples.
 	 */
-	variables: [string, string | string[]][] = [];
+	variables: app.Variable[] = [];
 	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
 	// Thumbnail of the entity
@@ -28,26 +31,35 @@ class Entity {
 	// Costume / Backdrop shown in the paint editor
 	current = 0;
 	/** Helper workspace for generating code. */
-	codeWorkspace = new Blockly.Workspace();
-	protected generator = new TypeScript(this);
-
-	code = "this.whenLoaded(function () {});";
-	blocks = true;
+	workspace = new Blockly.Workspace();
+	generator = new TypeScript(this);
+	private _code = "";
 	init = {};
 
 	/**
-	 * Get the workspace as JSON.
+	 * Get the code as string, or the workspace as JSON.
 	 */
-	get workspace() {
-		return Blockly.serialization.workspaces.save(this.codeWorkspace);
+	get code() {
+		if (this._code) {
+			return this._code;
+		}
+		return Blockly.serialization.workspaces.save(this.workspace);
 	}
 
-	/**
-	 * Set the workspace from JSON.
-	 * @param workspace JSON workspace
-	 */
-	set workspace(workspace: Record<string, any>) {
-		Blockly.serialization.workspaces.load(workspace, this.codeWorkspace, {recordUndo: false});
+	set code(value: Record<string, any> | string) {
+		if (typeof value === "string") {
+			this._code = value;
+		} else {
+			Blockly.serialization.workspaces.load(
+				value,
+				this.workspace,
+				{recordUndo: false}
+			);
+		}
+	}
+
+	isUsingBlocks() {
+		return !this._code;
 	}
 
 	/**
@@ -91,10 +103,6 @@ class Entity {
 		);
 	}
 
-	getCode() {
-		return this.blocks ? this.generator.workspaceToCode(this.codeWorkspace) : this.code;
-	}
-
 	async export(zip: JSZip) {
 		zip = zip.folder(this.name)!;
 		zip.file("script.js", await this.generator.ready(zip));
@@ -114,6 +122,18 @@ class Entity {
 	}
 
 	/**
+	 * Called before the entity gets deselected
+	 * @returns True if I were using blocks, false otherwise
+	 */
+	async dispose() {
+		if (this._code) {
+			this.variables = await Blocks.getVariables(this._code);
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Save the entity to a zip.
 	 * @param zip The zip to save to
 	 * @returns JSON data
@@ -121,34 +141,34 @@ class Entity {
 	save(zip: JSZip) {
 		zip = zip.folder(this.name)!;
 
-		for (const file of this.costumes) {
-			zip.file(file.name, file);
-		}
-
-		for (const file of this.sounds) {
-			zip.file(file.name, file);
-		}
-
 		return {
 			name: this.name,
-			costumes: this.costumes.map(f => f.name),
-			sounds: this.sounds.map(f => f.name),
-			workspace: this.workspace,
+			costumes: this.costumes.map(f => {
+				zip.file(f.name, f);
+				return f.name;
+			}),
+			sounds: this.sounds.map(f => {
+				zip.file(f.name, f);
+				return f.name;
+			}),
 			code: this.code,
-			blocks: this.blocks,
 			current: this.current,
 			variables: this.variables
 		};
 	}
 
+	/**
+	 * Loads a file and returns a stage, or a sprite with that data
+	 * @param zip 
+	 * @param json 
+	 * @returns 
+	 */
 	static async load(zip: JSZip, json: ReturnType<Entity["save"]>) {
 		const entity = json.name === "Stage" ? new Stage() : new Sprite(json.name);
-		entity.workspace = json.workspace;
 		const fn = this.loadFiles.bind(this, json.name, zip);
 		entity.costumes = await Promise.all(json.costumes.map(fn));
 		entity.sounds = await Promise.all(json.sounds.map(fn));
 		entity.code = json.code;
-		entity.blocks = json.blocks;
 		entity.current = json.current;
 		entity.variables = json.variables;
 		return entity;

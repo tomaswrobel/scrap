@@ -85,7 +85,7 @@ export const MIXIN = {
 	/**
 	 * Modify this block to have the correct number of inputs.
 	 */
-	updateShape(this: ArrayBlock, check: string | string[]) {
+	updateShape(this: ArrayBlock, check: app.Check) {
 		// Remove inputs
 		for (let i = 0; this.removeInput("ADD" + i, true); i++);
 
