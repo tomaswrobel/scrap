@@ -22,7 +22,9 @@ class Entity {
 	 * Variables are stored as an array of
 	 * `[name, type]` tuples.
 	 */
-	variables: app.Variable[] = [];
+	variables: app.Variable[] = [
+		["My variable", "number"]
+	];
 	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
 	// Thumbnail of the entity
@@ -33,14 +35,14 @@ class Entity {
 	/** Helper workspace for generating code. */
 	workspace = new Blockly.Workspace();
 	generator = new TypeScript(this);
-	private _code = "";
+	private _code?: string;
 	init = {};
 
 	/**
 	 * Get the code as string, or the workspace as JSON.
 	 */
 	get code() {
-		if (this._code) {
+		if (this._code !== undefined) {
 			return this._code;
 		}
 		return Blockly.serialization.workspaces.save(this.workspace);
@@ -50,6 +52,7 @@ class Entity {
 		if (typeof value === "string") {
 			this._code = value;
 		} else {
+			delete this._code;
 			Blockly.serialization.workspaces.load(
 				value,
 				this.workspace,
@@ -59,7 +62,7 @@ class Entity {
 	}
 
 	isUsingBlocks() {
-		return !this._code;
+		return this._code === undefined;
 	}
 
 	/**

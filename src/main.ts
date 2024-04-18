@@ -10,6 +10,16 @@ if ("serviceWorker" in navigator) {
 	});
 }
 
+window.MonacoEnvironment = {
+	getWorker: () => new Worker(
+		new URL(
+			"./monaco-editor/ts.worker.ts",
+			import.meta.url
+		),
+		{type: "module"}
+	),
+};
+
 // Enable opening files via PWA
 window.launchQueue?.setConsumer(async launchParams => {
 	function isFile(file: FileSystemHandle): file is FileSystemFileHandle {

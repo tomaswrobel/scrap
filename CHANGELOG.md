@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2024-4-18
+
+## Fixed
+
+- Monaco Editor
+
 ## [4.1.0] - 2024-4-18
 
 ### Changed
@@ -542,7 +548,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.1.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.2.0
 [4.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.1.0
 [4.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.0.0
 [3.6.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v3.6.0
