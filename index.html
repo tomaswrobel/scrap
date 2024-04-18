@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,8 +10,10 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="pwa/favicon-16x16.png" />
 	<link rel="manifest" href="pwa/site.webmanifest" />
 	<meta name="theme-color" content="#2fbf71" />
-	<meta name="description" content="Scrap is an IDE designed to simplify the transition from Scratch to JavaScript." />
+	<meta name="description"
+		content="Scrap is an IDE designed to simplify the transition from Scratch to JavaScript." />
 </head>
+
 <body>
 	<div id="root">
 		<iframe width="480" data-mode="paced" height="360" name="output" src="src/output/index.html"
@@ -38,7 +41,7 @@
 			</li>
 
 			<li class="dropdown">
-				<a href="javascript:this.app?.dropodown(1)">Mode</a>
+				<a href="javascript:this.app?.dropdown(1)">Mode</a>
 				<div class="dropdown-content">
 					<a href="javascript:void(0)" id="paced">
 						<span class="checkmark">&check;&nbsp;</span>
@@ -153,4 +156,5 @@
 	</dialog>
 	<script src="./src/main.ts" type="module"></script>
 </body>
+
 </html>

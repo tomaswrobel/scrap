@@ -22,9 +22,7 @@ class Entity {
 	 * Variables are stored as an array of
 	 * `[name, type]` tuples.
 	 */
-	variables: app.Variable[] = [
-		["My variable", "number"]
-	];
+	variables: app.Variable[] = [];
 	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
 	// Thumbnail of the entity
@@ -126,14 +124,11 @@ class Entity {
 
 	/**
 	 * Called before the entity gets deselected
-	 * @returns True if I were using blocks, false otherwise
 	 */
 	async dispose() {
-		if (this._code) {
+		if (this._code !== undefined) {
 			this.variables = await Blocks.getVariables(this._code);
-			return false;
 		}
-		return true;
 	}
 
 	/**

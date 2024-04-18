@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.0] - 2024-4-18
 
-## Fixed
+### Fixed
 
 - Monaco Editor
+- RELEASE_HEAD.md
 
 ## [4.1.0] - 2024-4-18
 

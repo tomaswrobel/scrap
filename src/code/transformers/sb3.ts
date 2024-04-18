@@ -947,7 +947,7 @@ class SB3 {
                 app.entities.unshift(app.current);
                 app.current.render(app.stagePanel);
             } else {
-                app.addSprite(app.current as Sprite);
+                app.addSprite(app.current as Sprite, false);
             }
 
             for (const block of Object.values(target.blocks)) {

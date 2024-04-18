@@ -259,8 +259,8 @@ dialog.parley {
 	text-align: center;
 	border: none;
 	border-radius: 5px;
-	max-width: 90vw;
-	max-height: 90vh;
+	max-width: 74vw;
+	max-height: 74vh;
 
 	min-width: 300px;
 	font-size: 12px;
@@ -282,8 +282,8 @@ dialog.parley {
 		&::before {
 			content: "";
 			background: var(--parley-primary);
-			width: calc(100% + 24px);
-			height: calc(100% + 24px);
+			width: calc(100% + 26px);
+			height: calc(100% + 26px);
 			position: absolute;
 			z-index: -1;
 			margin: -14px;
@@ -352,20 +352,20 @@ dialog.parley {
 
 	@keyframes open {
 		from {
-			scale: 1;
+			scale: 0.8;
 		}
 
-		90% {
-			scale: 1.25;
+		50% {
+			scale: 1.2;
 		}
 
 		to {
-			scale: 1.2;
+			scale: 1;
 		}
 	}
 
 	&[open] {
-		animation: open 0.5s;
+		animation: open 0.4s;
 		animation-fill-mode: forwards;
 	}
 }

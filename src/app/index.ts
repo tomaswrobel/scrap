@@ -50,7 +50,6 @@ export class App {
 
 	start(version: string) {
 		this.current = new Stage();
-
 		this.entities.push(this.current);
 		this.tabs = new Tabs(
 			this.workspace,
@@ -93,10 +92,42 @@ export class App {
 				}
 
 				script.textContent = code;
+
+				Object.assign(this.output.contentWindow!, {
+					alert: (message: string) => Parley.fire({
+						title: "Project Alert",
+						body: message,
+						input: "none",
+						cancelButtonHTML: "",
+						confirmButtonHTML: "OK"
+					}),
+					prompt: (message: string) => Parley.fire({
+						title: "Project prompts you...",
+						body: message,
+						input: "text",
+						inputOptions: {
+							placeholder: "Your answer here",
+						},
+						cancelButtonHTML: "Cancel",
+						confirmButtonHTML: "OK"
+					}),
+					confirm: (message: string) => Parley.fire({
+						title: "Project needs to confirm...",
+						body: message,
+						input: "none",
+						cancelButtonHTML: "No",
+						confirmButtonHTML: "Yes"
+					}),
+				});
+
+				document.body.append(engine, script);
 			} catch (e) {
-				window.alert(e);
+				await Parley.fire({
+					title: "Runtime Error",
+					body: String(e),
+					input: "none"
+				});
 			}
-			document.body.append(engine, script);
 		});
 
 		this.add.addEventListener("click", () => {
@@ -155,8 +186,9 @@ export class App {
 			return;
 		}
 
-		const blocks = await this.current.dispose();
+		await this.current.dispose();
 		this.current = entity;
+		const blocks = this.current.isUsingBlocks();
 
 		if (blocks && this.tabs.active === this.code) {
 			this.tabs.set(this.workspace);
@@ -167,30 +199,32 @@ export class App {
 		}
 	}
 
-	addSprite(sprite: Sprite) {
+	addSprite(sprite: Sprite, select = true) {
 		const element = sprite.render(this.spritePanel);
 
-		const select = (e: MouseEvent | false) => {
+		const selector = () => {
 			this.stagePanel.classList.remove("selected");
 			for (const s of this.spritePanel.getElementsByClassName("selected")) {
 				s.classList.remove("selected");
 			}
 			element.classList.add("selected");
 
-			e && this.select(sprite);
+			this.select(sprite);
 		};
 
-		this.entities.push(sprite);
-		this.code.updateLib();
+		if (select) {
+			this.entities.push(sprite);
+			this.code.updateLib();
+		}
 
-		if (this.workspace.workspace) {
-			select(false);
+		if (this.workspace.workspace && select) {
+			selector();
 		} else {
 			this.current = sprite;
 			element.classList.add("selected");
 		}
 
-		element.addEventListener("click", select);
+		element.addEventListener("click", selector);
 	}
 
 	/**
@@ -258,7 +292,7 @@ export class App {
 				this.entities.push(entity);
 				entity.render(this.stagePanel);
 			} else {
-				this.addSprite(entity);
+				this.addSprite(entity, false);
 			}
 		}
 
