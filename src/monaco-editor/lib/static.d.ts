@@ -77,6 +77,7 @@ interface Stage<Variables = {}> {
     whenKeyPressed(key: Key, fn: () => void): void;
     whenMouse(event: MouseEvent, fn: () => void): void;
     whenReceiveMessage(message: string, fn: () => void): void;
+    whenTimerElapsed(seconds: number, fn: () => void): void;
 
     broadcastMessage(message: string): void;
     broadcastMessageWait(message: string): void;

@@ -168,6 +168,10 @@ class TypeScript extends Blockly.CodeGenerator {
 			this.blocks[type as string] = callback;
 		}
 	}
+
+	set(name: string, value: string) {
+		this.definitions_["%" + name] = value;
+	}
 }
 
 TypeScript.register<UnknownBlock>("unknown", block => {
@@ -392,10 +396,10 @@ TypeScript.register("function", (block: FunctionBlock, ts) => {
 	const params = new Array<string>(block.params.length);
 	const nextBlock = block.getNextBlock();
 	const name = block.getFieldValue("NAME");
-	const returns = block.returns 
-		? ts.valueToCode(block, "RETURNS", Order.NONE) 
+	const returns = block.returns
+		? ts.valueToCode(block, "RETURNS", Order.NONE)
 		: "void"
-	;
+		;
 
 	for (let i = 0; i < params.length; i++) {
 		params[i] = ts.valueToCode(block, "PARAM_" + i, Order.NONE);
@@ -410,7 +414,8 @@ TypeScript.register("function", (block: FunctionBlock, ts) => {
 		var body = "\t\n";
 	}
 
-	return `function ${name}(${params.join(", ")}): ${returns} {\n${body}}`;
+	ts.set(name, `function ${name}(${params.join(", ")}): ${returns} {\n${body}}`);
+	return null;
 });
 
 TypeScript.register("generic", (block, ts) => {

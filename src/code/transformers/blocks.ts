@@ -23,7 +23,7 @@ export default class Blocks {
             ]
         });
 
-        if (tree) {
+        if (tree) {            
             const parser = new this(e.workspace, babel.types);
             tree.program.body.forEach(parser.parse, parser);
             e.variables = parser.variables;
@@ -720,7 +720,7 @@ export default class Blocks {
                         this.connection = block.getInput("VALUE")!.connection;
                         this.parse(node.arguments[0]);
                     } else {
-                        throw new SyntaxError(`Function ${node.callee.name} is not defined`);
+                        throw new SyntaxError(`Function ${node.callee.name} used before definition`);
                     }
                 } else {
                     throw new SyntaxError("Unsupported function call");

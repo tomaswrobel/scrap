@@ -33,24 +33,24 @@ class Entity {
 	/** Helper workspace for generating code. */
 	workspace = new Blockly.Workspace();
 	generator = new TypeScript(this);
-	private _code?: string;
+	typescript?: string;
 	init = {};
 
 	/**
 	 * Get the code as string, or the workspace as JSON.
 	 */
 	get code() {
-		if (this._code !== undefined) {
-			return this._code;
+		if (this.typescript !== undefined) {
+			return this.typescript;
 		}
 		return Blockly.serialization.workspaces.save(this.workspace);
 	}
 
 	set code(value: Record<string, any> | string) {
 		if (typeof value === "string") {
-			this._code = value;
+			this.typescript = value;
 		} else {
-			delete this._code;
+			delete this.typescript;
 			Blockly.serialization.workspaces.load(
 				value,
 				this.workspace,
@@ -60,7 +60,7 @@ class Entity {
 	}
 
 	isUsingBlocks() {
-		return this._code === undefined;
+		return this.typescript === undefined;
 	}
 
 	/**
@@ -126,8 +126,8 @@ class Entity {
 	 * Called before the entity gets deselected
 	 */
 	async dispose() {
-		if (this._code !== undefined) {
-			this.variables = await Blocks.getVariables(this._code);
+		if (this.typescript !== undefined) {
+			this.variables = await Blocks.getVariables(this.typescript);
 		}
 	}
 
