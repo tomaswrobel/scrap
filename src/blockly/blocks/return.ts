@@ -1,10 +1,10 @@
 import * as Blockly from "blockly";
-import {TypeToShadow} from "../types";
+import {TypeToShadow, toCheck} from "../types";
 
 export type ReturnBlock = Blockly.BlockSvg & ReturnBlockMixin;
 export interface ReturnBlockMixin extends ReturnBlockMixinType {}
 export type ReturnBlockMixinType = typeof MIXIN;
-export type ReturnBlockOutput = string[] | false;
+export type ReturnBlockOutput = app.Check | false;
 
 export const MIXIN = {
 	init(this: ReturnBlock) {
@@ -42,10 +42,10 @@ export const MIXIN = {
 			const parent = this.getRootBlock();
 
 			if (parent.type === "function") {
-				const type = parent.getFieldValue("TYPE");
-				this.loadExtraState!({output: type});
+				const type = parent.getInput("RETURNS")?.connection?.targetBlock();
+				this.loadExtraState!({output: type ? toCheck(type) : false});
 			} else {
-
+				this.loadExtraState!({output: false});
 			}
 		}
 	},
@@ -72,7 +72,15 @@ export const MIXIN = {
 			return true;
 		}
 
-		if (check1 && check2) {
+		if (typeof check1 === "string" && typeof check2 === "object") {
+			return check2.includes(check1);
+		}
+
+		if (typeof check1 === "object" && typeof check2 === "string") {
+			return check1.includes(check2);
+		}
+
+		if (typeof check1 === "object" && typeof check2 === "object") {
 			if (check1.length === check2.length) {
 				return check1.every(p => check2.includes(p));
 			}

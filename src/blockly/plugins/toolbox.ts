@@ -57,7 +57,7 @@ export class Toolbox extends Blockly.Toolbox {
 			const params = new Array(block.params.length);
 
 			for (let i = 0; i < params.length; i++) {
-				params[i] = toCheck(block.getInput("PARAM_" + i)!.connection!.targetBlock()!.getInput("TYPE")!.connection!.targetBlock()!);
+				params[i] = toCheck(block.getInput("PARAM_" + i)!.connection!.targetBlock());
 			}
 
 			contents.push({

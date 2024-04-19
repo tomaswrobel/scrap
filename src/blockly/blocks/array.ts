@@ -37,7 +37,7 @@ export const MIXIN = {
 		if (state.items) {
 			this.items = state.items;
 		}
-		this.updateShape(toCheck(this.getInput("TYPE")?.connection?.targetBlock()));
+		this.updateShape(toCheck(this));
 	},
 	/**
 	 * Populate the mutator's dialog with this block's components.
@@ -80,7 +80,7 @@ export const MIXIN = {
 			this.items.push(itemBlock.type.slice(19) as "iterable" | "single");
 			itemBlock = itemBlock.getNextBlock();
 		}
-		this.updateShape(toCheck(this.getInput("TYPE")?.connection?.targetBlock()));
+		this.updateShape(toCheck(this));
 	},
 	/**
 	 * Modify this block to have the correct number of inputs.

@@ -34,6 +34,9 @@ export function toCheck(block?: Blockly.Block | null): app.Check {
 
 		return [...set];
 	}
+	if (block.type === "typed") {
+		return toCheck(block.getInput("TYPE")?.connection?.targetBlock());
+	}
 	if (block.type === "generic") {
 		return block.getFieldValue("ITERABLE");
 	}
