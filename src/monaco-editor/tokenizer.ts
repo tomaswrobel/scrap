@@ -421,7 +421,7 @@ languages.onLanguageEncountered("typescript", () => {
             const rgb = [Math.round(info.color.red * 255), Math.round(info.color.green * 255), Math.round(info.color.blue * 255)];
             return [
                 {
-                    label: `rgb(${Math.round(info.color.red * 100)}%, ${Math.round(info.color.blue * 100)}%, ${Math.round(info.color.green * 100)}%)`,
+                    label: `rgb(${rgb.join(", ")})`,
                     textEdit: {
                         range: info.range,
                         text: code[0] === '"' ? `"#${rgb.map(s => s.toString(16).padStart(2, "0")).join("")}"` : rgb.join(", ")
@@ -430,86 +430,63 @@ languages.onLanguageEncountered("typescript", () => {
             ];
         },
         async provideDocumentColors(model) {
-            try {
-                const babel = await import("@babel/core");
-                const ast = await babel.parseAsync(
-                    model.getValue(),
-                    {
-                        sourceType: "module",
-                        filename: "script.ts",
-                        presets: [
-                            await import("@babel/preset-typescript")
-                        ],
+            const fromRGB = /Color\.fromRGB\((\d+,\s*\d+,\s*\d+)\)/g;
+            const fromHex = /Color\.fromHex\("(#[0-9a-fA-F]{6})"\)/g;
 
-                    }
-                );
+            const text = model.getValue();
+            const colors: languages.IColorInformation[] = [];
 
-                if (!ast) {
-                    return [];
-                }
+            const startOffset = "Color.from...(".length;
+            const endOffset = ")".length;
 
-                const colors: languages.IColorInformation[] = [];
+            let match: RegExpExecArray | null;
 
-                babel.traverse(ast, {
-                    CallExpression(path) {
-                        if (!path.node.loc) {
-                            return;
-                        }
+            while (match = fromRGB.exec(text)) {
+                const start = model.getPositionAt(match.index + startOffset);
+                const end = model.getPositionAt(match.index + match[0].length - endOffset);
+                const [r, g, b] = match[1].split(/,\s*/).map(Number);
 
-                        if (path.node.callee.type === "MemberExpression") {
-                            const {object, property} = path.node.callee;
-                            if (object.type === "Identifier" && object.name === "Color") {
-                                if (property.type === "Identifier") {
-                                    if (property.name === "fromRGB") {
-                                        const [red, green, blue] = path.node.arguments;
-                                        if (red.type === "NumericLiteral" && green.type === "NumericLiteral" && blue.type === "NumericLiteral") {
-                                            colors.push({
-                                                color: {
-                                                    red: red.value / 255,
-                                                    green: green.value / 255,
-                                                    blue: blue.value / 255,
-                                                    alpha: 1
-                                                },
-                                                range: {
-                                                    startLineNumber: red.loc!.start.line,
-                                                    startColumn: red.loc!.start.column + 1,
-                                                    endLineNumber: blue.loc!.end.line,
-                                                    endColumn: blue.loc!.end.column + 1,
-                                                }
-                                            });
-                                        }
-                                    } else if (property.name === "fromHex") {
-                                        const [hex] = path.node.arguments;
-                                        if (hex.type === "StringLiteral") {
-                                            if (!/^#[0-9A-F]{6}$/i.test(hex.value)) {
-                                                return;
-                                            }
-                                            colors.push({
-                                                color: {
-                                                    red: Number.parseInt(hex.value.slice(1, 3), 16) / 255,
-                                                    green: Number.parseInt(hex.value.slice(3, 5), 16) / 255,
-                                                    blue: Number.parseInt(hex.value.slice(5, 7), 16) / 255,
-                                                    alpha: 1
-                                                },
-                                                range: {
-                                                    startLineNumber: hex.loc!.start.line,
-                                                    startColumn: hex.loc!.start.column + 1,
-                                                    endLineNumber: hex.loc!.end.line,
-                                                    endColumn: hex.loc!.end.column + 1
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                colors.push({
+                    color: {
+                        red: r / 255,
+                        green: g / 255,
+                        blue: b / 255,
+                        alpha: 1
+                    },
+                    range: {
+                        startLineNumber: start.lineNumber,
+                        startColumn: start.column,
+                        endLineNumber: end.lineNumber,
+                        endColumn: end.column
                     }
                 });
-
-                return colors;
-            } catch (e) {
-                return [];
             }
+
+            while (match = fromHex.exec(text)) {
+                const start = model.getPositionAt(match.index + startOffset);
+                const end = model.getPositionAt(match.index + match[0].length - endOffset);
+
+                const r = Number.parseInt(match[1].slice(1, 3), 16);
+                const g = Number.parseInt(match[1].slice(3, 5), 16);
+                const b = Number.parseInt(match[1].slice(5, 7), 16);
+
+                colors.push({
+                    color: {
+                        red: r / 255,
+                        green: g / 255,
+                        blue: b / 255,
+                        alpha: 1
+                    },
+                    range: {
+                        startLineNumber: start.lineNumber,
+                        startColumn: start.column,
+                        endLineNumber: end.lineNumber,
+                        endColumn: end.column
+                    }
+                });
+            }
+
+            return colors;
         },
     });
     languages.setLanguageConfiguration("typescript", {

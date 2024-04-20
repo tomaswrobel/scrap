@@ -393,7 +393,7 @@ export class Fill extends Tool {
 		this.button.classList.add("selected");
 	}
 
-	worker = new Worker(new URL("./fill.worker.ts", import.meta.url));
+	worker = new Worker(new URL("./assets/fill.worker.ts", import.meta.url));
 
 	constructor() {
 		super("Fill area with the same color", {

@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import {Sprite, Stage} from "../../entities";
+import {Sprite, Stage} from "../../components/entity";
 import * as Blockly from "blockly";
 import {escape} from "./utils";
 

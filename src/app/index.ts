@@ -1,7 +1,7 @@
-import {Entity, Sprite, Stage} from "../entities";
+import {Entity, Sprite, Stage} from "../components/entity";
 import {version} from "scrap-engine/package.json";
-import Workspace from "../workspace";
-import Paint from "../paint";
+import Workspace from "../components/workspace";
+import Paint from "../components/paint";
 import CodeEditor from "../code/editor";
 
 import fs from "fs";
@@ -10,10 +10,10 @@ import * as Parley from "parley.js";
 import "./app.scss";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
-import Sound from "../sounds";
+import Sound from "../components/sounds";
 
 import SB3 from "../code/transformers/sb3";
-import Tabs from "../tabs";
+import Tabs from "../components/tabs";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -24,17 +24,7 @@ export class App {
 	add = document.getElementById("add")!;
 
 	output = document.querySelector("iframe")!;
-	play = document.getElementById("play")!;
-	stop = document.getElementById("stop")!;
-
-	load = document.querySelector<HTMLInputElement>("#load")!;
-	sb3 = document.querySelector<HTMLInputElement>("#sb3")!;
-	html = document.getElementById("html")!;
-	save = document.getElementById("save")!;
-
-	paced = document.getElementById("paced")!;
-	turbo = document.getElementById("turbo")!;
-	input = document.querySelector("input")!;
+	inputs = document.querySelectorAll("input");
 
 	tabs!: Tabs;
 	workspace = new Workspace();
@@ -57,14 +47,6 @@ export class App {
 			new Paint(),
 			new Sound()
 		);
-
-		this.play.addEventListener("click", () => {
-			this.output.src = this.output.src;
-		});
-
-		this.stop.addEventListener("click", () => {
-			this.output.contentWindow!.postMessage("STOP", "*");
-		});
 
 		this.stagePanel.addEventListener("click", () => {
 			this.stagePanel.classList.add("selected");
@@ -142,36 +124,13 @@ export class App {
 			this.addSprite(new Sprite(name));
 		});
 
-		this.turbo.addEventListener("click", () => {
-			this.output.dataset.mode = "turbo";
-		});
-
-		this.paced.addEventListener("click", () => {
-			this.output.dataset.mode = "paced";
-		});
-
-		this.load.addEventListener("change", () => {
-			this.open(version, this.load.files![0]);
-		});
-
-		this.sb3.addEventListener("change", () => {
-			this.import(this.sb3.files![0]);
-		});
-
-		this.html.addEventListener("click", () => {
-			this.export();
-		});
-
-		this.save.addEventListener("click", async () => {
-			const zip = new JSZip();
-			const entities = this.entities.map(e => e.save(zip));
-			zip.file("project.json", JSON.stringify({
-				entities,
-				version,
-				name: this.input.value
-			}));
-
-			saveAs(await zip.generateAsync({type: "blob"}), this.input.value + ".scrap");
+		this.inputs[0].addEventListener("change", () => {
+			if (this.inputs[0].accept === ".scrap") {
+				this.open(version, this.inputs[0].files![0]);
+			}
+			if (this.inputs[0].accept === ".sb3") {
+				this.import(this.inputs[0].files![0]);
+			}
 		});
 
 		const scrappy = new Sprite("Scrappy");
@@ -212,10 +171,8 @@ export class App {
 			this.select(sprite);
 		};
 
-		if (select) {
-			this.entities.push(sprite);
-			this.code.updateLib();
-		}
+		this.entities.push(sprite);
+		this.code.updateLib();
 
 		if (this.workspace.workspace && select) {
 			selector();
@@ -244,7 +201,7 @@ export class App {
 
 		if (blocks && this.tabs.active === this.code) {
 			this.tabs.set(this.workspace);
-		} else if (blocks && this.tabs.active === this.workspace) {
+		} else if (!blocks && this.tabs.active === this.workspace) {
 			this.tabs.set(this.code);
 		} else if (this.tabs.active) {
 			this.tabs.active.update();
@@ -268,7 +225,7 @@ export class App {
 			await zip.file("project.json")!.async("string")
 		);
 
-		this.input.value = name;
+		this.inputs[1].value = name;
 
 		// Check if the project is compatible with the current version
 		if (version.split(".")[0] !== currentVersion.split(".")[0]) {
@@ -378,6 +335,18 @@ ${scripts.trimEnd()}
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
 	}
 
+	async saveAs() {
+		const zip = new JSZip();
+		const entities = this.entities.map(e => e.save(zip));
+		zip.file("project.json", JSON.stringify({
+			entities,
+			version,
+			name: this.inputs[1].value
+		}));
+
+		saveAs(await zip.generateAsync({type: "blob"}), this.inputs[1].value + ".scrap");
+	}
+
 	/**
 	 * Hide the loading indicator
 	 * @see showLoader
@@ -395,9 +364,30 @@ ${scripts.trimEnd()}
 		document.body.dataset.loading = reason;
 	}
 
+	// For index.html
 	dropdowns = document.querySelectorAll<HTMLLIElement>("li.dropdown")!;
 
 	dropdown(i: number) {
-		this.dropdowns[i].classList.toggle("shown");
+		if (this.dropdowns[i].classList.toggle("shown")) {
+			document.addEventListener(
+				"mousedown",
+				e => {
+					if (!this.dropdowns[i].contains(e.target as Node)) {
+						e.preventDefault();
+						this.dropdowns[i].classList.remove("shown");
+					}
+				},
+				{once: true}
+			);
+		}
+	}
+
+	mode(mode: string) {
+		this.output.dataset.mode = mode;
+	}
+
+	pick(accept: string) {
+		this.inputs[0].accept = accept;
+		this.inputs[0].showPicker();
 	}
 }

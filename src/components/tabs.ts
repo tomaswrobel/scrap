@@ -1,4 +1,4 @@
-import TabComponent from "../tab";
+import TabComponent from "./tab";
 import * as Parley from "parley.js";
 import "./style.scss";
 

@@ -12,7 +12,7 @@ import sprite from "./data/sprite.json";
 import stage from "./data/stage.json";
 import theme from "./data/theme.json";
 import data from "./data/blocks.json";
-import {TypeScript, Order} from "../code/transformers/typescript.ts";
+import {TypeScript, Order} from "../code/transformers/typescript";
 
 for (const name in blocks) {
 	const data = blocks[name];

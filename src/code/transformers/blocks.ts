@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import type {Entity} from "../../entities";
+import type {Entity} from "../../components/entity";
 import {Error, allBlocks, toCheck} from "../../blockly";
 import type {types as BabelTypes} from "@babel/core";
 import {getPropertyContents, getType, isIdentifier, isProperty} from "./utils";
@@ -23,7 +23,7 @@ export default class Blocks {
             ]
         });
 
-        if (tree) {            
+        if (tree) {
             const parser = new this(e.workspace, babel.types);
             tree.program.body.forEach(parser.parse, parser);
             e.variables = parser.variables;

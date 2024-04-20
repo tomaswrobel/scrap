@@ -115,8 +115,10 @@ export const MIXIN = {
 	onchange(this: ArrayBlock, e: Blockly.Events.Abstract) {
 		if (e instanceof Blockly.Events.BlockMove && e.blockId && e.newParentId === this.id) {
 			const block = this.workspace.getBlockById(e.blockId)!;
-			block.setShadow(true);
-			this.updateShape(toCheck(block));
+			if (block.type === "type") {
+				block.setShadow(true);
+				this.updateShape(toCheck(block));
+			}
 		}
 	}
 };

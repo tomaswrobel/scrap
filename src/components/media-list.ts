@@ -135,7 +135,7 @@ export class MediaList extends EventTarget {
 
     static readonly SOUND: MediaType = {
         getURLFor(_file: File) {
-            return require("./note.svg");
+            return require("./assets/note.svg");
         },
         accept: [
             "audio/mpeg",

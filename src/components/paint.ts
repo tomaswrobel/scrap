@@ -1,8 +1,8 @@
-import {Brush, Line, Rectangle, Ellipse, Eraser, Fill, type Tool, Triangle, Select} from "../paint/tools";
-import Component from "../tab";
-import "./paint.scss";
-import {MediaList} from "../media-list";
+import {Brush, Line, Rectangle, Ellipse, Eraser, Fill, type Tool, Triangle, Select} from "./tools";
+import Component from "./tab";
+import {MediaList} from "./media-list";
 import {bind} from "../decorators";
+import "./paint.scss";
 
 export default class Paint implements Component {
 	context: CanvasRenderingContext2D;
@@ -23,7 +23,7 @@ export default class Paint implements Component {
 
 	name = "Costumes";
 
-	cropWorker = new Worker(new URL("./crop.worker.ts", import.meta.url));
+	cropWorker = new Worker(new URL("./assets/crop.worker.ts", import.meta.url));
 
 	constructor() {
 		this.container.classList.add("paint", "tab-content");

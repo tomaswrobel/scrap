@@ -224,10 +224,6 @@
         "contents": [
             {
                 "kind": "block",
-                "type": "whenLoaded"
-            },
-            {
-                "kind": "block",
                 "type": "whenFlag"
             },
             {

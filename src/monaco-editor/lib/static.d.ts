@@ -24,29 +24,45 @@ interface Stage<Variables = {}> {
 
     /**
      * Volume of sounds
-     * 0-100
+     * (0-100)
      */
     volume: number;
 
+    /**
+     * The namespace for the variables
+     * defined in the **Variables** interface
+     */
     readonly variables: Variables;
+    /**
+     * The X position of the mouse
+     */
     readonly mouseX: number;
+    /**
+     * The Y position of the mouse
+     */
     readonly mouseY: number;
+    /**
+     * If the mouse button is pressed
+     */
     readonly mouseDown: boolean;
+    /**
+     * Namespace for the backdrops
+     */
     readonly backdrop: Costumes;
 
     /**
-     * The callback gets invoked
+     * This event gets invoked
      * when the flag gets clicked
      * 
-     * @param fn the callback
+     * @param fn the event body
      */
     whenFlag(fn: () => void): void;
 
     /**
-     * The callback gets invoked
+     * This event gets invoked
      * after the engine is ready
      * 
-     * @param fn the callback
+     * @param fn the event body
      */
     whenLoaded(fn: () => void): void;
 
@@ -61,49 +77,64 @@ interface Stage<Variables = {}> {
     wait(seconds: number): void;
 
     /**
-     * The callback gets invoked when any key gets pressed
+     * This event gets invoked when any key gets pressed
      * 
      * @param key keyword "any"
-     * @param fn the callback
+     * @param fn the event body
      */
     whenKeyPressed(key: "any", fn: () => void): void;
 
     /**
-     * The callback gets invoked when the key gets pressed
+     * This event gets invoked when the key gets pressed
      * 
      * @param key the name of the Key
-     * @param fn the callback
+     * @param fn the event body
      */
     whenKeyPressed(key: Key, fn: () => void): void;
-    whenMouse(event: MouseEvent, fn: () => void): void;
-    whenReceiveMessage(message: string, fn: () => void): void;
-    whenTimerElapsed(seconds: number, fn: () => void): void;
 
+    /**
+     * Function gets invoked when the mouse event occurs
+     * @param event The type of the mouse event
+     * @param fn This event
+     */
+    whenMouse(event: MouseEvent, fn: () => void): void;
+    
+    whenReceiveMessage(message: string, fn: () => void): void;
     broadcastMessage(message: string): void;
     broadcastMessageWait(message: string): void;
 
     /**
      * Switches the backdrop to the specified backdrop.
      * @param value Name or index of the backdrop
-     * @returns the id of the listeners
      */
     switchBackdropTo(value: number | string): void;
     /**
      * Switch to backdrop and wait for all listeners to finish executing.
+     * Listeners are set by `whenBackdropChangesTo` method.
      * @param name Name of the backdrop
-     * @returns a promise that resolves when all listeners have finished executing
      */
     switchBackdropToWait(name: string): void;
+    /**
+     * Switch to the next backdrop
+     */
     nextBackdrop(): void;
 
+    /**
+     * @param name The backdrop name to listen to
+     * @param fn The event body
+     */
     whenBackdropChangesTo(name: string, fn: () => void): void;
     playSound(name: string): void;
     playSoundUntilDone(name: string): void;
+    whenTimerElapsed(seconds: number, fn: () => void): void;
     getTimer(): number;
     resetTimer(): void;
+    
+    isKeyPressed(key: Key): boolean;
+    isKeyPressed(key: "any"): boolean;
 }
 
-interface Sprite<Variables = {}> extends Stage<Variables> {
+interface Sprite<Variables = {}> extends Stage<Variables & typeof $.Stage.variables> {
     isPenDown: boolean;
     penSize: number;
     penColor: Color;
@@ -150,11 +181,11 @@ interface Sprite<Variables = {}> extends Stage<Variables> {
     show(): void;
     hide(): void;
 
-    think(contents: unknown): void;
-    say(contents: unknown): void;
-    thinkWait(contents: unknown, seconds: number): void;
-    sayWait(contents: unknown, seconds: number): void;
-    ask(contents: unknown): string;
+    think(contents: any): void;
+    say(contents: any): void;
+    thinkWait(contents: any, seconds: number): void;
+    sayWait(contents: any, seconds: number): void;
+    ask(contents: any): string;
     penClear(): void;
     stamp(): void;
     penDown(): void;
@@ -166,8 +197,6 @@ interface Sprite<Variables = {}> extends Stage<Variables> {
     isTouching(sprite: Sprite): void;
 
     isTouchingBackdropColor(): boolean;
-    isKeyPressed(key: Key): boolean;
-    isKeyPressed(key: "any"): boolean;
 }
 
 interface Costumes {
@@ -176,10 +205,63 @@ interface Costumes {
     readonly index: number;
 }
 
-declare type Color = string;
+declare type Color = string & {};
 declare namespace Color {
+    /**
+     * Converts the hexadecimal color to a color object
+     * @param hex Hexadecimal color in the format of #rrggbb
+     */
     function fromHex(hex: string): Color;
+    /**
+     * Converts the white color to a color object
+     * @param hex White color
+     */
+    function fromHex(hex: "#ffffff"): Color;
+    /**
+     * Converts the black color to a color object
+     * @param hex Black color
+     */
+    function fromHex(hex: "#000000"): Color;
+    /**
+     * Converts the red color to a color object
+     * @param hex Red color
+     */
+    function fromHex(hex: "#ff0000"): Color;
+    /**
+     * Converts the green color to a color object
+     * @param hex Green color
+     */
+    function fromHex(hex: "#00ff00"): Color;
+    /**
+     * Converts the blue color to a color object
+     * @param hex Blue color
+     */
+    function fromHex(hex: "#0000ff"): Color;
+    /**
+     * Converts the yellow color to a color object
+     * @param hex Yellow color
+     */
+    function fromHex(hex: "#ffff00"): Color;
+    /**
+     * Converts the magenta color to a color object
+     * @param hex Magenta color
+     */
+    function fromHex(hex: "#ff00ff"): Color;
+    /**
+     * Converts the cyan color to a color object
+     * @param hex Cyan color
+     */
+    function fromHex(hex: "#00ffff"): Color;
+    /**
+     * Converts RGB color to a color object
+     * @param r Red color 0-255
+     * @param g Green color 0-255
+     * @param b Blue color 0-255
+     */
     function fromRGB(r: number, g: number, b: number): Color;
+    /**
+     * Generates a random color
+     */
     function random(): Color;
 }
 
@@ -195,7 +277,7 @@ declare interface IArguments {}
 
 // Scrap's primitives
 declare interface Number {}
-declare function Number(value: unknown): number;
+declare function Number(value: any): number;
 
 declare interface String extends Iterable<string> {
     /**
@@ -210,7 +292,7 @@ declare interface String extends Iterable<string> {
      */
     slice(start: number, end: number): string;
 }
-declare function String(value: unknown): string;
+declare function String(value: any): string;
 
 
 // Scrap's iterables

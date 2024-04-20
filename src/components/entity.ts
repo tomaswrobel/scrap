@@ -7,7 +7,7 @@ import {reserved} from "../code/transformers/utils";
 import {TypeScript} from "../code/transformers/typescript";
 import Blocks from "../code/transformers/blocks";
 
-const click = fs.readFileSync(path.join(__dirname, "click.mp3"));
+const click = fs.readFileSync(path.join(__dirname, "assets", "click.mp3"));
 
 /**
  * I represent both a sprite and the stage.
@@ -70,6 +70,9 @@ class Entity {
 	constructor(initialCostume: File, public name: string) {
 		this.costumes.push(initialCostume);
 		this.thumbnail.alt = "";
+		const block = this.workspace.newBlock("whenLoaded");
+		block.setMovable(false);
+		block.setDeletable(false);
 		this.update();
 	}
 
@@ -199,7 +202,7 @@ class Entity {
 	}
 }
 
-const scrappy = fs.readFileSync(path.join(__dirname, "scrappy.svg"), "utf-8");
+const scrappy = fs.readFileSync(path.join(__dirname, "assets", "scrappy.svg"), "utf-8");
 
 class Sprite extends Entity {
 	constructor(name: string) {

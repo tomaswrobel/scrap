@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import {version as tsversion} from 'typescript/package.json'; // do not import the whole typescriptServices here
 import {languages, Emitter, IEvent, IDisposable} from 'monaco-editor';
-import "./tokenizer.ts";
+import "./tokenizer";
 
 //#region enums copied from typescript to prevent loading the entire typescriptServices ---
 

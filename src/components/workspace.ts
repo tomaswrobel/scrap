@@ -1,11 +1,11 @@
 import {stage, sprite, theme, plugins, Types} from "../blockly";
 import Blocks from "../code/transformers/blocks";
-import {Stage, Sprite} from "../entities";
+import {Stage, Sprite} from "./entity";
 import * as Blockly from "blockly";
 import * as Parley from "parley.js";
-import Component from "../tab";
+import Component from "./tab";
 import {bind} from "../decorators";
-import "./style.scss";
+import "./workspace.scss";
 
 export default class Workspace implements Component {
 	container = document.createElement("div");
@@ -27,7 +27,11 @@ export default class Workspace implements Component {
 
 	render() {
 		app.container.appendChild(this.container);
+		window.requestAnimationFrame(this.inject);
+	}
 
+	@bind
+	inject() {
 		this.workspace = Blockly.inject(this.container, {
 			theme,
 			renderer: "scrap",

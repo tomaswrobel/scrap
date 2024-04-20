@@ -31,7 +31,9 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Run Parcel 
-        run: yarn build
+        run: yarn build --no-source-maps
+      - name: How big is the dist folder?
+        run: du -sh dist
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact

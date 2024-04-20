@@ -1,14 +1,14 @@
 .blockly {
 	&TreeLabel {
-	margin: auto;
-	color: #575e75 !important;
+		margin: auto;
+		color: #575e75 !important;
 		font-size: 10px !important;
 	}
 
 	&TreeRowContentContainer {
 		display: flex;
 		flex-direction: column;
-	}	
+	}
 
 	&TreeRow {
 		height: initial;
@@ -64,6 +64,14 @@
 
 	&HtmlInput::-webkit-calendar-picker-indicator {
 		display: none;
+	}
+
+	&Menu {
+		padding: 0 !important;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
 	}
 }
 

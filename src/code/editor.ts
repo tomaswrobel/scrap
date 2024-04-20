@@ -1,12 +1,12 @@
 import {editor, Uri} from "monaco-editor";
 import "../monaco-editor/typescript";
 // Importing types
-import type TabComponent from "../tab";
+import type TabComponent from "../components/tab";
 import {TypeScript} from "./transformers/typescript";
 
 import path from "path";
 import fs from "fs";
-import type {Entity} from "../entities";
+import type {Entity} from "../components/entity";
 
 const lib = fs.readFileSync(path.join(__dirname, "lib", "runtime.ts"), "utf-8");
 

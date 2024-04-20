@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0] - 2024-4-20
+
+## Fixed
+
+- File importing
+- Return block
+- Monaco Editor's color picker
+
+## Changed
+
+- File structure
+- App functionality is called from index.html
+
 ## [4.2.1] - 2024-4-19
 
 ### Fixed
@@ -555,7 +568,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.2.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.0
 [4.2.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.2.1
 [4.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.2.0
 [4.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.1.0

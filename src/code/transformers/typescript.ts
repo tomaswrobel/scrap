@@ -8,7 +8,7 @@
  * from Blockly's JavaScript generator.
  */
 import * as Blockly from "blockly";
-import type {Entity} from "../../entities";
+import type {Entity} from "../../components/entity";
 
 import type JSZip from "jszip";
 import transform from "./javascript";
@@ -140,8 +140,8 @@ class TypeScript extends Blockly.CodeGenerator {
 		return `${definitions}${definitions && "\n\n"}${super.finish(result)}`;
 	}
 
-	scrubNakedValue() {
-		return "";
+	scrubNakedValue(line: string) {
+		return line + ";";
 	}
 
 	async ready(zip?: JSZip) {

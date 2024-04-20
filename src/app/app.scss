@@ -6,11 +6,11 @@ $modes: (
 );
 
 @each $mode in $modes {
-	##{$mode}>.checkmark {
+	##{$mode} > .checkmark {
 		visibility: hidden;
 	}
 
-	iframe[data-mode="#{$mode}"]+ul ##{$mode}>.checkmark {
+	iframe[data-mode="#{$mode}"] + ul ##{$mode} > .checkmark {
 		visibility: visible;
 	}
 }
@@ -32,7 +32,7 @@ iframe {
 	margin-bottom: $gap;
 }
 
-#root>ul {
+#root > ul {
 	grid-area: nav;
 	list-style-type: none;
 	margin: 0;
@@ -42,42 +42,56 @@ iframe {
 	background-color: $primary;
 	margin-right: $gap * -1;
 
-	.dropdown {
+	li.dropdown {
 		display: inline-block;
-	}
 
-	.dropdown-content {
-		display: none;
-		position: absolute;
-		background-color: $primary;
-		min-width: 160px;
-		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-		z-index: 1;
-	}
+		> a::after {
+			content: "▾";
+			margin-left: 2px;
+			transform-origin: center;
+			transition: transform 0.3s;
+			display: inline-block;
+		}
 
-	.dropdown-content>* {
-		padding: 12px 16px;
-		text-decoration: none;
-		display: block;
-		text-align: left;
-		color: white;
-		cursor: pointer;
+		> .dropdown-content {
+			display: none;
+			position: absolute;
+			background-color: $primary;
+			min-width: 160px;
+			box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+			z-index: 1;
+		}
 
-		&:hover {
-			background-color: rgba(0, 0, 0, 0.1);
+		> .dropdown-content > a {
+			padding: 12px 16px;
+			text-decoration: none;
+			display: block;
+			text-align: left;
+			color: white;
+			cursor: pointer;
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.1);
+			}
 		}
 	}
 
-	.shown .dropdown-content {
-		display: block;
-		z-index: 20000;
+	li.dropdown.shown > {
+		a::after {
+			transform: rotateZ(180deg);
+		}
+
+		.dropdown-content {
+			display: block;
+			z-index: 20000;
+		}
 	}
 }
 
-#root>ul>li {
+#root > ul > li {
 	float: left;
 
-	>a {
+	> a {
 		display: inline-block;
 		color: white;
 		text-align: center;
@@ -106,7 +120,7 @@ iframe {
 		padding: 6px;
 	}
 
-	>input {
+	> input {
 		background: transparent;
 		color: white;
 		border-color: white;
@@ -116,9 +130,9 @@ iframe {
 		outline-color: #FFFA;
 	}
 
-	>input:focus,
-	>input:active,
-	>input:hover {
+	> input:focus,
+	> input:active,
+	> input:hover {
 		background: rgba($color: $background, $alpha: 0.3);
 	}
 }
@@ -139,7 +153,7 @@ iframe {
 	&.selected {
 		border: 2px solid $primary;
 
-		>.name {
+		> .name {
 			background: $primary;
 			color: #fff;
 		}
@@ -176,7 +190,7 @@ label.file {
 	line-height: 75px;
 	text-align: center;
 
-	>input {
+	> input {
 		display: none;
 	}
 
@@ -265,7 +279,7 @@ dialog.parley {
 	min-width: 300px;
 	font-size: 12px;
 
-	>h2 {
+	> h2 {
 		color: white;
 		word-wrap: break-word;
 		max-width: 100%;
@@ -293,11 +307,11 @@ dialog.parley {
 		}
 	}
 
-	>p {
+	> p {
 		max-width: 50ch;
 	}
 
-	>form> {
+	> form > {
 		label {
 			display: block;
 		}
@@ -325,7 +339,7 @@ dialog.parley {
 			margin-top: 1rem;
 			gap: .5rem;
 
-			>button {
+			> button {
 				border: none;
 				border-radius: 2px;
 				padding: .5em 1em;
