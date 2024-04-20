@@ -40,8 +40,6 @@ languages.registerTokensProviderFactory("typescript", {
             "goToBack",
             "visible",
             "size",
-            "costume",
-            "backdrop",
         ],
         sounds: [
             "playSound",
@@ -238,6 +236,15 @@ languages.registerTokensProviderFactory("typescript", {
                     ]
                 ],
                 [
+                    /(\.[ \n\t\r]*)(costume|backdrop)(\.[ \n\t\r]*)(all|index|name)/,
+                    [
+                        "delimiter",
+                        "costume",
+                        "delimiter",
+                        "looks"
+                    ]
+                ],
+                [
                     /(new)([ \t\r\n]+)([A-Z]\w*)/,
                     [
                         "functions",
@@ -264,9 +271,11 @@ languages.registerTokensProviderFactory("typescript", {
                                 "@events": "events",
                                 "@controls": "controls",
                                 "@sensing": "sensing",
-                                "@default": "identifier",
                                 "@iterables": "iterables",
-                                "@math": "operators"
+                                "@math": "operators",
+                                "costume": "costume",
+                                "backdrop": "costume",
+                                "@default": "identifier"
                             }
                         }
                     ]
@@ -575,6 +584,7 @@ editor.defineTheme("scrap", {
         {token: "interface", foreground: "FF8C1A", fontStyle: "bold"},
         {token: "constructor", foreground: "FF6680", fontStyle: "bold"},
         {token: "Color", foreground: "59C059", fontStyle: "bold"},
+        {token: "costume", foreground: "9966FF", fontStyle: "bold"},
     ],
     colors: {
         "editor.background": "#FFFFFF",

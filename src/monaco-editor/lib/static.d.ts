@@ -126,6 +126,7 @@ interface Stage<Variables = {}> {
     whenBackdropChangesTo(name: string, fn: () => void): void;
     playSound(name: string): void;
     playSoundUntilDone(name: string): void;
+    stopSounds(): void;
     whenTimerElapsed(seconds: number, fn: () => void): void;
     getTimer(): number;
     resetTimer(): void;
