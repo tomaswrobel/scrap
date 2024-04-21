@@ -39,6 +39,7 @@ export class App {
 	scratchFiles = new SB3();
 
 	start(version: string) {
+		this.mode("paced");
 		this.current = new Stage();
 		this.entities.push(this.current);
 		this.tabs = new Tabs(
@@ -366,6 +367,7 @@ ${scripts.trimEnd()}
 
 	// For index.html
 	dropdowns = document.querySelectorAll<HTMLLIElement>("li.dropdown")!;
+	modes = document.querySelectorAll<HTMLAnchorElement>("[data-for]");
 
 	dropdown(i: number) {
 		if (this.dropdowns[i].classList.toggle("shown")) {
@@ -384,6 +386,10 @@ ${scripts.trimEnd()}
 
 	mode(mode: string) {
 		this.output.dataset.mode = mode;
+
+		for (const m of this.modes) {
+			m.style.setProperty("visibility", m.dataset.for === mode ? "visible" : "hidden");
+		}
 	}
 
 	pick(accept: string) {

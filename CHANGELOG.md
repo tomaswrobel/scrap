@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.6] - 2024-4-21
+
+## Fixed
+
+- Mode (Turbo/Paced) submenu
+- doctrine dependency removed
+
 ## [4.3.5] - 2024-4-21
 
 ## Changed
@@ -580,7 +587,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.5...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.6...HEAD
+[4.3.6]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.6
 [4.3.5]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.5
 [4.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.0
 [4.2.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.2.1
