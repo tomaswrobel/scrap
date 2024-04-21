@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.5] - 2024-4-21
+
+## Changed
+
+- Costumes & sounds can be renamed
+- Costumes & sounds don't show extensions now
+- Simplified Scrappy looks more cute
+
+## Fixed
+
+- Tabs bugs
+
 ## [4.3.0] - 2024-4-20
 
 ## Fixed
@@ -568,7 +580,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.5...HEAD
+[4.3.5]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.5
 [4.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.0
 [4.2.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.2.1
 [4.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.2.0

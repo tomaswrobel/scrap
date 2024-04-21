@@ -31,11 +31,20 @@
     }
 
     .name {
+        padding: 5px;
+        text-align: center;
         font-size: 12px;
         border-radius: 0 0 4px 4px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    input.name {
+        appearance: none;
+        border: none;
+        outline: none !important;
+        color: white;
     }
 
     .remove {

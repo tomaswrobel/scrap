@@ -228,7 +228,7 @@ export default class Paint implements Component {
 			reader.onload = () => {
 				const image = new Image();
 				image.onload = () => {
-					if (app.current.name === "Stage") {
+					if (app.current.isStage()) {
 						this.context.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
 					} else {
 						// Center the image
@@ -337,6 +337,11 @@ export default class Paint implements Component {
 			app.current.update();
 			await this.load((e as CustomEvent<File>).detail);
 			this.setChanged(false);
+		});
+
+		this.mediaList.addEventListener("rename", e => {
+			const {detail: {file, name}} = e as CustomEvent<{file: File, name: string}>;
+			app.current.costumes[app.current.costumes.indexOf(file)] = new File([file], name, {type: file.type});
 		});
 
 		this.mediaList.render(this.container);

@@ -18,11 +18,13 @@ export default class Workspace implements Component {
 	}
 
 	async prerender() {
-		app.showLoader("Compiling code");
-		app.current.workspace.clear();
-		await Blocks.processEntity(app.current);
-		delete app.current.typescript;
-		app.hideLoader();
+		if (!app.current.isUsingBlocks()) {
+			app.showLoader("Compiling code");
+			app.current.workspace.clear();
+			await Blocks.processEntity(app.current);
+			delete app.current.typescript;
+			app.hideLoader();
+		}
 	}
 
 	render() {

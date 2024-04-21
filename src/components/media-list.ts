@@ -1,4 +1,5 @@
 import "./media-list.scss";
+import path from "path";
 
 export class MediaList extends EventTarget {
     root = document.createElement("div");
@@ -8,7 +9,7 @@ export class MediaList extends EventTarget {
         readonly type: MediaType,
         readonly files: File[]
     ) {
-        super(); 
+        super();
 
         this.root.classList.add("media-list");
         this.root.style.gridArea = type.gridArea;
@@ -44,9 +45,9 @@ export class MediaList extends EventTarget {
         });
 
         // Styling
-		this.fab.style.lineHeight = "50px";
-		this.fab.style.textAlign = "center";
-		this.fab.style.font = "20px sans-serif bold";
+        this.fab.style.lineHeight = "50px";
+        this.fab.style.textAlign = "center";
+        this.fab.style.font = "20px sans-serif bold";
 
         this.fab.appendChild(input);
     }
@@ -73,6 +74,7 @@ export class MediaList extends EventTarget {
     }
 
     createMediaElement(file: File) {
+        const {name, ext} = path.parse(file.name);
         const element = document.createElement("div");
         element.classList.add("media-element");
 
@@ -80,11 +82,57 @@ export class MediaList extends EventTarget {
         img.src = this.type.getURLFor(file);
         element.appendChild(img);
 
-        const name = document.createElement("span");
-        name.title = file.name;
-        name.classList.add("name");
-        name.textContent = file.name;
-        element.appendChild(name);
+        const span = document.createElement("span");
+        span.classList.add("name");
+        span.textContent = name;
+
+        const input = document.createElement("input");
+        input.classList.add("name");
+
+        span.ondblclick = () => {
+            input.value = span.textContent!;
+            element.replaceChild(input, span);
+            input.focus();
+            input.select();
+        };
+
+        input.onkeyup = e => {
+            if (e.key === "Enter") {
+                input.blur();
+            } else if (e.key === "Escape") {
+                e.preventDefault();
+                input.value = span.textContent!;
+                input.blur();
+            }
+        };
+
+        input.onblur = () => {
+            const invalid = /[/\\?%*:|"<>]/g; // Invalid characters
+            const reserved = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/i; // Windows reserved names
+            let name = input.value.trim();
+
+            if (reserved.test(name)) {
+                name = "";
+            } else {
+                name = name.trim().replace(invalid, "");
+            }
+
+            name = name || span.textContent!;
+
+            if (name !== span.textContent) {
+                this.dispatchEvent(new CustomEvent("rename", {
+                    detail: {
+                        file,
+                        name: name + ext
+                    }
+                }));
+            }
+
+            span.textContent = name;
+            element.replaceChild(span, input);
+        };
+
+        element.appendChild(span);
 
         const remove = document.createElement("div");
         remove.classList.add("remove");
@@ -96,13 +144,13 @@ export class MediaList extends EventTarget {
                 element.remove();
                 this.files.splice(this.files.indexOf(file), 1);
                 this.dispatchEvent(new CustomEvent("select", {detail: this.files[0]}));
-                
+
                 for (const child of this.root.getElementsByClassName("selected")) {
                     child.classList.remove("selected");
                 }
 
                 this.root.querySelector(".media-element")!.classList.add("selected");
-            } else {
+            } else if (e.target !== span && e.target !== input) {
                 for (const child of this.root.getElementsByClassName("selected")) {
                     child.classList.remove("selected");
                 }
@@ -143,7 +191,7 @@ export class MediaList extends EventTarget {
             "audio/wav",
         ],
         gridArea: "sound"
-    }
+    };
 }
 
 export interface MediaType {

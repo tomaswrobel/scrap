@@ -98,7 +98,7 @@ interface Stage<Variables = {}> {
      * @param fn This event
      */
     whenMouse(event: MouseEvent, fn: () => void): void;
-    
+
     whenReceiveMessage(message: string, fn: () => void): void;
     broadcastMessage(message: string): void;
     broadcastMessageWait(message: string): void;
@@ -130,7 +130,7 @@ interface Stage<Variables = {}> {
     whenTimerElapsed(seconds: number, fn: () => void): void;
     getTimer(): number;
     resetTimer(): void;
-    
+
     isKeyPressed(key: Key): boolean;
     isKeyPressed(key: "any"): boolean;
 }
@@ -195,7 +195,7 @@ interface Sprite<Variables = {}> extends Stage<Variables & typeof $.Stage.variab
     distanceTo(x: number, y: number): number;
     isTouchingMouse(): boolean;
     isTouchingEdge(): boolean;
-    isTouching(sprite: Sprite): void;
+    isTouching(sprite: Sprite): boolean;
 
     isTouchingBackdropColor(): boolean;
 }

@@ -148,7 +148,7 @@ class TypeScript extends Blockly.CodeGenerator {
 		const code = this.entity.code;
 		const result = await transform(typeof code === "string" ? code : this.workspaceToCode(this.entity.workspace));
 		const body = this.prefixLines(result?.code || "", "\t");
-		const isStage = this.entity.name === "Stage";
+		const isStage = this.entity.isStage();
 		const configuration = {
 			...this.entity.init,
 			current: this.entity.current,
@@ -232,8 +232,7 @@ TypeScript.register("backdrop", "costume", block => {
 });
 
 TypeScript.register("repeat", (block, ts) => {
-	const times = ts.valueToCode(block, "TIMES", Order.NONE) || "0";
-	const i = Blockly.Variables.generateUniqueNameFromOptions("i", app.current.variables.map(t => t[0]));
+	const times = ts.valueToCode(block, "TIMES", Order.NONE) || "0", i = `$${+new Date()}`;
 	return `for (let ${i} = 0; ${i} < ${times}; ${i}++) {\n${ts.statementToCode(block, "STACK")}}\n`;
 });
 

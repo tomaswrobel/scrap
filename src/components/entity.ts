@@ -86,21 +86,21 @@ class Entity {
 		if (!zip) {
 			// No zip provided
 			return this[type].reduce(
-				(urls, s) => ({
+				(urls, file) => ({
 					...urls,
-					[s.name]: URL.createObjectURL(s),
+					[path.parse(file.name).name]: URL.createObjectURL(file),
 				}),
 				{} as Record<string, string>
 			);
 		}
 
 		return this[type].reduce(
-			(urls, s) => {
-				zip!.file(s.name, s);
+			(urls, file) => {
+				zip!.file(file.name, file);
 				return {
 					...urls,
 					// Path to file in zip
-					[s.name]: path.join(this.name, s.name),
+					[path.parse(file.name).name]: path.join(this.name, file.name),
 				};
 			},
 			{} as Record<string, string>
@@ -200,6 +200,10 @@ class Entity {
 		}
 		return "image/svg+xml";
 	}
+
+	public isStage(): this is Stage {
+		return this.name === "Stage";
+	}
 }
 
 const scrappy = fs.readFileSync(path.join(__dirname, "assets", "scrappy.svg"), "utf-8");
@@ -235,6 +239,16 @@ class Sprite extends Entity {
 			sprite.replaceChild(input, span);
 			input.focus();
 			input.select();
+		};
+
+		input.onkeyup = e => {
+			if (e.key === "Enter") {
+				input.blur();
+			} else if (e.key === "Escape") {
+				e.preventDefault();
+				input.value = span.textContent!;
+				input.blur();
+			}
 		};
 
 		input.onblur = () => {

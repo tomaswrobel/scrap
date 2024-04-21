@@ -1,20 +1,5 @@
 @import "../globals";
 
-$modes: (
-	turbo,
-	paced
-);
-
-@each $mode in $modes {
-	##{$mode} > .checkmark {
-		visibility: hidden;
-	}
-
-	iframe[data-mode="#{$mode}"] + ul ##{$mode} > .checkmark {
-		visibility: visible;
-	}
-}
-
 * {
 	box-sizing: border-box;
 }
@@ -137,18 +122,17 @@ iframe {
 	}
 }
 
-.name {
-	all: unset;
-
-	&.error {
-		color: red;
-	}
-}
-
 .stage {
 	grid-area: stage;
 	margin-bottom: $gap;
 	margin-left: $gap;
+
+	> .name {
+		display: block;
+		text-align: center;
+		padding: 5px;
+		font-size: 12px;
+	}
 
 	&.selected {
 		border: 2px solid $primary;
@@ -197,12 +181,6 @@ label.file {
 	&::before {
 		content: "+";
 	}
-}
-
-.name {
-	display: block;
-	text-align: center;
-	padding: 5px;
 }
 
 body {

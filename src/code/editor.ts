@@ -88,7 +88,7 @@ function getVariables(entity: Entity) {
 }
 
 function reducer(prev: string, entity: Entity) {
-	return `${prev}\t${JSON.stringify(entity.name)}: ${entity.name === "Stage" ? "Stage" : "Sprite"}${getVariables(entity)};\n`;
+	return `${prev}\t${JSON.stringify(entity.name)}: ${entity.isStage() ? "Stage" : "Sprite"}${getVariables(entity)};\n`;
 }
 
 function mapper([name, type]: app.Variable) {

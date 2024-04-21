@@ -8,7 +8,6 @@ const controlRe = /[\x00-\x1f\x80-\x9f]/g;
 const reservedRe = /^\.+$/;
 
 class SB3 {
-    target!: SB3.Target;
     transformers: Record<string, (data: SB3.Block) => Promise<Blockly.Block> | Blockly.Block> = {};
 
     constructor() {
@@ -175,53 +174,14 @@ class SB3 {
                 : app.current.workspace.newBlock("goBackward")
                 ;
         };
-        this.transformers.looks_costumenumbername = data => {
-            if (data.fields.NUMBER_NAME[0] === "number") { // Scratch uses 1-based indexing
-                const one = app.current.workspace.newBlock("math_number");
-                one.setFieldValue("1", "NUM");
-
-                const add = app.current.workspace.newBlock("arithmetics");
-                add.setFieldValue("+", "OP");
-
-                const block = app.current.workspace.newBlock("costume");
-                block.setFieldValue("index", "VALUE");
-
-                add.getInput("A")!.connection!.connect(one.outputConnection!);
-                add.getInput("B")!.connection!.connect(block.outputConnection!);
-
-                return add;
-            }
-            return this.provideAsset("costume");
-        };
-        this.transformers.looks_backdropnumbername = data => {
-            if (data.fields.NUMBER_NAME[0] === "number") { // Scratch uses 1-based indexing
-                const one = app.current.workspace.newBlock("math_number");
-                one.setFieldValue("1", "NUM");
-
-                const add = app.current.workspace.newBlock("arithmetics");
-                add.setFieldValue("+", "OP");
-
-                const block = app.current.workspace.newBlock("backdrop");
-                block.setFieldValue("index", "VALUE");
-
-                add.getInput("A")!.connection!.connect(one.outputConnection!);
-                add.getInput("B")!.connection!.connect(block.outputConnection!);
-
-                return add;
-            }
-
-            return this.provideAsset("backdrop");
-        };
-        this.transformers.looks_nextbackdrop = this.override({
-            opcode: "nextBackdrop",
-        });
+        this.transformers.looks_costumenumbername = this.asset("costume");
+        this.transformers.looks_backdropnumbername = this.asset("backdrop");
+        this.transformers.looks_nextbackdrop = this.override({opcode: "nextBackdrop"});
 
         // Sounds
         this.transformers.sound_sounds_menu = data => {
             const block = app.current.workspace.newBlock("sound");
-            const name = data.fields.SOUND_MENU[0];
-            const file = this.target.sounds.find(sound => sound.name === name)!;
-            block.setFieldValue(`${name}.${file!.dataFormat}`, "NAME");
+            block.setFieldValue(data.fields.SOUND_MENU[0], "NAME");
             return block;
         };
         this.transformers.sound_play = this.override({
@@ -241,12 +201,12 @@ class SB3 {
         });
         this.transformers.sound_setvolumeto = this.setter("set", "volume", "VOLUME");
         this.transformers.sound_changevolumeby = this.setter("change", "volume", "VOLUME");
-        this.transformers.sound_volume = this.reporter("volume"),
+        this.transformers.sound_volume = this.reporter("volume");
 
-            // Pen
-            this.transformers.pen_clear = this.override({
-                opcode: "penClear"
-            });
+        // Pen
+        this.transformers.pen_clear = this.override({
+            opcode: "penClear"
+        });
         this.transformers.pen_stamp = this.override({
             opcode: "stamp"
         });
@@ -579,15 +539,16 @@ class SB3 {
         this.transformers.sensing_mousex = this.reporter("mouseX");
         this.transformers.sensing_mousey = this.reporter("mouseY");
         this.transformers.sensing_setdragmode = data => {
-            const block = app.current.workspace.newBlock("setDragMode");
+            const block = app.current.workspace.newBlock("set");
+            block.getInput("VAR")!.connection!.setShadowState({type: "draggable"});
             if (data.fields.DRAG_MODE[0] === "draggable") {
                 const trueBlock = app.current.workspace.newBlock("boolean");
                 trueBlock.setFieldValue("true", "BOOL");
-                block.getInput("DRAGGABLE")!.connection!.connect(trueBlock.outputConnection!);
+                block.getInput("VALUE")!.connection!.connect(trueBlock.outputConnection!);
             } else if (data.fields.DRAG_MODE[0] === "not draggable") {
                 const falseBlock = app.current.workspace.newBlock("boolean");
                 falseBlock.setFieldValue("false", "BOOL");
-                block.getInput("DRAGGABLE")!.connection!.connect(falseBlock.outputConnection!);
+                block.getInput("VALUE")!.connection!.connect(falseBlock.outputConnection!);
             }
             return block;
         };
@@ -896,12 +857,11 @@ class SB3 {
         };
     }
 
-    assetMap: Record<string, string> = {};
-
     async transform(file: File) {
         const zip = await JSZip.loadAsync(file);
         const project: SB3.Project = JSON.parse(await zip.file("project.json")!.async("text"));
         this.isProjectCompatible(project);
+        this.assetMap = {};
 
         for (const target of project.targets) {
             this.isTargetCompatible(target);
@@ -919,7 +879,7 @@ class SB3 {
                 app.current.costumes.push(
                     new File(
                         [await zip.file(filename)!.async("blob")],
-                        this.assetMap[costume.name] = `${name}.${costume.dataFormat}`,
+                        `${this.assetMap[costume.name] = name}.${costume.dataFormat}`,
                         {type: `image/${costume.dataFormat}${costume.dataFormat === "svg" ? "+xml" : ""}`}
                     )
                 );
@@ -1087,11 +1047,11 @@ class SB3 {
         };
     }
 
-    setter(_: "set" | "change", type: string, VALUE = "VALUE") {
+    setter(kind: "set" | "change", type: string, input: string) {
         return async (data: SB3.Block) => {
-            const block = app.current.workspace.newBlock(_);
+            const block = app.current.workspace.newBlock(kind);
             block.getInput("VAR")!.connection!.setShadowState({type});
-            const value = await this.input(data.inputs[VALUE]);
+            const value = await this.input(data.inputs[input]);
 
             if (value) {
                 block.getInput("VALUE")!.connection!.connect(value.outputConnection!);
@@ -1134,7 +1094,6 @@ class SB3 {
         });
     }
 
-    provided!: Record<string, string>;
     /**
      * Some Scratch blocks do not have a corresponding block in Scrap.
      * However, it is sometimes possible to emulate the block using a function.
@@ -1165,60 +1124,84 @@ class SB3 {
      * @param type The type of asset to provide.
      * @returns Call block that calls the provided function.
      */
-    provideAsset(type: string) {
-        const block = app.current.workspace.newBlock("controls_if");
-        block.loadExtraState!({
-            hasElse: true,
-            elseIfCount: this.target.costumes.length - 1
-        });
+    asset(type: string) {
+        return (data: SB3.Block) => {
+            if (data.fields.NUMBER_NAME[0] === "number") { // Scratch uses 1-based indexing
+                const one = app.current.workspace.newBlock("math_number");
+                one.setFieldValue("1", "NUM");
 
-        for (let i = 0; i < this.target.costumes.length; i++) {
-            const equals = app.current.workspace.newBlock("compare");
-            equals.setFieldValue("==", "OP");
+                const add = app.current.workspace.newBlock("arithmetics");
+                add.setFieldValue("+", "OP");
 
-            const assetBlock = app.current.workspace.newBlock(type);
-            const nameBlock = app.current.workspace.newBlock("iterables_string");
+                const block = app.current.workspace.newBlock(type);
+                block.setFieldValue("index", "VALUE");
 
-            nameBlock.setFieldValue(this.assetMap[this.target.costumes[i].name], "TEXT");
-            equals.getInput("A")!.connection!.connect(assetBlock.outputConnection!);
-            equals.getInput("B")!.connection!.connect(nameBlock.outputConnection!);
+                add.getInput("A")!.connection!.connect(one.outputConnection!);
+                add.getInput("B")!.connection!.connect(block.outputConnection!);
 
-            block.getInput(`IF${i}`)!.connection!.connect(equals.outputConnection!);
+                return add;
+            }
 
-            const returnBlock = app.current.workspace.newBlock("return");
-            returnBlock.loadExtraState!({
-                output: "string"
+            const block = app.current.workspace.newBlock("controls_if");
+            block.loadExtraState!({
+                hasElse: true,
+                elseIfCount: this.target.costumes.length - 1
             });
 
-            returnBlock.getInput("VALUE")!.connection!.targetBlock()!.setFieldValue(this.target.costumes[i].name, "TEXT");
-            block.getInput(`DO${i}`)!.connection!.connect(returnBlock.previousConnection!);
-        }
+            for (let i = 0; i < this.target.costumes.length; i++) {
+                const equals = app.current.workspace.newBlock("compare");
+                equals.setFieldValue("==", "OP");
 
-        const throwBlock = app.current.workspace.newBlock("throw");
-        throwBlock.getInput("ERROR")!.connection!.setShadowState({
-            type: "iterables_string",
-            fields: {
-                TEXT: "Invalid costume name"
+                const assetBlock = app.current.workspace.newBlock(type);
+                const nameBlock = app.current.workspace.newBlock("iterables_string");
+
+                nameBlock.setFieldValue(this.assetMap[this.target.costumes[i].name], "TEXT");
+                equals.getInput("A")!.connection!.connect(assetBlock.outputConnection!);
+                equals.getInput("B")!.connection!.connect(nameBlock.outputConnection!);
+
+                block.getInput(`IF${i}`)!.connection!.connect(equals.outputConnection!);
+
+                const returnBlock = app.current.workspace.newBlock("return");
+                returnBlock.loadExtraState!({
+                    output: "string"
+                });
+
+                returnBlock.getInput("VALUE")!.connection!.targetBlock()!.setFieldValue(this.target.costumes[i].name, "TEXT");
+                block.getInput(`DO${i}`)!.connection!.connect(returnBlock.previousConnection!);
             }
-        });
-        block.getInput("ELSE")!.connection!.connect(throwBlock.previousConnection!);
 
-        const name = this.provide(block, {
-            args: [],
-            name: type,
-            returns: "string",
-            comment: "Returns the name of the asset before renaming."
-        });
+            const throwBlock = app.current.workspace.newBlock("throw");
+            throwBlock.getInput("ERROR")!.connection!.setShadowState({
+                type: "iterables_string",
+                fields: {
+                    TEXT: "Invalid costume name"
+                }
+            });
+            block.getInput("ELSE")!.connection!.connect(throwBlock.previousConnection!);
 
-        const call = app.current.workspace.newBlock("call");
-        call.loadExtraState!({
-            name,
-            params: [],
-            returnType: "string"
-        });
+            const name = this.provide(block, {
+                args: [],
+                name: type,
+                returns: "string",
+                comment: "Returns the name of the asset before renaming."
+            });
 
-        return call;
+            const call = app.current.workspace.newBlock("call");
+            call.loadExtraState!({
+                name,
+                params: [],
+                returnType: "string"
+            });
+
+            return call;
+        };
     }
+}
+
+interface SB3 {
+    target: SB3.Target;
+    provided: Record<string, string>;
+    assetMap: Record<string, string>;
 }
 
 declare namespace SB3 {
@@ -1290,7 +1273,6 @@ declare namespace SB3 {
 
     interface Target {
         name: string;
-        isStage: boolean;
         variables: Record<string, Variable>;
         lists: Record<string, unknown>;
         costumes: Costume[];
@@ -1300,7 +1282,7 @@ declare namespace SB3 {
     }
 
     interface Stage extends Target {
-        name: "string";
+        name: "Stage";
         isStage: true;
     }
 
