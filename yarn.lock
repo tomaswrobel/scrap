@@ -327,17 +327,17 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@blockly/field-colour-hsv-sliders@4.2.3":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-4.2.3.tgz#394c5c0a81acc995e3d7c9fd0abc3d5f52c1b9b0"
-  integrity sha512-btN1+kDO+hiaFdO8oXeaissfL5ekJTL7PdaFNutkNtqTJSDCAkzHcXtrmQ+lqbCgjBiQpu4aCHzWicIZeV0uwg==
+"@blockly/field-colour-hsv-sliders@4.2.4":
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-4.2.4.tgz#2224559f4a99efb01ab890fc55f7d417284e2504"
+  integrity sha512-pFiZ+IGJnxKnaiYUEF+e/+YHqrwQYJclOkqw0afBefvFgf5zWcdP2/BlwVEnPFJTKVPpjLpQVbN5/hxbb5Ao+Q==
   dependencies:
-    "@blockly/field-colour" "^4.0.0"
+    "@blockly/field-colour" "^4.0.1"
 
-"@blockly/field-colour@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-4.0.0.tgz#499867ca2f64bdb38f55c8677ff13a0867850d5a"
-  integrity sha512-DigQJ2Yqf/VN4xr7AI7N3gnGabl3dZULRI2CPCgOiasKF3qqsLoyYCKKz3rLpd8Rzl08wkxMqaY/WqYxOAMzpQ==
+"@blockly/field-colour@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-4.0.1.tgz#cdc1ae6bfe6b5b89b6365a1c388b427bd665b16a"
+  integrity sha512-IcQwjdbjoUdJXLYm7JVg8vhTdPl8uEDh7hLsfbaxJ5OyJsiTloSPoGfQpqfB8y+xz6PCmE+HxseTmD2193TibQ==
 
 "@blockly/field-date@8.0.14":
   version "8.0.14"
