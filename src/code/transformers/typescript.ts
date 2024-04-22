@@ -231,9 +231,11 @@ TypeScript.register("backdrop", "costume", block => {
 	return [`self.${block.type}.${block.getFieldValue("VALUE")}`, Order.MEMBER];
 });
 
-TypeScript.register("repeat", (block, ts) => {
-	const times = ts.valueToCode(block, "TIMES", Order.NONE) || "0", i = `$${+new Date()}`;
-	return `for (let ${i} = 0; ${i} < ${times}; ${i}++) {\n${ts.statementToCode(block, "STACK")}}\n`;
+TypeScript.register("for", (block, ts) => {
+	const variable = block.getField("VAR")!.getText();
+	const from = ts.valueToCode(block, "FROM", Order.NONE) || "0";
+	const to = ts.valueToCode(block, "TO", Order.NONE) || "0";
+	return `for (let ${variable} = ${from}; ${variable} <= ${to}; ${variable}++) {\n${ts.statementToCode(block, "STACK")}}\n`;
 });
 
 TypeScript.register("while", (block, ts) => {

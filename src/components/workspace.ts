@@ -105,6 +105,9 @@ export default class Workspace implements Component {
 												}
 											}
 										}
+									},
+									fields: {
+										PARAM: String.fromCharCode(65 + i)
 									}
 								}
 							},

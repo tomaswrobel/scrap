@@ -930,9 +930,17 @@
             },
             {
                 "kind": "block",
-                "type": "repeat",
+                "type": "for",
                 "inputs": {
-                    "TIMES": {
+                    "FROM": {
+                        "shadow": {
+                            "type": "math_number",
+                            "fields": {
+                                "NUM": 1
+                            }
+                        }
+                    },
+                    "TO": {
                         "shadow": {
                             "type": "math_number",
                             "fields": {
@@ -940,6 +948,9 @@
                             }
                         }
                     }
+                },
+                "fields": {
+                    "VAR": "i:number"
                 }
             },
             {

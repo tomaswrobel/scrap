@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.7] - 2024-4-22
+
+## Changed
+
+- `repeat` block is being replaced by `for` block
+- `for` and `foreach` blocks share an extension
+
 ## [4.3.6] - 2024-4-21
 
 ## Fixed

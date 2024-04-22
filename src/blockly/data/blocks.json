@@ -1476,13 +1476,22 @@
 		"style": "Controls"
 	},
 	{
-		"type": "repeat",
+		"type": "for",
 		"inputsInline": true,
-		"message0": "repeat %1 times",
+		"message0": "for %1 from %2 to %3",
 		"args0": [
 			{
+				"type": "field_param",
+				"name": "VAR"
+			},
+			{
 				"type": "input_value",
-				"name": "TIMES",
+				"name": "FROM",
+				"check": "number"
+			},
+			{
+				"type": "input_value",
+				"name": "TO",
 				"check": "number"
 			}
 		],
@@ -1490,13 +1499,16 @@
 		"args1": [
 			{
 				"type": "input_statement",
-				"check": "any",
-				"name": "STACK"
+				"name": "STACK",
+				"check": "any"
 			}
 		],
-		"nextStatement": "any",
 		"previousStatement": "any",
-		"style": "Controls"
+		"nextStatement": "any",
+		"style": "Controls",
+		"extensions": [
+			"for"
+		]
 	},
 	{
 		"type": "while",
@@ -2457,7 +2469,7 @@
 		"nextStatement": "any",
 		"style": "Iterables",
 		"extensions": [
-			"foreach"
+			"for"
 		]
 	},
 	{

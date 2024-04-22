@@ -338,12 +338,24 @@ class SB3 {
                 return this.unknown(`control_stop [${options}]`, "command");
             }
         };
-        this.transformers.control_repeat = this.override({
-            opcode: "repeat",
-            inputs: {
-                SUBSTACK: ["STACK", true]
+        this.transformers.control_repeat = async data => {
+            const block = app.current.workspace.newBlock("for");
+            const times = await this.input(data.inputs.TIMES);
+            
+            block.getInput("FROM")!.connection!.setShadowState({
+                type: "number", 
+                fields: {NUM: "1"}
+            });
+
+            block.getInput("TO")!.connection!.connect(times!.outputConnection!);
+
+            if ("SUBSTACK" in data.inputs) {
+                const inner = await this.input(data.inputs.SUBSTACK, true);
+                block.getInput("STACK")!.connection!.connect(inner!.previousConnection!);
             }
-        });
+
+            return block;
+        };
         this.transformers.control_start_as_clone = this.override({
             opcode: "whenCloned"
         });

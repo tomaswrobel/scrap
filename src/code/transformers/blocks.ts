@@ -456,8 +456,8 @@ export default class Blocks {
                     throw new SyntaxError("Only binary expressions are supported");
                 }
 
-                if (test.operator !== "<") {
-                    throw new SyntaxError("Only < binary expressions are supported");
+                if (test.operator !== "<=") {
+                    throw new SyntaxError("Only <= binary expressions are supported");
                 }
 
                 if (update.type !== "UpdateExpression") {
@@ -482,10 +482,6 @@ export default class Blocks {
                     throw new SyntaxError("Only variable declarations with initializers are supported");
                 }
 
-                if (dec.type !== "NumericLiteral" || dec.value) {
-                    throw new SyntaxError("Only numeric literals with value 0 are supported");
-                }
-
                 if (id.type !== "Identifier") {
                     throw new SyntaxError("Only simple identifiers are supported");
                 }
@@ -506,11 +502,15 @@ export default class Blocks {
                     throw new SyntaxError("Only for loops with the same variable in init and update are supported");
                 }
 
-                const block = this.block("repeat");
+                const block = this.block("for");
+                block.setFieldValue(`${id.name}:number`, "VAR");
                 this.comments(block, node);
 
-                this.connection = block.getInput("TIMES")!.connection;
+                this.connection = block.getInput("TO")!.connection;
                 this.parse(test.right);
+
+                this.connection = block.getInput("FROM")!.connection;
+                this.parse(dec);
 
                 this.connection = block.getInput("STACK")!.connection;
                 this.parse(body);
