@@ -7,41 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.8] - 2024-4-23
+
+### Changed
+
+- Logo
+
 ## [4.3.7] - 2024-4-22
 
-## Changed
+### Changed
 
 - `repeat` block is being replaced by `for` block
 - `for` and `foreach` blocks share an extension
 
 ## [4.3.6] - 2024-4-21
 
-## Fixed
+### Fixed
 
 - Mode (Turbo/Paced) submenu
 - doctrine dependency removed
 
 ## [4.3.5] - 2024-4-21
 
-## Changed
+### Changed
 
 - Costumes & sounds can be renamed
 - Costumes & sounds don't show extensions now
 - Simplified Scrappy looks more cute
 
-## Fixed
+### Fixed
 
 - Tabs bugs
 
 ## [4.3.0] - 2024-4-20
 
-## Fixed
+### Fixed
 
 - File importing
 - Return block
 - Monaco Editor
 
-## Changed
+### Changed
 
 - File structure
 - App functionality is called from index.html
