@@ -42,6 +42,7 @@ export default class Workspace implements Component {
 				contents: app.current instanceof Stage ? stage : sprite,
 			},
 			media: "blockly-media/",
+			sounds: false,
 			zoom: {
 				startScale: 0.65,
 			},
