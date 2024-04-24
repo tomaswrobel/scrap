@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.11] - 2024-4-24
+
+## Changed
+
+- Project name input is placed correctly
+
 ## [4.3.10] - 2024-4-24
 
 ### Changed
