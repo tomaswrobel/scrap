@@ -49,13 +49,14 @@ jobs:
         id: package
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION\n" >> "$GITHUB_OUTPUT"
-          echo "tag=v$VERSION\n" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "name=Scrap v$VERSION" >> "$GITHUB_OUTPUT"
       - name: Create release notes from changelog
         uses: CSchoel/release-notes-from-changelog@v1.3.0
         with:
           version: ${{steps.package.outputs.version}}
       - name: Release
-        run: gh release create "${{steps.package.outputs.tag}}" -F RELEASE.md
+        run: gh release create "${{steps.package.outputs.tag}}" scrap.zip --title "${{steps.package.outputs.name}}" --notes-file RELEASE.md
         env:
           GH_TOKEN: ${{github.token}}       
