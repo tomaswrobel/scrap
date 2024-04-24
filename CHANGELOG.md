@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.10] - 2024-4-24
+
+### Changed
+
+- Project name input is no longer centered
+- GitHub action no longer has two jobs
+
 ## [4.3.9] - 2024-4-24
 
 ### Added
@@ -616,7 +623,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.9...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.10...HEAD
+[4.3.10]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.10
 [4.3.9]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.9
 [4.3.8]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.8
 [4.3.7]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.7

@@ -108,15 +108,6 @@ iframe {
 			}
 		}
 
-		&:last-child {
-			@media (min-width: 800px) {
-				position: absolute;
-				left: 50vw;
-				top: 50%;
-				transform: translate(-50%, -50%);
-			}
-		}
-
 		> input {
 			background: transparent;
 			border: 1px solid white;
