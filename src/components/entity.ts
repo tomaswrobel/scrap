@@ -267,6 +267,8 @@ class Sprite extends Entity {
 const stage = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
 
 class Stage extends Entity {
+	readonly __stage__ = true;
+
 	constructor() {
 		super(new File([stage], "stage.svg", {type: "image/svg+xml"}), "Stage");
 	}

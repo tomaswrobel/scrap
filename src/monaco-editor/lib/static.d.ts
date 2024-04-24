@@ -11,9 +11,9 @@ declare namespace Scrap {
     const isTurbo: boolean;
 }
 
-interface Stage<Variables = {}> {
+interface Stage<Variables = {}, Sound = string> {
     /**
-     * Graphical effects
+     * Graphical effects - each effect is a number between 0 and 100
      */
     readonly effects: {
         brightness: number,
@@ -33,22 +33,26 @@ interface Stage<Variables = {}> {
      * defined in the **Variables** interface
      */
     readonly variables: Variables;
+
     /**
      * The X position of the mouse
      */
     readonly mouseX: number;
+    
     /**
      * The Y position of the mouse
      */
     readonly mouseY: number;
+    
     /**
      * If the mouse button is pressed
      */
     readonly mouseDown: boolean;
+    
     /**
      * Namespace for the backdrops
      */
-    readonly backdrop: Costumes;
+    readonly backdrop: Costumes<Backdrop>;
 
     /**
      * This event gets invoked
@@ -95,25 +99,61 @@ interface Stage<Variables = {}> {
     /**
      * Function gets invoked when the mouse event occurs
      * @param event The type of the mouse event
-     * @param fn This event
+     * @param fn the event body
      */
     whenMouse(event: MouseEvent, fn: () => void): void;
 
+    // Because "MouseEvent" is not a valid type,
+    // we need to use the string type instead.
+    /**
+     * Function gets invoked when the mouse event occurs
+     * @param event The type of the mouse event
+     * @param fn the event body
+     */
+    whenMouse(event: string, fn: () => void): void;
+
+    /**
+     * When any of sprites, or the stage broadcasts 
+     * the message, the function gets invoked.
+     * @param message The message to listen to
+     * @param fn the event body
+     */
     whenReceiveMessage(message: string, fn: () => void): void;
+
+    /**
+     * After the specified seconds since the start of the project,
+     * the function gets invoked.
+     * @param seconds Number of seconds
+     * @param fn the event body
+     */
+    whenTimerElapsed(seconds: number, fn: () => void): void;
+
+    /**
+     * Broadcasts the message to all sprites and the stage
+     * @param message The message to broadcast
+     */
     broadcastMessage(message: string): void;
+
+    /**
+     * Broadcasts the message to all sprites and the stage
+     * and waits for all of them to finish their job.
+     * @param message The message to broadcast
+     */
     broadcastMessageWait(message: string): void;
 
     /**
      * Switches the backdrop to the specified backdrop.
      * @param value Name or index of the backdrop
      */
-    switchBackdropTo(value: number | string): void;
+    switchBackdropTo(value: number | Backdrop): void;
+
     /**
      * Switch to backdrop and wait for all listeners to finish executing.
      * Listeners are set by `whenBackdropChangesTo` method.
      * @param name Name of the backdrop
      */
-    switchBackdropToWait(name: string): void;
+    switchBackdropToWait(name: Backdrop): void;
+
     /**
      * Switch to the next backdrop
      */
@@ -123,86 +163,319 @@ interface Stage<Variables = {}> {
      * @param name The backdrop name to listen to
      * @param fn The event body
      */
-    whenBackdropChangesTo(name: string, fn: () => void): void;
-    playSound(name: string): void;
-    playSoundUntilDone(name: string): void;
+    whenBackdropChangesTo(name: Backdrop, fn: () => void): void;
+
+    /**
+     * Starts the sound
+     * @param name The sound name
+     */
+    playSound(name: Sound): void;
+
+    /**
+     * Plays the sound until it finishes
+     * @param name The sound name
+     */
+    playSoundUntilDone(name: Sound): void;
+
+    /**
+     * Stops all sounds
+     */
     stopSounds(): void;
-    whenTimerElapsed(seconds: number, fn: () => void): void;
+
+    /**
+     * Gets the current time in seconds
+     */
     getTimer(): number;
+
+    /**
+     * Resets the timer to 0
+     */
     resetTimer(): void;
 
+    /**
+     * Is the key pressed?
+     * @param key The key to check
+     */
     isKeyPressed(key: Key): boolean;
+
+    /**
+     * Is any key pressed?
+     * @param key The keyword "any"
+     */
     isKeyPressed(key: "any"): boolean;
 }
 
-interface Sprite<Variables = {}> extends Stage<Variables & typeof $.Stage.variables> {
+interface Sprite<Variables = {}, Sound = string, Costume = string> extends Stage<Variables & typeof $.Stage.variables, Sound> {
+    /**
+     * If the pen is down, sprite draws lines when it moves.
+     */
     isPenDown: boolean;
+
+    /**
+     * The width of the lines drawn by the sprite in pixels.
+     */
     penSize: number;
+
+    /**
+     * The color of the lines drawn by the sprite.
+     */
     penColor: Color;
 
+    /**
+     * The horizontal position of the sprite.
+     * 0 is the center of the stage.
+     */
     x: number;
+
+    /**
+     * The vertical position of the sprite.
+     * 0 is the center of the stage.
+     */
     y: number;
+
+    /**
+     * Can be dragged by the mouse?
+     */
     draggable: boolean;
+
+    /**
+     * The direction the sprite is facing in degrees.
+     */
     direction: number;
+
+    /**
+     * If the sprite is visible.
+     */
     visible: boolean;
+
+    /**
+     * The size of the sprite, where 100 is the original size.
+     */
     size: number;
 
-    readonly costume: Costumes;
+    /**
+     * Namespace for the costumes
+     */
+    readonly costume: Costumes<Costume>;
 
+    /**
+     * Deletes the sprite (or clone)
+     */
     delete(): void;
+
+    /**
+     * Clones the sprite
+     */
     clone(): this;
 
+    /**
+     * Clones the sprite and executes the function. {@link self} is bound 
+     * to the new sprite, meaning {@link delete} will delete the clone.
+     * @param fn The function to execute when the sprite is cloned
+     */
     whenCloned(fn: () => void): void;
+
     /**
      * Moves the sprite for the specified number of seconds so it arrives at specified location when time is up.
      * @param seconds time to glide
      * @param x the x coordinate to glide to
      * @param y the y coordinate to glide to
-     * @returns a promise that resolves when the glide is done
      */
     glide(seconds: number, x: number, y: number): void;
+
+    /**
+     * Moves the sprite in the direction it is facing by the specified number of steps.
+     * @param steps Number of steps to move in pixels
+     */
     move(steps: number): void;
+
+    /**
+     * Goes to the specified location without animation.
+     * @param x the x coordinate to go to (0 is the center of the stage)
+     * @param y the y coordinate to go to (0 is the center of the stage)
+     */
     goTo(x: number, y: number): void;
+
+    /**
+     * Goes to the same location as the specified sprite.
+     * @param sprite other sprite
+     */
     goTowards(sprite: Sprite): void;
+
+    /**
+     * Points the sprite in the specified direction.
+     * @param direction The direction in degrees
+     */
     pointInDirection(direction: number): void;
+
+    /**
+     * Points the sprite towards the specified sprite.
+     * @param sprite The sprite to point towards
+     */
     pointTowards(sprite: Sprite): void;
+
+    /**
+     * Points the sprite towards the specified location.
+     * @param x the x coordinate to point towards
+     * @param y the y coordinate to point towards
+     */
     pointTo(x: number, y: number): void;
+
+    /**
+     * Turns the sprite to the left by the specified number of degrees.
+     * @param degrees The number of degrees to turn
+     */
     turnLeft(degrees: number): void;
+
+    /**
+     * Turns the sprite to the right by the specified number of degrees.
+     * @param degrees The number of degrees to turn
+     */
     turnRight(degrees: number): void;
+
+    /**
+     * Sets the rotation style of the sprite. It is visible only when the sprite is rotated.
+     * @param style 0: don't rotate, 1: left-right, 2: all around
+     */
     setRotationStyle(style: 0 | 1 | 2 | "left-right" | "don't rotate" | "all around"): void;
+
+    /**
+     * If I am touching the edge, I bounce.
+     */
     ifOnEdgeBounce(): void;
+
+    /**
+     * Go one layer forward. (In front of other sprites)
+     */
     goForward(): void;
+
+    /**
+     * Go one layer backward. (Behind other sprites)
+     */
     goBackward(): void;
+
+    /**
+     * Go to the front layer. (In front of other sprites)
+     */
     goToFront(): void;
+
+    /**
+     * Go to the back layer. (Behind other sprites)
+     */
     goToBack(): void;
 
-    switchCostumeTo(value: string | number): void;
+    /**
+     * Switches the costume to the specified costume.
+     * @param value Name or index of the costume
+     */
+    switchCostumeTo(value: Costume | number): void;
+
+    /**
+     * Switch to the next costume
+     */
     nextCostume(): void;
 
     show(): void;
     hide(): void;
 
+    /**
+     * Shows the content in the sprite's speech bubble. The bubble looks like a cloud.
+     * @param contents The content to show. Might be string, number, boolean, or any other type.
+     */
     think(contents: any): void;
+
+    /**
+     * Shows the content in the sprite's speech bubble.
+     * @param contents The content to show. Might be string, number, boolean, or any other type.
+     */
     say(contents: any): void;
+
+    /**
+     * Shows the content in the sprite's speech bubble and waits for the specified number of seconds.
+     * @param contents The content to show. Might be string, number, boolean, or any other type.
+     * @param seconds The number of seconds to wait
+     */
     thinkWait(contents: any, seconds: number): void;
+
+    /**
+     * Shows the content in the sprite's speech bubble and waits for the specified number of seconds.
+     * @param contents The content to show. Might be string, number, boolean, or any other type.
+     * @param seconds The number of seconds to wait
+     */
     sayWait(contents: any, seconds: number): void;
+
+    /**
+     * Shows the content in the sprite's speech bubble and waits for the user to type the answer.
+     * @param contents The content to show. Might be string, number, boolean, or any other type.
+     * @returns The answer typed by the user
+     */
     ask(contents: any): string;
+
+    /**
+     * Clears lines drawn by all sprites (and stamps).
+     */
     penClear(): void;
+
+    /**
+     * Draws the current sprite as a stamp.
+     * Stamps are not affected by the pen size or color.
+     * Also, stamps are not sprites, so they cannot be interacted with.
+     */
     stamp(): void;
+
+    /**
+     * Puts the pen down, so the sprite draws lines when it moves.
+     */
     penDown(): void;
+
+    /**
+     * Lifts the pen up, so the sprite stops drawing lines when it moves.
+     */
     penUp(): void;
 
+    /**
+     * Counts the distance to the specified location.
+     * @param x the x coordinate to measure the distance to
+     * @param y the y coordinate to measure the distance to
+     */
     distanceTo(x: number, y: number): number;
+
+    /**
+     * Am I touching the mouse pointer?
+     */
     isTouchingMouse(): boolean;
+
+    /**
+     * Am I touching the edge?
+     */
     isTouchingEdge(): boolean;
+
+    /**
+     * Am I touching the specified sprite?
+     * @param sprite The sprite to check if touching
+     */
     isTouching(sprite: Sprite): boolean;
 
+    /**
+     * Am I touching the specified color?
+     */
     isTouchingBackdropColor(): boolean;
 }
 
-interface Costumes {
-    readonly all: string[];
-    readonly name: string;
+interface Costumes<K> {
+    /**
+     * Returns all the asset names
+     */
+    readonly all: K[];
+
+    /**
+     * Returns the name of the current asset
+     */
+    readonly name: K;
+
+    /**
+     * Returns the index of the current asset
+     */
     readonly index: number;
 }
 
@@ -376,38 +649,151 @@ declare var Array: {
 };
 
 declare class Date {
-    constructor(date?: string);
+    /**
+     * Creates a new date object,
+     * representing the specified date and time
+     * @param date date string
+     */
+    constructor(date: string);
 
+    /**
+     * Creates a new date object,
+     * representing the current date and time
+     */
+    constructor();
+
+    /**
+     * Returns the year of the specified date according to local time.
+     */
     getFullYear(): number;
+
+    /**
+     * Returns the month of the specified date according to local time.
+     */
     getMonth(): number;
+
+    /**
+     * Returns the day of the month for the specified date according to local time.
+     */
     getDate(): number;
+
+    /**
+     * Returns the day of the week for the specified date according to local time.
+     */
     getDay(): number;
+
+    /**
+     * Returns the hour for the specified date according to local time.
+     */
     getHours(): number;
+
+    /**
+     * Returns the minutes in the specified date according to local time.
+     */
     getMinutes(): number;
+
+    /**
+     * Returns the seconds in the specified date according to local time.
+     */
     getSeconds(): number;
 }
 
 declare namespace Math {
+    /**
+     * Returns a random number between 0 (inclusive) and 1 (exclusive)
+     */
     function random(): number;
+
+    /**
+     * Returns the smallest integer greater than or equal to a number
+     */
     function floor(value: number): number;
+
+    /**
+     * Returns the largest integer less than or equal to a number
+     */
     function ceil(value: number): number;
+
+    /**
+     * Returns the value of a number rounded to the nearest integer
+     */
     function round(value: number): number;
+
+    /**
+     * Returns the absolute value of a number
+     * |x| = x if x > 0
+     * |x| = -x if x < 0
+     */
     function abs(value: number): number;
+
+    /**
+     * Returns the square root of a number
+     */
     function sqrt(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function sin(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function cos(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */	
     function tan(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function asin(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function acos(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function atan(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function log(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function exp(value: number): number;
+
+    /**
+     * Returns the value of x to the power of y
+     */
     function log10(value: number): number;
 }
 
 declare namespace window {
+    /**
+     * Displays the native alert dialog with the specified message.
+     * @param message the message to display
+     */
     function alert(message: string): void;
+
+    /**
+     * Displays the native confirm dialog with the specified message.
+     * @param message the message to display
+     */
     function confirm(message: string): boolean;
+
+    /**
+     * 
+     * @param message the message to display
+     */
     function prompt(message: string): string;
 }
 

@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2024-4-24
+
+### Fixed
+
+- Better Typings
+    - documentation to all blocks
+    - runtime backdrop / costume / sound
+- Apple touch icon
+
 ## [4.3.11] - 2024-4-24
 
-## Changed
+### Changed
 
 - Project name input is placed correctly
 
@@ -629,7 +638,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.3.10...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.4.0
+[4.3.11]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.11
 [4.3.10]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.10
 [4.3.9]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.9
 [4.3.8]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.8

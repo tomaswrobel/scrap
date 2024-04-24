@@ -71,24 +71,48 @@ class CodeEditor implements TabComponent {
 			return JSON.stringify(app.current.name);
 		} else if (key === "SPRITES") {
 			return app.entities.reduce(reducer, "\n");
+		} else if (key === "BACKDROPS") {
+			return getCostumes(app.entities[0]);
 		} else {
 			throw new TypeError("Template not found.");
 		}
 	}
 }
 
+function namer(file: File) {
+	return JSON.stringify(path.parse(file.name).name);
+}
+
 function getVariables(entity: Entity) {
 	if (entity === app.current) {
-		return "<Variables>";
+		return "Variables";
 	}
 	if (!entity.variables.length) {
-		return "";
+		return "{}";
 	}
-	return `<{\n${entity.variables.map(mapper).join("")}}>`;
+	return `{\n${entity.variables.map(mapper).join("")}}`;
+}
+
+function getSounds(sprite: Entity) {
+	if (!sprite.sounds.length) {
+		return "never";
+	}
+
+	return sprite.sounds.map(namer).join(" | ");
+}
+
+function getCostumes(sprite: Entity) {
+	return sprite.costumes.map(namer).join(" | ");
 }
 
 function reducer(prev: string, entity: Entity) {
-	return `${prev}\t${JSON.stringify(entity.name)}: ${entity.isStage() ? "Stage" : "Sprite"}${getVariables(entity)};\n`;
+	if (entity.isStage()) {
+		var constructor = `Stage<${getVariables(entity)}, ${getSounds(entity)}>`;
+	} else {
+		var constructor = `Sprite<${getVariables(entity)}, ${getSounds(entity)}, ${getCostumes(entity)}>`;
+	}
+
+	return `${prev}\t${JSON.stringify(entity.name)}: ${constructor};\n`;
 }
 
 function mapper([name, type]: app.Variable) {

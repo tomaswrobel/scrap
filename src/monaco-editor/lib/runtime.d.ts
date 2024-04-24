@@ -6,3 +6,5 @@ declare const $: {
 } & {
     Stage: Stage<{}>;
 };
+
+type Backdrop = never;

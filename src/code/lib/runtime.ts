@@ -19,3 +19,4 @@ interface Variables {}
  * ```
  */
 declare const $: {__SPRITES__;};
+type Backdrop = __BACKDROPS__;
