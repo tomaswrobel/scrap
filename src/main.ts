@@ -20,6 +20,9 @@ window.MonacoEnvironment = {
 	),
 };
 
+window.app = new App();
+window.app.start(version);
+
 // Enable opening files via PWA
 window.launchQueue?.setConsumer(async launchParams => {
 	function isFile(file: FileSystemHandle): file is FileSystemFileHandle {
@@ -30,9 +33,9 @@ window.launchQueue?.setConsumer(async launchParams => {
 		const fileHandle = launchParams.files[0];
 
 		if (isFile(fileHandle)) {
-			if (fileHandle.name.endsWith(".sb3")) {
+			if (fileHandle.name.endsWith(".scrap")) {
 				app.open(version, await fileHandle.getFile());
-			} else if (fileHandle.name.endsWith(".scrap")) {
+			} else if (fileHandle.name.endsWith(".sb3")) {
 				app.import(await fileHandle.getFile());
 			} else {
 				window.alert("Unsupported file type");
@@ -40,6 +43,3 @@ window.launchQueue?.setConsumer(async launchParams => {
 		}
 	}
 });
-
-window.app = new App();
-window.app.start(version);

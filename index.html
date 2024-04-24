@@ -18,36 +18,6 @@
 	<div id="root">
 		<iframe width="480" height="360" name="output" src="src/components/output.html" title="Output"></iframe>
 		<input type="file" style="display: none;" title="Hidden file input">
-		<!-- Nav -->
-		<ul>
-			<li><a href="/"></a></li>
-
-			<li class="dropdown">
-				<a href="javascript:this.app?.dropdown(0)">File</a>
-				<div class="dropdown-content">
-					<a href="javascript:this.app?.dropdown(0);this.app?.pick('.scrap');">Open</a>
-					<a href="javascript:this.app?.dropdown(0);this.app?.saveAs();">Save</a>
-					<a href="javascript:this.app?.dropdown(0);this.app?.export();">Export HTML</a>
-					<a href="javascript:this.app?.dropdown(0);this.app?.pick('.sb3');">Import SB3</a>
-				</div>
-			</li>
-			<li class="dropdown">
-				<a href="javascript:this.app?.dropdown(1)">Mode</a>
-				<div class="dropdown-content">
-					<a href="javascript:this.app?.mode('paced')">
-						<span class="checkmark" data-for="paced">&check;&nbsp;</span>
-						Paced
-					</a>
-					<a href="javascript:this.app?.mode('turbo')">
-						<span class="checkmark" data-for="turbo">&check;&nbsp;</span>
-						Turbo
-					</a>
-				</div>
-			</li>
-
-			<li><a href="javascript:void(document.getElementById('about').showModal())">About</a></li>
-			<li><input type="text" placeholder="Project name" value="Project"></li>
-		</ul>
 
 		<!-- Tabs -->
 		<div id="tabs"></div>
@@ -68,6 +38,36 @@
 			<span class="name">Stage</span>
 		</div>
 	</div>
+	<!-- Nav -->
+	<ul role="navigation">
+		<li><a href="/" title="Scrap"></a></li>
+		<li class="dropdown">
+			<a href="javascript:this.app?.dropdown(0)">File</a>
+			<div class="dropdown-content">
+				<a href="javascript:this.app?.dropdown(0);this.app?.pick('.scrap');">Open</a>
+				<a href="javascript:this.app?.dropdown(0);this.app?.saveAs();">Save</a>
+				<a href="javascript:this.app?.dropdown(0);this.app?.export();">Export HTML</a>
+				<a href="javascript:this.app?.dropdown(0);this.app?.pick('.sb3');">Import SB3</a>
+			</div>
+		</li>
+		<li class="dropdown">
+			<a href="javascript:this.app?.dropdown(1)">Mode</a>
+			<div class="dropdown-content">
+				<a href="javascript:this.app?.mode('paced')">
+					<span class="checkmark" data-for="paced">&check;&nbsp;</span>
+					Paced
+				</a>
+				<a href="javascript:this.app?.mode('turbo')">
+					<span class="checkmark" data-for="turbo">&check;&nbsp;</span>
+					Turbo
+				</a>
+			</div>
+		</li>
+
+		<li><a href="javascript:void(document.getElementById('about').showModal())">About</a></li>
+		<li><input type="text" placeholder="Project name" value="Project"></li>
+	</ul>
+	<!-- About -->
 	<dialog class="parley" id="about" style="width: 500px;">
 		<h2>
 			About Scrap

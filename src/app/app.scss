@@ -17,15 +17,21 @@ iframe {
 	margin-bottom: $gap;
 }
 
-#root > ul {
-	grid-area: nav;
+#root + ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
-	font-size: 15px;
+	z-index: 10000;
+	font-size: calc(env(titlebar-area-height, 45px) / 3);
 	background-color: $primary;
 	margin-right: $gap * -1;
+	-webkit-app-region: drag;
+
+	position: fixed;
+	left: env(titlebar-area-x, 0);
+	top: env(titlebar-area-y, 0);
+	height: env(titlebar-area-height, 45px);
+	width: env(titlebar-area-width, 100%);
 
 	li.dropdown {
 		display: inline-block;
@@ -42,13 +48,13 @@ iframe {
 			display: none;
 			position: absolute;
 			background-color: $primary;
-			min-width: 160px;
+			min-width: 120px;
 			box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 			z-index: 1;
 		}
 
 		> .dropdown-content > a {
-			padding: 12px 16px;
+			padding: 0 1em;
 			text-decoration: none;
 			display: block;
 			text-align: left;
@@ -68,57 +74,65 @@ iframe {
 
 		.dropdown-content {
 			display: block;
-			z-index: 20000;
 		}
 	}
-}
 
-#root > ul > li {
-	float: left;
+	> li {
+		float: left;
+		height: 100%;
+		line-height: env(titlebar-area-height, 45px);
+		-webkit-app-region: none;
 
-	> a {
-		display: inline-block;
-		color: white;
-		text-align: center;
-		padding: 14px 16px;
-		text-decoration: none;
+		> a {
+			display: inline-block;
+			color: white;
+			text-align: center;
+			text-decoration: none;
+			padding: 0 1em;
+			height: 100%;
 
-		&:not(:empty):hover {
-			background-color: rgba(0, 0, 0, 0.1);
-		}
+			&:not(:empty):hover {
+				background-color: rgba(0, 0, 0, 0.1);
+			}
 
-		&:empty {
-			background-image: url("./scrap.svg");
-			background-size: 80%;
-			background-repeat: no-repeat;
-			background-position: center;
+			&:empty {
+				background-image: url("./scrap.svg");
+				background-size: 80%;
+				background-repeat: no-repeat;
+				background-position: center;
 
-			&::after {
-				content: "SCRAP";
-				opacity: 0;
+				&::after {
+					content: "SCRAP";
+					opacity: 0;
+				}
 			}
 		}
-	}
 
-	&:last-child {
-		margin-left: 2vw;
-		padding: 6px;
-	}
+		&:last-child {
+			@media (min-width: 800px) {
+				position: absolute;
+				left: 50vw;
+				top: 50%;
+				transform: translate(-50%, -50%);
+			}
+		}
 
-	> input {
-		background: transparent;
-		color: white;
-		border-color: white;
-		padding: 7px 9px;
-		border-radius: 3px;
-		border: 1px solid;
-		outline-color: #FFFA;
-	}
+		> input {
+			background: transparent;
+			border: 1px solid white;
+			color: white;
+			border-radius: 3px;
+			outline-color: #fffa;
+			padding: 4px;
+			text-align: center;
+			font-size: 11px;
+		}
 
-	> input:focus,
-	> input:active,
-	> input:hover {
-		background: rgba($color: $background, $alpha: 0.3);
+		> input:focus,
+		> input:active,
+		> input:hover {
+			background: rgba($color: $background, $alpha: 0.3);
+		}
 	}
 }
 
@@ -193,14 +207,14 @@ body {
 	width: 100vw;
 	display: grid;
 	grid-template-areas:
-		"nav nav nav"
 		"tabs buttons buttons"
 		"tab-content output output"
 		"tab-content sprites stage";
 	grid-template-columns: 1fr 380px 100px;
-	grid-template-rows: auto 40px auto 1fr;
+	grid-template-rows: 40px auto 1fr;
 	background: $background;
 	padding-right: $gap;
+	padding-top: env(titlebar-area-height, 45px);
 }
 
 .fab {

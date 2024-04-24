@@ -1,4 +1,5 @@
 import * as Blockly from "blockly";
+import path from "path";
 
 export const MIXIN = {
     init(this: Blockly.Block) {
@@ -8,14 +9,15 @@ export const MIXIN = {
         this.appendDummyInput().appendField<string>(
             new Blockly.FieldDropdown(
                 () => {
-                    if (!app.current.sounds) {
+                    if (!app.current.sounds.length) {
                         return [["", ""]];
                     }
                     return app.current.sounds.map<[string, string]>(e => {
-                        if (e.name.length > 12) {
-                            return [e.name.slice(0, 12) + "...", e.name];
+                        const {name} = path.parse(e.name);
+                        if (name.length > 12) {
+                            return [name.slice(0, 12) + "...", name];
                         }
-                        return [e.name, e.name];
+                        return [name, name];
                     });
                 }
             ),

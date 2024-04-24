@@ -134,6 +134,7 @@ export class App {
 			}
 		});
 
+		this.saveAs = App.save.bind(this, version);
 		const scrappy = new Sprite("Scrappy");
 		scrappy.variables.push(["My variable", "number"]);
 		this.addSprite(scrappy);
@@ -254,7 +255,6 @@ export class App {
 			}
 		}
 
-		this.current = this.entities[0];
 		this.selectStage();
 		this.hideLoader();
 	}
@@ -336,14 +336,17 @@ ${scripts.trimEnd()}
 		saveAs(await zip.generateAsync({type: "blob"}), "project.zip");
 	}
 
-	async saveAs() {
+	private static async save(this: App, version: string) {
 		const zip = new JSZip();
 		const entities = this.entities.map(e => e.save(zip));
-		zip.file("project.json", JSON.stringify({
-			entities,
-			version,
-			name: this.inputs[1].value
-		}));
+		zip.file(
+			"project.json", 
+			JSON.stringify({
+				entities,
+				version,
+				name: this.inputs[1].value
+			})
+		);
 
 		saveAs(await zip.generateAsync({type: "blob"}), this.inputs[1].value + ".scrap");
 	}
@@ -396,4 +399,6 @@ ${scripts.trimEnd()}
 		this.inputs[0].accept = accept;
 		this.inputs[0].showPicker();
 	}
+
+	saveAs?: () => void;
 }

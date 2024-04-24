@@ -3,6 +3,12 @@
     "short_name": "Scrap",
     "icons": [
         {
+            "src": "icon-maskable.png",
+            "sizes": "256x256",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
             "src": "android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
@@ -16,6 +22,9 @@
     "theme_color": "#2fbf71",
     "background_color": "#c8f2db",
     "display": "standalone",
+    "display_override": [
+        "window-controls-overlay"
+    ],
     "start_url": "/",
     "file_handlers": [
         {
