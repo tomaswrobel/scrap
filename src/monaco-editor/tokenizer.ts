@@ -76,7 +76,9 @@ languages.registerTokensProviderFactory("typescript", {
             "break",
             "continue",
             "try",
-            "catch"
+            "catch",
+            "finally",
+            "throw"
         ],
         controls: [
             "wait",
@@ -214,6 +216,46 @@ languages.registerTokensProviderFactory("typescript", {
             "^=",
             "@"
         ],
+        // TS/JS keywords invalid in Scrap
+        banned: [
+            "import",
+            "export",
+            "default",
+            "class",
+            "extends",
+            "super",
+            "this",
+            "static",
+            "private",
+            "protected",
+            "public",
+            "readonly",
+            "abstract",
+            "implements",
+            "as",
+            "from",
+            "namespace",
+            "module",
+            "type",
+            "declare",
+            "readonly",
+            "keyof",
+            "infer",
+            "unique",
+            "satisfies",
+            "is",
+            "null",
+            "undefined",
+            "never",
+            "switch",
+            "case",
+            "typeof",
+            "await",
+            "async",
+            "with",
+            "yield",
+            "enum"
+        ],
         // we include these common regular expressions
         symbols: /[=><!~?:&|+\-*\/\^%]+/,
         escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
@@ -289,6 +331,7 @@ languages.registerTokensProviderFactory("typescript", {
                             "@functions": "functions",
                             "Variables": "interface",
                             "@sprites": "sprites",
+                            "@banned": "invalid",
                             "@default": "variables",
                         }
                     }
@@ -585,6 +628,7 @@ editor.defineTheme("scrap", {
         {token: "constructor", foreground: "FF6680", fontStyle: "bold"},
         {token: "Color", foreground: "59C059", fontStyle: "bold"},
         {token: "costume", foreground: "9966FF", fontStyle: "bold"},
+        {token: "invalid", background: "AA0000", foreground: "FFFFFF"},
     ],
     colors: {
         "editor.background": "#FFFFFF",

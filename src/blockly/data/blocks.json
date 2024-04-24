@@ -1,11 +1,5 @@
 [
 	{
-		"type": "declarations",
-		"message0": "declarations",
-		"nextStatement": "any",
-		"style": "Variables"
-	},
-	{
 		"type": "set",
 		"inputsInline": true,
 		"message0": "set %1 to %2",

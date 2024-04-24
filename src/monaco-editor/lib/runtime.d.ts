@@ -7,4 +7,4 @@ declare const $: {
     Stage: Stage<{}>;
 };
 
-type Backdrop = never;
+declare type Backdrop = never;

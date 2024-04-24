@@ -35,6 +35,18 @@ interface Stage<Variables = {}, Sound = string> {
     readonly variables: Variables;
 
     /**
+     * Hides the variable from the stage
+     * @param name The name of the variable
+     */
+    hideVariable(name: keyof Variables): void;
+
+    /**
+     * Shows the variable on the stage
+     * @param name The name of the variable
+     */
+    showVariable(name: keyof Variables): void;
+
+    /**
      * The X position of the mouse
      */
     readonly mouseX: number;
@@ -91,10 +103,20 @@ interface Stage<Variables = {}, Sound = string> {
     /**
      * This event gets invoked when the key gets pressed
      * 
-     * @param key the name of the Key
+     * @param key the name of the key
      * @param fn the event body
      */
     whenKeyPressed(key: Key, fn: () => void): void;
+
+    // Because "Key" is not a valid type,
+    // we need to use the string type instead.
+    /**
+     * This event gets invoked when the key gets pressed
+     * 
+     * @param key the name of the key
+     * @param fn the event body
+     */
+    whenKeyPressed(key: string, fn: () => void): void;
 
     /**
      * Function gets invoked when the mouse event occurs
@@ -143,9 +165,23 @@ interface Stage<Variables = {}, Sound = string> {
 
     /**
      * Switches the backdrop to the specified backdrop.
-     * @param value Name or index of the backdrop
+     * @param value Index of the backdrop (0-based)
      */
-    switchBackdropTo(value: number | Backdrop): void;
+    switchBackdropTo(value: number): void;
+
+    /**
+     * Switches the backdrop to the specified backdrop.
+     * @param value Name of the backdrop
+     */
+    switchBackdropTo(value: Backdrop): void;
+
+    // Because "Backdrop" is not a valid type,
+    // we need to use the string type instead.
+    /**
+     * Switches the backdrop to the specified backdrop.
+     * @param value Name of the backdrop
+     */
+    switchBackdropTo(value: string): void;
 
     /**
      * Switch to backdrop and wait for all listeners to finish executing.
@@ -153,6 +189,15 @@ interface Stage<Variables = {}, Sound = string> {
      * @param name Name of the backdrop
      */
     switchBackdropToWait(name: Backdrop): void;
+
+    // Because "Backdrop" is not a valid type,
+    // we need to use the string type instead.
+    /**
+     * Switch to backdrop and wait for all listeners to finish executing.
+     * Listeners are set by `whenBackdropChangesTo` method.
+     * @param name Name of the backdrop
+     */
+    switchBackdropToWait(name: string): void;
 
     /**
      * Switch to the next backdrop
@@ -164,6 +209,14 @@ interface Stage<Variables = {}, Sound = string> {
      * @param fn The event body
      */
     whenBackdropChangesTo(name: Backdrop, fn: () => void): void;
+
+    // Because "Backdrop" is not a valid type,
+    // we need to use the string type instead.
+    /**
+     * @param name The backdrop name to listen to
+     * @param fn The event body
+     */
+    whenBackdropChangesTo(name: string, fn: () => void): void;
 
     /**
      * Starts the sound
@@ -203,6 +256,14 @@ interface Stage<Variables = {}, Sound = string> {
      * @param key The keyword "any"
      */
     isKeyPressed(key: "any"): boolean;
+
+    // Because "Key" is not a valid type,
+    // we need to use the string type instead.
+    /**
+     * Is the key pressed?
+     * @param key The key to check
+     */
+    isKeyPressed(key: string): boolean;
 }
 
 interface Sprite<Variables = {}, Sound = string, Costume = string> extends Stage<Variables & typeof $.Stage.variables, Sound> {
@@ -365,10 +426,24 @@ interface Sprite<Variables = {}, Sound = string, Costume = string> extends Stage
     goToBack(): void;
 
     /**
-     * Switches the costume to the specified costume.
-     * @param value Name or index of the costume
+     * Switches the costume to the specified index.
+     * @param value Index of the costume (0-based)
      */
-    switchCostumeTo(value: Costume | number): void;
+    switchCostumeTo(value: number): void;
+
+    /**
+     * Switches the costume to the specified costume.
+     * @param value Name of the costume
+     */
+    switchCostumeTo(value: Costume): void;
+
+    // Because "Costume" is not a valid type,
+    // we need to use the string type instead.
+    /**
+     * Switches the costume to the specified costume.
+     * @param value Name of the costume
+     */
+    switchCostumeTo(value: string): void;
 
     /**
      * Switch to the next costume

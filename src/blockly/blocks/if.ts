@@ -185,11 +185,11 @@ export const MIXIN = {
 			this.appendValueInput("IF" + i)
 				.setCheck("boolean")
 				.appendField(Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"]);
-			this.appendStatementInput("DO" + i);
+			this.appendStatementInput("DO" + i).setCheck("any");
 		}
 		if (this.elseCount_) {
 			this.appendDummyInput("ELSE0").appendField(Blockly.Msg["CONTROLS_IF_MSG_ELSE"]);
-			this.appendStatementInput("ELSE");
+			this.appendStatementInput("ELSE").setCheck("any");
 		}
 	},
 	/**

@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - documentation to all blocks
     - runtime backdrop / costume / sound
 - Apple touch icon
+- If / else, Try / catch
+- Responsive project name input
 
 ## [4.3.11] - 2024-4-24
 

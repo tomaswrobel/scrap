@@ -37,12 +37,12 @@ export const MIXIN = {
                 input.appendField(new FieldParam(this.catch));
             }
 
-            this.appendStatementInput("CATCH");
+            this.appendStatementInput("CATCH").setCheck("any");
         }
 
         if (this.finally) {
             this.appendDummyInput("FINALLY-LABEL").appendField("finally");
-            this.appendStatementInput("FINALLY");
+            this.appendStatementInput("FINALLY").setCheck("any");
         }
 
         if (!this.finally && !this.catch) {
