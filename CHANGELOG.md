@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Apple touch icon
 - If / else, Try / catch
 - Responsive project name input
+- Better tokenizer
 
 ## [4.3.11] - 2024-4-24
 

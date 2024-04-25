@@ -138,12 +138,10 @@ languages.registerTokensProviderFactory("typescript", {
             "string",
             "boolean",
             "any",
-            "Sprite",
             "true",
             "false",
             "Infinity",
-            "NaN",
-            "Color"
+            "NaN"
         ],
         iterables: [
             "length",
@@ -156,20 +154,13 @@ languages.registerTokensProviderFactory("typescript", {
         functions: [
             "function",
             "call",
-            "Date",
-            "Array",
             "window",
             "interface",
-            "Stage",
             "const",
             "var",
             "let",
-            "Scrap",
-            "new"
-        ],
-        sprites: [
-            "self",
-            "$"
+            "new",
+            "namespace"
         ],
         operators: [
             "<=",
@@ -221,8 +212,6 @@ languages.registerTokensProviderFactory("typescript", {
             "import",
             "export",
             "default",
-            "class",
-            "extends",
             "super",
             "this",
             "static",
@@ -234,8 +223,6 @@ languages.registerTokensProviderFactory("typescript", {
             "implements",
             "as",
             "from",
-            "namespace",
-            "module",
             "type",
             "declare",
             "readonly",
@@ -255,6 +242,13 @@ languages.registerTokensProviderFactory("typescript", {
             "with",
             "yield",
             "enum"
+        ],
+        sprites: [
+            "$",
+            "self",
+            "Date",
+            "Sprite",
+            "Stage"
         ],
         // we include these common regular expressions
         symbols: /[=><!~?:&|+\-*\/\^%]+/,
@@ -278,25 +272,12 @@ languages.registerTokensProviderFactory("typescript", {
                     ]
                 ],
                 [
-                    /(\.[ \n\t\r]*)(costume|backdrop)(\.[ \n\t\r]*)(all|index|name)/,
+                    /(\.[ \n\t\r]*)(costume|backdrop)([ \n\t\r]*\.[ \n\t\r]*)(all|index|name)/,
                     [
                         "delimiter",
                         "costume",
                         "delimiter",
                         "looks"
-                    ]
-                ],
-                [
-                    /(new)([ \t\r\n]+)([A-Z]\w*)/,
-                    [
-                        "functions",
-                        "white",
-                        {
-                            cases: {
-                                "@functions": "constructor",
-                                "@default": "interface"
-                            }
-                        }
                     ]
                 ],
                 // identifiers and keywords
@@ -330,8 +311,11 @@ languages.registerTokensProviderFactory("typescript", {
                             "@types": "operators",
                             "@functions": "functions",
                             "Variables": "interface",
+                            "Scrap": "constructor",
                             "@sprites": "sprites",
-                            "@banned": "invalid",
+                            "Array": "array",
+                            "Math": "math",
+                            "@banned": "error",
                             "@default": "variables",
                         }
                     }
@@ -621,14 +605,16 @@ editor.defineTheme("scrap", {
         {token: "variables", foreground: "FF8C1A"},
         {token: "functions", foreground: "FF6680"},
         {token: "operators", foreground: "59C059"},
+        {token: "math", foreground: "59C059", fontStyle: "bold"},
         {token: 'comment', foreground: '008000'},
         {token: 'string', foreground: 'A31515'},
         {token: 'number', foreground: '098658'},
+        {token: "array", foreground: "FF661A", fontStyle: "bold"},
         {token: "interface", foreground: "FF8C1A", fontStyle: "bold"},
         {token: "constructor", foreground: "FF6680", fontStyle: "bold"},
         {token: "Color", foreground: "59C059", fontStyle: "bold"},
         {token: "costume", foreground: "9966FF", fontStyle: "bold"},
-        {token: "invalid", background: "AA0000", foreground: "FFFFFF"},
+        {token: "error", fontStyle: "strikethrough", foreground: "AA0000"}
     ],
     colors: {
         "editor.background": "#FFFFFF",
