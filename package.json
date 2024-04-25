@@ -46,7 +46,7 @@
 		"monaco-editor": "0.47.0",
 		"parley.js": "2.0.0",
 		"process": "0.11.10",
-		"scrap-engine": "2.3.0",
+		"scrap-engine": "2.3.1",
 		"typescript": "5.4.5",
 		"wavesurfer.js": "7.7.10"
 	},

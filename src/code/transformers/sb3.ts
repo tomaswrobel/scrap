@@ -37,7 +37,7 @@ class SB3 {
         this.transformers.motion_goto = async data => {
             const block = app.current.workspace.newBlock("goTowards");
             const to = await this.input(data.inputs.TO);
-            block.getInput("SPRITE")!.connection!.connect(to!.outputConnection!);
+            block.getInput("SPRITE")?.connection?.connect(to!.outputConnection!);
             return block;
         };
         this.transformers.motion_changexby = this.setter("change", "x", "DX");
@@ -49,7 +49,7 @@ class SB3 {
         });
         this.transformers.motion_setrotationstyle = data => {
             const block = app.current.workspace.newBlock("setRotationStyle");
-            block.getInput("STYLE")!.connection!.setShadowState({
+            block.getInput("STYLE")?.connection!.setShadowState({
                 type: "rotationStyle",
                 fields: {
                     STYLE: data.fields.STYLE[0]
@@ -88,13 +88,13 @@ class SB3 {
 
             const value = await this.input(data.inputs.VALUE);
             const block = app.current.workspace.newBlock(data.opcode === "looks_seteffectto" ? "set" : "change");
-            block.getInput("VAR")!.connection!.setShadowState({
+            block.getInput("VAR")?.connection!.setShadowState({
                 type: "effect",
                 fields: {
                     EFFECT: data.fields.EFFECT[0]
                 }
             });
-            block.getInput("VALUE")!.connection!.connect(value!.outputConnection!);
+            block.getInput("VALUE")?.connection?.connect(value!.outputConnection!);
 
             return block;
         };
@@ -125,12 +125,12 @@ class SB3 {
                 const subtract = app.current.workspace.newBlock("arithmetics");
                 subtract.setFieldValue("-", "OP");
 
-                subtract.getInput("A")!.connection!.connect(input!.outputConnection!);
-                subtract.getInput("B")!.connection!.connect(one.outputConnection!);
+                subtract.getInput("A")?.connection?.connect(input!.outputConnection!);
+                subtract.getInput("B")?.connection?.connect(one.outputConnection!);
 
-                block.getInput("COSTUME")!.connection!.connect(subtract.outputConnection!);
+                block.getInput("COSTUME")?.connection?.connect(subtract.outputConnection!);
             } else {
-                block.getInput("COSTUME")!.connection!.connect(input!.outputConnection!);
+                block.getInput("COSTUME")?.connection?.connect(input!.outputConnection!);
             }
 
             return block;
@@ -149,12 +149,12 @@ class SB3 {
                 const subtract = app.current.workspace.newBlock("arithmetics");
                 subtract.setFieldValue("-", "OP");
 
-                subtract.getInput("A")!.connection!.connect(input!.outputConnection!);
-                subtract.getInput("B")!.connection!.connect(one.outputConnection!);
+                subtract.getInput("A")?.connection?.connect(input!.outputConnection!);
+                subtract.getInput("B")?.connection?.connect(one.outputConnection!);
 
-                block.getInput("COSTUME")!.connection!.connect(subtract.outputConnection!);
+                block.getInput("COSTUME")?.connection?.connect(subtract.outputConnection!);
             } else {
-                block.getInput("COSTUME")!.connection!.connect(input!.outputConnection!);
+                block.getInput("COSTUME")?.connection?.connect(input!.outputConnection!);
             }
 
             return block;
@@ -228,7 +228,7 @@ class SB3 {
             if (data.fields.WHENGREATERTHANMENU[0] === "TIMER") {
                 const block = app.current.workspace.newBlock("whenTimerElapsed");
                 const value = await this.input(data.inputs.VALUE);
-                block.getInput("TIMER")!.connection!.connect(value!.outputConnection!);
+                block.getInput("TIMER")?.connection?.connect(value!.outputConnection!);
                 return block;
             } else {
                 return this.unknown("event_whengreaterthan [volume]", "command");
@@ -236,13 +236,13 @@ class SB3 {
         };
         this.transformers.event_whenthisspriteclicked = () => {
             const block = app.current.workspace.newBlock("whenMouse");
-            block.getInput("EVENT")!.connection!.setShadowState({type: "event"});
+            block.getInput("EVENT")?.connection!.setShadowState({type: "event"});
             return block;
         };
         this.transformers.event_whenstageclicked = this.transformers.event_whenthisspriteclicked;
         this.transformers.event_whenbroadcastreceived = data => {
             const block = app.current.workspace.newBlock("whenReceiveMessage");
-            block.getInput("MESSAGE")!.connection!.setShadowState({
+            block.getInput("MESSAGE")?.connection!.setShadowState({
                 type: "iterables_string",
                 fields: {
                     TEXT: data.fields.BROADCAST_OPTION[0]
@@ -264,7 +264,7 @@ class SB3 {
         });
         this.transformers.event_whenbackdropswitchesto = data => {
             const block = app.current.workspace.newBlock("whenBackdropChangesTo");
-            block.getInput("BACKDROP")!.connection!.setShadowState({
+            block.getInput("BACKDROP")?.connection!.setShadowState({
                 type: "backdrop",
                 fields: {
                     BACKDROP: data.fields.BACKDROP[0]
@@ -297,7 +297,7 @@ class SB3 {
             }
 
             const block = app.current.workspace.newBlock("whenKeyPressed");
-            block.getInput("KEY")!.connection!.connect(key.outputConnection!);
+            block.getInput("KEY")?.connection?.connect(key.outputConnection!);
             return block;
         };
 
@@ -314,14 +314,14 @@ class SB3 {
 
             const condition = await this.input(data.inputs.CONDITION);
             if (condition) {
-                not.getInput("BOOL")!.connection!.connect(condition.outputConnection!);
+                not.getInput("BOOL")?.connection?.connect(condition.outputConnection!);
             }
 
-            block.getInput("CONDITION")!.connection!.connect(not.outputConnection!);
+            block.getInput("CONDITION")?.connection?.connect(not.outputConnection!);
 
             if ("SUBSTACK" in data.inputs) {
                 const inner = await this.input(data.inputs.SUBSTACK, true);
-                block.getInput("STACK")!.connection!.connect(inner!.previousConnection!);
+                block.getInput("STACK")?.connection?.connect(inner!.previousConnection!);
             }
 
             return block;
@@ -341,17 +341,17 @@ class SB3 {
         this.transformers.control_repeat = async data => {
             const block = app.current.workspace.newBlock("for");
             const times = await this.input(data.inputs.TIMES);
-            
-            block.getInput("FROM")!.connection!.setShadowState({
-                type: "number", 
+
+            block.getInput("FROM")?.connection!.setShadowState({
+                type: "math_number",
                 fields: {NUM: "1"}
             });
 
-            block.getInput("TO")!.connection!.connect(times!.outputConnection!);
+            block.getInput("TO")?.connection?.connect(times!.outputConnection!);
 
             if ("SUBSTACK" in data.inputs) {
                 const inner = await this.input(data.inputs.SUBSTACK, true);
-                block.getInput("STACK")!.connection!.connect(inner!.previousConnection!);
+                block.getInput("STACK")?.connection?.connect(inner!.previousConnection!);
             }
 
             return block;
@@ -362,7 +362,7 @@ class SB3 {
         this.transformers.control_create_clone_of = data => {
             const field = this.target.blocks[data.inputs.CLONE_OPTION[1] as string].fields.CLONE_OPTION[0];
             const block = app.current.workspace.newBlock("clone");
-            block.getInput("SPRITE")!.connection!.setShadowState({
+            block.getInput("SPRITE")?.connection!.setShadowState({
                 type: "sprite",
                 fields: {
                     SPRITE: field === "_myself_" ? "self" : field
@@ -378,7 +378,7 @@ class SB3 {
 
             if ("SUBSTACK" in data.inputs) {
                 const inner = await this.input(data.inputs.SUBSTACK, true);
-                block.getInput("STACK")!.connection!.connect(
+                block.getInput("STACK")?.connection?.connect(
                     inner!.previousConnection!
                 );
             }
@@ -386,7 +386,7 @@ class SB3 {
             const trueBlock = app.current.workspace.newBlock("boolean");
             trueBlock.setFieldValue("true", "BOOL");
 
-            block.getInput("CONDITION")!.connection!.connect(trueBlock.outputConnection!);
+            block.getInput("CONDITION")?.connection?.connect(trueBlock.outputConnection!);
 
             return block;
         };
@@ -439,7 +439,7 @@ class SB3 {
                 return app.current.workspace.newBlock("isTouchingMouse");
             } else {
                 const block = app.current.workspace.newBlock("isTouching");
-                block.getInput("SPRITE")!.connection!.setShadowState({
+                block.getInput("SPRITE")?.connection!.setShadowState({
                     type: "sprite",
                     fields: {
                         SPRITE: fieldValue
@@ -457,16 +457,16 @@ class SB3 {
             const fieldValue = this.target.blocks[data.inputs.DISTANCETOMENU[1] as string].fields.DISTANCETOMENU[0];
             const block = app.current.workspace.newBlock("distanceTo");
             if (fieldValue === "_mouse_") {
-                block.getInput("X")!.connection!.connect(
+                block.getInput("X")?.connection?.connect(
                     app.current.workspace.newBlock("mouseX")!.outputConnection!
                 );
-                block.getInput("Y")!.connection!.connect(
+                block.getInput("Y")?.connection?.connect(
                     app.current.workspace.newBlock("mouseY")!.outputConnection!
                 );
             } else {
                 const x = app.current.workspace.newBlock("property");
                 x.setFieldValue("x", "PROPERTY");
-                x.getInput("SPRITE")!.connection!.setShadowState({
+                x.getInput("SPRITE")?.connection!.setShadowState({
                     type: "sprite",
                     fields: {
                         SPRITE: fieldValue
@@ -475,15 +475,15 @@ class SB3 {
 
                 const y = app.current.workspace.newBlock("property");
                 y.setFieldValue("y", "PROPERTY");
-                y.getInput("SPRITE")!.connection!.setShadowState({
+                y.getInput("SPRITE")?.connection!.setShadowState({
                     type: "sprite",
                     fields: {
                         SPRITE: fieldValue
                     }
                 });
 
-                block.getInput("X")!.connection!.connect(x.outputConnection!);
-                block.getInput("Y")!.connection!.connect(y.outputConnection!);
+                block.getInput("X")?.connection?.connect(x.outputConnection!);
+                block.getInput("Y")?.connection?.connect(y.outputConnection!);
             }
             return block;
         };
@@ -507,11 +507,11 @@ class SB3 {
         })();
         this.transformers.sensing_askandwait = async data => {
             const block = app.current.workspace.newBlock("set");
-            block.getInput("VAR")!.connection!.connect(answer().outputConnection!);
+            block.getInput("VAR")?.connection?.connect(answer().outputConnection!);
             const ask = app.current.workspace.newBlock("ask");
             const question = await this.input(data.inputs.QUESTION);
-            ask.getInput("QUESTION")!.connection!.connect(question!.outputConnection!);
-            block.getInput("VALUE")!.connection!.connect(ask.outputConnection!);
+            ask.getInput("QUESTION")?.connection?.connect(question!.outputConnection!);
+            block.getInput("VALUE")?.connection?.connect(ask.outputConnection!);
             return block;
         };
         this.transformers.sensing_answer = answer;
@@ -552,15 +552,15 @@ class SB3 {
         this.transformers.sensing_mousey = this.reporter("mouseY");
         this.transformers.sensing_setdragmode = data => {
             const block = app.current.workspace.newBlock("set");
-            block.getInput("VAR")!.connection!.setShadowState({type: "draggable"});
+            block.getInput("VAR")?.connection!.setShadowState({type: "draggable"});
             if (data.fields.DRAG_MODE[0] === "draggable") {
                 const trueBlock = app.current.workspace.newBlock("boolean");
                 trueBlock.setFieldValue("true", "BOOL");
-                block.getInput("VALUE")!.connection!.connect(trueBlock.outputConnection!);
+                block.getInput("VALUE")?.connection?.connect(trueBlock.outputConnection!);
             } else if (data.fields.DRAG_MODE[0] === "not draggable") {
                 const falseBlock = app.current.workspace.newBlock("boolean");
                 falseBlock.setFieldValue("false", "BOOL");
-                block.getInput("VALUE")!.connection!.connect(falseBlock.outputConnection!);
+                block.getInput("VALUE")?.connection?.connect(falseBlock.outputConnection!);
             }
             return block;
         };
@@ -605,14 +605,14 @@ class SB3 {
             const random = app.current.workspace.newBlock("random");
 
             // Connections
-            multiply.getInput("A")!.connection!.connect(random.outputConnection!);
-            multiply.getInput("B")!.connection!.connect(subtract.outputConnection!);
-            subtract.getInput("A")!.connection!.connect(toParam.outputConnection!);
-            subtract.getInput("B")!.connection!.connect(fromParam.outputConnection!);
+            multiply.getInput("A")?.connection?.connect(random.outputConnection!);
+            multiply.getInput("B")?.connection?.connect(subtract.outputConnection!);
+            subtract.getInput("A")?.connection?.connect(toParam.outputConnection!);
+            subtract.getInput("B")?.connection?.connect(fromParam.outputConnection!);
 
-            floor.getInput("NUM")!.connection!.connect(multiply.outputConnection!);
-            add.getInput("A")!.connection!.connect(floor.outputConnection!);
-            add.getInput("B")!.connection!.connect(one.outputConnection!);
+            floor.getInput("NUM")?.connection?.connect(multiply.outputConnection!);
+            add.getInput("A")?.connection?.connect(floor.outputConnection!);
+            add.getInput("B")?.connection?.connect(one.outputConnection!);
 
             const name = this.provide(returnBlock, {
                 args: [
@@ -633,7 +633,7 @@ class SB3 {
             if (returnBlock.disposed) {
                 add.dispose(false);
             } else {
-                returnBlock.getInput("VALUE")!.connection!.connect(add.outputConnection!);
+                returnBlock.getInput("VALUE")?.connection?.connect(add.outputConnection!);
             }
 
             const block = app.current.workspace.newBlock("call");
@@ -649,8 +649,8 @@ class SB3 {
             const from = await this.input(data.inputs.FROM);
             const to = await this.input(data.inputs.TO);
 
-            block.getInput("PARAM_0")!.connection!.connect(from!.outputConnection!);
-            block.getInput("PARAM_1")!.connection!.connect(to!.outputConnection!);
+            block.getInput("PARAM_0")?.connection?.connect(from!.outputConnection!);
+            block.getInput("PARAM_1")?.connection?.connect(to!.outputConnection!);
 
             return block;
         };
@@ -678,11 +678,11 @@ class SB3 {
 
             minus.setFieldValue("-", "OP");
             one.setFieldValue("1", "NUM");
-            minus.getInput("A")!.connection!.connect(letter!.outputConnection!);
-            minus.getInput("B")!.connection!.connect(one.outputConnection!);
+            minus.getInput("A")?.connection?.connect(letter!.outputConnection!);
+            minus.getInput("B")?.connection?.connect(one.outputConnection!);
 
-            block.getInput("INDEX")!.connection!.connect(minus.outputConnection!);
-            block.getInput("ITERABLE")!.connection!.connect(string!.outputConnection!);
+            block.getInput("INDEX")?.connection?.connect(minus.outputConnection!);
+            block.getInput("ITERABLE")?.connection?.connect(string!.outputConnection!);
 
             return block;
         };
@@ -699,7 +699,7 @@ class SB3 {
             const block = app.current.workspace.newBlock("math");
             block.setFieldValue("round", "OP");
             const value = await this.input(data.inputs.NUM);
-            block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+            block.getInput("NUM")?.connection?.connect(value!.outputConnection!);
             return block;
         };
         this.transformers.operator_mathop = async data => {
@@ -716,35 +716,35 @@ class SB3 {
                     const block = app.current.workspace.newBlock("math");
                     block.setFieldValue(data.fields.OPERATOR[0], "OP");
                     const value = await this.input(data.inputs.NUM);
-                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    block.getInput("NUM")?.connection?.connect(value!.outputConnection!);
                     return block;
                 }
                 case "ceiling": {
                     const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("ceil", "OP");
                     const value = await this.input(data.inputs.NUM);
-                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    block.getInput("NUM")?.connection?.connect(value!.outputConnection!);
                     return block;
                 }
                 case "ln": {
                     const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("log", "OP");
                     const value = await this.input(data.inputs.NUM);
-                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    block.getInput("NUM")?.connection?.connect(value!.outputConnection!);
                     return block;
                 }
                 case "log": {
                     const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("log10", "OP");
                     const value = await this.input(data.inputs.NUM);
-                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    block.getInput("NUM")?.connection?.connect(value!.outputConnection!);
                     return block;
                 }
                 case "e ^": {
                     const block = app.current.workspace.newBlock("math");
                     block.setFieldValue("exp", "OP");
                     const value = await this.input(data.inputs.NUM);
-                    block.getInput("NUM")!.connection!.connect(value!.outputConnection!);
+                    block.getInput("NUM")?.connection?.connect(value!.outputConnection!);
                     return block;
                 }
                 case "10 ^": {
@@ -753,8 +753,8 @@ class SB3 {
                     const value = await this.input(data.inputs.NUM);
                     const ten = app.current.workspace.newBlock("math_number");
                     ten.setFieldValue("10", "NUM");
-                    block.getInput("A")!.connection!.connect(ten.outputConnection!);
-                    block.getInput("B")!.connection!.connect(value!.outputConnection!);
+                    block.getInput("A")?.connection?.connect(ten.outputConnection!);
+                    block.getInput("B")?.connection?.connect(value!.outputConnection!);
                     return block;
                 }
                 default:
@@ -765,8 +765,8 @@ class SB3 {
             const block = app.current.workspace.newBlock("arithmetics");
             const A = await this.input(data.inputs.STRING1);
             const B = await this.input(data.inputs.STRING2);
-            block.getInput("A")!.connection!.connect(A!.outputConnection!);
-            block.getInput("B")!.connection!.connect(B!.outputConnection!);
+            block.getInput("A")?.connection?.connect(A!.outputConnection!);
+            block.getInput("B")?.connection?.connect(B!.outputConnection!);
 
             return block;
         };
@@ -775,13 +775,13 @@ class SB3 {
         this.transformers.data_setvariableto = this.transformers.data_changevariableby = async data => {
             const block = app.current.workspace.newBlock(data.opcode.slice(5, -10));
             const value = await this.input(data.inputs.VALUE);
-            block.getInput("VALUE")!.connection!.connect(value!.outputConnection!);
+            block.getInput("VALUE")?.connection?.connect(value!.outputConnection!);
 
             const variable = app.current.workspace.newBlock("parameter");
             variable.loadExtraState!({isVariable: true});
             variable.setFieldValue(data.fields.VARIABLE[0], "VAR");
 
-            block.getInput("VAR")!.connection!.connect(variable.outputConnection!);
+            block.getInput("VAR")?.connection?.connect(variable.outputConnection!);
 
             return block;
         };
@@ -834,7 +834,7 @@ class SB3 {
                 const content = data.inputs[args[i]];
                 if (content) { // Boolean inputs can be empty
                     const value = await this.input(content);
-                    call.getInput(`PARAM_${i}`)!.connection!.connect(value!.outputConnection!);
+                    call.getInput(`PARAM_${i}`)?.connection?.connect(value!.outputConnection!);
                 }
             }
 
@@ -862,8 +862,8 @@ class SB3 {
             const A = await this.input(data.inputs[`${input}1`]);
             const B = await this.input(data.inputs[`${input}2`]);
 
-            block.getInput("A")!.connection!.connect(A!.outputConnection!);
-            block.getInput("B")!.connection!.connect(B!.outputConnection!);
+            block.getInput("A")?.connection?.connect(A!.outputConnection!);
+            block.getInput("B")?.connection?.connect(B!.outputConnection!);
 
             return block;
         };
@@ -1017,25 +1017,25 @@ class SB3 {
                 const inner = await this.input(input, name in inputs ? inputs[name][1] : false);
 
                 if (inner && inner.previousConnection) {
-                    connection!.connect(inner.previousConnection);
+                    connection?.connect(inner.previousConnection);
                 } else if (inner && inner.outputConnection) {
-                    const didConnect = connection!.connect(inner.outputConnection);
+                    const didConnect = connection?.connect(inner.outputConnection);
 
                     // Scratch is not strongly typed, so we need to convert the type
                     if (!didConnect) {
                         switch (connection!.getCheck()![0]) {
                             case "number": {
                                 const block = app.current.workspace.newBlock("number");
-                                block.getInput("VALUE")!.connection!.connect(inner.outputConnection);
+                                block.getInput("VALUE")?.connection?.connect(inner.outputConnection);
 
-                                connection!.connect(block.outputConnection!);
+                                connection?.connect(block.outputConnection!);
                                 break;
                             }
                             case "string": {
                                 const block = app.current.workspace.newBlock("string");
-                                block.getInput("VALUE")!.connection!.connect(inner.outputConnection);
+                                block.getInput("VALUE")?.connection?.connect(inner.outputConnection);
 
-                                connection!.connect(block.outputConnection!);
+                                connection?.connect(block.outputConnection!);
                                 break;
                             }
                             case "boolean": {
@@ -1045,10 +1045,10 @@ class SB3 {
                                 const trueBlock = app.current.workspace.newBlock("iterables_string");
                                 trueBlock.setFieldValue("true", "TEXT");
 
-                                block.getInput("A")!.connection!.connect(trueBlock.outputConnection!);
-                                block.getInput("B")!.connection!.connect(inner.outputConnection);
+                                block.getInput("A")?.connection?.connect(trueBlock.outputConnection!);
+                                block.getInput("B")?.connection?.connect(inner.outputConnection);
 
-                                connection!.connect(block.outputConnection!);
+                                connection?.connect(block.outputConnection!);
                                 break;
                             }
                         }
@@ -1062,11 +1062,11 @@ class SB3 {
     setter(kind: "set" | "change", type: string, input: string) {
         return async (data: SB3.Block) => {
             const block = app.current.workspace.newBlock(kind);
-            block.getInput("VAR")!.connection!.setShadowState({type});
+            block.getInput("VAR")?.connection!.setShadowState({type});
             const value = await this.input(data.inputs[input]);
 
             if (value) {
-                block.getInput("VALUE")!.connection!.connect(value.outputConnection!);
+                block.getInput("VALUE")?.connection?.connect(value.outputConnection!);
             }
             return block;
         };
@@ -1085,7 +1085,7 @@ class SB3 {
 
         if (data.next) {
             const next = await this.block(this.target.blocks[data.next]);
-            block.nextConnection!.connect(next.previousConnection!);
+            block.nextConnection?.connect(next.previousConnection!);
         }
 
         return new Promise<Blockly.Block>(resolve => {
@@ -1126,7 +1126,7 @@ class SB3 {
             returnType: init.returns
         });
 
-        block.nextConnection!.connect(_block.previousConnection!);
+        block.nextConnection?.connect(_block.previousConnection!);
         return this.provided[init.name] = name;
     }
 
@@ -1148,8 +1148,8 @@ class SB3 {
                 const block = app.current.workspace.newBlock(type);
                 block.setFieldValue("index", "VALUE");
 
-                add.getInput("A")!.connection!.connect(one.outputConnection!);
-                add.getInput("B")!.connection!.connect(block.outputConnection!);
+                add.getInput("A")?.connection?.connect(one.outputConnection!);
+                add.getInput("B")?.connection?.connect(block.outputConnection!);
 
                 return add;
             }
@@ -1168,28 +1168,28 @@ class SB3 {
                 const nameBlock = app.current.workspace.newBlock("iterables_string");
 
                 nameBlock.setFieldValue(this.assetMap[this.target.costumes[i].name], "TEXT");
-                equals.getInput("A")!.connection!.connect(assetBlock.outputConnection!);
-                equals.getInput("B")!.connection!.connect(nameBlock.outputConnection!);
+                equals.getInput("A")?.connection?.connect(assetBlock.outputConnection!);
+                equals.getInput("B")?.connection?.connect(nameBlock.outputConnection!);
 
-                block.getInput(`IF${i}`)!.connection!.connect(equals.outputConnection!);
+                block.getInput(`IF${i}`)?.connection?.connect(equals.outputConnection!);
 
                 const returnBlock = app.current.workspace.newBlock("return");
                 returnBlock.loadExtraState!({
                     output: "string"
                 });
 
-                returnBlock.getInput("VALUE")!.connection!.targetBlock()!.setFieldValue(this.target.costumes[i].name, "TEXT");
-                block.getInput(`DO${i}`)!.connection!.connect(returnBlock.previousConnection!);
+                returnBlock.getInput("VALUE")?.connection!.targetBlock()!.setFieldValue(this.target.costumes[i].name, "TEXT");
+                block.getInput(`DO${i}`)?.connection?.connect(returnBlock.previousConnection!);
             }
 
             const throwBlock = app.current.workspace.newBlock("throw");
-            throwBlock.getInput("ERROR")!.connection!.setShadowState({
+            throwBlock.getInput("ERROR")?.connection!.setShadowState({
                 type: "iterables_string",
                 fields: {
                     TEXT: "Invalid costume name"
                 }
             });
-            block.getInput("ELSE")!.connection!.connect(throwBlock.previousConnection!);
+            block.getInput("ELSE")?.connection?.connect(throwBlock.previousConnection!);
 
             const name = this.provide(block, {
                 args: [],

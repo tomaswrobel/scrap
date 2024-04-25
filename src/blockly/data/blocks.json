@@ -607,10 +607,7 @@
 				"text": "0"
 			}
 		],
-		"output": [
-			"string",
-			"number"
-		],
+		"output": "any",
 		"style": "Operators"
 	},
 	{

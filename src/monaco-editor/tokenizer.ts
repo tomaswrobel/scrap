@@ -84,7 +84,8 @@ languages.registerTokensProviderFactory("typescript", {
             "wait",
             "delete",
             "clone",
-            "stop"
+            "stop",
+            "whenCloned"
         ],
         sensing: [
             "isTouching",

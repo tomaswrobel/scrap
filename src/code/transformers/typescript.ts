@@ -254,7 +254,7 @@ TypeScript.register("break", "continue", block => {
 
 TypeScript.register("sprite", block => {
 	const name = block.getFieldValue("SPRITE");
-	if (name === "this") {
+	if (name === "self") {
 		return [name, Order.ATOMIC];
 	}
 	return [`$[${JSON.stringify(name)}]`, Order.MEMBER];
