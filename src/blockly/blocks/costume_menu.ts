@@ -1,3 +1,12 @@
+/**
+ * @license MIT
+ * @fileoverview Costume menu block
+ * @author Tomáš Wróbel
+ * 
+ * Costume menu block is a dropdown with all the costumes.
+ * It should be always a shadow block, as it's used in the
+ * switch-costume-to block.
+ */
 import * as Blockly from "blockly";
 import path from "path";
 

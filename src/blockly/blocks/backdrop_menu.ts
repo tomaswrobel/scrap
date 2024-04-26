@@ -1,3 +1,12 @@
+/**
+ * @license MIT
+ * @fileoverview Backdrop menu block
+ * @author Tomáš Wróbel
+ * 
+ * Backdrop menu block is a dropdown with all the backdrops.
+ * It should be always a shadow block, as it's used in the
+ * switch-backdrop-to block.
+ */
 import * as Blockly from "blockly";
 import path from "path";
 

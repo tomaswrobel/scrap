@@ -2723,10 +2723,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scrap-engine@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-2.3.1.tgz#922146a7c29fe18830b32bd6dfc4f06d05ebf66b"
-  integrity sha512-gMK2xgWlhZEDOwGrSXrfiguzFfUFq89qPNK4+/Ud1er0Cl71uwnlBDnf5giIQ+y5NaqWCYHTMRzcmf651HPeIw==
+scrap-engine@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-2.3.2.tgz#90fcd93a33fa30f8a66fd7af9168c02992b8e5d5"
+  integrity sha512-kudlRIjp4bSys9CrORR8JSDbTq952Dt+alAM2TUX1SZmMIzk1fbaJ1Z3J62sc0rirgdj+OxnqkiqU7vlHhebYA==
 
 semver@^6.3.1:
   version "6.3.1"

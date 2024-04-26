@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import {TypeToShadow, Types, toCheck} from "../types";
+import {TypeToShadow, Types} from "../types";
 import type {ArrayBlock} from "./array";
 
 export const MIXIN = {
@@ -15,7 +15,7 @@ export const MIXIN = {
                         if (this.parentBlock_?.type === "typed") {
                             const param = this.parentBlock_.getField("PARAM")!;
 
-                            param.setValue(`${param.getText()}:${toCheck(this)}`);
+                            param.setValue(`${param.getText()}:${type}`);
                             param.markDirty();
 
                             if (this.parentBlock_.parentBlock_?.type === "variable") {
@@ -39,6 +39,16 @@ export const MIXIN = {
                             if (this.workspace instanceof Blockly.WorkspaceSvg) {
                                 this.workspace.refreshToolboxSelection();
                             }
+                        }
+                        
+                        if (this.parentBlock_?.type === "function") {
+                            for (const block of this.parentBlock_.getDescendants(false)) {
+                                if (block.type === "return") {
+                                    block.loadExtraState!({
+                                        output: type
+                                    });
+                                }
+                            }   
                         }
 
                         return type;

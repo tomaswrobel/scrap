@@ -28,9 +28,13 @@ export const MIXIN = {
 
 			if (input) {
 				const block = input.connection!.targetBlock();
-				input.connection!.disconnect();
 				this.removeInput("VALUE");
-				this.addValue(state.output, block);
+				if (block?.isShadow()) {
+					block.dispose(false);
+					this.addValue(state.output, null);
+				} else {
+					this.addValue(state.output, block);
+				}
 			} else {
 				this.addValue(state.output, null);
 			}
@@ -51,20 +55,27 @@ export const MIXIN = {
 	},
 
 	addValue(this: ReturnBlock, check: ReturnBlockOutput, block: Blockly.Block | null) {
-		if (check) {
-			const input = this.appendValueInput("VALUE").setCheck(check);
-			const type = check.length === 1 ? check[0] : "any";
-
-			if (type in TypeToShadow) {
-				input.connection!.setShadowState({
-					type: TypeToShadow[type]
-				});
-			}
-
-			if (block) {
-				input.connection!.connect(block.outputConnection!);
-			}
+		if (!check) {
+			return;
 		}
+
+		const input = this.appendValueInput("VALUE").setCheck(check);
+
+		if (typeof check === "string") {
+			var type = check;
+		} else if (check.length === 1) {
+			var type = check[0];
+		} else {
+			var type = "any";
+		}
+
+		if (type in TypeToShadow) {
+			input.connection!.setShadowState({
+				type: TypeToShadow[type]
+			});
+		}
+
+		block && !input.connection!.connect(block.outputConnection!);
 	},
 
 	isEqual(check1: ReturnBlockOutput, check2: ReturnBlockOutput) {

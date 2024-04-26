@@ -70,9 +70,6 @@ class Entity {
 	constructor(initialCostume: File, public name: string) {
 		this.costumes.push(initialCostume);
 		this.thumbnail.alt = "";
-		const block = this.workspace.newBlock("whenLoaded");
-		block.setMovable(false);
-		block.setDeletable(false);
 		this.update();
 	}
 

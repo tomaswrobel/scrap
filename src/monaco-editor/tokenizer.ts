@@ -57,7 +57,6 @@ languages.registerTokensProviderFactory("typescript", {
             "penColor",
         ],
         events: [
-            "whenLoaded",
             "whenFlag",
             "whenBackdropChangesTo",
             "whenKeyPressed",

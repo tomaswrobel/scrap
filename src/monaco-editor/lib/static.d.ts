@@ -75,14 +75,6 @@ interface Stage<Variables = {}, Sound = string> {
     whenFlag(fn: () => void): void;
 
     /**
-     * This event gets invoked
-     * after the engine is ready
-     * 
-     * @param fn the event body
-     */
-    whenLoaded(fn: () => void): void;
-
-    /**
      * Clears the effects of the entity.
      */
     clearEffects(): void;

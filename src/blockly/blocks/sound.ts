@@ -1,3 +1,12 @@
+/**
+ * @license MIT
+ * @fileoverview Sound block
+ * @author Tomáš Wróbel
+ * 
+ * Sound block is a dropdown with all the sounds. It 
+ * should be always a shadow block, as it's used in 
+ * the play-sound block.
+ */
 import * as Blockly from "blockly";
 import path from "path";
 

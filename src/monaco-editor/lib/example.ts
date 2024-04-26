@@ -1,6 +1,6 @@
-self.whenLoaded(function () {
+self.whenFlag(() => {
     self.effects.brightness = 0;
-    self.whenKeyPressed("any", function () {
+    self.whenKeyPressed("any", () => {
         self.clearEffects();
         self.effects.brightness = 100;
         self.wait(1);

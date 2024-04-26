@@ -1296,13 +1296,6 @@
 		"style": "Pen"
 	},
 	{
-		"type": "whenLoaded",
-		"inputsInline": true,
-		"message0": "when loaded",
-		"nextStatement": "any",
-		"style": "Events"
-	},
-	{
 		"type": "whenFlag",
 		"inputsInline": true,
 		"message0": "when flag clicked",

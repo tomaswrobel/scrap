@@ -1,7 +1,12 @@
 /**
  * @license MIT
- * @fileoverview Defines the parameter mutator (to update the shape).
+ * @fileoverview Defines the parameter mutator.
  * @author Tomáš Wróbel
+ * 
+ * This mutator is used to update the type of the parameter block.
+ * The parameter block is:
+ * - a variable getter
+ * - a block created by FieldParam, see fields/field_param.ts
  */
 export type ParameterBlock = import("blockly").BlockSvg & ParameterBlockMixin;
 export interface ParameterBlockMixin extends ParameterBlockMixinType {}

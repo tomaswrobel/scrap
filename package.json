@@ -2,7 +2,7 @@
 	"name": "scrap",
 	"displayName": "Scrap",
 	"private": true,
-	"version": "4.4.0",
+	"version": "4.4.1",
 	"type": "module",
 	"description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
 	"scripts": {
@@ -46,7 +46,7 @@
 		"monaco-editor": "0.47.0",
 		"parley.js": "2.0.0",
 		"process": "0.11.10",
-		"scrap-engine": "2.3.1",
+		"scrap-engine": "2.3.2",
 		"typescript": "5.4.5",
 		"wavesurfer.js": "7.7.10"
 	},

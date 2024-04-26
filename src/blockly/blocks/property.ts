@@ -1,3 +1,11 @@
+/**
+ * @license MIT
+ * @fileoverview Property block
+ * @author Tomáš Wróbel
+ * 
+ * Property block is a block that returns a property of a sprite.
+ * It's a dropdown with all the properties (and variables) of a sprite.
+ */
 import * as Blockly from "blockly";
 
 export const MIXIN = {

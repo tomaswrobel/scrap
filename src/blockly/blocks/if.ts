@@ -11,13 +11,13 @@ export type IfMixinType = typeof MIXIN;
 
 /** Type of a controls_if_elseif or controls_if_else block. */
 export interface ClauseBlock extends Blockly.Block {
-	valueConnection_?: Blockly.Connection | null;
-	statementConnection_?: Blockly.Connection | null;
+	valueConnection?: Blockly.Connection | null;
+	statementConnection?: Blockly.Connection | null;
 }
 
 export const MIXIN = {
-	elseifCount_: 0,
-	elseCount_: 0,
+	elseifCount: 0,
+	elseCount: 0,
 
 	/**
 	 * Returns the state of this block as a JSON serializable object.
@@ -25,14 +25,14 @@ export const MIXIN = {
 	 * @returns The state of this block, ie the else if count and else state.
 	 */
 	saveExtraState(this: IfBlock): IfExtraState | null {
-		if (!this.elseifCount_ && !this.elseCount_) {
+		if (!this.elseifCount && !this.elseCount) {
 			return null;
 		}
 		const state = Object.create(null);
-		if (this.elseifCount_) {
-			state["elseIfCount"] = this.elseifCount_;
+		if (this.elseifCount) {
+			state["elseIfCount"] = this.elseifCount;
 		}
-		if (this.elseCount_) {
+		if (this.elseCount) {
 			state["hasElse"] = true;
 		}
 		return state;
@@ -45,9 +45,9 @@ export const MIXIN = {
 	 *     else state.
 	 */
 	loadExtraState(this: IfBlock, state: IfExtraState) {
-		this.elseifCount_ = state["elseIfCount"] || 0;
-		this.elseCount_ = state["hasElse"] ? 1 : 0;
-		this.updateShape_();
+		this.elseifCount = state["elseIfCount"] || 0;
+		this.elseCount = state["hasElse"] ? 1 : 0;
+		this.updateShape();
 	},
 	/**
 	 * Populate the mutator's dialog with this block's components.
@@ -59,13 +59,13 @@ export const MIXIN = {
 		const containerBlock = workspace.newBlock("controls_if_if");
 		containerBlock.initSvg();
 		let connection = containerBlock.nextConnection!;
-		for (let i = 1; i <= this.elseifCount_; i++) {
+		for (let i = 1; i <= this.elseifCount; i++) {
 			const elseifBlock = workspace.newBlock("controls_if_elseif");
 			elseifBlock.initSvg();
 			connection.connect(elseifBlock.previousConnection!);
 			connection = elseifBlock.nextConnection!;
 		}
-		if (this.elseCount_) {
+		if (this.elseCount) {
 			const elseBlock = workspace.newBlock("controls_if_else");
 			elseBlock.initSvg();
 			connection.connect(elseBlock.previousConnection!);
@@ -80,13 +80,13 @@ export const MIXIN = {
 	compose(this: IfBlock, containerBlock: Blockly.Block) {
 		let clauseBlock = containerBlock.nextConnection!.targetBlock() as ClauseBlock | null;
 		// Count number of inputs.
-		this.elseifCount_ = 0;
-		this.elseCount_ = 0;
-		// Connections arrays are passed to .reconnectChildBlocks_() which
+		this.elseifCount = 0;
+		this.elseCount = 0;
+		// Connections arrays are passed to .reconnectChildBlocks() which
 		// takes 1-based arrays, so are initialised with a dummy value at
 		// index 0 for convenience.
-		const valueConnections: Array<Blockly.Connection | null> = [null];
-		const statementConnections: Array<Blockly.Connection | null> = [null];
+		const valueConnections: (Blockly.Connection | null)[] = [null];
+		const statementConnections: (Blockly.Connection | null)[] = [null];
 		let elseStatementConnection: Blockly.Connection | null = null;
 		while (clauseBlock) {
 			if (clauseBlock.isInsertionMarker()) {
@@ -95,22 +95,22 @@ export const MIXIN = {
 			}
 			switch (clauseBlock.type) {
 				case "controls_if_elseif":
-					this.elseifCount_++;
-					valueConnections.push(clauseBlock.valueConnection_!);
-					statementConnections.push(clauseBlock.statementConnection_!);
+					this.elseifCount++;
+					valueConnections.push(clauseBlock.valueConnection!);
+					statementConnections.push(clauseBlock.statementConnection!);
 					break;
 				case "controls_if_else":
-					this.elseCount_++;
-					elseStatementConnection = clauseBlock.statementConnection_!;
+					this.elseCount++;
+					elseStatementConnection = clauseBlock.statementConnection!;
 					break;
 				default:
 					throw TypeError("Unknown block type: " + clauseBlock.type);
 			}
 			clauseBlock = clauseBlock.getNextBlock() as ClauseBlock | null;
 		}
-		this.updateShape_();
+		this.updateShape();
 		// Reconnect any child blocks.
-		this.reconnectChildBlocks_(valueConnections, statementConnections, elseStatementConnection);
+		this.reconnectChildBlocks(valueConnections, statementConnections, elseStatementConnection);
 	},
 	/**
 	 * Store pointers to any connected child blocks.
@@ -129,14 +129,14 @@ export const MIXIN = {
 				case "controls_if_elseif": {
 					const inputIf = this.getInput("IF" + i);
 					const inputDo = this.getInput("DO" + i);
-					clauseBlock.valueConnection_ = inputIf && inputIf.connection!.targetConnection;
-					clauseBlock.statementConnection_ = inputDo && inputDo.connection!.targetConnection;
+					clauseBlock.valueConnection = inputIf && inputIf.connection!.targetConnection;
+					clauseBlock.statementConnection = inputDo && inputDo.connection!.targetConnection;
 					i++;
 					break;
 				}
 				case "controls_if_else": {
 					const inputDo = this.getInput("ELSE");
-					clauseBlock.statementConnection_ = inputDo && inputDo.connection!.targetConnection;
+					clauseBlock.statementConnection = inputDo && inputDo.connection!.targetConnection;
 					break;
 				}
 				default:
@@ -148,9 +148,9 @@ export const MIXIN = {
 	/**
 	 * Reconstructs the block with all child blocks attached.
 	 */
-	rebuildShape_(this: IfBlock) {
-		const valueConnections: Array<Blockly.Connection | null> = [null];
-		const statementConnections: Array<Blockly.Connection | null> = [null];
+	rebuildShape(this: IfBlock) {
+		const valueConnections: (Blockly.Connection | null)[] = [null];
+		const statementConnections: (Blockly.Connection | null)[] = [null];
 		let elseStatementConnection: Blockly.Connection | null = null;
 
 		if (this.getInput("ELSE")) {
@@ -162,15 +162,15 @@ export const MIXIN = {
 			valueConnections.push(inputIf!.connection!.targetConnection);
 			statementConnections.push(inputDo!.connection!.targetConnection);
 		}
-		this.updateShape_();
-		this.reconnectChildBlocks_(valueConnections, statementConnections, elseStatementConnection);
+		this.updateShape();
+		this.reconnectChildBlocks(valueConnections, statementConnections, elseStatementConnection);
 	},
 	/**
 	 * Modify this block to have the correct number of inputs.
 	 *
 	 * @internal
 	 */
-	updateShape_(this: IfBlock) {
+	updateShape(this: IfBlock) {
 		// Delete everything.
 		if (this.getInput("ELSE")) {
 			this.removeInput("ELSE");
@@ -181,13 +181,13 @@ export const MIXIN = {
 			this.removeInput("DO" + i);
 		}
 		// Rebuild block.
-		for (let i = 1; i <= this.elseifCount_; i++) {
+		for (let i = 1; i <= this.elseifCount; i++) {
 			this.appendValueInput("IF" + i)
 				.setCheck("boolean")
 				.appendField(Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"]);
 			this.appendStatementInput("DO" + i).setCheck("any");
 		}
-		if (this.elseCount_) {
+		if (this.elseCount) {
 			this.appendDummyInput("ELSE0").appendField(Blockly.Msg["CONTROLS_IF_MSG_ELSE"]);
 			this.appendStatementInput("ELSE").setCheck("any");
 		}
@@ -201,13 +201,13 @@ export const MIXIN = {
 	 *     connections for 'do' input.  Value at index [0] ignored.
 	 * @param elseStatementConnection Statement connection for else input.
 	 */
-	reconnectChildBlocks_(
+	reconnectChildBlocks(
 		this: IfBlock,
-		valueConnections: Array<Blockly.Connection | null>,
-		statementConnections: Array<Blockly.Connection | null>,
+		valueConnections: (Blockly.Connection | null)[],
+		statementConnections: (Blockly.Connection | null)[],
 		elseStatementConnection: Blockly.Connection | null
 	) {
-		for (let i = 1; i <= this.elseifCount_; i++) {
+		for (let i = 1; i <= this.elseifCount; i++) {
 			valueConnections[i]?.reconnect(this, "IF" + i);
 			statementConnections[i]?.reconnect(this, "DO" + i);
 		}
