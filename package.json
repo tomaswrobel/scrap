@@ -37,7 +37,7 @@
 	"dependencies": {
 		"@babel/core": "7.24.4",
 		"@babel/preset-typescript": "7.24.1",
-		"@blockly/field-colour-hsv-sliders": "4.2.3",
+		"@blockly/field-colour-hsv-sliders": "4.2.5",
 		"@blockly/field-date": "8.0.14",
 		"@parcel/service-worker": "2.12.0",
 		"blockly": "10.4.3",
