@@ -1309,6 +1309,12 @@
 		"style": "Events"
 	},
 	{
+		"type": "whenLoaded",
+		"message0": "when loaded",
+		"nextStatement": "any",
+		"style": "Events"
+	},
+	{
 		"type": "whenBackdropChangesTo",
 		"inputsInline": true,
 		"message0": "when backdrop changes to %1",

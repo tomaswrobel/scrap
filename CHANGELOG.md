@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Better tokenizer
+- When loaded block
 - Advanced for loop transformation from TS to blocks
 - `blocks/parameter` - Variable removing, info
 - `field_flag` - Flag icon in the `when flag clicked` block
