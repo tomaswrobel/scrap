@@ -157,7 +157,7 @@ class TypeScript extends Blockly.CodeGenerator {
 		};
 		const entity = `$[${JSON.stringify(this.entity.name)}]`;
 		const init = `${entity} = new Scrap.${isStage ? "Stage" : "Sprite"}(${JSON.stringify(configuration, null, "\t")});`;
-		return `${init}\n${entity}.whenLoaded(async self => {\n${body}});\n${isStage ? "" : `${entity}.addTo($["Stage"])`}\n`; 
+		return `${init}\n${entity}.init(async self => {\n${body}});\n${isStage ? "" : `${entity}.addTo($["Stage"])`}\n`; 
 	}
 
 	static register<Block extends Blockly.Block>(...args: [...string[], BlockCallback<Block>]) {
