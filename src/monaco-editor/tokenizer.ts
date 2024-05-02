@@ -26,7 +26,6 @@ languages.registerTokensProviderFactory("typescript", {
             "say",
             "think",
             "thinkWait",
-            "effects",
             "switchCostumeTo",
             "nextCostume",
             "switchBackdropToWait",
@@ -280,6 +279,15 @@ languages.registerTokensProviderFactory("typescript", {
                         "looks"
                     ]
                 ],
+                [
+                    /(\.[ \n\t\r]*)(effects)([ \n\t\r]*\.[ \n\t\r]*)(brightness|color|ghost|grayscale)/,
+                    [
+                        "delimiter",
+                        "costume",
+                        "delimiter",
+                        "looks"
+                    ]
+                ],
                 // identifiers and keywords
                 [
                     /(\.[ \n\t\r]*)([A-Za-z_$][\w$]*)/,
@@ -298,6 +306,7 @@ languages.registerTokensProviderFactory("typescript", {
                                 "@math": "operators",
                                 "costume": "costume",
                                 "backdrop": "costume",
+                                "effects": "costume",
                                 "@default": "identifier"
                             }
                         }
@@ -586,6 +595,11 @@ languages.onLanguageEncountered("typescript", () => {
                 end: new RegExp("^\\s*//\\s*#?endregion\\b")
             }
         }
+    });
+    languages.typescript.typescriptDefaults.setCompilerOptions({
+        target: languages.typescript.ScriptTarget.ES2015,
+        noEmit: true,
+        strict: true,
     });
 });
 

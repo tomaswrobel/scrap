@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2024-5-2
+
+### Added
+
+- Better tokenizer
+- Advanced for loop transformation from TS to blocks
+- `blocks/parameter` - Variable removing, info
+- `field_flag` - Flag icon in the `when flag clicked` block
+- `field_param` - Blockly's constant handling (you cannot change the value of a constant)
+
 ## [4.4.1] - 2024-4-26
 
 ### Fixed
@@ -650,7 +660,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.4.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.5.0...HEAD
+[4.5.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.0
 [4.4.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.4.1
 [4.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.4.0
 [4.3.11]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.3.11

@@ -1,20 +1,24 @@
 {
 	"compilerOptions": {
 		"target": "ES2017",
-		"useDefineForClassFields": true,
-		"lib": ["ES2017", "DOM", "DOM.Iterable"],
+		"lib": [
+			"ES2017",
+			"DOM",
+			"DOM.Iterable"
+		],
 		"skipLibCheck": true,
 		"experimentalDecorators": true,
+		"useDefineForClassFields": true,
 
-		/* Bundler mode */
+		// Bundler mode
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"module": "Preserve",
 		"allowJs": true,
 		"noEmit": true,
-
-		/* Linting */
+	
+		// Linting
 		"strict": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,

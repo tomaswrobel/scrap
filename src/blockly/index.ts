@@ -53,7 +53,7 @@ export const allBlocks = data.map(({args0, type, output, previousStatement}) => 
 			let code = `self.${type}`;
 
 			if (args0 || isEvent) {
-				const args = (args0 || []).map(input => {
+				const args = (args0 || []).filter(input => input.type === "input_value").map(input => {
 					return (
 						ts.valueToCode(block, input.name, Order.NONE) ||
 						"null"
@@ -67,7 +67,7 @@ export const allBlocks = data.map(({args0, type, output, previousStatement}) => 
 					if (next) {
 						arg += "\n" + ts.prefixLines(
 							ts.blockToCode(next) as string,
-							ts.INDENT
+							"\t"
 						);
 					}
 

@@ -444,78 +444,104 @@ export default class Blocks {
             case "ForStatement": {
                 const {init, update, test, body} = node;
 
-                if (!init || !update) {
-                    throw new SyntaxError("Only for loops with init and update are supported");
+                if (!init && !update && !test) { // while true
+                    const block = this.block("while");
+                    this.comments(block, node);
+                    this.connection = block.getInput("CONDITION")!.connection;
+                    this.block("boolean");
+
+                    this.connection = block.getInput("STACK")!.connection;
+                    this.parse(node.body);
+
+                    this.connection = block.nextConnection;
+                } else try {
+                    if (!init || !update) {
+                        throw new SyntaxError("Only for loops with init and update are supported");
+                    }
+
+                    if (!test) {
+                        throw new SyntaxError("Only for loops with test are supported");
+                    }
+
+                    if (init.type !== "VariableDeclaration") {
+                        throw new SyntaxError("Only variable declarations are supported");
+                    }
+
+                    if (test.type !== "BinaryExpression") {
+                        throw new SyntaxError("Only binary expressions are supported");
+                    }
+
+                    if (test.operator !== "<=") {
+                        throw new SyntaxError("Only <= binary expressions are supported");
+                    }
+
+                    if (update.type !== "UpdateExpression") {
+                        throw new SyntaxError("Only update expressions are supported");
+                    }
+
+                    if (update.operator !== "++") {
+                        throw new SyntaxError("Only ++ update expressions are supported");
+                    }
+
+                    if (init.declarations.length !== 1) {
+                        throw new SyntaxError("Only one variable declaration is supported");
+                    }
+
+                    const {id, init: dec} = init.declarations[0];
+
+                    if (!dec) {
+                        throw new SyntaxError("Only variable declarations with initializers are supported");
+                    }
+
+                    if (id.type !== "Identifier") {
+                        throw new SyntaxError("Only simple identifiers are supported");
+                    }
+
+                    if (test.left.type !== "Identifier") {
+                        throw new SyntaxError("Only simple identifiers are supported");
+                    }
+
+                    if (test.left.name !== id.name) {
+                        throw new SyntaxError("Only for loops with the same variable in init and test are supported");
+                    }
+
+                    if (update.argument.type !== "Identifier") {
+                        throw new SyntaxError("Only simple identifiers are supported");
+                    }
+
+                    if (update.argument.name !== id.name) {
+                        throw new SyntaxError("Only for loops with the same variable in init and update are supported");
+                    }
+
+                    const block = this.block("for");
+                    block.setFieldValue(`${id.name}:number`, "VAR");
+                    this.comments(block, node);
+
+                    this.connection = block.getInput("TO")!.connection;
+                    this.parse(test.right);
+
+                    this.connection = block.getInput("FROM")!.connection;
+                    this.parse(dec);
+
+                    this.connection = block.getInput("STACK")!.connection;
+                    this.parse(body);
+
+                    this.connection = block.nextConnection;
+                } catch (e) { // Convert to "while" block
+                    this.parse(node.init);
+
+                    const block = this.block("while");
+                    this.comments(block, node);
+
+                    this.connection = block.getInput("CONDITION")!.connection;
+                    this.parse(node.test);
+
+                    this.connection = block.getInput("STACK")!.connection;
+                    this.parse(node.body);
+
+                    this.connection = block.nextConnection;
+                    this.parse(node.update);
                 }
-
-                if (!test) {
-                    throw new SyntaxError("Only for loops with test are supported");
-                }
-
-                if (test.type !== "BinaryExpression") {
-                    throw new SyntaxError("Only binary expressions are supported");
-                }
-
-                if (test.operator !== "<=") {
-                    throw new SyntaxError("Only <= binary expressions are supported");
-                }
-
-                if (update.type !== "UpdateExpression") {
-                    throw new SyntaxError("Only update expressions are supported");
-                }
-
-                if (update.operator !== "++") {
-                    throw new SyntaxError("Only ++ update expressions are supported");
-                }
-
-                if (init.type !== "VariableDeclaration") {
-                    throw new SyntaxError("Only variable declarations are supported");
-                }
-
-                if (init.declarations.length !== 1) {
-                    throw new SyntaxError("Only one variable declaration is supported");
-                }
-
-                const {id, init: dec} = init.declarations[0];
-
-                if (!dec) {
-                    throw new SyntaxError("Only variable declarations with initializers are supported");
-                }
-
-                if (id.type !== "Identifier") {
-                    throw new SyntaxError("Only simple identifiers are supported");
-                }
-
-                if (test.left.type !== "Identifier") {
-                    throw new SyntaxError("Only simple identifiers are supported");
-                }
-
-                if (test.left.name !== id.name) {
-                    throw new SyntaxError("Only for loops with the same variable in init and test are supported");
-                }
-
-                if (update.argument.type !== "Identifier") {
-                    throw new SyntaxError("Only simple identifiers are supported");
-                }
-
-                if (update.argument.name !== id.name) {
-                    throw new SyntaxError("Only for loops with the same variable in init and update are supported");
-                }
-
-                const block = this.block("for");
-                block.setFieldValue(`${id.name}:number`, "VAR");
-                this.comments(block, node);
-
-                this.connection = block.getInput("TO")!.connection;
-                this.parse(test.right);
-
-                this.connection = block.getInput("FROM")!.connection;
-                this.parse(dec);
-
-                this.connection = block.getInput("STACK")!.connection;
-                this.parse(body);
-
-                this.connection = block.nextConnection;
 
                 break;
             }
@@ -753,8 +779,8 @@ export default class Blocks {
                         }
 
                         const block = this.block("property");
-                        block.setFieldValue(`effects.${getPropertyContents(property)}`, "PROPERTY");
                         block.setFieldValue(getPropertyContents(object.object.property), "SPRITE");
+                        block.setFieldValue(`effects.${getPropertyContents(property)}`, "PROPERTY");
                     } else {
                         throw new SyntaxError("Unsupported object");
                     }
@@ -774,15 +800,15 @@ export default class Blocks {
                         }
 
                         const block = this.block("property");
-                        block.setFieldValue(`variables[${JSON.stringify(getPropertyContents(property))}]`, "PROPERTY");
                         block.setFieldValue(getPropertyContents(object.object.property), "SPRITE");
+                        block.setFieldValue(`variables[${JSON.stringify(getPropertyContents(property))}]`, "PROPERTY");
                     } else {
                         throw new SyntaxError("Unsupported object");
                     }
                 } else if (object.type === "MemberExpression" && isProperty(object, "costume", "backdrop")) {
                     const type = getPropertyContents(object.property);
                     const prop = getPropertyContents(property);
-                    if (isIdentifier(object.object, "self")) {
+                    if (type === "backdrop" || isIdentifier(object.object, "self")) {
                         if (prop === "all") {
                             this.block(`${type}.all`);
                         } else {
@@ -794,8 +820,8 @@ export default class Blocks {
                             throw new SyntaxError("Only simple identifiers and string literals are supported");
                         }
                         const block = this.block("property");
-                        block.setFieldValue(`${type}.${prop}`, "PROPERTY");
                         block.setFieldValue(getPropertyContents(object.object.property), "SPRITE");
+                        block.setFieldValue(`${type}.${prop}`, "PROPERTY");
                     } else {
                         throw new SyntaxError("Unsupported object");
                     }
@@ -816,8 +842,8 @@ export default class Blocks {
                         }
 
                         const block = this.block("property");
-                        block.setFieldValue(getPropertyContents(property), "PROPERTY");
                         block.setFieldValue(getPropertyContents(node.object.property), "SPRITE");
+                        block.setFieldValue(getPropertyContents(property), "PROPERTY");
                     } else {
                         throw new SyntaxError("Unsupported object");
                     }
@@ -899,6 +925,22 @@ export default class Blocks {
                 }
                 break;
             }
+            case "UpdateExpression": {
+                const block = this.block("change");
+
+                this.connection = block.getInput("VAR")!.connection!;
+                this.connection.setShadowState({type: "x"});
+                this.parse(node.argument);
+
+                block.getInput("VALUE")!.connection!.setShadowState({
+                    type: "math_number",
+                    fields: {
+                        NUM: node.operator === "--" ? -1 : 1
+                    }
+                });
+
+                break;
+            }
             case "UnaryExpression": {
                 if (node.operator === "!") {
                     const block = this.block("not");
@@ -952,9 +994,9 @@ export default class Blocks {
                     }
                 }
 
-                this.connection = block.getInput("VAR")!.connection;
+                this.connection = block.getInput("VAR")!.connection!;
+                this.connection.setShadowState({type: "x"});
                 this.parse(node.left)!;
-                this.connection!.targetBlock!()!.setMovable(false);
 
                 this.connection = block.getInput("VALUE")!.connection;
                 this.parse(argument);

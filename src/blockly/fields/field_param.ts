@@ -15,7 +15,7 @@
 import * as Blockly from "blockly";
 
 export default class FieldParam extends Blockly.Field<string> {
-	constructor(defaultVarName = "i", type?: app.Check, readonly readonly = false) {
+	constructor(defaultVarName = "i", type?: app.Check) {
 		super(type ? `${defaultVarName}:${type}` : defaultVarName);
 	}
 
@@ -57,24 +57,22 @@ export default class FieldParam extends Blockly.Field<string> {
 			return;
 		}
 
-		const workspace = this.sourceBlock_?.workspace;
-
-		if (workspace instanceof Blockly.WorkspaceSvg) {
+		if (this.sourceBlock_?.workspace instanceof Blockly.WorkspaceSvg) {
 			// Gestures are responsible for dragging blocks around.
-			const gesture = workspace.getGesture(e);
+			const gesture = this.sourceBlock_.workspace.getGesture(e);
 			// Now, the source block is the block that's being dragged.
 			if (gesture) {
-				const block = workspace.newBlock("parameter"); // Create a new block.
+				const block = this.sourceBlock_.workspace.newBlock("parameter"); // Create a new block.
 
 				// Extract the position of this field.
 				const transform = this.fieldGroup_!.getAttribute("transform");
 				const transformX = transform?.match(/translate\((\d+)/)?.[1] ?? 0;
 				const transformY = transform?.match(/translate\(\d+,(\d+)/)?.[1] ?? 0;
-				const {x, y} = this.sourceBlock_!.getRelativeToSurfaceXY().translate(+transformX, +transformY);
+				const {x, y} = this.sourceBlock_.getRelativeToSurfaceXY().translate(+transformX, +transformY);
 
 				block.loadExtraState!({
 					type: this.getType(), // Set the type of the parameter.
-					isConstant: this.readonly, // Set the block as constant if the field is readonly.
+					isConstant: this.sourceBlock_.type === "typed" && this.sourceBlock_.getParent()!.getFieldValue("kind") === "const"
 				});
 				block.setFieldValue(this.getText(), "VAR"); // Set the name of the parameter.
 				block.moveBy(x, y); // Move the block to the position of the field.

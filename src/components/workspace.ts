@@ -1,4 +1,4 @@
-import {stage, sprite, theme, plugins, Types} from "../blockly";
+import {stage, sprite, theme, plugins, Types, TypeToShadow} from "../blockly";
 import Blocks from "../code/transformers/blocks";
 import {Stage, Sprite} from "./entity";
 import * as Blockly from "blockly";
@@ -157,9 +157,34 @@ export default class Workspace implements Component {
 
 				if (json.length > 5) {
 					const [VAR, type] = app.current.variables[0] || app.entities[0].variables[0] || [];
+					const inputs: Record<string, Blockly.serialization.blocks.ConnectionState> = {};
 
 					if (!VAR) {
 						return json;
+					}
+
+					inputs.VAR = {
+						shadow: {
+							type: "parameter",
+							fields: {
+								VAR
+							},
+							extraState: {
+								type,
+								isVariable: true
+							}
+						}
+					};
+
+					const shadow = typeof type === "string"
+						? TypeToShadow[type] 
+						: type.length === 1 
+							? TypeToShadow[type[0]] 
+							: TypeToShadow.any
+					;
+
+					if (shadow) {
+						inputs.VALUE = {shadow: {type: shadow}};
 					}
 
 					json.splice(
@@ -167,20 +192,7 @@ export default class Workspace implements Component {
 						{
 							kind: "block",
 							type: "set",
-							inputs: {
-								VAR: {
-									shadow: {
-										type: "parameter",
-										fields: {
-											VAR
-										},
-										extraState: {
-											type,
-											isVariable: true
-										}
-									}
-								}
-							}
+							inputs
 						},
 						{
 							kind: "block",

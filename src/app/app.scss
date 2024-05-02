@@ -399,3 +399,13 @@ div.parley-loader {
 		transform: rotate(360deg);
 	}
 }
+
+table {
+	width: 100%;
+	border-spacing: 0;
+
+	td {
+		padding: 0.5em;
+		border: 1px solid #ddd;
+	}
+}

@@ -1298,7 +1298,13 @@
 	{
 		"type": "whenFlag",
 		"inputsInline": true,
-		"message0": "when flag clicked",
+		"message0": "when %1 clicked",
+		"args0": [
+			{
+				"type": "field_flag",
+				"name": "flag"
+			}
+		],
 		"nextStatement": "any",
 		"style": "Events"
 	},

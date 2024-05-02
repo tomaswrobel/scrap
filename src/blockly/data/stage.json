@@ -228,6 +228,10 @@
             },
             {
                 "kind": "block",
+                "type": "whenLoaded"
+            },
+            {
+                "kind": "block",
                 "type": "whenTimerElapsed",
                 "inputs": {
                     "TIMER": {

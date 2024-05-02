@@ -8,7 +8,9 @@
  * - a variable getter
  * - a block created by FieldParam, see fields/field_param.ts
  */
-export type ParameterBlock = import("blockly").BlockSvg & ParameterBlockMixin;
+import * as Parley from "parley.js";
+import {ContextMenuRegistry, BlockSvg} from "blockly";
+export type ParameterBlock = BlockSvg & ParameterBlockMixin;
 export interface ParameterBlockMixin extends ParameterBlockMixinType {}
 export type ParameterBlockMixinType = typeof MIXIN;
 
@@ -44,4 +46,57 @@ export const MIXIN = {
             }
         }
     },
+
+    customContextMenu(this: ParameterBlock, options: ContextMenuRegistry.LegacyContextMenuOption[]) {
+        if (this.isInFlyout && this.isVariable_) {
+            options.push({
+                text: "Delete variable",
+                enabled: true,
+                callback: async () => {
+                    if (await Parley.fire({
+                        input: "none",
+                        title: "Delete Variable",
+                        body: "Are you sure you want to delete this variable?",
+                        cancelButtonHTML: "No",
+                        confirmButtonHTML: "Yes"
+                    })) {
+                        app.current.variables = app.current.variables.filter(
+                            ([name]) => name !== this.getFieldValue("VAR")
+                        );
+                        this.workspace.refreshToolboxSelection();
+                    }
+                }
+            }, {
+                text: "Info",
+                enabled: true,
+                callback: async () => {
+                    const body = document.createElement("table");
+                    const name = this.getFieldValue("VAR");
+                    const blocks = this.workspace.getBlocksByType("parameter");
+
+                    body.innerHTML = `
+                        <tr>
+                            <td style="text-align:left;">Name:</td>
+                            <td>${name}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">Type:</td>
+                            <td>${new Array<string>().concat(this.type_ || "any").join(" or ")}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;">Usage:</td>
+                            <td>${blocks.filter(block => block.getFieldValue("VAR") === name).length}</td>
+                        </tr>
+
+                    `;
+
+                    await Parley.fire({
+                        input: "none",
+                        title: "Variable Info",
+                        body
+                    });
+                }
+            });
+        }
+    }
 };

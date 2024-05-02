@@ -327,29 +327,6 @@ export default async function transform(code: string) {
 									)
 								)
 							);
-						} else if (path.node.object.type === "MemberExpression" && isProperty(path.node.object, "effects")) {
-							if (path.node.property.type === "StringLiteral") {
-								var string = path.node.property;
-							} else if (path.node.property.type === "Identifier") {
-								var string = babel.types.stringLiteral(path.node.property.name);
-							} else {
-								path.addComment("leading", "Cannot transform?", true);
-								return;
-							}
-
-							path.replaceWith(
-								babel.types.awaitExpression(
-									babel.types.callExpression(
-										babel.types.memberExpression(
-											path.node.object.object,
-											babel.types.identifier("getEffect")
-										),
-										[
-											string
-										]
-									)
-								)
-							);
 						}
 					}
 				},

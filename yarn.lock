@@ -327,22 +327,22 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
-"@blockly/field-colour-hsv-sliders@4.2.3":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-4.2.3.tgz#394c5c0a81acc995e3d7c9fd0abc3d5f52c1b9b0"
-  integrity sha512-btN1+kDO+hiaFdO8oXeaissfL5ekJTL7PdaFNutkNtqTJSDCAkzHcXtrmQ+lqbCgjBiQpu4aCHzWicIZeV0uwg==
+"@blockly/field-colour-hsv-sliders@4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-4.2.5.tgz#f9924b566ac2301a0723180d4f1d34ee5238bf23"
+  integrity sha512-Ip8ZB7GMw9lDWyUzw+5GpZJag16ojf5+N88YzgUrRKPebkNNd0Kp0YilyMX3MqcYUDC4JjadzRnFxYnbFA+qGg==
   dependencies:
-    "@blockly/field-colour" "^4.0.0"
+    "@blockly/field-colour" "^4.0.2"
 
-"@blockly/field-colour@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-4.0.0.tgz#499867ca2f64bdb38f55c8677ff13a0867850d5a"
-  integrity sha512-DigQJ2Yqf/VN4xr7AI7N3gnGabl3dZULRI2CPCgOiasKF3qqsLoyYCKKz3rLpd8Rzl08wkxMqaY/WqYxOAMzpQ==
+"@blockly/field-colour@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-4.0.2.tgz#4439cd03b974b463eb79e06609ef61b6373550ad"
+  integrity sha512-3gQufdo+40uFHbHn6Kyyw1ZVbgQffC7Ko8erVD8BcQwPgnusYIMgrqjn86nv2vgCH2kwH1ilg6xJfkDdqc/asw==
 
-"@blockly/field-date@8.0.14":
-  version "8.0.14"
-  resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-8.0.14.tgz#752068a61dcd9075f9f68bb3cf35e35b841dcab8"
-  integrity sha512-Dh+3iWZiNHX7JEiYwwa0THKZnM1Ws6h2Ixrs2AAGIGihqVCWIkAG8+fC3Ls9yY6EuYW23k/9xg3yNxP8CjEehA==
+"@blockly/field-date@8.0.15":
+  version "8.0.15"
+  resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-8.0.15.tgz#7c164e956f66de0308f84849bfe22d5fbd8e7289"
+  integrity sha512-P/480xETkzA/TW+y2C8x9hwY0qo38y0KIZ2wujpTc01EfMnxOxGHTyzp77gkRZOAAwLhheZ2NcQLehjXczv95g==
 
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.5"
@@ -1435,20 +1435,15 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
-"@types/doctrine@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@types/doctrine/-/doctrine-0.0.9.tgz#d86a5f452a15e3e3113b99e39616a9baa0f9863f"
-  integrity sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA==
-
 "@types/file-saver@2.0.7":
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/@types/file-saver/-/file-saver-2.0.7.tgz#8dbb2f24bdc7486c54aa854eb414940bbd056f7d"
   integrity sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==
 
-"@types/node@20.12.5":
-  version "20.12.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.12.5.tgz#74c4f31ab17955d0b5808cdc8fd2839526ad00b3"
-  integrity sha512-BD+BjQ9LS/D8ST9p5uqBxghlN+S42iuNxjsUGjeZobe/ciXzk2qb1B6IXc6AnRLS+yFJRpN2IPEHMzwspfDJNw==
+"@types/node@20.12.7":
+  version "20.12.7"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.12.7.tgz#04080362fa3dd6c5822061aa3124f5c152cff384"
+  integrity sha512-wq0cICSkRLVaf3UGLMGItu/PtdY7oaXaI/RVU+xliKVOtRna3PRY57ZDfztpDL0n11vfymMUnXv8QwYCO7L1wg==
   dependencies:
     undici-types "~5.26.4"
 
@@ -2698,10 +2693,10 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass@1.74.1:
-  version "1.74.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.74.1.tgz#686fc227d3707dd25cb2925e1db8e4562be29319"
-  integrity sha512-w0Z9p/rWZWelb88ISOLyvqTWGmtmu2QJICqDBGyNnfG4OUnPX9BBjjYIXUpXCMOOg5MQWNpqzt876la1fsTvUA==
+sass@1.75.0:
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.75.0.tgz#91bbe87fb02dfcc34e052ddd6ab80f60d392be6c"
+  integrity sha512-ShMYi3WkrDWxExyxSZPst4/okE9ts46xZmJDSawJQrnte7M1V9fScVB+uNXOVKRBt0PggHOwoZcn8mYX4trnBw==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -2723,10 +2718,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scrap-engine@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-2.3.2.tgz#90fcd93a33fa30f8a66fd7af9168c02992b8e5d5"
-  integrity sha512-kudlRIjp4bSys9CrORR8JSDbTq952Dt+alAM2TUX1SZmMIzk1fbaJ1Z3J62sc0rirgdj+OxnqkiqU7vlHhebYA==
+scrap-engine@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/scrap-engine/-/scrap-engine-2.4.0.tgz#f5fbbdfdb592ed4970fc2b580caeb6d6a76eba3a"
+  integrity sha512-2/ebexmsHtuPgEKRa9VzZXfZHFZ/LNYCmJ3bNSVBjnNj74EQBb9Ctqyrw5gDDIlEG4pYzEIrzJ5cGDlZSyh4wg==
 
 semver@^6.3.1:
   version "6.3.1"
@@ -2922,10 +2917,10 @@ w3c-xmlserializer@^4.0.0:
   dependencies:
     xml-name-validator "^4.0.0"
 
-wavesurfer.js@7.7.10:
-  version "7.7.10"
-  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.7.10.tgz#b33abea4dc153b5302117c22ebaab7f38e8ad931"
-  integrity sha512-fpQ/OiHGkFxD6cJRuU/VQ+iuYM4ipMvMyD5fp0ENPPHYwiZeb01nqXYdXPemK70vAxNDHkVqAsFqLZEchxySJg==
+wavesurfer.js@7.7.11:
+  version "7.7.11"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.7.11.tgz#9db7a7974ec1d61dc7b2afe6360f575b5d216285"
+  integrity sha512-27otJlDBcUSbMh/YkxEZN0yXTHINQNYSOl5aJplYlIaHw2u3BrABUzOmUZV3dKIy8udOLJXS/67y5pOIzgAg+w==
 
 weak-lru-cache@^1.2.2:
   version "1.2.2"
