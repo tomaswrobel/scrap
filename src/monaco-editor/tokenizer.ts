@@ -61,6 +61,7 @@ languages.registerTokensProviderFactory("typescript", {
             "whenKeyPressed",
             "whenTimerElapsed",
             "whenMouse",
+            "whenLoaded",
             "broadcastMessage",
             "whenReceiveMessage",
             "broadcastMessageWait"
@@ -140,7 +141,10 @@ languages.registerTokensProviderFactory("typescript", {
             "true",
             "false",
             "Infinity",
-            "NaN"
+            "NaN",
+            "String",
+            "NUmber",
+            "Boolean"
         ],
         iterables: [
             "length",

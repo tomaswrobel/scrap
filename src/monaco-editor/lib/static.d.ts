@@ -1,15 +1,15 @@
-declare namespace Scrap {
+declare const Scrap: {
     /**
      * Stops the project
      */
-    function stop(): void;
+    stop(): void;
 
     /**
      * Detects if project
      * runs in turbo mode
      */
-    const isTurbo: boolean;
-}
+    readonly isTurbo: boolean;
+};
 
 interface Stage<Variables = {}, Sound = string> {
     /**
@@ -50,21 +50,27 @@ interface Stage<Variables = {}, Sound = string> {
      * The X position of the mouse
      */
     readonly mouseX: number;
-    
+
     /**
      * The Y position of the mouse
      */
     readonly mouseY: number;
-    
+
     /**
      * If the mouse button is pressed
      */
     readonly mouseDown: boolean;
-    
+
     /**
      * Namespace for the backdrops
      */
     readonly backdrop: Costumes<Backdrop>;
+
+    /**
+     * This event gets invoked when the sprite / stage is loaded
+     * @param fn the event body
+     */
+    whenLoaded(fn: () => void): void;
 
     /**
      * This event gets invoked
@@ -547,64 +553,65 @@ interface Costumes<K> {
 }
 
 declare type Color = string & {};
-declare namespace Color {
+
+declare const Color: {
     /**
      * Converts the hexadecimal color to a color object
      * @param hex Hexadecimal color in the format of #rrggbb
      */
-    function fromHex(hex: string): Color;
+    fromHex(hex: `#${string}`): Color;
     /**
      * Converts the white color to a color object
      * @param hex White color
      */
-    function fromHex(hex: "#ffffff"): Color;
+    fromHex(hex: "#ffffff"): Color;
     /**
      * Converts the black color to a color object
      * @param hex Black color
      */
-    function fromHex(hex: "#000000"): Color;
+    fromHex(hex: "#000000"): Color;
     /**
      * Converts the red color to a color object
      * @param hex Red color
      */
-    function fromHex(hex: "#ff0000"): Color;
+    fromHex(hex: "#ff0000"): Color;
     /**
      * Converts the green color to a color object
      * @param hex Green color
      */
-    function fromHex(hex: "#00ff00"): Color;
+    fromHex(hex: "#00ff00"): Color;
     /**
      * Converts the blue color to a color object
      * @param hex Blue color
      */
-    function fromHex(hex: "#0000ff"): Color;
+    fromHex(hex: "#0000ff"): Color;
     /**
      * Converts the yellow color to a color object
      * @param hex Yellow color
      */
-    function fromHex(hex: "#ffff00"): Color;
+    fromHex(hex: "#ffff00"): Color;
     /**
      * Converts the magenta color to a color object
      * @param hex Magenta color
      */
-    function fromHex(hex: "#ff00ff"): Color;
+    fromHex(hex: "#ff00ff"): Color;
     /**
      * Converts the cyan color to a color object
      * @param hex Cyan color
      */
-    function fromHex(hex: "#00ffff"): Color;
+    fromHex(hex: "#00ffff"): Color;
     /**
      * Converts RGB color to a color object
      * @param r Red color 0-255
      * @param g Green color 0-255
      * @param b Blue color 0-255
      */
-    function fromRGB(r: number, g: number, b: number): Color;
+    fromRGB(r: number, g: number, b: number): Color;
     /**
      * Generates a random color
      */
-    function random(): Color;
-}
+    random(): Color;
+};
 
 declare type Key = "Enter" | "Escape" | "Space" | "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight" | "Shift" | "Ctrl" | "Alt" | "Backspace" | "Tab" | "Delete" | "CapsLock" | "F1" | "F2" | "F3" | "F4" | "F5" | "F6" | "F7" | "F8" | "F9" | "F10" | "F11" | "F12" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
 declare type MouseEvent = "clicked" | "pressed" | "released" | "left" | "entered" | "moved" | "double-clicked";
@@ -619,6 +626,9 @@ declare interface IArguments {}
 // Scrap's primitives
 declare interface Number {}
 declare function Number(value: any): number;
+declare function Number(value: true): 1;
+declare function Number(value: false): 0;
+declare function Number(value: boolean): 0 | 1;
 
 declare interface String extends Iterable<string> {
     /**
@@ -634,6 +644,9 @@ declare interface String extends Iterable<string> {
     slice(start: number, end: number): string;
 }
 declare function String(value: any): string;
+declare function String(value: true): "true";
+declare function String(value: false): "false";
+declare function String(value: boolean): "true" | "false";
 
 
 // Scrap's iterables
@@ -704,31 +717,24 @@ declare interface Array<T> extends Iterable<T> {
     slice(start: number, end: number): T[];
 }
 
-declare var Array: {
+declare const Array: {
     /**
      * Single type array
      */
     new <T>(...items: T[]): T[];
     /**
-     * Mixed type array
+     * Fixed-sized & Mixed type array - automatically infers the type
+     * 
+     * If you want to specify the type, use `new Array<T>(...)`
+     * ```ts
+     * const a = Array(3, "a", 6); // a: [3, "a", 6]
+     * const b = Array<number | string>(3, "a", 6); // b: (number | string)[]
+     * ```
      */
-    new <T extends any[]>(...items: T): T;
+    new <const T extends any[]>(...items: T): T;
 };
 
-declare class Date {
-    /**
-     * Creates a new date object,
-     * representing the specified date and time
-     * @param date date string
-     */
-    constructor(date: string);
-
-    /**
-     * Creates a new date object,
-     * representing the current date and time
-     */
-    constructor();
-
+declare interface Date {
     /**
      * Returns the year of the specified date according to local time.
      */
@@ -765,104 +771,119 @@ declare class Date {
     getSeconds(): number;
 }
 
-declare namespace Math {
+declare const Date: {
+    /**
+     * Creates a new date object,
+     * representing the specified date and time
+     * @param date date string
+     */
+    new(date: string): Date;
+
+    /**
+     * Creates a new date object,
+     * representing the current date and time
+     */
+    new(): Date;
+};
+
+declare const Math: {
     /**
      * Returns a random number between 0 (inclusive) and 1 (exclusive)
      */
-    function random(): number;
+    random(): number;
 
     /**
      * Returns the smallest integer greater than or equal to a number
      */
-    function floor(value: number): number;
+    floor(value: number): number;
 
     /**
      * Returns the largest integer less than or equal to a number
      */
-    function ceil(value: number): number;
+    ceil(value: number): number;
 
     /**
      * Returns the value of a number rounded to the nearest integer
      */
-    function round(value: number): number;
+    round(value: number): number;
 
     /**
      * Returns the absolute value of a number
      * |x| = x if x > 0
      * |x| = -x if x < 0
      */
-    function abs(value: number): number;
+    abs(value: number): number;
 
     /**
      * Returns the square root of a number
      */
-    function sqrt(value: number): number;
+    sqrt(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function sin(value: number): number;
+    sin(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function cos(value: number): number;
-
-    /**
-     * Returns the value of x to the power of y
-     */	
-    function tan(value: number): number;
+    cos(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function asin(value: number): number;
+    tan(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function acos(value: number): number;
+    asin(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function atan(value: number): number;
+    acos(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function log(value: number): number;
+    atan(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function exp(value: number): number;
+    log(value: number): number;
 
     /**
      * Returns the value of x to the power of y
      */
-    function log10(value: number): number;
-}
+    exp(value: number): number;
 
-declare namespace window {
+    /**
+     * Returns the value of x to the power of y
+     */
+    log10(value: number): number;
+};
+
+declare const window: typeof globalThis & {
     /**
      * Displays the native alert dialog with the specified message.
      * @param message the message to display
      */
-    function alert(message: string): void;
+    alert(message: string): void;
 
     /**
      * Displays the native confirm dialog with the specified message.
      * @param message the message to display
      */
-    function confirm(message: string): boolean;
+    confirm(message: string): boolean;
 
     /**
      * 
      * @param message the message to display
      */
-    function prompt(message: string): string;
-}
+    prompt(message: string): string;
+};
 
 declare const Infinity: number;
 declare const NaN: number;
