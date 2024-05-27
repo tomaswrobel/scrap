@@ -439,10 +439,10 @@
   resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-4.0.2.tgz#4439cd03b974b463eb79e06609ef61b6373550ad"
   integrity sha512-3gQufdo+40uFHbHn6Kyyw1ZVbgQffC7Ko8erVD8BcQwPgnusYIMgrqjn86nv2vgCH2kwH1ilg6xJfkDdqc/asw==
 
-"@blockly/field-date@8.0.15":
-  version "8.0.15"
-  resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-8.0.15.tgz#7c164e956f66de0308f84849bfe22d5fbd8e7289"
-  integrity sha512-P/480xETkzA/TW+y2C8x9hwY0qo38y0KIZ2wujpTc01EfMnxOxGHTyzp77gkRZOAAwLhheZ2NcQLehjXczv95g==
+"@blockly/field-date@8.0.17":
+  version "8.0.17"
+  resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-8.0.17.tgz#3d7e86de5d9afc8a0131849401c5bb497fb13bc8"
+  integrity sha512-NopAsJCAB6qyWSTVN2caIfgiwZrU1coX/C4f/ydpVbzTQcEzkhDWWB6v+qycjxmRhaaTDJE3X29XjtV8Z7u+zQ==
 
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.5"
