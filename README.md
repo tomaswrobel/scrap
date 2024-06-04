@@ -27,7 +27,7 @@ Scratch is an excellent platform for beginners to get started with programming, 
 
 - **Block-Based Interface** - Scrap's interface is block-based, just like Scratch. This makes it easier for Scratch users to get started with Scrap. The block-based interface is powered by [Blockly](https://developers.google.com/blockly).
 
-- **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by [Prism Code Editor](https://prism-code-editor.netlify.app).
+- **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by [Monaco Editor](https://microsoft.github.io/monaco-editor/).
 
 - **SB3 Support** \[*incomplete*\] - Scrap supports the SB3 file format, which is the default file format used by Scratch 3.0. This allows you to import your Scratch projects into Scrap and continue working on them.
 
@@ -66,37 +66,42 @@ In the worst case, Scrap will not work at all. You'll get non-sensical errors, a
 
 ### Installation
 
-> **NOTE**: If you just want to use Scrap, you can access it online at [scrap.tomaswrobel.dev](https://scrap.tomaswrobel.dev). You don't need to install anything to use Scrap online.
+> **NOTE**: If you just want to use Scrap, you can access it online at [scrap.tomaswrobel.dev](https://scrap.tomaswrobel.dev). This guide is for developers who want to contribute to Scrap or run it locally.
 
-To get started with Scrap, you need to have Node.js installed on your machine. If you don't have it yet, you can download and install it from the official [Node.js website](https://nodejs.org/).
+To get started with Scrap, you need to have Node.js installed on your machine. If you don't have it yet, you can download and install it from the official [Node.js website](https://nodejs.org/). Also, make sure you have `yarn` installed. If you don't have it, you can install it by running `npm install -g yarn`.
 
-Once you have Node.js installed, follow these steps:
+Once you have Node.js and Yarn installed, follow these steps:
 
 1. Clone this repository: `git clone https://github.com/tomas-wrobel/scrap.git`
 2. Navigate to the project folder: `cd scrap`
-3. Install project dependencies: `npm install`
+3. Install project dependencies: `yarn`
 
 ### Usage
 
 After installing the required dependencies, you can launch the Scrap interactive environment:
 
 ```bash
-npm run dev
+yarn serve
 ```
 
 This will open up a local development server where you can access the Scrap interface using your web browser.
 
 ## Roadmap
 
-Scrap is still in its early stages of development. Here's what's planned for the future:
+Scrap is still in its early stages of development.
 
-- **More Blocks** - Scrap currently supports only a limited number of blocks. More blocks will be added in the future to make Scrap more useful.
+### Planned
 
-- **Scratch Compatibility** - Scrap is not fully compatible with Scratch yet. In the future, Scrap will be made compatible with Scratch to make the transition smoother.
+- [ ] **More Blocks** - Scrap currently supports only a limited number of blocks. More blocks will be added in the future to make Scrap more useful.
 
-- **More Features** - Scrap will be getting more features in the future, such as a built-in code editor, a better paint editor, and more.
+- [ ] **More Features** - Scrap will be getting more features in the future, such as a better paint editor, and more.
 
-- **More Resources** - Scrap will be getting more resources in the future, such as tutorials, guides, and more.
+- [ ] **More Resources** - Scrap will be getting more resources in the future, such as tutorials, guides, and more.
+
+### Finished
+
+- [x] **Builtin code editor** - Scrap now has a built-in code editor powered by Monaco Editor. It highlights syntax to be the same as blocks, provides autocompletion, checks for errors, and more. (Scrap 4)
+- [x] **Scratch Support** - Scrap now supports SB3 files. You can import your Scratch projects into Scrap and continue working on them. (Scrap 3)
 
 ## Scrap Logo Explanation
 
@@ -114,7 +119,7 @@ In essence, Scrap's logo is a respectful tribute to Scratch, complying with lega
 
 For more info, you can take a look at the [blog post](https://tomaswrobel.dev/blog/scrap.mdx) I wrote about Scrap's development.
 
-**Microsoft**: Scrap is written in **TypeScript**. It doesn't use any framework. I use **Visual Studio Code** as my code editor. I develop with the help of **GitHub**, and its Copilot. Also, I use **GitHub Actions** to automate the build and deployment process. The resulting code is hosted on **GitHub Pages**. Primarily, I develop on **Windows 11** and test on **Microsoft Edge**.
+**Microsoft**: Scrap is written in **TypeScript**. The same language you can code with inside Scrap with the help of **Monaco Edtior**. It doesn't use any framework. I use **Visual Studio Code** as my code editor. I develop with the help of **GitHub**, and its Copilot. Also, I use **GitHub Actions** to automate the build and deployment process. The resulting code is hosted on **GitHub Pages**. Primarily, I develop on **Windows 11** and test on **Microsoft Edge**.
 
 **Google**: Scrap wouldn't be possible without **Blockly**. (In fact, Scratch relies on Blockly too.) When I'm at school, I use a **Chromebok** to take notes and, when the teacher isn't looking, to code Scrap.
 
@@ -127,7 +132,9 @@ Scrap is released under the [MIT License](LICENSE), which means you're free to u
 
 ---
 
-Ready to make your transition from Scratch to JavaScript smoother? Scrap is here to assist you. Start exploring, experimenting, and learning with Scrap today! If you have any questions or need help, feel free to reach out to us in the Issues section.
+Ready to make your transition from Scratch to JavaScript smoother? Scrap is here to assist you. Start exploring, experimenting, and learning with Scrap today! If you have any questions or need help, feel free to reach out to me in the Issues section.
+
+![Scrap Logo](src/app/scrap.svg)
 
 [blockly-badge]: https://img.shields.io/badge/built_on-blockly-blue?logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgaWQ9IkxheWVyXzYiCiAgIGRhdGEtbmFtZT0iTGF5ZXIgNiIKICAgdmlld0JveD0iMCAwIDE5MiAxOTIiCiAgIHZlcnNpb249IjEuMSIKICAgc29kaXBvZGk6ZG9jbmFtZT0ibG9nby1vbmx5LnN2ZyIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMC45Mi4ycHJlMCAoOTczZTIxNiwgMjAxNy0wNy0yNSkiCiAgIGlua3NjYXBlOmV4cG9ydC1maWxlbmFtZT0iL3Vzci9sb2NhbC9nb29nbGUvaG9tZS9lcGFzdGVybi9Eb2N1bWVudHMvQmxvY2tseSBMb2dvcy9TcXVhcmUvbG9nby1vbmx5LnBuZyIKICAgaW5rc2NhcGU6ZXhwb3J0LXhkcGk9Ijk2IgogICBpbmtzY2FwZTpleHBvcnQteWRwaT0iOTYiPgogIDxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTkxMyI+CiAgICA8cmRmOlJERj4KICAgICAgPGNjOldvcmsKICAgICAgICAgcmRmOmFib3V0PSIiPgogICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgICAgIDxkYzp0eXBlCiAgICAgICAgICAgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIgLz4KICAgICAgICA8ZGM6dGl0bGU+bG9nby1vbmx5PC9kYzp0aXRsZT4KICAgICAgPC9jYzpXb3JrPgogICAgPC9yZGY6UkRGPgogIDwvbWV0YWRhdGE+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxIgogICAgIG9iamVjdHRvbGVyYW5jZT0iMTAiCiAgICAgZ3JpZHRvbGVyYW5jZT0iMTAiCiAgICAgZ3VpZGV0b2xlcmFuY2U9IjEwIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwIgogICAgIGlua3NjYXBlOnBhZ2VzaGFkb3c9IjIiCiAgICAgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIyNTYwIgogICAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9IjEzNzkiCiAgICAgaWQ9Im5hbWVkdmlldzkxMSIKICAgICBzaG93Z3JpZD0iZmFsc2UiCiAgICAgaW5rc2NhcGU6em9vbT0iMiIKICAgICBpbmtzY2FwZTpjeD0iMjM5Ljg3NjQyIgogICAgIGlua3NjYXBlOmN5PSI1OS43NDI2ODciCiAgICAgaW5rc2NhcGU6d2luZG93LXg9IjAiCiAgICAgaW5rc2NhcGU6d2luZG93LXk9IjAiCiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJnMTAxMyIgLz4KICA8ZGVmcwogICAgIGlkPSJkZWZzOTAyIj4KICAgIDxzdHlsZQogICAgICAgaWQ9InN0eWxlOTAwIj4uY2xzLTF7ZmlsbDojNDI4NWY0O30uY2xzLTJ7ZmlsbDojYzhkMWRiO308L3N0eWxlPgogIDwvZGVmcz4KICA8dGl0bGUKICAgICBpZD0idGl0bGU5MDQiPmxvZ28tb25seTwvdGl0bGU+CiAgPGcKICAgICBpZD0iZzEwMTMiCiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjMuNTAwMDAyLC03LjkxMjExMDUpIgogICAgIGlua3NjYXBlOmV4cG9ydC14ZHBpPSI5NiIKICAgICBpbmtzY2FwZTpleHBvcnQteWRwaT0iOTYiPgogICAgPHBhdGgKICAgICAgIGlkPSJwYXRoOTA2IgogICAgICAgZD0iTSAyMC4xNDA2MjUsMzIgQyAxMy40MzM1OTgsMzEuOTk0NDY4IDcuOTk0NDY4NCwzNy40MzM1OTggOCw0NC4xNDA2MjUgViAxNDguODU5MzggQyA3Ljk5NDQ3LDE1NS41NjY0MSAxMy40MzM1OTgsMTYxLjAwNTUzIDIwLjE0MDYyNSwxNjEgaCA0LjcyNjU2MyBjIDIuMzMwODI2LDguNzQxODIgMTAuMjQ1NzUxLDE0LjgyNTg1IDE5LjI5Mjk2OCwxNC44MzAwOCBDIDUzLjIwMTU2MiwxNzUuODE4NzggNjEuMTA4MTc2LDE2OS43MzYyMSA2My40Mzc1LDE2MSBoIDQuODQxNzk3IDE1LjcyNjU2MiBjIDQuNDE4Mjc4LDAgOCwtMy41ODE3MiA4LC04IFYgNDAgbCAtOCwtOCB6IgogICAgICAgc3R5bGU9ImZpbGw6IzQyODVmNCIKICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICBzb2RpcG9kaTpub2RldHlwZXM9ImNjY2NjY2Njc3NjY2MiIC8+CiAgICA8cGF0aAogICAgICAgc29kaXBvZGk6bm9kZXR5cGVzPSJjY2NjY2NjY2NjY2NjY2NjYyIKICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICBpZD0icGF0aDkwOCIKICAgICAgIGQ9Ik0gODAuMDA3ODEyLDMxLjk5NDE0MSBDIDc5Ljk5NzE0Nyw0OS42OTY4ODcgODAsNjcuMzk2NTI1IDgwLDg1LjEwOTM3NSBMIDYzLjM2OTE0MSw3NS43MTA5MzggQyA2MC45NzE3ODQsNzQuMzU4MTg5IDU4LjAwNDg5MSw3Ni4wODcxNjggNTgsNzguODM5ODQ0IHYgNDAuNjIxMDk2IGMgMC4wMDQ5LDIuNzUyNjcgMi45NzE3ODYsNC40ODE2NSA1LjM2OTE0MSwzLjEyODkgTCA4MCwxMTMuMTg5NDUgdiAzNy41OTE4IDIuMjE4NzUgOCBoIDggMS40MjU3ODEgMzYuMDU0Njg5IGMgNi4zNjE5NSwtMi42ZS00IDExLjUxOTI3LC01LjE1NzU4IDExLjUxOTUzLC0xMS41MTk1MyBWIDQzLjQ4MDQ2OSBDIDEzNi45NzgyMiwzNy4xMzM3NzUgMTMxLjgyNzIsMzIuMDAwMjIyIDEyNS40ODA0NywzMiBaIgogICAgICAgc3R5bGU9ImZpbGw6I2M4ZDFkYiIgLz4KICA8L2c+Cjwvc3ZnPgo=
 [engine-badge]: https://img.shields.io/badge/scrap--engine-1.10.5-red?logo=npm
