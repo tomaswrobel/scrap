@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.3] - 2024-6-4
+
+### Fixed
+
+- CHANGELOG.md format
+- dependencies update
+
 ## [4.5.2] - 2024-6-4
 
 ### Fixed
@@ -210,7 +217,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SB3 compatibility - `setRotationStyle` block now works correctly.
 - README.md note for end users
 
-## Added
+### Added
 
 - Styling of color & range input in Paint Editor
 - Select tool in Paint Editor
@@ -218,18 +225,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some comments
 - PWA can now handles SB3 files.
 
-## Changed
+### Changed
 
 - The way how triangles are drawn in Paint Editor
 
 ## [3.4.1] - 2023-11-11
 
-## Fixed
+### Fixed
 
 - backdrop / costume accessors now work correctly.
 - conversion from JS to blocks now handles variables correctly.
 
-## Added
+### Added
 
 - User can now export the project with CDN links to Scrap Engine, minimizing the size of the project.
 
@@ -348,7 +355,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SB3 file compatibility (experimental, about 20 % so far)
 - `ifOnEdgeBounce` block
 
-## Changed
+### Changed
 
 - prism-code-editor update
 - scrap-engine update
@@ -493,7 +500,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - engine udate
 - worker's fixes
 
-## Added
+### Added
 
 - stop functionality
 
@@ -631,7 +638,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Code" tab is now called "JavaScript".
 - Release note header is now smaller.
 
-## Added
+### Added
 
 - RELEASE_HEADER.md file is now included in releases.
 
@@ -678,7 +685,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.5.2...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.5.3...HEAD
+[4.5.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.3
 [4.5.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.2
 [4.5.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.1
 [4.5.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.0
