@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.6.0] - 2024-6-18
+
+### Changed
+
+- Scrap Engine version
+
 ## [4.5.3] - 2024-6-4
 
 ### Fixed
@@ -685,7 +691,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.5.3...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.6.0...HEAD
+[4.6.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.6.0
 [4.5.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.3
 [4.5.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.2
 [4.5.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.1
