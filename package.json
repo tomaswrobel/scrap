@@ -62,5 +62,6 @@
 		"./node_modules/monaco-editor/esm/vs/base/common/platform.js": "./src/monaco-editor/platform.ts",
 		"./node_modules/monaco-editor/esm/vs/editor/editor.main.js": "monaco-editor/esm/vs/editor/edcore.main.js",
 		"./node_modules/blockly/index.js": "./node_modules/blockly/blockly_compressed.js"
-	}
+	},
+	"packageManager": "yarn@1.22.22"
 }
