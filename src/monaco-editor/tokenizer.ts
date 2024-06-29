@@ -244,7 +244,8 @@ languages.registerTokensProviderFactory("typescript", {
             "async",
             "with",
             "yield",
-            "enum"
+            "enum",
+            "class"
         ],
         sprites: [
             "$",
