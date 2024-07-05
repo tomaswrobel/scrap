@@ -1,4 +1,9 @@
 /**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
  * @license MIT
  * @fileoverview Defines the function mutator.
  * @author Tomáš Wróbel
@@ -112,12 +117,7 @@ export const MIXIN = {
             }
         }
 
-        while (true) {
-            const input = this.getInput("PARAM_" + i);
-            if (!input) {
-                break;
-            }
-            input.connection!.targetBlock()!.dispose(false);
+        for (let input = this.getInput("PARAM_" + i); input; input = this.getInput("PARAM_" + ++i)) {
             this.removeInput("PARAM_" + i);
         }
 

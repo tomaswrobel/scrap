@@ -1,12 +1,22 @@
-// Replacement for monaco-editor/esm/vs/base/common/platform.js
-// Monaco Editor attempts to detect Node environment.
-// However, Parcel tries to simulate Node and the simulation
-// does not work with Monaco Editor's
-
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT [from-monaco-editor]
+ * @author Microsoft Corporation
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Platform utilities for Monaco Editor.
+ *
+ * Replacement for monaco-editor/esm/vs/base/common/platform.js
+ * Monaco Editor attempts to detect Node environment.
+ * However, Parcel tries to simulate Node and the simulation
+ * does not work with Monaco Editor's detection.
+ */
+/** TypeScript requires declaration even within typeof .. !== 'undefined' */
 declare const importScripts: (...scripts: string[]) => void;
 export const userAgent = navigator.userAgent;
 export const LANGUAGE_DEFAULT = 'en';

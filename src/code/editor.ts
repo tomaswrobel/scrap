@@ -12,6 +12,7 @@ const lib = fs.readFileSync(path.join(__dirname, "lib", "runtime.ts"), "utf-8");
 
 class CodeEditor implements TabComponent {
 	name = "Code";
+	hasError = false;
 	editor?: editor.IStandaloneCodeEditor;
 
 	// DOM
@@ -21,8 +22,15 @@ class CodeEditor implements TabComponent {
 
 	constructor() {
 		this.container.classList.add("tab-content");
+
 		this.main.onDidChangeContent(() => {
 			app.current.code = this.main.getValue();
+		});
+
+		this.main.onDidChangeDecorations(() => {
+			const decorations = this.main.getAllDecorations(undefined, true);
+			const errors = this.main.getAllDecorations(undefined, false);
+			this.hasError = decorations.length !== errors.length;
 		});
 	}
 

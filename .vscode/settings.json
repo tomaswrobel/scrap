@@ -4,7 +4,10 @@
     "typescript.format.semicolons": "insert",
     "editor.formatOnSave": true,
     "files.associations": {
+        // Parcel supports JSONC by default
         "*.json": "jsonc",
     },
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
 }

@@ -1,3 +1,15 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ *
+ * This file corrects the Blockly workspace to be more Scrap-like.
+ * Also it handles custom toolbox, see it at src/blockly/plugins/. 
+ */
 .blockly {
 	&TreeLabel {
 		margin: auto;

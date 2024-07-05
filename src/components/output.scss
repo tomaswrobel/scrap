@@ -1,5 +1,17 @@
-// This is more Scratch-like style
-// than found in BlockLike.js
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview CSS injected into the output frame.
+ * @author Tomáš Wróbel
+ *
+ * This is more Scratch-like style than found in Scrap Engine.
+ * This is because Scrap Engine gets bundled into exports
+ * so it's better to keep it minimal.
+ */
 * {
 	box-sizing: border-box;
 }
@@ -29,7 +41,7 @@ body {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background-image: url("../app/flag.svg");
+	background-image: url("../svgs/flag.svg");
 	background-size: 70px 70px;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -150,13 +162,13 @@ body {
 	border-radius: 4px;
 	background-color: #AAA;
 
-	>span {
+	> span {
 		font-family: sans-serif;
 		color: #111;
 		font-size: 11px;
 	}
 
-	>.scrap-slider {
+	> .scrap-slider {
 		position: absolute;
 		left: 0;
 		bottom: 0;
@@ -168,7 +180,7 @@ body {
 		padding-bottom: 24px;
 	}
 
-	&:not(.has-slider)>.scrap-slider {
+	&:not(.has-slider) > .scrap-slider {
 		display: none;
 	}
 }

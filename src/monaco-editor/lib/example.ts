@@ -7,3 +7,7 @@ self.whenFlag(() => {
         self.effects.brightness = 0;
     });
 });
+
+let a = 5;
+
+const c = String(a)

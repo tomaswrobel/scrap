@@ -1,7 +1,7 @@
 import * as Blockly from "blockly";
-import blocks from "./blocks";
-import fields from "./fields";
-import extensions from "./extensions";
+import * as blocks from "./blocks/*.ts";
+import * as fields from "./fields/*.ts";
+import * as extensions from "./extensions/*.ts";
 
 import "@blockly/field-color";
 import "@blockly/field-date";
@@ -14,46 +14,71 @@ import theme from "./data/theme.json";
 import data from "./data/blocks.json";
 import {TypeScript, Order} from "../code/transformers/typescript";
 
-for (const name in blocks) {
-	const data = blocks[name];
+const mutatorBlocks: string[] = []; {
+	let start = 0;
+	for (const name in blocks) {
+		const data = blocks[name];
 
-	if ("init" in data.MIXIN) {
-		Blockly.Blocks[name] = data.MIXIN;
-	} else {
-		Blockly.Extensions.registerMutator(
-			name,
-			data.MIXIN,
-			undefined,
-			data.blocks
-		);
+		if (name === "*.d") {
+			continue;
+		}
+
+		if ("init" in data.MIXIN) {
+			Blockly.Blocks[name] = data.MIXIN;
+		} else {
+			for (let i = 0; i < (data.blocks?.length || 0); i++) {
+				mutatorBlocks[i + start++] = data.blocks![i];
+			}
+
+			Blockly.Extensions.registerMutator(
+				name,
+				data.MIXIN,
+				undefined,
+				data.blocks
+			);
+		}
 	}
 }
 
-for (const field in fields) {
+for (const name in fields) {
+	if (name === "*.d") {
+		continue;
+	}
+
 	Blockly.fieldRegistry.register(
-		field,
-		fields[field].default
+		name,
+		fields[name].default
 	);
 }
 
-for (const extension in extensions) {
+for (const name in extensions) {
+	if (name === "*.d") {
+		continue;
+	}
+
 	Blockly.Extensions.register(
-		extension,
-		extensions[extension].default
+		name,
+		extensions[name].default
 	);
 }
 
 Blockly.setLocale(En);
 
-export const allBlocks = data.map(({args0, type, output, previousStatement}) => {
-	const isEvent = output === undefined && previousStatement === undefined;
+/**
+ * All names of properties and methods that are available on the sprite and stage objects.
+ */
+export const properties = data.map(d => {
+	// Despite the name, this also handles the dynamic code generation. 
+	// It's placed here to minimize the amount of iterations.
+	
+	if (!(d.type in TypeScript.blocks) && mutatorBlocks.indexOf(d.type) === -1) {
+		const isEvent = !("output" in d) && !("previousStatement" in d);
 
-	if (!(type in TypeScript.blocks)) {
-		TypeScript.register(type, (block, ts) => {
-			let code = `self.${type}`;
+		TypeScript.register(d.type, (block, ts) => {
+			let code = `self.${d.type}`;
 
-			if (args0 || isEvent) {
-				const args = (args0 || []).filter(input => input.type === "input_value").map(input => {
+			if (d.args0 || isEvent) {
+				const args = (d.args0 || []).filter(input => input.type === "input_value").map(input => {
 					return (
 						ts.valueToCode(block, input.name, Order.NONE) ||
 						"null"
@@ -84,9 +109,9 @@ export const allBlocks = data.map(({args0, type, output, previousStatement}) => 
 
 			return code + ";\n";
 		});
-	}
 
-	return type;
+		return d.type;
+	}
 });
 
 

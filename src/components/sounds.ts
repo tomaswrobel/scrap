@@ -1,3 +1,17 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Sound preview component.
+ * 
+ * Unfortunately, Scrap does not support sound editing yet. This component
+ * is a placeholder for future development. It allows the user to preview
+ * the sound files and play them only.
+ */
 import WaveSurfer from "wavesurfer.js";
 import TabComponent from "./tab";
 import {MediaList} from "./media-list";

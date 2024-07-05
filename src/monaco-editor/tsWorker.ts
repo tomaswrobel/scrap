@@ -1,16 +1,26 @@
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT [from-monaco-editor]
+ * @author Microsoft Corporation
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * 
+ * Added:
+ * - Scrap lib instead of TypeScript lib.
+ * - Error diagnostics for advanced syntax.
+ * 
+ * Changed:
+ * - Transforming TypeScriptWorker.clearFiles to decorator.
+ * - Remapping imports.
+ */
 import ts from 'typescript';
-import type {
-    Diagnostic,
-    DiagnosticRelatedInformation,
-    IExtraLibs,
-    TypeScriptWorker as ITypeScriptWorker
-} from './typescript';
-import {Uri, worker} from 'monaco-editor';
+import type {Diagnostic, IExtraLibs, ITypeScriptWorker} from './typescript';
+import type {Uri, languages, worker} from 'monaco-editor';
 
 import path from 'path';
 import fs from 'fs';
@@ -159,60 +169,256 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 
     // --- language features
 
-    private static clearFiles(tsDiagnostics: ts.Diagnostic[]): Diagnostic[] {
-        // Clear the `file` field, which cannot be JSON'yfied because it
-        // contains cyclic data structures, except for the `fileName`
-        // property.
-        // Do a deep clone so we don't mutate the ts.Diagnostic object (see https://github.com/microsoft/monaco-editor/issues/2392)
-        const diagnostics: Diagnostic[] = [];
-        for (const tsDiagnostic of tsDiagnostics) {
-            const diagnostic: Diagnostic = {...tsDiagnostic};
-            diagnostic.file = diagnostic.file ? {fileName: diagnostic.file.fileName} : undefined;
-            if (tsDiagnostic.relatedInformation) {
-                diagnostic.relatedInformation = [];
-                for (const tsRelatedDiagnostic of tsDiagnostic.relatedInformation) {
-                    const relatedDiagnostic: DiagnosticRelatedInformation = {...tsRelatedDiagnostic};
-                    relatedDiagnostic.file = relatedDiagnostic.file
-                        ? {fileName: relatedDiagnostic.file.fileName}
-                        : undefined;
-                    diagnostic.relatedInformation.push(relatedDiagnostic);
+    public static clearFiles<T extends TypeScriptWorker>(_target: T, _key: string, value: TypedPropertyDescriptor<(this: T, fileName: string) => Promise<Diagnostic[]>>): typeof value {
+        return {
+            configurable: true,
+            enumerable: false,
+            async value(fileName: string) {
+                const diagnostics = await value.value!.call(this, fileName);
+
+                if (diagnostics.length === 0) {
+                    return diagnostics;
                 }
+
+                return diagnostics.reduce(
+                    (acc, diag) => {
+                        return [
+                            ...acc,
+                            {
+                                ...diag,
+                                file: diag.file && {fileName: diag.file.fileName},
+                                relatedInformation: diag.relatedInformation?.map((ri) => ({
+                                    ...ri,
+                                    file: ri.file && {fileName: ri.file.fileName}
+                                }))
+                            }
+                        ];
+                    },
+                    [] as Diagnostic[]
+                );
             }
-            diagnostics.push(diagnostic);
-        }
-        return diagnostics;
+        };
     }
 
+    /**
+     * A decorator that adds Scrap related diagnostics.
+     * Add this to either a semantic or syntactic diagnostic method.
+     * 
+     * @param _target A TypeScriptWorker instance
+     * @param _key A string
+     * @param value A TypedPropertyDescriptor
+     */
+    public static scrap<T extends TypeScriptWorker>(_target: T, _key: string, value: TypedPropertyDescriptor<(this: T, fileName: string) => Promise<Diagnostic[]>>): typeof value {
+        return {
+            configurable: true,
+            enumerable: false,
+            async value(fileName: string) {
+                const diagnostics = await value.value!.call(this, fileName);
+                const program = this._languageService.getProgram();
+
+                if (!program) {
+                    return diagnostics;
+                }
+
+                const sourceFile = program.getSourceFile(fileName);
+                if (!sourceFile) {
+                    return diagnostics;
+                }
+
+                sourceFile.forEachChild(function visit(node) {
+                    switch (node.kind) {
+                        case ts.SyntaxKind.ClassDeclaration:
+                        case ts.SyntaxKind.ClassExpression:
+                            diagnostics.push({
+                                messageText: "Classes are not allowed",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
+                        case ts.SyntaxKind.ExportDeclaration:
+                        case ts.SyntaxKind.ExportAssignment:
+                        case ts.SyntaxKind.ImportDeclaration:
+                        case ts.SyntaxKind.ImportEqualsDeclaration:
+                            diagnostics.push({
+                                messageText: "You are not inside a module!",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
+                        case ts.SyntaxKind.TypeAliasDeclaration:
+                            diagnostics.push(
+                                {
+                                    messageText: "Type aliases are not allowed",
+                                    category: ts.DiagnosticCategory.Error,
+                                    code: 9999,
+                                    start: node.getStart(),
+                                    length: node.getWidth(),
+                                    file: {fileName}
+                                },
+                                {
+                                    messageText: "Scrap does not use TypeScript type-checking. It uses its own, much simpler type system because the translation to blocks",
+                                    category: ts.DiagnosticCategory.Message,
+                                    code: 9999,
+                                    start: node.getStart(),
+                                    length: node.getWidth(),
+                                    file: {fileName}
+                                }
+                            );
+                            break;
+                        case ts.SyntaxKind.InterfaceDeclaration:
+                            const interfaceNode = node as ts.InterfaceDeclaration;
+                            if (interfaceNode.name.text === "Variables") {
+                                if (interfaceNode.heritageClauses?.length) {
+                                    diagnostics.push({
+                                        messageText: "Variables interface cannot extend other interfaces",
+                                        category: ts.DiagnosticCategory.Error,
+                                        code: 9999,
+                                        start: node.getStart(),
+                                        length: node.getWidth(),
+                                        file: {fileName}
+                                    });
+                                }
+                                break;
+                            }
+                            diagnostics.push({
+                                messageText: "Interfaces are not allowed",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
+                        case ts.SyntaxKind.EnumDeclaration:
+                            diagnostics.push({
+                                messageText: "Enums are not allowed",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
+                        case ts.SyntaxKind.ModuleDeclaration:
+                            diagnostics.push({
+                                messageText: "Namespaces are not allowed",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
+                        case ts.SyntaxKind.AsExpression:
+                        case ts.SyntaxKind.SatisfiesExpression:
+                            diagnostics.push(
+                                {
+                                    messageText: "Type assertions are not allowed",
+                                    category: ts.DiagnosticCategory.Error,
+                                    code: 9999,
+                                    start: node.getStart(),
+                                    length: node.getWidth(),
+                                    file: {fileName}
+                                },
+                                {
+                                    messageText: "Scrap does not use TypeScript type-checking. It uses its own, much simpler type system because the translation to blocks",
+                                    category: ts.DiagnosticCategory.Message,
+                                    code: 9999,
+                                    start: node.getStart(),
+                                    length: node.getWidth(),
+                                    file: {fileName}
+                                }
+                            );
+                            break;
+                        case ts.SyntaxKind.NullKeyword:
+                        case ts.SyntaxKind.UndefinedKeyword:
+                            diagnostics.push({
+                                messageText: "In Scrap, there is no null or undefined",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
+                        case ts.SyntaxKind.ThisKeyword:
+                            diagnostics.push({
+                                messageText: "This won't have a value in Scrap. Use `self` instead.",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
+                        case ts.SyntaxKind.AwaitExpression:
+                        case ts.SyntaxKind.AsyncKeyword:
+                            diagnostics.push(
+                                {
+                                    messageText: "Async / await is redundant in Scrap",
+                                    category: ts.DiagnosticCategory.Error,
+                                    code: 9999,
+                                    start: node.getStart(),
+                                    length: node.getWidth(),
+                                    file: {fileName}
+                                },
+                                {
+                                    messageText: "In fact, Scrap transforms every call to an awaited one and every function to an async one.",
+                                    category: ts.DiagnosticCategory.Message,
+                                    code: 9999,
+                                    start: node.getStart(),
+                                    length: node.getWidth(),
+                                    file: {fileName}
+                                }
+                            );
+                            break;
+                    }
+
+                    ts.forEachChild(node, visit);
+                });
+
+                return diagnostics;
+            }
+        };
+    }
+
+    @TypeScriptWorker.clearFiles
     async getSyntacticDiagnostics(fileName: string): Promise<Diagnostic[]> {
         if (fileNameIsLib(fileName)) {
             return [];
         }
-        const diagnostics = this._languageService.getSyntacticDiagnostics(fileName);
-        return TypeScriptWorker.clearFiles(diagnostics);
+        return this._languageService.getSyntacticDiagnostics(fileName);
     }
 
+    @TypeScriptWorker.scrap
+    @TypeScriptWorker.clearFiles
     async getSemanticDiagnostics(fileName: string): Promise<Diagnostic[]> {
         if (fileNameIsLib(fileName)) {
             return [];
         }
-        const diagnostics = this._languageService.getSemanticDiagnostics(fileName);
-        return TypeScriptWorker.clearFiles(diagnostics);
+        return this._languageService.getSemanticDiagnostics(fileName);
     }
 
+    @TypeScriptWorker.clearFiles
     async getSuggestionDiagnostics(fileName: string): Promise<Diagnostic[]> {
         if (fileNameIsLib(fileName)) {
             return [];
         }
-        const diagnostics = this._languageService.getSuggestionDiagnostics(fileName);
-        return TypeScriptWorker.clearFiles(diagnostics);
+        return this._languageService.getSuggestionDiagnostics(fileName);
     }
 
+    @TypeScriptWorker.clearFiles
     async getCompilerOptionsDiagnostics(fileName: string): Promise<Diagnostic[]> {
         if (fileNameIsLib(fileName)) {
             return [];
         }
-        const diagnostics = this._languageService.getCompilerOptionsDiagnostics();
-        return TypeScriptWorker.clearFiles(diagnostics);
+        return this._languageService.getCompilerOptionsDiagnostics();
     }
 
     async getCompletionsAtPosition(
@@ -356,7 +562,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
     async getRenameInfo(
         fileName: string,
         position: number,
-        options: ts.RenameInfoOptions
+        options: ts.UserPreferences
     ): Promise<ts.RenameInfo> {
         if (fileNameIsLib(fileName)) {
             return {canRename: false, localizedErrorMessage: 'Cannot rename in lib file'};
@@ -364,11 +570,16 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
         return this._languageService.getRenameInfo(fileName, position, options);
     }
 
-    async getEmitOutput(fileName: string): Promise<ts.EmitOutput> {
+    async getEmitOutput(fileName: string) {
         if (fileNameIsLib(fileName)) {
-            return {outputFiles: [], emitSkipped: true};
+            return {
+                outputFiles: [],
+                emitSkipped: true,
+                diagnostics: []
+            };
         }
-        return this._languageService.getEmitOutput(fileName);
+
+        return this._languageService.getEmitOutput(fileName) as languages.typescript.EmitOutput;
     }
 
     async getCodeFixesAtPosition(
@@ -376,7 +587,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
         start: number,
         end: number,
         errorCodes: number[],
-        formatOptions: ts.FormatCodeOptions
+        formatOptions: ts.FormatCodeSettings
     ): Promise<ReadonlyArray<ts.CodeFixAction>> {
         if (fileNameIsLib(fileName)) {
             return [];

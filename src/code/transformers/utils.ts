@@ -125,13 +125,13 @@ export function getType(type: babel.types.TSType | null | undefined): app.Check 
 	return "any";
 }
 
-export function isProperty(node: babel.types.MemberExpression, ...properties: string[]): node is babel.types.MemberExpression & {property: babel.types.Identifier | babel.types.StringLiteral;} {
+export function isProperty(node: babel.types.MemberExpression, ...properties: unknown[]): node is babel.types.MemberExpression & {property: babel.types.Identifier | babel.types.StringLiteral;} {
 	return (
 		isIdentifier(node.property, ...properties) ||
 		(node.property.type === "StringLiteral" && properties.indexOf(node.property.value) > -1)
 	);
 }
 
-export function isIdentifier(node: babel.types.Node, ...names: string[]) {
+export function isIdentifier(node: babel.types.Node, ...names: unknown[]) {
 	return node.type === "Identifier" && names.indexOf(node.name) > -1;
 }

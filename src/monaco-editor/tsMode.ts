@@ -1,8 +1,16 @@
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT [from-monaco-editor]
+ * @author Microsoft Corporation
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Just remapped imports.
+ */
 import {WorkerManager} from './workerManager';
 import type {TypeScriptWorker} from './tsWorker';
 import type {LanguageServiceDefaults} from './typescript';

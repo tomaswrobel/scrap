@@ -1,7 +1,23 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Block transformer for TypeScript code.
+ * 
+ * This file is responsible for transforming TypeScript code into Blockly
+ * blocks. It uses Babel to parse the code and Blockly to generate the
+ * blocks. The transformation is done in a way that the blocks are
+ * generated in the same order as the code is written. This is done by
+ * traversing the AST and creating blocks for each node. 
+ */
 import * as Blockly from "blockly";
 import type {Entity} from "../../components/entity";
-import {Error, allBlocks, toCheck} from "../../blockly";
-import type {types as BabelTypes} from "@babel/core";
+import {Error, properties, toCheck} from "../../blockly";
+import type {types as Types} from "@babel/core";
 import {getPropertyContents, getType, isIdentifier, isProperty} from "./utils";
 
 export default class Blocks {
@@ -11,7 +27,7 @@ export default class Blocks {
 
     private constructor(
         readonly workspace: Blockly.Workspace,
-        readonly babel: typeof BabelTypes
+        readonly babel: typeof Types
     ) {}
 
     static async processEntity(e: Entity) {
@@ -65,7 +81,7 @@ export default class Blocks {
         return variables;
     }
 
-    comments(block: Blockly.Block, node: BabelTypes.Node) {
+    comments(block: Blockly.Block, node: Types.Node) {
         if (node.leadingComments) {
             block.setCommentText(node.leadingComments.reduce((a, b) => a + b.value + "\n", "").trim());
         }
@@ -85,11 +101,11 @@ export default class Blocks {
         return block;
     }
 
-    parseArguments(block: Blockly.Block, nodes: BabelTypes.CallExpression["arguments"]) {
+    parseArguments(block: Blockly.Block, nodes: Types.CallExpression["arguments"]) {
         let i = 0;
 
         const inputs = block.inputList.filter(input => {
-            if (input.type === Blockly.inputTypes.VALUE) {
+            if (input.type === Blockly.inputs.inputTypes.VALUE) {
                 // Skip inputs that are already connected
                 if (input.connection?.isConnected()) {
                     i++;
@@ -121,7 +137,7 @@ export default class Blocks {
         }
     }
 
-    parse(node?: BabelTypes.Node | null): void {
+    parse(node?: Types.Node | null): void {
         if (node) switch (node.type) {
             case "TSAnyKeyword": {
                 const block = this.block("type");
@@ -395,7 +411,7 @@ export default class Blocks {
                 this.parse(node.consequent);
 
                 let elseIfCount = 0,
-                    elseIfStatements: BabelTypes.IfStatement[] = [],
+                    elseIfStatements: Types.IfStatement[] = [],
                     alternate = node.alternate;
 
                 while (alternate && alternate.type === "IfStatement") {
@@ -587,7 +603,7 @@ export default class Blocks {
                 });
 
                 if (this.connection = block.getInput("RETURNS")?.connection) {
-                    this.parse((node.returnType as BabelTypes.TSTypeAnnotation).typeAnnotation);
+                    this.parse((node.returnType as Types.TSTypeAnnotation).typeAnnotation);
                     savedTypes.push(toCheck(this.connection.targetBlock()));
                 }
 
@@ -684,7 +700,7 @@ export default class Blocks {
                         block.setFieldValue(getPropertyContents(node.callee.property), "PROPERTY");
                         this.connection = block.getInput("DATE")!.connection!;
                         this.parse(node.callee.object);
-                    } else if (isIdentifier(node.callee.object, "self") && isProperty(node.callee, ...allBlocks)) {
+                    } else if (isIdentifier(node.callee.object, "self") && isProperty(node.callee, ...properties)) {
                         const block = this.block(getPropertyContents(node.callee.property));
                         this.comments(block, node);
                         this.parseArguments(block, node.arguments);
@@ -767,7 +783,7 @@ export default class Blocks {
                     const block = this.block("length");
                     this.connection = block.getInput("VALUE")!.connection;
                     this.parse(object);
-                } else if (isIdentifier(object, "self") && isProperty(node, ...allBlocks)) {
+                } else if (isIdentifier(object, "self") && isProperty(node, ...properties)) {
                     this.block(getPropertyContents(property));
                 } else if (object.type === "MemberExpression" && isProperty(object, "effects")) {
                     if (isIdentifier(object.object, "self")) {
@@ -986,8 +1002,8 @@ export default class Blocks {
                     }
                     default: {
                         var block = this.block("set");
-                        var argument: BabelTypes.Expression = this.babel.binaryExpression(
-                            node.operator.slice(0, -1) as BabelTypes.BinaryExpression["operator"],
+                        var argument: Types.Expression = this.babel.binaryExpression(
+                            node.operator.slice(0, -1) as Types.BinaryExpression["operator"],
                             node.left,
                             node.right
                         );

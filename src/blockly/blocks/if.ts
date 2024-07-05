@@ -1,3 +1,19 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license Apache-2.0
+ * @author Google LLC
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Defines the if mutator.
+ * 
+ * This mutator is taken from Blockly's built-in controls_if block.
+ * The original isn't used only because of bundle size.
+ */
 import * as Blockly from "blockly";
 
 export type IfExtraState = {

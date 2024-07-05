@@ -1,4 +1,13 @@
-@import "../globals";
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+@import "../scss/globals";
 
 .sprites {
     display: flex;
@@ -10,7 +19,7 @@
 }
 
 .stage {
-    >img {
+    > img {
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 8px;
         width: 90%;

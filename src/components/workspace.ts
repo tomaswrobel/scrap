@@ -1,13 +1,26 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview Workspace component.
+ * @author Tomáš Wróbel
+ */
 import {stage, sprite, theme, plugins, Types, TypeToShadow} from "../blockly";
 import Blocks from "../code/transformers/blocks";
 import {Stage, Sprite} from "./entity";
 import * as Blockly from "blockly";
 import * as Parley from "parley.js";
-import Component from "./tab";
+import TabComponent from "./tab";
 import {bind} from "../decorators";
 import "./workspace.scss";
 
-export default class Workspace implements Component {
+/**
+ * Workspace component is a tab that displays the Blockly workspace.
+ */
+export default class Workspace implements TabComponent {
 	container = document.createElement("div");
 	workspace!: Blockly.WorkspaceSvg;
 	name = "Blocks";
@@ -19,6 +32,10 @@ export default class Workspace implements Component {
 
 	async prerender() {
 		if (!app.current.isUsingBlocks()) {
+			if (app.code.hasError) {
+				throw new Error("Please fix all errors before switching to blocks");
+			}
+
 			app.showLoader("Compiling code");
 			app.current.workspace.clear();
 			await Blocks.processEntity(app.current);
@@ -42,7 +59,6 @@ export default class Workspace implements Component {
 				contents: app.current instanceof Stage ? stage : sprite,
 			},
 			media: "blockly-media/",
-			sounds: false,
 			zoom: {
 				startScale: 0.65,
 			},
@@ -177,11 +193,11 @@ export default class Workspace implements Component {
 					};
 
 					const shadow = typeof type === "string"
-						? TypeToShadow[type] 
-						: type.length === 1 
-							? TypeToShadow[type[0]] 
+						? TypeToShadow[type]
+						: type.length === 1
+							? TypeToShadow[type[0]]
 							: TypeToShadow.any
-					;
+						;
 
 					if (shadow) {
 						inputs.VALUE = {shadow: {type: shadow}};

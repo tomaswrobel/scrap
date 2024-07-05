@@ -1,0 +1,213 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+@import "./globals";
+
+#app {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-areas:
+        "tabs handler buttons buttons"
+        "tab-content handler output output"
+        "tab-content handler sprites stage"
+    ;
+    grid-template-rows: 40px calc((var(--output) + 100) * 3px / 4) 1fr;
+    grid-template-columns: 1fr $gap calc(var(--output) * 1px + $gap) 100px;
+    background: $background;
+    padding-top: env(titlebar-area-height, 45px);
+
+    @mixin region($area) {
+        grid-area: $area;
+        border-radius: 5px;
+        background-color: white;
+    }
+
+    #handler {
+        cursor: ew-resize;
+        grid-area: handler;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+    }
+
+    iframe {
+        @include region(output);
+        border: 0;
+
+        width: calc(100% - $gap);
+        height: 100%;
+    }
+
+    + ul[role="navigation"] {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        z-index: 10000;
+        font-size: calc(env(titlebar-area-height, 45px) / 3);
+        background-color: $primary;
+        -webkit-app-region: drag;
+
+        position: fixed;
+        left: env(titlebar-area-x, 0);
+        top: env(titlebar-area-y, 0);
+        height: env(titlebar-area-height, 45px);
+        width: env(titlebar-area-width, 100%);
+
+        li.dropdown {
+            display: inline-block;
+
+            > a::after {
+                content: "▾";
+                margin-left: 2px;
+                transform-origin: center;
+                transition: transform 0.3s;
+                display: inline-block;
+            }
+
+            > .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: $primary;
+                min-width: 120px;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+            }
+
+            > .dropdown-content > a {
+                padding: 0 1em;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+                color: white;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+            }
+        }
+
+        li.dropdown.shown > {
+            a::after {
+                transform: rotateZ(180deg);
+            }
+
+            .dropdown-content {
+                display: block;
+            }
+        }
+
+        > li {
+            float: left;
+            height: 100%;
+            line-height: env(titlebar-area-height, 45px);
+            -webkit-app-region: none;
+
+            > a {
+                display: inline-block;
+                color: white;
+                text-align: center;
+                text-decoration: none;
+                padding: 0 1em;
+                height: 100%;
+
+                &:not(:empty):hover {
+                    background-color: rgba(0, 0, 0, 0.1);
+                }
+
+                &:empty {
+                    background-image: url("../svgs/scrap.svg");
+                    background-size: 80%;
+                    background-repeat: no-repeat;
+                    background-position: center;
+
+                    &::after {
+                        content: "SCRAP";
+                        opacity: 0;
+                    }
+                }
+            }
+
+            &.input {
+                display: flex;
+                align-items: center;
+
+                > input {
+                    background: transparent;
+                    border: 1px solid white;
+                    color: white;
+                    border-radius: 3px;
+                    outline-color: #fffa;
+                    text-align: center;
+                    font-size: inherit;
+                    margin-left: 1em;
+                    padding: 3%;
+
+                    &:hover:not(:focus) {
+                        background: rgba($color: $background, $alpha: 0.1);
+                    }
+                }
+            }
+        }
+    }
+
+    #stage {
+        @include region(stage);
+        margin: $gap;
+
+        > .name {
+            display: block;
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        &.selected {
+            border: 2px solid $primary;
+
+            > .name {
+                background: $primary;
+                color: #fff;
+            }
+        }
+
+        > img {
+            aspect-ratio: 4 / 3;
+            border: 1px solid #00000026;
+            border-radius: 8px;
+            width: 90%;
+            margin: 1em auto auto;
+            display: block;
+        }
+    }
+
+    #add {
+        grid-area: sprites;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        justify-self: end;
+    }
+
+    #sprites {
+        @include region(sprites);
+        margin: $gap 0;
+    }
+
+    .tab-content {
+        @include region(tab-content);
+        font-size: 16px;
+        tab-size: 4;
+    }
+}
+
+#load, #sb3 {
+    display: none;
+}

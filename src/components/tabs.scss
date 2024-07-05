@@ -1,4 +1,13 @@
-@import "../globals";
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+@import "../scss/globals";
 
 #tabs {
     grid-area: tabs;
@@ -41,7 +50,7 @@
     gap: $gap;
     align-items: center;
 
-    >a {
+    > a {
         display: inline-flex;
         justify-content: center;
         align-content: center;
@@ -57,5 +66,16 @@
             width: 24px;
             height: 24px;
         }
+
+        &:last-child {
+            margin-left: auto;
+            margin-right: $gap;
+        }
     }
+}
+
+.tab-content {
+    grid-area: tab-content;
+    font-size: 16px;
+    tab-size: 4;
 }

@@ -1,28 +1,33 @@
+import {Visibility, type Hidden} from "./visibility";
 import TabComponent from "./tab";
 import * as Parley from "parley.js";
-import "./style.scss";
+import "./tabs.scss";
 
-class Tabs {
-    active?: TabComponent;
+export default class Tabs {
+    active: TabComponent;
     root = document.getElementById("tabs")!;
     buttons: Record<string, HTMLButtonElement> = {};
 
+    /**
+     * Create a new tab bar.
+     * 
+     * @param components The components to be displayed in the tab bar. At least one component is required.
+     */
     constructor(...components: [TabComponent, ...TabComponent[]]) {
-        for (const component of components) {
+        for (let i = 0; i < components.length; i++) {
             const button = document.createElement("button");
+            button.onclick = this.click(components[i]);
+            const {name} = components[i];
             button.type = "button";
-            button.title = `${component.name} tab`;
-            button.innerText = component.name;
-            this.buttons[component.name] = button;
-            button.onclick = () => {
-                if (this.active === component) {
-                    return;
-                }
-                this.set(component);
-            };
+            button.title = `${name} tab`;
+            button.innerText = name;
+            this.buttons[name] = button;
             this.root.appendChild(button);
         }
-        this.set(components[0]);
+
+        this.active = components[0];
+        this.active.render();
+        this.buttons[this.active.name].classList.add("selected");
     }
 
     async set(component: TabComponent) {
@@ -30,7 +35,8 @@ class Tabs {
             component.update();
             return;
         }
-        if (component.prerender && this.active) {
+
+        if (component.prerender) {
             try {
                 await component.prerender();
             } catch (error) {
@@ -46,18 +52,29 @@ class Tabs {
             }
         }
 
-        this.active?.dispose();
+        this.active.dispose();
         this.active = component;
         this.active.render();
 
-        const selected = this.root.querySelector(".selected");
-
-        if (selected) {
-            selected.classList.remove("selected");
-        }
-
+        this.root.querySelector(".selected")?.classList.remove("selected");
         this.buttons[component.name].classList.add("selected");
     }
-}
 
-export default Tabs;
+    private click(component: TabComponent) {
+        return () => {
+            if (this.active === component) {
+                return;
+            }
+
+            this.set(component);
+        };
+    }
+
+    /**
+     * Effects currently do this:
+     * 
+     * - Hide the active tab, show {@link Hidden placeholder}
+     * - Restore the active tab
+     */
+    public readonly effects = new Visibility(this);
+}

@@ -1,4 +1,13 @@
-@import "../globals";
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+@import "../scss/globals";
 @import "./slider.scss";
 
 .paint {
@@ -40,11 +49,13 @@
 		}
 
 		&.shape-button.outline {
+
 			&:not(.selected) ~ span,
 			&:not(.selected) ~ input[type="range"] {
 				display: none;
 			}
-			>  svg {
+
+			> svg {
 				stroke-width: 3px;
 				stroke: #575E75;
 				fill: none;

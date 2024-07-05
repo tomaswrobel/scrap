@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2024-7-3
+
+### Added
+
+- The ability to resize the stage:
+    - the `Hidden` tab component:
+        - it shows as stripes showing new size in format `width x height`
+        - after resizing, component will revert to the original component
+    - New blocks - `width` and `height`:
+        - Scrap Engine supports fitting the stage to the new size
+        - width / height can report for both sprites and the stage
+    - Fullscreen support in the Scrap IDE
+- Header license comment in all TypeScript and Sass files
+
+### Changed
+
+- Exporting:
+    - Exported HTML is minified
+    - Export is named after the project name
+    - HTML export includes iframe with dimensions like in the editor
+- File structure:
+    - `app` folder gets splitted:
+        - `index.ts` lives in the `src` folder as `app.ts`
+        - SVG files are now in the `svgs` folder
+        - `style.scss` gets splitted into files inside `src/scss` folder
+    - New glob typing files `*.d.ts` (literally with asterisk) files replace `index.js` files in:
+        - `src/blockly/blocks` 
+        - `src/blockly/fields`
+        - `src/blockly/extensions`
+    - Angle field now lives in `src/blockly/fields` folder (it was removed from Blockly core)
+- Monaco Editor:
+    - Reporting advanced syntax (e.g. OOP) via diagnostics, not only highlighting
+    - Highlighted banned words: 
+        - null and undefined removed - they are standalone keywords, so the diagnostics does better job
+        - added `class` and `extends` - they are a part of a bigger structure (class)
+    - Editing Microsoft's comments in `src/monaco-editor` to match Scrap's style
+- Scrap Engine, **Blockly**  and other dependencies **update**
+
+### Fixed
+
+- `function` block no longer generates hidden `typed` block:
+    - those took place on the generated code, and threw an error
+    - note that the bug was caused by Blockly brokenness
+- many minor bugs (they usually did not affect the user a lot)
+
 ## [4.6.1] - 2024-6-29
 
 ### Fixed

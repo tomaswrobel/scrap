@@ -1,4 +1,9 @@
 /**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
  * @license MIT
  * @fileoverview Property block
  * @author Tomáš Wróbel
@@ -17,6 +22,8 @@ export const MIXIN = {
                 .appendField<string>(
                     new Blockly.FieldDropdown(() => {
                         const result: [string, string][] = [
+                            ["width", "width"],
+                            ["height", "height"],
                             ["volume", "volume"],
                             [
                                 "color effect",

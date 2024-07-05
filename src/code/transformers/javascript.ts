@@ -21,7 +21,7 @@ import {getPropertyContents, getType, isProperty} from "./utils";
  */
 export default async function transform(code: string) {
 	const babel = await import("@babel/core");
-	
+
 	return babel.transformAsync(code, {
 		filename: "script.ts",
 		presets: [

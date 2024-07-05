@@ -1,23 +1,22 @@
 /**
- * @license
- * PXT Blockly
- *
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * https://github.com/Microsoft/pxt-blockly
- *
- * See LICENSE file for details.
- */
-
-/**
- * @fileoverview String field.
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @copyright Microsoft
  * @author Sam El-Husseini
- */
-/**
+ * 
+ * @license MIT
+ * @fileoverview String field.
  * @author Tomáš Wróbel
- * Conversion to TypeScript
- * Using Modern ECMAScript
- * Using Modern DOM API
- * Color Validation
+ * 
+ * This file is taken from PXT blockly, with the following modifications:
+ * 	- Conversion to TypeScript
+ * 	- Using Modern ECMAScript
+ * 	- Using Modern DOM API
+ * 	- Color Validation
  */
 import * as Blockly from "blockly";
 

@@ -1,3 +1,21 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview Typed block
+ * @author Tomáš Wróbel
+ * 
+ * Typed block is inside the variable block or the function block.
+ * It serves as a container with own data model.
+ * 
+ * It's the only block that has a square output shape. While it's
+ * not hard for user to notice that it's a separate block, the shape
+ * and the immovability of the block help to blend it in with the
+ * parent block.
+ */
 import * as Blockly from "blockly";
 import FieldParam from "../fields/field_param";
 import FieldIdentifier from "../fields/field_identifier";
@@ -12,7 +30,7 @@ export const MIXIN = {
         this.setStyle("Functions");
         this.setOutput(true);
         this.setMovable(false);
-        this.setOutputShape(3);
+        this.setOutputShape(3); // Square
 
         const input = this.appendValueInput("TYPE");
 
@@ -56,7 +74,12 @@ export const MIXIN = {
 
         this.onchange = function (e: Blockly.Events.Abstract) {
             const block = this.getParent();
-            if (block?.type === "variable") {
+            if (!block) {
+                // Dispose if not inside a block.
+                // This logic was moved from the parent block,
+                // as it was buggy due to Blockly's event system.
+                this.dispose(false);
+            } else if (block.type === "variable") {
                 if (e instanceof Blockly.Events.BlockMove && e.blockId) {
                     if (e.newParentId === this.id) {
                         const type = this.getInput("TYPE")?.connection?.targetBlock();

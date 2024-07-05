@@ -1,3 +1,31 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview Try mutator
+ * @author Tomáš Wróbel
+ * 
+ * Try muator is necessary for the try-catch-finally block.
+ * 
+ * User has these options:
+ * 
+ * - try .. catch
+ * - try .. catch (with error variable)
+ * - try .. finally
+ * - try .. catch .. finally
+ * - try .. catch (with error variable) .. finally
+ * 
+ * Luckily, the connection checker is configured not 
+ * to  allow more than one catch or finally block. 
+ * But what if only the try block is present? Then,
+ * the block will warn about the syntax error. The 
+ * error does not stop the user from translating to 
+ * the TypeScript, but the Monaco editor is of course 
+ * aware of the incorrect syntax.
+ */
 import * as Blockly from "blockly";
 import FieldParam from "../fields/field_param";
 

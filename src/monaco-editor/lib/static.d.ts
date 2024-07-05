@@ -1,3 +1,22 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Scrap Engine's static types.
+ * 
+ * This file, including this comment, serves as a definition of the
+ * TypeScript statically known types. 
+ */
+
+/**
+ * Namespace for the functionality
+ * handled by the Scrap engine
+ * and not by individual sprites.
+ */
 declare const Scrap: {
     /**
      * Stops the project
@@ -262,6 +281,24 @@ interface Stage<Variables = {}, Sound = string> {
      * @param key The key to check
      */
     isKeyPressed(key: string): boolean;
+
+    /**
+     * Describes the width of the stage / sprite in pixels.
+     * 
+     * Note:
+     * * The width of the stage is width of the frame / window.
+     * * The width of the sprite is the width of the costume.
+     */
+    readonly width: number;
+
+    /**
+     * Describes the height of the stage / sprite in pixels.
+     * 
+     * Note:
+     * * The height of the stage is height of the frame / window.
+     * * The height of the sprite is the height of the costume.
+     */
+    readonly height: number;
 }
 
 interface Sprite<Variables = {}, Sound = string, Costume = string> extends Stage<Variables & typeof $.Stage.variables, Sound> {
@@ -552,8 +589,16 @@ interface Costumes<K> {
     readonly index: number;
 }
 
-declare type Color = string & {};
+/**
+ * Color is a basic Scrap type representing a color.
+ * It is interchangeable with a string, but some 
+ * methods may require a color object.
+ */
+declare type Color = (string & {}) | `#${string}`;
 
+/**
+ * Color namespace allows you to inistantiate colors.
+ */
 declare const Color: {
     /**
      * Converts the hexadecimal color to a color object
@@ -625,9 +670,27 @@ declare interface IArguments {}
 
 // Scrap's primitives
 declare interface Number {}
+
+/**
+ * Converts the value to a number
+ * @param value any value
+ */
 declare function Number(value: any): number;
+
+/**
+ * True is converted to 1
+ */
 declare function Number(value: true): 1;
+
+/**
+ * False is converted to 0
+ */
 declare function Number(value: false): 0;
+
+/**
+ * Converts the value to a number
+ * @param value True is converted to 1, false to 0
+ */
 declare function Number(value: boolean): 0 | 1;
 
 declare interface String extends Iterable<string> {
@@ -643,10 +706,12 @@ declare interface String extends Iterable<string> {
      */
     slice(start: number, end: number): string;
 }
-declare function String(value: any): string;
-declare function String(value: true): "true";
-declare function String(value: false): "false";
-declare function String(value: boolean): "true" | "false";
+
+/**
+ * Converts the value to a string
+ * @param value any value
+ */
+declare function String<const T>(value: T): T extends number | boolean ? `${T}` : string;
 
 
 // Scrap's iterables

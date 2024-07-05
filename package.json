@@ -1,67 +1,69 @@
 {
-	"name": "scrap",
-	"displayName": "Scrap",
-	"private": true,
-	"version": "4.6.1",
-	"type": "module",
-	"description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
-	"scripts": {
-		"serve": "parcel serve index.html",
-		"build": "parcel build index.html",
-		"preview": "python3 -m http.server -d dist"
-	},
-	"author": {
-		"name": "Tomáš Wróbel",
-		"email": "tomas.wrobel@email.cz",
-		"url": "https://tomaswrobel.dev"
-	},
-	"devDependencies": {
-		"@parcel/core": "2.12.0",
-		"@parcel/packager-raw-url": "2.12.0",
-		"@parcel/resolver-glob": "2.12.0",
-		"@parcel/transformer-sass": "2.12.0",
-		"@parcel/transformer-webmanifest": "2.12.0",
-		"@types/babel__core": "7.20.5",
-		"@types/file-saver": "2.0.7",
-		"@types/node": "20.14.8",
-		"@types/wicg-file-system-access": "2023.10.5",
-		"@types/wicg-web-app-launch": "2023.1.4",
-		"assert": "2.1.0",
-		"buffer": "6.0.3",
-		"parcel": "2.12.0",
-		"parcel-reporter-static-files-copy": "1.5.3",
-		"path-browserify": "1.0.1",
-		"sass": "1.77.6"
-	},
-	"dependencies": {
-		"@babel/core": "7.24.7",
-		"@babel/preset-typescript": "7.24.7",
-		"@blockly/field-colour-hsv-sliders": "4.2.7",
-		"@blockly/field-date": "8.0.17",
-		"@parcel/service-worker": "2.12.0",
-		"blockly": "10.4.3",
-		"file-saver": "2.0.5",
-		"jszip": "3.10.1",
-		"monaco-editor": "0.50.0",
-		"parley.js": "2.0.0",
-		"process": "0.11.10",
-		"scrap-engine": "2.4.1",
-		"typescript": "5.5.2",
-		"wavesurfer.js": "7.8.0"
-	},
-	"staticFiles": {
-		"staticPath": "node_modules/blockly/media",
-		"staticOutPath": "blockly-media"
-	},
-	"@parcel/resolver-default": {
-		"packageExports": true
-	},
-	"alias": {
-		"@blockly/field-color": "@blockly/field-colour-hsv-sliders/src/index.ts",
-		"monaco-editor/worker": "monaco-editor/esm/vs/editor/editor.worker",
-		"./node_modules/monaco-editor/esm/vs/base/common/platform.js": "./src/monaco-editor/platform.ts",
-		"./node_modules/monaco-editor/esm/vs/editor/editor.main.js": "monaco-editor/esm/vs/editor/edcore.main.js",
-		"./node_modules/blockly/index.js": "./node_modules/blockly/blockly_compressed.js"
-	},
-	"packageManager": "yarn@1.22.22"
+    "name": "scrap",
+    "displayName": "Scrap",
+    "private": true,
+    "version": "5.0.0",
+    "type": "module",
+    "description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
+    "scripts": {
+        "serve": "parcel serve index.html",
+        "build": "parcel build index.html",
+        "preview": "python3 -m http.server -d dist"
+    },
+    "author": {
+        "name": "Tomáš Wróbel",
+        "email": "tomas.wrobel@email.cz",
+        "url": "https://tomaswrobel.dev"
+    },
+    "devDependencies": {
+        "@parcel/core": "2.12.0",
+        "@parcel/packager-raw-url": "2.12.0",
+        "@parcel/resolver-glob": "2.12.0",
+        "@parcel/transformer-sass": "2.12.0",
+        "@parcel/transformer-webmanifest": "2.12.0",
+        "@types/babel__core": "7.20.5",
+        "@types/file-saver": "2.0.7",
+        "@types/node": "20.14.8",
+        "@types/wicg-file-system-access": "2023.10.5",
+        "@types/wicg-web-app-launch": "2023.1.4",
+        "assert": "2.1.0",
+        "buffer": "6.0.3",
+        "parcel": "2.12.0",
+        "path-browserify": "1.0.1",
+        "sass": "1.77.6"
+    },
+    "dependencies": {
+        "@babel/core": "7.24.7",
+        "@babel/preset-typescript": "7.24.7",
+        "@blockly/field-angle": "5.0.2",
+        "@blockly/field-colour-hsv-sliders": "5.0.2",
+        "@blockly/field-date": "9.0.2",
+        "@parcel/reporter-static-files": "npm:parcel-reporter-static-files-copy@1.5.3",
+        "@parcel/service-worker": "2.12.0",
+        "blockly": "11.1.1",
+        "file-saver": "2.0.5",
+        "jszip": "3.10.1",
+        "monaco-editor": "0.50.0",
+        "parley.js": "2.0.0",
+        "process": "0.11.10",
+        "scrap-engine": "2.5.3",
+        "typescript": "5.5.3",
+        "wavesurfer.js": "7.8.0"
+    },
+    "staticFiles": {
+        "staticPath": "node_modules/blockly/media",
+        "staticOutPath": "blockly-media"
+    },
+    "@parcel/resolver-default": {
+        "packageExports": true
+    },
+    "alias": {
+        "@blockly/field-color": "@blockly/field-colour-hsv-sliders/src/field_colour_hsv_sliders.ts",
+        "@blockly/field-angle": "@blockly/field-angle/src/field_angle.ts",
+        "monaco-editor/worker": "monaco-editor/esm/vs/editor/editor.worker",
+        "./node_modules/monaco-editor/esm/vs/base/common/platform.js": "./src/monaco-editor/platform.ts",
+        "./node_modules/monaco-editor/esm/vs/editor/editor.main.js": "monaco-editor/esm/vs/editor/edcore.main.js",
+        "./node_modules/blockly/index.js": "./node_modules/blockly/blockly_compressed.js"
+    },
+    "packageManager": "yarn@1.22.22"
 }

@@ -1,3 +1,21 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview Block imported from Scratch with unknown opcode
+ * @author Tomáš Wróbel
+ * 
+ * This block is a placeholder for a block that was imported from
+ * Scratch and is not compatible with Scrap. It will not be executed.
+ * 
+ * It's dynamic because it initializes with different shapes and
+ * opcodes based on the state. This would be possible with static
+ * blocks, each with a different shape, but those would need
+ * different names. This way, we can reuse the same block.
+ */
 import * as Blockly from 'blockly/core';
 
 export type UnknownBlock = Blockly.BlockSvg & UnknownBlockMixin;

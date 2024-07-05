@@ -1,3 +1,18 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT [from-monaco-editor]
+ * @author Microsoft Corporation
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * 
+ * The tokenizer is created by Microsoft, I only mapped identifiers
+ * to Scrap blocks. For that, I created a new theme on my own.
+ */
 import {editor, languages} from "monaco-editor";
 
 languages.registerTokensProviderFactory("typescript", {
@@ -113,6 +128,9 @@ languages.registerTokensProviderFactory("typescript", {
             "confirm",
             "prompt",
             "isTurbo",
+            // size
+            "width",
+            "height",
         ],
         math: [
             "abs",
@@ -234,8 +252,6 @@ languages.registerTokensProviderFactory("typescript", {
             "unique",
             "satisfies",
             "is",
-            "null",
-            "undefined",
             "never",
             "switch",
             "case",
@@ -245,7 +261,8 @@ languages.registerTokensProviderFactory("typescript", {
             "with",
             "yield",
             "enum",
-            "class"
+            "class",
+            "extends"
         ],
         sprites: [
             "$",

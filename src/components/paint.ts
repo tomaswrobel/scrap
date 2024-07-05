@@ -148,6 +148,7 @@ export default class Paint implements Component {
 					const mouseDown = (e: MouseEvent) => {
 						document.removeEventListener("mousedown", mouseDown);
 						if (e.target !== canvas) {
+							document.removeEventListener("keydown", keydown);
 							const x = parseInt(canvas.style.left.replace("px", ""));
 							const y = parseInt(canvas.style.top.replace("px", ""));
 
@@ -207,7 +208,24 @@ export default class Paint implements Component {
 						document.addEventListener("mousedown", mouseDown);
 					};
 
+					const keydown = (e: KeyboardEvent) => {
+						if (e.key === "Delete") {
+							document.removeEventListener("mousemove", mouseMove);
+							document.removeEventListener("mouseup", mouseUp);
+							document.removeEventListener("mousedown", mouseDown);
+							document.removeEventListener("keydown", keydown);
+
+							this.canvasContainer.removeChild(canvas);
+							this.currentTool!.lastX = NaN;
+							this.currentTool!.lastY = NaN;
+							this.currentTool!.startX = NaN;
+							this.currentTool!.startY = NaN;
+						}
+					};
+
 					document.addEventListener("mousedown", mouseDown);
+					document.addEventListener("keydown", keydown);
+
 					this.canvasContainer.appendChild(canvas);
 				}
 
@@ -340,7 +358,7 @@ export default class Paint implements Component {
 		});
 
 		this.mediaList.addEventListener("rename", e => {
-			const {detail: {file, name}} = e as CustomEvent<{file: File, name: string}>;
+			const {detail: {file, name}} = e as CustomEvent<{file: File, name: string;}>;
 			app.current.costumes[app.current.costumes.indexOf(file)] = new File([file], name, {type: file.type});
 		});
 

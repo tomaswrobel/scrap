@@ -1,8 +1,16 @@
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT [from-monaco-editor]
+ * @author Microsoft Corporation
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Just remapped imports.
+ */
 import {
     Diagnostic,
     DiagnosticRelatedInformation,
@@ -70,14 +78,6 @@ function displayPartsToString(displayParts: ts.SymbolDisplayPart[] | undefined):
 
 export abstract class Adapter {
     constructor(protected _worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {}
-
-    // protected _positionToOffset(model: editor.ITextModel, position: monaco.IPosition): number {
-    // 	return model.getOffsetAt(position);
-    // }
-
-    // protected _offsetToPosition(model: editor.ITextModel, offset: number): monaco.IPosition {
-    // 	return model.getPositionAt(offset);
-    // }
 
     protected _textSpanToRange(model: editor.ITextModel, span: ts.TextSpan): IRange {
         let p1 = model.getPositionAt(span.start);
@@ -1167,9 +1167,9 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
         const renameLocations = await worker.findRenameLocations(
             fileName,
             offset,
-			/*strings*/ false,
-			/*comments*/ false,
-			/*prefixAndSuffix*/ false
+            /*strings*/ false,
+            /*comments*/ false,
+            /*prefixAndSuffix*/ false
         );
 
         if (!renameLocations || model.isDisposed()) {

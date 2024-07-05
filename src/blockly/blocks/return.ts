@@ -1,3 +1,26 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview Defines the return block.
+ * @author Tomáš Wróbel
+ * 
+ * Return block is not a mutator, but a standalone block.
+ * 
+ * This dynamic block handles the return statement.
+ * Since the return statement can appear in every function,
+ * Scrap handles it for event callbacks and function definitions.
+ * 
+ * If the return block is inside a function block, it will
+ * automatically adapt to the function's return type.
+ * 
+ * If the return block is not inside a function block, it
+ * will remove its value input (return;) and serve like
+ * the Scratch's "stop this script" block. 
+ */
 import * as Blockly from "blockly";
 import {TypeToShadow, toCheck} from "../types";
 
@@ -84,16 +107,16 @@ export const MIXIN = {
 		}
 
 		if (typeof check1 === "string" && typeof check2 === "object") {
-			return check2.includes(check1);
+			return check2.indexOf(check1) !== -1;
 		}
 
 		if (typeof check1 === "object" && typeof check2 === "string") {
-			return check1.includes(check2);
+			return check1.indexOf(check2) !== -1;
 		}
 
 		if (typeof check1 === "object" && typeof check2 === "object") {
 			if (check1.length === check2.length) {
-				return check1.every(p => check2.includes(p));
+				return check1.every(p => check2.indexOf(p) !== -1);
 			}
 		}
 

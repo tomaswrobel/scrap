@@ -2,146 +2,152 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Scrap - Loading...</title>
-	<link rel="apple-touch-icon" sizes="180x180" href="pwa/apple-touch-icon.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="pwa/favicon-32x32.png" />
-	<link rel="icon" type="image/png" sizes="16x16" href="pwa/favicon-16x16.png" />
-	<link rel="manifest" href="pwa/site.webmanifest" />
-	<meta name="theme-color" content="#2fbf71" />
-	<meta name="description"
-		content="Scrap is an IDE designed to simplify the transition from Scratch to JavaScript." />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scrap - Loading...</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="pwa/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="pwa/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="pwa/favicon-16x16.png" />
+    <link rel="manifest" href="pwa/site.webmanifest" />
+    <meta name="theme-color" content="#2fbf71" />
+    <meta name="description" content="Scrap is an IDE designed to simplify the transition from Scratch to JavaScript." />
 </head>
 
 <body>
-	<div id="root">
-		<iframe width="480" height="360" name="output" src="src/components/output.html" title="Output"></iframe>
-		<input type="file" style="display: none;" title="Hidden file input">
+    <div id="app" style="--output: 380;">
+        <iframe name="output" src="src/components/output.html" title="Output"></iframe>
+        <input type="file" style="display: none;" title="Hidden file input">
 
-		<!-- Tabs -->
-		<div id="tabs"></div>
+        <!-- Tabs -->
+        <div id="tabs"></div>
 
-		<!-- Stage controls -->
-		<div id="buttons">
-			<a href="javascript:frames.output.location.reload();"><img src="src/app/flag.svg" alt="Play" /></a>
-			<a href="javascript:frames.output.postMessage('STOP', '\u002a')" id="stop"><img src="src/app/stop.svg"
-					alt="Stop" /></a>
-		</div>
+        <!-- Stage controls -->
+        <div id="buttons">
+            <a href="javascript:frames.output.location.reload();">
+                <img src="./src/svgs/flag.svg" alt="Play" />
+            </a>
+            <a href="javascript:frames.output.postMessage('STOP', '\u002a')" id="stop">
+                <img src="./src/svgs/stop.svg" alt="Stop" />
+            </a>
+            <a href="javascript:frames.output.document.documentElement.requestFullscreen();">
+                <img src="./src/svgs/fullscreen.svg" alt="Fullscreen" />
+            </a>
+        </div>
 
-		<!-- Sprite Bar -->
-		<div class="sprites"></div>
-		<button id="add" type="button" class="fab" title="New sprite...">+</button>
+        <!-- Sprite Bar -->
+        <div id="sprites"></div>
+        <button id="add" type="button" class="fab" title="New sprite...">+</button>
 
-		<!-- Stage -->
-		<div class="stage">
-			<span class="name">Stage</span>
-		</div>
-	</div>
-	<!-- Nav -->
-	<ul role="navigation">
-		<li><a href="/" title="Scrap"></a></li>
-		<li class="dropdown">
-			<a href="javascript:this.app?.dropdown(0)">File</a>
-			<div class="dropdown-content">
-				<a href="javascript:this.app?.dropdown(0);this.app?.pick('.scrap');">Open</a>
-				<a href="javascript:this.app?.dropdown(0);this.app?.saveAs();">Save</a>
-				<a href="javascript:this.app?.dropdown(0);this.app?.export();">Export HTML</a>
-				<a href="javascript:this.app?.dropdown(0);this.app?.pick('.sb3');">Import SB3</a>
-			</div>
-		</li>
-		<li class="dropdown">
-			<a href="javascript:this.app?.dropdown(1)">Mode</a>
-			<div class="dropdown-content">
-				<a href="javascript:this.app?.mode('paced')">
-					<span class="checkmark" data-for="paced">&check;&nbsp;</span>
-					Paced
-				</a>
-				<a href="javascript:this.app?.mode('turbo')">
-					<span class="checkmark" data-for="turbo">&check;&nbsp;</span>
-					Turbo
-				</a>
-			</div>
-		</li>
+        <!-- Stage -->
+        <div id="stage">
+            <span class="name">Stage</span>
+        </div>
+        <div id="handler"></div>
+    </div>
+    <!-- Nav -->
+    <ul role="navigation">
+        <li><a href="/" title="Scrap"></a></li>
+        <li class="dropdown">
+            <a href="javascript:this.app?.dropdown(0)">File</a>
+            <div class="dropdown-content">
+                <a href="javascript:this.app?.dropdown(0);this.app?.pick('.scrap');">Open</a>
+                <a href="javascript:this.app?.dropdown(0);this.app?.saveAs();">Save</a>
+                <a href="javascript:this.app?.dropdown(0);this.app?.export();">Export HTML</a>
+                <a href="javascript:this.app?.dropdown(0);this.app?.pick('.sb3');">Import SB3</a>
+            </div>
+        </li>
+        <li class="dropdown">
+            <a href="javascript:this.app?.dropdown(1)">Mode</a>
+            <div class="dropdown-content">
+                <a href="javascript:this.app?.mode('paced')">
+                    <span class="checkmark" data-for="paced">&check;&nbsp;</span>
+                    Paced
+                </a>
+                <a href="javascript:this.app?.mode('turbo')">
+                    <span class="checkmark" data-for="turbo">&check;&nbsp;</span>
+                    Turbo
+                </a>
+            </div>
+        </li>
 
-		<li><a href="javascript:void(document.getElementById('about').showModal())">About</a></li>
-		<li class="input"><input type="text" placeholder="Project name" value="Project"></li>
-	</ul>
-	<!-- About -->
-	<dialog class="parley" id="about" style="width: 500px;">
-		<h2>
-			About Scrap
-		</h2>
-		<div style="text-align: left;">
-			<p>
-				Scrap is a tool by <a href="https://tomaswrobel.dev" target="_blank">Tomáš Wróbel</a> designed to
-				simplify the transition from
-				Scratch to JavaScript. If you're a beginner programmer who's familiar with Scratch and looking to delve
-				into JavaScript, Scrap is here
-				to help bridge the gap and make your learning journey smoother.
-			</p>
-			<h3>Open-Source</h3>
-			<p>
-				Since Scrap is open-source, you can see how it works and even contribute to its development. The source
-				code is available on
-				<a href="https://github.com/tomas-wrobel/scrap">GitHub</a>
-			</p>
-			<h3>Inspiration</h3>
-			<p>
-				The name Scrap is a combination of the words <a href="https://scratch.mit.edu/"
-					target="_blank">Scratch</a> and
-				<a href="https://snap.berkeley.edu/" target="_blank">Snap</a>, two block-based programming languages
-				that inspired me to create Scrap.
-				Snap gave me an idea to make the IDE advanced and powerful, while Scratch inspired me to make it
-				intuitive and easy to use.
-			</p>
-			<p>
-				The design is heavily inspired by Scratch not to lose familiar environment. The logo for Scrap shares a
-				visual resemblance with the
-				Scratch logo as a deliberate homage. Here's what you need to know:
-			</p>
-			<ul>
-				<li>
-					<strong>Font Choice</strong>: Scrap uses the <q>Black Boys on Mopeds</q> font, the same as Scratch's
-					logo, which is freeware and
-					freely usable.
-				</li>
-				<li>
-					<strong>No Copyright Infringement</strong>: Scrap respects copyright laws and does not infringe on
-					Scratch's intellectual
-					property. The similarity is a tribute, not a copy.
-				</li>
-				<li>
-					<strong>Non-Commercial</strong>: Scrap is a non-commercial project, and its logo is used to
-					recognize Scratch's influence on its
-					mission to help beginners transition from Scratch to JavaScript.
-				</li>
-			</ul>
-			<p>In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.
-			</p>
-			<h3>Technology</h3>
-			<p>
-				<a href="https://github.com/tomas-wrobel/scrap-engine">Scrap Engine</a> is a
-				technology based on <a href="https://blocklike.org" target="_blank">BlockLike.js</a>.
-			</p>
-			<p>
-				It uses <a href="https://developers.google.com/blockly" target="_blank">Blockly</a> as a block editor.
-				The code editor is powered by
-				<a href="https://microsoft.github.io/monaco-editor/" target="_blank">Monaco Editor</a>
-			</p>
-			<p>
-				Scrap output uses <a href="https://typescriptlang.org/">TypeScript</a> for type annotations and is
-				compiled by
-				<a href="https://babeljs.io/">Babel</a>.
-			</p>
-		</div>
-		<form method="dialog">
-			<div class="button-container">
-				<button type="submit" style="background: var(--parley-primary);">OK</button>
-			</div>
-		</form>
-	</dialog>
-	<script src="./src/main.ts" type="module"></script>
+        <li><a href="javascript:void(document.getElementById('about').showModal())">About</a></li>
+        <li class="input"><input type="text" placeholder="Project name" value="Project"></li>
+    </ul>
+    <!-- About -->
+    <dialog class="parley" id="about" style="width: 500px;">
+        <h2>
+            About Scrap
+        </h2>
+        <div style="text-align: left;">
+            <p>
+                Scrap is a tool by <a href="https://tomaswrobel.dev" target="_blank">Tomáš Wróbel</a> designed to
+                simplify the transition from Scratch to JavaScript. If you're a beginner programmer who's familiar 
+                with Scratch and looking to delve into JavaScript, Scrap is here to help bridge the gap and make 
+                your learning journey smoother.
+            </p>
+            <h3>Open-Source</h3>
+            <p>
+                Since Scrap is open-source, you can see how it works and even contribute to its development. 
+                The source code is available on <a href="https://github.com/tomas-wrobel/scrap">GitHub</a>
+            </p>
+            <p>
+                Scratch is open-source too, but Scrap does <strong>not</strong> use any of Scratch's code.
+            </p>
+            <h3>Inspiration</h3>
+            <p>
+                The name Scrap is a combination of the words 
+                <a href="https://scratch.mit.edu/" target="_blank">Scratch</a> and 
+                <a href="https://snap.berkeley.edu/" target="_blank">Snap</a>, 
+                two block-based programming languages that inspired me to create 
+                Scrap. Snap gave me an idea to make the IDE advanced and powerful, 
+                while Scratch  inspired me to make it intuitive and easy to use.
+            </p>
+            <p>
+                The design is heavily inspired by Scratch not to lose familiar environment. 
+                Heritage is visible in the logo, and the block editor. Here's what you need to know:
+            </p>
+            <ul>
+                <li>
+                    <strong>Logo's Font Choice</strong>: Scrap uses the <q>Black Boys on Mopeds</q> 
+                    font, the same as Scratch's logo, which is freeware and freely usable.
+                </li>
+                <li>
+                    <strong>Similar block interface</strong>: Scrap uses Blockly as a block editor, 
+                    which is a separate project from Scratch. However, the Scratch Team has forked 
+                    Blockly to create their block editor. (Scrap uses the original Blockly.)
+                </li>
+                <li>
+                    <strong>No Copyright Infringement</strong>: Scrap respects copyright laws and 
+                    does not infringe on Scratch's intellectual property. The similarity is a tribute, not a copy.
+                </li>
+                <li>
+                    <strong>Non-Commercial</strong>: Scrap is a non-commercial project, and its logo is used to
+                    recognize Scratch's influence on its mission to help beginners transition from Scratch to JavaScript.
+                </li>
+            </ul>
+            <p>In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.</p>
+            <h3>Technology</h3>
+            <p>
+                <a href="https://github.com/tomas-wrobel/scrap-engine">Scrap Engine</a> is a
+                technology based on <a href="https://blocklike.org" target="_blank">BlockLike.js</a>.
+            </p>
+            <p>
+                It uses <a href="https://developers.google.com/blockly" target="_blank">Blockly</a> as a block editor.
+                The code editor is powered by
+                <a href="https://microsoft.github.io/monaco-editor/" target="_blank">Monaco Editor</a>
+            </p>
+            <p>
+                Scrap output uses <a href="https://typescriptlang.org/">TypeScript</a> for type annotations and is
+                compiled by <a href="https://babeljs.io/">Babel</a>.
+            </p>
+        </div>
+        <form method="dialog">
+            <div class="button-container">
+                <button type="submit" style="background: var(--parley-primary);">OK</button>
+            </div>
+        </form>
+    </dialog>
+    <script src="./src/main.ts" type="module"></script>
 </body>
 
 </html>

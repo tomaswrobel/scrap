@@ -1,0 +1,33 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+$light: rgba(255, 255, 255, 0.5);
+$dark: rgba(0, 0, 0, 0.1);
+
+.hidden-content {
+    background: repeating-linear-gradient(
+        -45deg,
+        $light,
+        $light 20px,
+        $dark 20px,
+        $dark 30px
+    );
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+        content: attr(data-size);
+        padding: 0.5em 1em;
+        background: white;
+
+        font-size: 1.5rem;
+    }
+}

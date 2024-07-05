@@ -1,4 +1,9 @@
 /**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
  * @license MIT
  * @fileoverview Defines the parameter mutator.
  * @author Tomáš Wróbel
@@ -72,7 +77,6 @@ export const MIXIN = {
                 callback: async () => {
                     const body = document.createElement("table");
                     const name = this.getFieldValue("VAR");
-                    const blocks = this.workspace.getBlocksByType("parameter");
 
                     body.innerHTML = `
                         <tr>
@@ -84,10 +88,9 @@ export const MIXIN = {
                             <td>${new Array<string>().concat(this.type_ || "any").join(" or ")}</td>
                         </tr>
                         <tr>
-                            <td style="text-align:left;">Usage:</td>
-                            <td>${blocks.filter(block => block.getFieldValue("VAR") === name).length}</td>
+                            <td style="text-align:left;">Constant:</td>
+                            <td>${this.isConstant_ ? "Yes" : "No"}</td>
                         </tr>
-
                     `;
 
                     await Parley.fire({

@@ -1,3 +1,25 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview Type block
+ * @author Tomáš Wróbel
+ * 
+ * Type block is a dropdown with all the types.
+ * 
+ * If inside the typed block (which is always 
+ * inside the variable block), it will change 
+ * the type of the variable.
+ * 
+ * If inside the array block, it will change
+ * the item type of the array.
+ * 
+ * If inside the function block, it will change
+ * the return type of the function.
+ */
 import * as Blockly from "blockly";
 import {TypeToShadow, Types} from "../types";
 import type {ArrayBlock} from "./array";

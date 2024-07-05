@@ -1,38 +1,38 @@
 {
-	"compilerOptions": {
-		"target": "ES2017",
-		"lib": [
-			"ES2017",
-			"DOM",
-			"DOM.Iterable"
-		],
-		"skipLibCheck": true,
-		"experimentalDecorators": true,
-		"useDefineForClassFields": true,
+    "compilerOptions": {
+        "target": "ES2017",
+        "lib": [
+            "ES2017",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "useDefineForClassFields": true,
 
-		// Bundler mode
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true,
-		"module": "Preserve",
-		"allowJs": true,
-		"noEmit": true,
-	
-		// Linting
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true
-	},
-	"include": [
-		"src"
-	],
-	"exclude": [
-		"src/monaco-editor/lib",
-		"src/code/lib"
-	],
-	"references": [
-		{"path": "./src/monaco-editor/lib/tsconfig.json"},
-		{"path": "./src/code/lib/tsconfig.json"}
-	]
+        // Bundler mode
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "module": "Preserve",
+        "allowJs": true,
+        "noEmit": true,
+    
+        // Linting
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "src/monaco-editor/lib",
+        "src/code/lib"
+    ],
+    "references": [
+        {"path": "./src/monaco-editor/lib/tsconfig.json"},
+        {"path": "./src/code/lib/tsconfig.json"}
+    ]
 }

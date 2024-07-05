@@ -1,3 +1,13 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ * @fileoverview Renderer with hexagonal shape for type blocks.
+ */
 import * as Blockly from "blockly";
 
 export class Renderer extends Blockly.zelos.Renderer {
@@ -11,47 +21,6 @@ export class Renderer extends Blockly.zelos.Renderer {
                 }
 
                 return super.shapeFor(connection);
-            }
-        };
-    }
-
-    protected makeDrawer_(block: Blockly.BlockSvg, info: Blockly.blockRendering.RenderInfo) {
-        return new class extends Blockly.zelos.Drawer {
-            constructor() {
-                super(block, info as Blockly.zelos.RenderInfo);
-            }
-
-            protected layoutField_(fieldInfo: Blockly.blockRendering.Icon | Blockly.blockRendering.Field): void {
-                const yPos = fieldInfo.centerline - fieldInfo.height / 2;
-                let xPos = fieldInfo.xPos;
-                let scale = '';
-                if (this.info_.RTL) {
-                    xPos = -(xPos + fieldInfo.width);
-                    if (fieldInfo.flipRtl) {
-                        xPos += fieldInfo.width;
-                        scale = 'scale(-1 1)';
-                    }
-                }
-
-                if (Blockly.blockRendering.Types.isIcon(fieldInfo)) {
-                    const icon = (fieldInfo as Blockly.blockRendering.Icon).icon;
-                    icon.setOffsetInBlock(new Blockly.utils.Coordinate(xPos, yPos));
-                    if (this.info_.isInsertionMarker) {
-                        icon.hideForInsertionMarker();
-                    }
-                } else {
-                    const svgGroup = (fieldInfo as Blockly.blockRendering.Field).field.getSvgRoot();
-                    if (!svgGroup) {
-                        return;
-                    }
-                    svgGroup.setAttribute(
-                        'transform',
-                        'translate(' + xPos + ',' + yPos + ')' + scale,
-                    );
-                    if (this.info_.isInsertionMarker) {
-                        svgGroup.setAttribute('display', 'none');
-                    }
-                }
             }
         };
     }

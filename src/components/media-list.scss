@@ -1,4 +1,13 @@
-@import "../globals";
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+@import "../scss/globals";
 
 .media-list {
     display: flex;
@@ -9,7 +18,7 @@
     padding: 10px;
     background: $background;
 
-    +.fab {
+    + .fab {
         margin-bottom: 10px;
     }
 }
@@ -22,7 +31,7 @@
     border-radius: 10px;
     border: 2px solid hsla(0, 0%, 0%, 0.15);
 
-    >img {
+    > img {
         display: block;
         margin: auto;
         height: 60px;

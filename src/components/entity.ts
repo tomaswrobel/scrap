@@ -1,3 +1,13 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @fileoverview Sprite and stage entities
+ * @author Tomáš Wróbel
+ */
 import * as Blockly from "blockly";
 import JSZip from "jszip";
 import fs from "fs";
@@ -7,6 +17,8 @@ import {reserved} from "../code/transformers/utils";
 import {TypeScript} from "../code/transformers/typescript";
 import Blocks from "../code/transformers/blocks";
 
+const stage = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
+const scrappy = fs.readFileSync(path.join(__dirname, "assets", "scrappy.svg"), "utf-8");
 const click = fs.readFileSync(path.join(__dirname, "assets", "click.mp3"));
 
 /**
@@ -15,7 +27,7 @@ const click = fs.readFileSync(path.join(__dirname, "assets", "click.mp3"));
  * 
  * My {@link code} could be blocks or TypeScript
  */
-class Entity {
+export class Entity {
 	// Costumes & Sounds are stored as files
 	costumes: File[] = [];
 	/**
@@ -203,9 +215,7 @@ class Entity {
 	}
 }
 
-const scrappy = fs.readFileSync(path.join(__dirname, "assets", "scrappy.svg"), "utf-8");
-
-class Sprite extends Entity {
+export class Sprite extends Entity {
 	constructor(name: string) {
 		super(new File([scrappy], "scrappy.svg", {type: "image/svg+xml"}), name);
 		this.init = {
@@ -261,9 +271,7 @@ class Sprite extends Entity {
 	}
 }
 
-const stage = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
-
-class Stage extends Entity {
+export class Stage extends Entity {
 	readonly __stage__ = true;
 
 	constructor() {
@@ -277,5 +285,3 @@ class Stage extends Entity {
 		return img;
 	}
 }
-
-export {Stage, Sprite, Entity};

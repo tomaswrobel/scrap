@@ -1,9 +1,16 @@
-/*
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ 
  * Made with the help of https://toughengineer.github.io/demo/slider-styler
- * Transformed into SCSS, dropped support for -ms- (Edge Legacy & IE)
- * (Nobody uses them + I couldn't use CSS variables)
+ * Transformed into SCSS, dropped support for -ms- (Edge Legacy & IE).
  */
-@import "../globals";
+@import "../scss/globals";
 
 $default: linear-gradient(#{$primary}, #{$primary});
 $darken: darken($color: $primary, $amount: 10%);
