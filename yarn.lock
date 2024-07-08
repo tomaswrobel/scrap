@@ -2705,10 +2705,10 @@ w3c-xmlserializer@^5.0.0:
   dependencies:
     xml-name-validator "^5.0.0"
 
-wavesurfer.js@7.8.0:
-  version "7.8.0"
-  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.8.0.tgz#47eac03bc421107a060915aa8fa41dc251db4b15"
-  integrity sha512-V9SIfE08VtSIl1KYHi+i+52gytEIxk0nDKlV98fjrK0UW+z37ojImgsYINEV015syLB9sZVAXDdGI8F4xmU7KQ==
+wavesurfer.js@7.8.1:
+  version "7.8.1"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.8.1.tgz#5b2c315c5ffeb42a142a621a1cc422017db72f68"
+  integrity sha512-KMebCPZF7jjo1/B+G7JGJgQc7hshIhJLnM/gUi4pdyCwb89s4apivpVZY2kdvausqbm+ceeudvKGPBcR9uqXnQ==
 
 weak-lru-cache@^1.2.2:
   version "1.2.2"
