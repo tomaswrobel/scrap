@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0] - 2024-7-9
+
+### Fixed
+
+- Sprite adding
+- Sprite bar layout
+
+### Changed
+
+- sw.js → sw.ts
+- dependencies update
+
 ## [5.0.0] - 2024-7-3
 
 ### Added
@@ -747,7 +759,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v4.6.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.1.0
+[5.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.0.0
 [4.6.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.6.1
 [4.6.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.6.0
 [4.5.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v4.5.3

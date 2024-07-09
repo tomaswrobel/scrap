@@ -296,27 +296,27 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@blockly/field-angle@5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.2.tgz#4be661b48051bfcaab154b20ce645017fe347a3f"
-  integrity sha512-anRfpWallY5t92jlCssNeipO19PCJNbof10nAfw0YZPHIdAUsQ8uI7GfI9h9xFozoxxJ8j7XuHoPq0zxm3ZrWQ==
+"@blockly/field-angle@5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.3.tgz#35c56b85f5407037eb5176765006fd5b1ad1ed08"
+  integrity sha512-eBmHwADzhckqTcW5W/giR/a/IjhgS6mbLNVGAorM3z8ki+6837EZtGcnez9YSirGQYKJOnpNRKP4gzbSqVI90Q==
 
-"@blockly/field-colour-hsv-sliders@5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-5.0.2.tgz#b32b51eb423891fb49768520ddd132390bebde17"
-  integrity sha512-9v0d8IPwPnkYwjfEN1QVNNOyhVnB5l04ZcS2uM8RR7OKGa14bUJtHgjbQmVzM0iNTnxAceb6DKiS/4FcCaiI+A==
+"@blockly/field-colour-hsv-sliders@5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-5.0.3.tgz#552301b231a1e579e91a6a582a32d6ab821519b5"
+  integrity sha512-/jewk9im/fWe2Um8rvjriOKuJgHlq4TfXF1q1yllQSaACkvjl654inSAa0584eLS2EsE+N9keAEN34IH9xqMNA==
   dependencies:
-    "@blockly/field-colour" "^5.0.2"
+    "@blockly/field-colour" "^5.0.3"
 
-"@blockly/field-colour@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.2.tgz#fe8751f824d7d18783e3b4e8097e17b4562d9a47"
-  integrity sha512-h0QKQNdakH+luhY5JgAOOr4YVxWXZEXXzXUbItKWMEDiAIi6gOckylNECr0aqqRrUHryY2g+tALWj7ZtmDravw==
+"@blockly/field-colour@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.3.tgz#c9312d139ee2fb34003e82fab947840a916565c0"
+  integrity sha512-fhaA4fWy5XyezjuCcZl6vpnB0WY2dcVmS8R/10RqXvDMCGg+wtigDpD6eeZVcIDc/U6UHQTc/mYKN2UiXeHMBA==
 
-"@blockly/field-date@9.0.2":
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-9.0.2.tgz#62d91229b30dc56cae352c972f442591ed00bcc9"
-  integrity sha512-ble6mEA99SiSjsdVI8Sl0Z7qK/wZ0FsKqy3a3eqTn/H1Cx04GlI5DONA04V93GuKtdAJyGJaldQQPRywDuBCxw==
+"@blockly/field-date@9.0.3":
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-9.0.3.tgz#e6d6a18ee07b4e8df28c0d33a8049ad77ca90005"
+  integrity sha512-RNVHVVEQos+6Hma0ItpvtK18C5Q+PVkhzoSlz3xyjk/uhI3Cl/3CQxos4UuvBlemvDHXbCrLQwk9Tq/1jODyqw==
 
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.5"
@@ -1275,22 +1275,12 @@
   resolved "https://registry.yarnpkg.com/@types/file-saver/-/file-saver-2.0.7.tgz#8dbb2f24bdc7486c54aa854eb414940bbd056f7d"
   integrity sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==
 
-"@types/node@20.14.8":
-  version "20.14.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.14.8.tgz#45c26a2a5de26c3534a9504530ddb3b27ce031ac"
-  integrity sha512-DO+2/jZinXfROG7j7WKFn/3C6nFwxy2lLpgLjEXJz+0XKphZlTLJ14mo8Vfg8X5BWN6XjyESXq+LcYdT7tR3bA==
+"@types/node@20.14.10":
+  version "20.14.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.14.10.tgz#a1a218290f1b6428682e3af044785e5874db469a"
+  integrity sha512-MdiXf+nDuMvY0gJKxyfZ7/6UFsETO7mGKF54MVD/ekJS6HdFtpZFBgrh6Pseu64XTb2MLyFPlbW6hj8HYRQNOQ==
   dependencies:
     undici-types "~5.26.4"
-
-"@types/wicg-file-system-access@2023.10.5":
-  version "2023.10.5"
-  resolved "https://registry.yarnpkg.com/@types/wicg-file-system-access/-/wicg-file-system-access-2023.10.5.tgz#14b3c25eb4d914b5734795bdea71da229f918b9d"
-  integrity sha512-e9kZO9kCdLqT2h9Tw38oGv9UNzBBWaR1MzuAavxPcsV/7FJ3tWbU6RI3uB+yKIDPGLkGVbplS52ub0AcRLvrhA==
-
-"@types/wicg-web-app-launch@2023.1.4":
-  version "2023.1.4"
-  resolved "https://registry.yarnpkg.com/@types/wicg-web-app-launch/-/wicg-web-app-launch-2023.1.4.tgz#796ecaeeccf3c18ffd053d5251d9a617ec5143ef"
-  integrity sha512-7yGDdKY0SSOeE3oFHYnnJUd0p6EW+VYwHvbruZC+UxniWo5xm/AvoHHIWsVEQPEkRI1g4WFb7zD/fwK8EcYQNQ==
 
 abortcontroller-polyfill@^1.1.9:
   version "1.7.5"
@@ -2705,10 +2695,10 @@ w3c-xmlserializer@^5.0.0:
   dependencies:
     xml-name-validator "^5.0.0"
 
-wavesurfer.js@7.8.0:
-  version "7.8.0"
-  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.8.0.tgz#47eac03bc421107a060915aa8fa41dc251db4b15"
-  integrity sha512-V9SIfE08VtSIl1KYHi+i+52gytEIxk0nDKlV98fjrK0UW+z37ojImgsYINEV015syLB9sZVAXDdGI8F4xmU7KQ==
+wavesurfer.js@7.8.1:
+  version "7.8.1"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.8.1.tgz#5b2c315c5ffeb42a142a621a1cc422017db72f68"
+  integrity sha512-KMebCPZF7jjo1/B+G7JGJgQc7hshIhJLnM/gUi4pdyCwb89s4apivpVZY2kdvausqbm+ceeudvKGPBcR9uqXnQ==
 
 weak-lru-cache@^1.2.2:
   version "1.2.2"

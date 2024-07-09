@@ -6,7 +6,6 @@
             "DOM",
             "DOM.Iterable"
         ],
-        "skipLibCheck": true,
         "experimentalDecorators": true,
         "useDefineForClassFields": true,
 
@@ -25,7 +24,8 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": [
-        "src"
+        "src",
+        "pwa"
     ],
     "exclude": [
         "src/monaco-editor/lib",

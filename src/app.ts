@@ -120,15 +120,8 @@ export class App {
             }
         });
 
-        document.getElementById("handler")!.addEventListener("click", () => {
-            let i = 0,
-                name: string;
-
-            do {
-                name = "Scrappy" + (i || "");
-                i++;
-            } while (this.entities.some(e => e.name === name));
-
+        document.getElementById("add")!.addEventListener("click", () => {
+            for (var n = 1, name = "Scrappy"; this.entities.some(e => e.name === name); name = `Scrappy ${n++}`);
             this.addSprite(new Sprite(name));
         });
 

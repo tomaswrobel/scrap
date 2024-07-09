@@ -11,7 +11,6 @@
 import * as Blockly from "blockly";
 import JSZip from "jszip";
 import fs from "fs";
-import "./entity.scss";
 import path from "path";
 import {reserved} from "../code/transformers/utils";
 import {TypeScript} from "../code/transformers/typescript";

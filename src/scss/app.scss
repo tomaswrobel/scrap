@@ -199,6 +199,12 @@
     #sprites {
         @include region(sprites);
         margin: $gap 0;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 4px;
+        gap: 4px;
+        overflow-y: auto;
+        align-content: baseline;
     }
 
     .tab-content {
