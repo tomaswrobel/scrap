@@ -296,10 +296,10 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@blockly/field-angle@5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.3.tgz#35c56b85f5407037eb5176765006fd5b1ad1ed08"
-  integrity sha512-eBmHwADzhckqTcW5W/giR/a/IjhgS6mbLNVGAorM3z8ki+6837EZtGcnez9YSirGQYKJOnpNRKP4gzbSqVI90Q==
+"@blockly/field-angle@5.0.4":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.4.tgz#7dfd1a8780fb4de6347354dc87fdf00d9dbfd1d2"
+  integrity sha512-pCLDv2qvmj/wcRHSy8TYBnj9I68qV+YJd2/joLQEjHQabe4vOEmrAySBD4fzgV960Z8iFz8MJOqfsjCbktSYxw==
 
 "@blockly/field-colour-hsv-sliders@5.0.3":
   version "5.0.3"
