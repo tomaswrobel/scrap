@@ -31,7 +31,7 @@
         "sass": "1.77.6"
     },
     "dependencies": {
-        "@babel/core": "7.24.7",
+        "@babel/core": "7.24.9",
         "@babel/preset-typescript": "7.24.7",
         "@blockly/field-angle": "5.0.3",
         "@blockly/field-colour-hsv-sliders": "5.0.3",
