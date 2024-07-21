@@ -119,7 +119,7 @@ In essence, Scrap's logo is a respectful tribute to Scratch, complying with lega
 
 For more info, you can take a look at the [blog post](https://tomaswrobel.dev/blog/scrap.mdx) I wrote about Scrap's development.
 
-**Microsoft**: Scrap is written in **TypeScript**. The same language you can code with inside Scrap with the help of **Monaco Edtior**. It doesn't use any framework. I use **Visual Studio Code** as my code editor. I develop with the help of **GitHub**, and its Copilot. Also, I use **GitHub Actions** to automate the build and deployment process. The resulting code is hosted on **GitHub Pages**. Primarily, I develop on **Windows 11** and test on **Microsoft Edge**.
+**Microsoft**: Scrap is written in **TypeScript**. The same language you can code with inside Scrap with the help of **Monaco Edtior**. It doesn't use any framework. I use **Visual Studio Code** as my code editor. I develop with the help of **GitHub**, and its Copilot. Also, I use **GitHub Actions** to automate the build and deployment process. The resulting code is hosted on **GitHub Pages**.
 
 **Google**: Scrap wouldn't be possible without **Blockly**. (In fact, Scratch relies on Blockly too.) When I'm at school, I use a **Chromebok** to take notes and, when the teacher isn't looking, to code Scrap.
 
