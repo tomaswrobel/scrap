@@ -357,10 +357,10 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@blockly/field-angle@5.0.4":
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.4.tgz#7dfd1a8780fb4de6347354dc87fdf00d9dbfd1d2"
-  integrity sha512-pCLDv2qvmj/wcRHSy8TYBnj9I68qV+YJd2/joLQEjHQabe4vOEmrAySBD4fzgV960Z8iFz8MJOqfsjCbktSYxw==
+"@blockly/field-angle@5.0.5":
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.5.tgz#3d1bc29ff7bde25ae817e2afa046dc3ceb5f81e8"
+  integrity sha512-a0G/WeASK3n2yEvr9QfALU6JYTHBPBaEDrd0XmFIofMvNqfcXO5/ezmAdHe0y9fVnkryuuqpRwbFfRpYyFaPJg==
 
 "@blockly/field-colour-hsv-sliders@5.0.4":
   version "5.0.4"
