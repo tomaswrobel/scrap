@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 2024-8-22
+
+### Fixed
+
+- flag field uses data URL as the image source, so it can be exported as PNG
+- GitHub Actions deprecation
+
 ## [5.1.2] - 2024-8-15
 
 ### Fixed
@@ -771,7 +778,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.1.2...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.2.0...HEAD
+[5.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.1.2
 [5.1.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.1.2
 [5.1.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.1.1
 [5.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.1.0

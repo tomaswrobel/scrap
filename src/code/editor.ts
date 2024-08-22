@@ -71,19 +71,19 @@ class CodeEditor implements TabComponent {
 	}
 
 	updateLib() {
-		this.types.setValue(lib.replace(/__(\w+)__/g, this.replacer));
-	}
+		this.types.setValue(lib.replace(/__(\w+)__/g, replacer));
+	} 
+}
 
-	private replacer(_: string, key: string) {
-		if (key === "SPRITE") {
-			return JSON.stringify(app.current.name);
-		} else if (key === "SPRITES") {
-			return app.entities.reduce(reducer, "\n");
-		} else if (key === "BACKDROPS") {
-			return getCostumes(app.entities[0]);
-		} else {
-			throw new TypeError("Template not found.");
-		}
+function replacer(_: string, key: string) {
+	if (key === "SPRITE") {
+		return JSON.stringify(app.current.name);
+	} else if (key === "SPRITES") {
+		return app.entities.reduce(reducer, "\n");
+	} else if (key === "BACKDROPS") {
+		return getCostumes(app.entities[0]);
+	} else {
+		throw new TypeError("Template not found.");
 	}
 }
 

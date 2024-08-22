@@ -25,7 +25,7 @@ import type {TryBlock} from "../../blockly/blocks/try";
 import type {ArrayBlock} from "../../blockly/blocks/array";
 import type {UnknownBlock} from "../../blockly/blocks/unknown";
 import type {CallBlock} from "../../blockly/blocks/call";
-import {UnionBlock} from "../../blockly/blocks/union";
+import type {UnionBlock} from "../../blockly/blocks/union";
 
 interface BlockCallback<T extends Blockly.Block = any> {
     (block: T, ts: TypeScript): null | string | [string, Order];

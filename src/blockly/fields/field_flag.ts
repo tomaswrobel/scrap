@@ -9,11 +9,13 @@
  * @author Tomáš Wróbel
  */
 import * as Blockly from 'blockly/core';
-import flag from "../../svgs/flag.svg";
+import fs from "fs";
+
+const data = fs.readFileSync("src/svgs/flag.svg", "base64");
 
 export default class extends Blockly.FieldImage {
     constructor() {
-        super(flag, 24, 24, "flag");
+        super(`data:image/svg+xml;base64,${data}`, 24, 24, "flag");
     }
 
     static fromJson() {
