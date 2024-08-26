@@ -41,7 +41,7 @@
         "blockly": "11.1.1",
         "file-saver": "2.0.5",
         "jszip": "3.10.1",
-        "monaco-editor": "0.50.0",
+        "monaco-editor": "0.51.0",
         "parley.js": "2.0.0",
         "process": "0.11.10",
         "scrap-engine": "2.5.3",
