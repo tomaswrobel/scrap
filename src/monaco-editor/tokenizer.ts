@@ -329,6 +329,7 @@ languages.registerTokensProviderFactory("typescript", {
                                 "costume": "costume",
                                 "backdrop": "costume",
                                 "effects": "costume",
+                                "variables": "variables",
                                 "@default": "identifier"
                             }
                         }

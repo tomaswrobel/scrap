@@ -162,16 +162,19 @@
     #stage {
         @include region(stage);
         margin: $gap;
+        border: 2px solid transparent;
+        overflow-y: auto;
 
         > .name {
             display: block;
             text-align: center;
-            padding: 5px;
             font-size: 12px;
+            height: 34px;
+            line-height: 34px;
         }
 
         &.selected {
-            border: 2px solid $primary;
+            border-color: $primary;
 
             > .name {
                 background: $primary;
@@ -184,7 +187,7 @@
             border: 1px solid #00000026;
             border-radius: 8px;
             width: 90%;
-            margin: 1em auto auto;
+            margin: 9px auto;
             display: block;
         }
     }
@@ -194,6 +197,7 @@
         margin-right: 20px;
         margin-bottom: 20px;
         justify-self: end;
+        z-index: 1;
     }
 
     #sprites {
@@ -201,16 +205,59 @@
         margin: $gap 0;
         display: flex;
         flex-wrap: wrap;
-        padding: 4px;
+        padding: 0 8px;
         gap: 4px;
         overflow-y: auto;
         align-content: baseline;
+        position: relative;
+
+        > .media-element.selected > .remove {
+            display: block;
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: $primary;
+            width: 100%;
+            height: 35px;
+        }
     }
 
     .tab-content {
         @include region(tab-content);
         font-size: 16px;
         tab-size: 4;
+    }
+
+    input.name {
+        opacity: 0.75;
+    }
+}
+
+.sprite-info {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 5px;
+    z-index: 200;
+
+    // Disable for stage
+    #stage.selected + #sprites > & {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .blocklyMainBackground {
+        fill: $primary !important;
+        stroke-width: 0 !important;
+        stroke: unset !important;
+    }
+
+    g[data-id="root"] > .blocklyPath {
+        // remove block's border
+        d: path("");
     }
 }
 

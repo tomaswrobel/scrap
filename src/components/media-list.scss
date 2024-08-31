@@ -14,36 +14,36 @@
     flex-direction: column;
     align-content: center;
     overflow-y: auto;
-    gap: 20px;
-    padding: 10px;
+    gap: 15px;
+    padding: 7.5px;
     background: $background;
 
     + .fab {
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 }
 
 .media-element {
-    width: 90px;
-    height: 90px;
+    width: 67.5px;
+    height: 67.5px;
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: 7.5px;
     border: 2px solid hsla(0, 0%, 0%, 0.15);
 
     > img {
         display: block;
         margin: auto;
-        height: 60px;
+        height: 45px;
         aspect-ratio: 1;
         object-fit: contain;
     }
 
     .name {
-        padding: 5px;
+        padding: 3.75px;
         text-align: center;
-        font-size: 12px;
-        border-radius: 0 0 4px 4px;
+        font-size: 9px;
+        border-radius: 0 0 3px 3px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -57,7 +57,26 @@
     }
 
     .remove {
-        display: none;
+        position: absolute;
+        background: #2fbf71;
+        border-radius: 50%;
+        top: -0.5em;
+        right: -0.5em;
+        user-select: none;
+        cursor: pointer;
+
+        width: 16px;
+        height: 16px;
+
+        line-height: 16px;
+        text-align: center;
+    }
+
+    &:only-child,
+    &:not(.selected) {
+        > .remove {
+            display: none;
+        }
     }
 
     &.selected {
@@ -68,18 +87,6 @@
 
         .name {
             background-color: $primary;
-        }
-
-        &:not(:only-child) .remove {
-            display: block;
-            position: absolute;
-            background: #2fbf71;
-            padding: 3px 7px;
-            border-radius: 50%;
-            top: -0.5em;
-            right: -0.5em;
-            user-select: none;
-            cursor: pointer;
         }
     }
 }

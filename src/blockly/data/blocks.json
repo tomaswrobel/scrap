@@ -2542,5 +2542,43 @@
         "style": "Operators",
         "nextStatement": "any",
         "previousStatement": "any"
+    },
+    {
+        "type": "spriteinfo",
+        "message0": "x %1 y %2 show %3 drag %4 size %5 direction %6",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "x",
+                "check": "number"
+            },
+            {
+                "type": "input_value",
+                "name": "y",
+                "check": "number"
+            },
+            {
+                "type": "field_checkbox",
+                "name": "visible",
+                "checked": true
+            },
+            {
+                "type": "field_checkbox",
+                "name": "draggable",
+                "checked": false
+            },
+            {
+                "type": "input_value",
+                "name": "size",
+                "check": "number"
+            },
+            {
+                "type": "input_value",
+                "name": "direction",
+                "check": "number"
+            }
+        ],
+        "colour": "#2fbf71",
+        "inputsInline": true
     }
 ]

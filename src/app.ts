@@ -24,26 +24,30 @@ import Sound from "./components/sounds";
 import SB3 from "./code/transformers/sb3";
 import Tabs from "./components/tabs";
 
+import * as Blockly from "blockly";
+
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
 const engineCDN = "https://unpkg.com/scrap-engine@" + version;
 
 export class App {
     public readonly container = document.getElementById("app")!;
-    output = document.querySelector("iframe")!;
-    inputs = document.querySelectorAll("input");
+    private readonly output = document.querySelector("iframe")!;
+    private readonly inputs = document.querySelectorAll("input");
 
-    tabs!: Tabs;
-    workspace = new Workspace();
-    code = new CodeEditor();
+    private spritePanelBlock!: Blockly.BlockSvg;
+    private tabs!: Tabs;
+
+    private readonly workspace = new Workspace();
+    public readonly code = new CodeEditor();
 
     entities = new Array<Entity>();
     current!: Entity;
 
-    spritePanel = document.getElementById("sprites")!;
-    stagePanel = document.getElementById("stage")!;
+    public readonly spritePanel = document.getElementById("sprites")!;
+    public readonly stagePanel = document.getElementById("stage")!;
 
-    scratchFiles = new SB3();
+    private scratchFiles = new SB3();
 
     start(version: string) {
         this.mode("paced");
@@ -140,10 +144,27 @@ export class App {
         );
 
         this.saveAs = App.save.bind(this, version);
+
+        // Sprite panel
+        const workspace = Blockly.inject(
+            this.spritePanel.querySelector(".sprite-info")!,
+            {
+                renderer: "scrap",
+                zoom: {
+                    startScale: 0.65,
+                }
+            }
+        );
+        workspace.showContextMenu = () => {};
+
+        this.spritePanelBlock = workspace.newBlock("spriteinfo", "root");
+        this.setUpSpritePanelBlock();
+
         const scrappy = new Sprite("Scrappy");
         scrappy.variables.push(["My variable", "number"]);
         this.addSprite(scrappy);
 
+        // Finalize
         document.title = `Scrap - Editor v${version}`;
     }
 
@@ -154,17 +175,134 @@ export class App {
 
         await this.current.dispose();
         this.current = entity;
-        const blocks = this.current.isUsingBlocks();
 
-        if (blocks && this.tabs.active === this.code) {
+        // Update the tabs
+        // Different sprites may use blocks or code differently
+        if (entity.isUsingBlocks() && this.tabs.active === this.code) {
             this.tabs.set(this.workspace);
-        } else if (!blocks && this.tabs.active === this.workspace) {
+        } else if (entity.isUsingCode() && this.tabs.active === this.workspace) {
             this.tabs.set(this.code);
         } else if (this.tabs.active) {
             this.tabs.active.update();
         }
+
+        // Update the sprite panel
+        if (entity.isStage()) {
+            this.spritePanelBlock.setEditable(false);
+        } else {
+            this.spritePanelBlock.setEditable(true);
+
+            this.spritePanelBlock.getInput("x")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("x"), "NUM");
+            this.spritePanelBlock.getInput("y")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("y"), "NUM");
+            this.spritePanelBlock.getInput("size")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("size"), "NUM");
+            this.spritePanelBlock.getInput("direction")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("direction"), "VALUE");
+
+            this.spritePanelBlock.getField("draggable")!.setValue(entity.getInit<boolean>("draggable"));
+            this.spritePanelBlock.getField("visible")!.setValue(entity.getInit<boolean>("visible"));
+        }
     }
 
+    /**
+     * Set up the sprite panel block
+     */
+    private setUpSpritePanelBlock() {
+        const x = this.spritePanelBlock.getInput("x")!;
+        const y = this.spritePanelBlock.getInput("y")!;
+        const size = this.spritePanelBlock.getInput("size")!;
+        const direction = this.spritePanelBlock.getInput("direction")!;
+
+        const draggable = this.spritePanelBlock.getField("draggable") as Blockly.FieldCheckbox;
+        const visible = this.spritePanelBlock.getField("visible") as Blockly.FieldCheckbox;
+
+        x.connection!.setShadowState({
+            type: "math_number",
+            fields: {
+                NUM: 0
+            }
+        });
+
+        y.connection!.setShadowState({
+            type: "math_number",
+            fields: {
+                NUM: 0
+            }
+        });
+
+        size.connection!.setShadowState({
+            type: "math_number",
+            fields: {
+                NUM: 100
+            }
+        });
+
+        direction.connection!.setShadowState({
+            type: "motion_angle",
+            fields: {
+                VALUE: 90
+            }
+        });
+
+        x.connection!.targetBlock()!.getField("NUM")!.setValidator(x => {
+            if (!this.current.isStage()) {
+                Object.assign(this.current.init, {x});
+            } else {
+                return null;
+            }
+        });
+
+        y.connection!.targetBlock()!.getField("NUM")!.setValidator(y => {
+            if (!this.current.isStage()) {
+                Object.assign(this.current.init, {y});
+            } else {
+                return null;
+            }
+        });
+
+        size.connection!.targetBlock()!.getField("NUM")!.setValidator(size => {
+            if (!this.current.isStage()) {
+                Object.assign(this.current.init, {size});
+            } else {
+                return null;
+            }
+        });
+
+        direction.connection!.targetBlock()!.getField("VALUE")!.setValidator(direction => {
+            if (!this.current.isStage()) {
+                Object.assign(this.current.init, {direction});
+            } else {
+                return null;
+            }
+        });
+
+        draggable.setValidator(draggable => {
+            if (!this.current.isStage()) {
+                Object.assign(this.current.init, {draggable});
+            } else {
+                return null;
+            }
+        });
+
+        visible!.setValidator(visible => {
+            if (!this.current.isStage()) {
+                Object.assign(this.current.init, {visible});
+            } else {
+                return null;
+            }
+        });
+
+        visible.setCheckCharacter("\u2714");
+        draggable.setCheckCharacter("\u2714");
+
+        this.spritePanelBlock.setDeletable(false);
+        this.spritePanelBlock.setMovable(false);
+        this.spritePanelBlock.initSvg();
+    }
+
+    /**
+     * Adds sprite to the panel
+     * @param sprite Sprite to add
+     * @param select whether to select the sprite immediately
+     */
     addSprite(sprite: Sprite, select = true) {
         const element = sprite.render(this.spritePanel);
 
@@ -189,6 +327,26 @@ export class App {
         }
 
         element.addEventListener("click", selector);
+    }
+
+    /**
+     * Removes sprite from the database
+     * 
+     * @param sprite Sprite to remove
+     */
+    removeSprite(sprite: Sprite) {
+        const index = this.entities.indexOf(sprite);
+
+        if (index === -1) {
+            return;
+        }
+
+        this.entities.splice(index, 1);
+        this.code.updateLib();
+
+        if (sprite === this.current) {
+            this.selectStage();
+        }
     }
 
     /**

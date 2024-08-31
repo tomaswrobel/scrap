@@ -60,11 +60,6 @@ export class MediaList extends EventTarget {
             }
         });
 
-        // Styling
-        this.fab.style.lineHeight = "50px";
-        this.fab.style.textAlign = "center";
-        this.fab.style.font = "20px sans-serif bold";
-
         this.fab.appendChild(input);
     }
 

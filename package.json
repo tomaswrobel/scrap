@@ -2,7 +2,7 @@
     "name": "scrap",
     "displayName": "Scrap",
     "private": true,
-    "version": "5.2.0",
+    "version": "5.3.0",
     "type": "module",
     "description": "Scrap is an IDE designed to simplify the transition from Scratch to JavaScript.",
     "scripts": {
@@ -23,7 +23,7 @@
         "@parcel/transformer-webmanifest": "2.12.0",
         "@types/babel__core": "7.20.5",
         "@types/file-saver": "2.0.7",
-        "@types/node": "22.3.0",
+        "@types/node": "22.5.1",
         "assert": "2.1.0",
         "buffer": "6.0.3",
         "parcel": "2.12.0",
@@ -31,22 +31,22 @@
         "sass": "1.77.8"
     },
     "dependencies": {
-        "@babel/core": "7.24.9",
+        "@babel/core": "7.25.2",
         "@babel/preset-typescript": "7.24.7",
         "@blockly/field-angle": "5.0.7",
-        "@blockly/field-colour-hsv-sliders": "5.0.7",
-        "@blockly/field-date": "9.0.7",
+        "@blockly/field-colour-hsv-sliders": "5.0.8",
+        "@blockly/field-date": "9.0.8",
         "@parcel/reporter-static-files": "npm:parcel-reporter-static-files-copy@1.5.3",
         "@parcel/service-worker": "2.12.0",
         "blockly": "11.1.1",
         "file-saver": "2.0.5",
         "jszip": "3.10.1",
-        "monaco-editor": "0.50.0",
+        "monaco-editor": "0.51.0",
         "parley.js": "2.0.0",
         "process": "0.11.10",
         "scrap-engine": "2.5.3",
         "typescript": "5.5.4",
-        "wavesurfer.js": "7.8.2"
+        "wavesurfer.js": "7.8.4"
     },
     "staticFiles": {
         "staticPath": "node_modules/blockly/media",

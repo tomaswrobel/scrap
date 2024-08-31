@@ -13,6 +13,8 @@ import * as Blockly from "blockly";
 export class Renderer extends Blockly.zelos.Renderer {
     protected override makeConstants_() {
         return new class extends Blockly.zelos.ConstantProvider {
+            FIELD_CHECKBOX_X_OFFSET = 9;
+
             shapeFor(connection: Blockly.RenderedConnection) {
                 const check = connection.getCheck();
 

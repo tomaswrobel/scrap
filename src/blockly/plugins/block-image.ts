@@ -37,6 +37,9 @@ Blockly.ContextMenuRegistry.registry.register({
 		if (scope.block!.isInFlyout) {
 			return "hidden";
 		}
+		if (scope.block!.type === "spriteinfo") {
+			return "hidden";
+		}
 		return "enabled";
 	},
 	scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,

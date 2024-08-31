@@ -74,6 +74,10 @@ export class Entity {
 		return this.typescript === undefined;
 	}
 
+	isUsingCode() {
+		return this.typescript !== undefined
+	}
+
 	/**
 	 * @param initialCostume The first and undeletable costume
 	 * @param name My name (can be changed later)
@@ -212,6 +216,16 @@ export class Entity {
 	public isStage(): this is Stage {
 		return this.name === "Stage";
 	}
+
+	/**
+	 * Returns the initial value of a key
+	 * 
+	 * @param key The key to get the initial value of
+	 * @returns The value
+	 */
+	public getInit<T>(key: string) {
+		return (this.init as Record<string, T>)[key];
+	}
 }
 
 export class Sprite extends Entity {
@@ -266,6 +280,18 @@ export class Sprite extends Entity {
 		};
 
 		sprite.appendChild(span);
+
+		const remove = document.createElement("div");
+
+		remove.textContent = "×";
+		remove.classList.add("remove");
+		remove.onclick = () => {
+			parent.removeChild(sprite);
+			app.removeSprite(this);
+		};
+
+		sprite.appendChild(remove);
+
 		return parent.appendChild(sprite);
 	}
 }

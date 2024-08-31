@@ -315,6 +315,17 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
                                 file: {fileName}
                             });
                             break;
+                        case ts.SyntaxKind.LiteralType:
+                        case ts.SyntaxKind.TupleType:
+                            diagnostics.push({
+                                messageText: "Literal types are not allowed",
+                                category: ts.DiagnosticCategory.Error,
+                                code: 9999,
+                                start: node.getStart(),
+                                length: node.getWidth(),
+                                file: {fileName}
+                            });
+                            break;
                         case ts.SyntaxKind.AsExpression:
                         case ts.SyntaxKind.SatisfiesExpression:
                             diagnostics.push(
