@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.1] - 2024-9-1
+
+### Fixed
+
+- Blockly fixes (NPM update)
+- sprite panel got removed when opening the project
+
 ## [5.3.0] - 2024-8-31
 
 ### Added
@@ -794,7 +801,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.3.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.3.1...HEAD
+[5.3.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.1
 [5.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.0
 [5.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.2.0
 [5.1.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.1.2

@@ -411,8 +411,7 @@ export class App {
         this.container.style.setProperty("--output", `${size}`);
 
         this.entities = [];
-        this.spritePanel.innerHTML = "";
-        this.stagePanel.innerHTML = '<span class="name">Stage</span>';
+        this.cleanPanels();
 
         for (const data of entities) {
             const entity = await Entity.load(zip, data);
@@ -440,8 +439,7 @@ export class App {
 
         this.showLoader("Transforming project");
         this.entities = [];
-        this.spritePanel.innerHTML = "";
-        this.stagePanel.innerHTML = '<span class="name">Stage</span>';
+        this.cleanPanels();
 
         try {
             await this.scratchFiles.transform(file);
@@ -456,6 +454,17 @@ export class App {
 
         this.current = this.entities[0];
         this.hideLoader();
+    }
+
+    /**
+     * Removes all the entities from the DOM
+     */
+    private cleanPanels() {
+        for (let i = 1; i < this.spritePanel.children.length; i++) {
+            this.spritePanel.children[i].remove();
+        }
+
+        this.stagePanel.innerHTML = '<span class="name">Stage</span>';
     }
 
     /**
