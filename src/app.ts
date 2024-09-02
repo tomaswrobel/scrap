@@ -192,13 +192,13 @@ export class App {
         } else {
             this.spritePanelBlock.setEditable(true);
 
-            this.spritePanelBlock.getInput("x")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("x"), "NUM");
-            this.spritePanelBlock.getInput("y")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("y"), "NUM");
-            this.spritePanelBlock.getInput("size")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("size"), "NUM");
-            this.spritePanelBlock.getInput("direction")!.connection!.targetBlock()!.setFieldValue(entity.getInit<number>("direction"), "VALUE");
+            this.spritePanelBlock.getInput("x")!.connection!.targetBlock()!.setFieldValue(entity.getInit("x"), "NUM");
+            this.spritePanelBlock.getInput("y")!.connection!.targetBlock()!.setFieldValue(entity.getInit("y"), "NUM");
+            this.spritePanelBlock.getInput("size")!.connection!.targetBlock()!.setFieldValue(entity.getInit("size"), "NUM");
+            this.spritePanelBlock.getInput("direction")!.connection!.targetBlock()!.setFieldValue(entity.getInit("direction"), "VALUE");
 
-            this.spritePanelBlock.getField("draggable")!.setValue(entity.getInit<boolean>("draggable"));
-            this.spritePanelBlock.getField("visible")!.setValue(entity.getInit<boolean>("visible"));
+            this.spritePanelBlock.getField("draggable")!.setValue(entity.getInit("draggable") ? "TRUE" : "FALSE");
+            this.spritePanelBlock.getField("visible")!.setValue(entity.getInit("visible") ? "TRUE" : "FALSE");
         }
     }
 
@@ -274,17 +274,21 @@ export class App {
             }
         });
 
-        draggable.setValidator(draggable => {
+        draggable.setValidator(s => {
             if (!this.current.isStage()) {
-                Object.assign(this.current.init, {draggable});
+                Object.assign(this.current.init, {
+                    draggable: s === "TRUE"
+                });
             } else {
                 return null;
             }
         });
 
-        visible!.setValidator(visible => {
+        visible.setValidator(s => {
             if (!this.current.isStage()) {
-                Object.assign(this.current.init, {visible});
+                Object.assign(this.current.init, {
+                    visible: s === "TRUE"
+                });
             } else {
                 return null;
             }

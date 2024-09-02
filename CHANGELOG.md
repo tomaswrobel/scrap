@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.3] - 2024-9-2
+
+### Fixed
+
+- checkboxes in the settings panel
+- changelog links
 
 ## [5.3.2] - 2024-9-2
 
@@ -813,7 +819,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.3.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.3.3...HEAD
+[5.3.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.3
+[5.3.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.2
 [5.3.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.1
 [5.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.0
 [5.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.2.0
