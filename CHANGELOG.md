@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [5.3.2] - 2024-9-2
+
+### Fixed
+
+- README.md link to image fixed
+- white border in sprite panel removed
+
+### Added
+
+- PWA screenshots
+
 ## [5.3.1] - 2024-9-1
 
 ### Fixed

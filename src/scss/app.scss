@@ -250,9 +250,12 @@
     }
 
     .blocklyMainBackground {
-        fill: $primary !important;
+        fill: none !important;
         stroke-width: 0 !important;
-        stroke: unset !important;
+    }
+
+    .blocklySvg {
+        background: none !important;
     }
 
     g[data-id="root"] > .blocklyPath {

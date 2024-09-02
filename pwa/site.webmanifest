@@ -19,6 +19,35 @@
             "type": "image/png"
         }
     ],
+    "screenshots": [
+        {
+            "src": "block_coding.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "label": "Block coding",
+            "form_factor": "wide"
+        },
+        {
+            "src": "text_coding.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "label": "Text coding",
+            "form_factor": "wide"
+        },
+        {
+            "src": "paint_editor.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "label": "Paint editor",
+            "form_factor": "wide"
+        },
+        {
+            "src": "scrappy.png",
+            "sizes": "1080x1920",
+            "type": "image/png",
+            "label": "Scrappy"
+        }
+    ],
     "theme_color": "#2fbf71",
     "background_color": "#c8f2db",
     "display": "standalone",
