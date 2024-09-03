@@ -22,7 +22,7 @@ export interface ArrayBlockMixin extends ArrayBlockMixinType {}
 export type ArrayBlockMixinType = typeof MIXIN;
 
 export const MIXIN = {
-	items: [] as ("iterable" | "single")[],
+	items: [] as string[],
 	/**
 	 * Returns the state of this block as a JSON serializable object.
 	 *
@@ -82,7 +82,7 @@ export const MIXIN = {
 				itemBlock = itemBlock.getNextBlock();
 				continue;
 			}
-			this.items.push(itemBlock.type.slice(19) as "iterable" | "single");
+			this.items.push(itemBlock.type.slice("array_item_".length));
 			itemBlock = itemBlock.getNextBlock();
 		}
 		this.updateShape(toCheck(this));

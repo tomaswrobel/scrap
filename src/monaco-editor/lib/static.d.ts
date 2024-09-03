@@ -758,7 +758,7 @@ declare interface Iterable<T> {
     };
 }
 
-declare interface Array<T> extends Iterable<T> {
+declare interface Array<T = any> extends Iterable<T> {
     /**
      * Joins the string represantation with the separator
      * 

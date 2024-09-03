@@ -364,12 +364,12 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@blockly/field-angle@5.0.7":
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.7.tgz#87652c7e5aa228feb31f35f14ddf4e5e94538244"
-  integrity sha512-6KjIIMWyEd6/ZegDugk9gkMGWQUF55LRsJ2Qnj+vZbHOLFzL62MyUH+rnfvhO8gXTSX0rqPsoTh2NhIxRrK1Lg==
+"@blockly/field-angle@5.0.9":
+  version "5.0.9"
+  resolved "https://registry.yarnpkg.com/@blockly/field-angle/-/field-angle-5.0.9.tgz#7942a2faf9ac999f70279182b58ccc365c7e6033"
+  integrity sha512-pb7zjEH0buO34KD89oL676ju6uSJPXIqF8i67CMV34/EOnb4d7bDtetsN86bS0mRwvrD63sYsTGto8DfTNYGEA==
 
-"@blockly/field-colour-hsv-sliders@^5.0.9":
+"@blockly/field-colour-hsv-sliders@5.0.9":
   version "5.0.9"
   resolved "https://registry.yarnpkg.com/@blockly/field-colour-hsv-sliders/-/field-colour-hsv-sliders-5.0.9.tgz#14fc5a1cf79cd049308e403c3226ff81e03e2cd0"
   integrity sha512-GkVrlTZvqoNYP36vxtABfPior9mLvqZrFsacxyRXfBWlX6g5MltlxtqXVkXpyMOmjlBqP/dvD6AUHTkLLAHblg==
@@ -381,7 +381,7 @@
   resolved "https://registry.yarnpkg.com/@blockly/field-colour/-/field-colour-5.0.9.tgz#92981415fa1c8a8955ae1ddf591e4b07204c748b"
   integrity sha512-ebj4oGwrqkcGKTYjLDHLQYilZ1qfmiPIfi3QVv/ROfSut4VPEf4JEnTmc/AJJrKQgzygdbz02QLZ2DBlVkoWNg==
 
-"@blockly/field-date@^9.0.9":
+"@blockly/field-date@9.0.9":
   version "9.0.9"
   resolved "https://registry.yarnpkg.com/@blockly/field-date/-/field-date-9.0.9.tgz#760e9c906913d71d08f769dbf196d4a7d1f93f08"
   integrity sha512-MoriCotoPtBAnI/SsKu8KaUKJVea7CH/Im/F5KsETjpsnicro3i1eHBlR53uBuBH+jc/3NIuvfW4adapeZTlCw==

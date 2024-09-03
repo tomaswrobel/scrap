@@ -562,31 +562,24 @@ export default class Blocks {
                 break;
             }
             case "FunctionDeclaration": {
-                const {id, params, body} = node;
-
-                if (!id) {
+                if (!node.id) {
                     throw new SyntaxError("Only named functions are supported");
                 }
 
                 let commentText = "";
+                const params: string[] = [];
 
                 const block = this.workspace.newBlock("function");
-                block.setFieldValue(id.name, "NAME");
-
-                const extraState = {
-                    params: new Array<string>(),
-                    returns: node.returnType?.type === "TSTypeAnnotation" && node.returnType.typeAnnotation.type !== "TSVoidKeyword"
-                };
+                block.setFieldValue(node.id.name, "NAME");
 
                 const types = new Array<babel.types.TSType | null>();
-                const savedTypes = new Array<app.Check>();
 
-                for (const param of params) {
+                for (const param of node.params) {
                     if (param.type !== "Identifier") {
                         continue;
                     }
 
-                    extraState.params.push(param.name);
+                    params.push(param.name);
 
                     if (param.typeAnnotation?.type === "TSTypeAnnotation") {
                         types.push(param.typeAnnotation.typeAnnotation);
@@ -594,24 +587,37 @@ export default class Blocks {
                         types.push(null);
                     }
                 }
-                block.loadExtraState!(extraState);
+
+                block.loadExtraState!({
+                    params,
+                    returns: node.returnType?.type === "TSTypeAnnotation" && node.returnType.typeAnnotation.type !== "TSVoidKeyword"
+                });
 
                 types.forEach((type, i) => {
                     this.connection = block.getInput(`PARAM_${i}`)!.connection!.targetBlock()!.getInput("TYPE")!.connection!;
                     this.parse(type);
-                    savedTypes.push(toCheck(this.connection.targetBlock()));
                 });
 
                 if (this.connection = block.getInput("RETURNS")?.connection) {
                     this.parse((node.returnType as Types.TSTypeAnnotation).typeAnnotation);
-                    savedTypes.push(toCheck(this.connection.targetBlock()));
+
+                    this.functions.set(node.id.name, {
+                        params,
+                        name: node.id.name,
+                        returnType: toCheck(this.connection.targetBlock())
+                    });
+                } else {
+                    this.functions.set(node.id.name, {
+                        params,
+                        name: node.id.name,
+                        returnType: false
+                    });
                 }
 
-                this.functions.set(id.name, extraState);
                 block.setCommentText(commentText.trim());
 
                 this.connection = block.nextConnection;
-                this.parse(body);
+                this.parse(node.body);
 
                 this.connection = null;
 
@@ -737,6 +743,8 @@ export default class Blocks {
                 } else if (node.callee.type === "Identifier") {
                     if (this.functions.has(node.callee.name)) {
                         const block = this.workspace.newBlock("call");
+                        block.setFieldValue(node.callee.name, "NAME");
+
                         block.loadExtraState!(this.functions.get(node.callee.name));
 
                         if (this.connection) {

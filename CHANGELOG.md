@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.4] - 2024-9-2
+
+### Fixed
+
+- @blockly/field-angle update
+- array mutator no longer struggles with types
+- type argument of `Array` is optional in Scrap ECMAScript definition
+- transformation of `call` block from code to blocks
+
 ## [5.3.3] - 2024-9-2
 
 ### Fixed
@@ -819,7 +828,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.3.3...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.3.4...HEAD
+[5.3.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.4
 [5.3.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.3
 [5.3.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.2
 [5.3.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.1

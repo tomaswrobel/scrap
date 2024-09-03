@@ -74,7 +74,7 @@ export function toCheck(block?: Blockly.Block | null): app.Check {
 
 		return [...set];
 	}
-	if (block.type === "typed") {
+	if (block.type === "typed" || block.type === "array") {
 		return toCheck(block.getInput("TYPE")?.connection?.targetBlock());
 	}
 	if (block.type === "generic") {
