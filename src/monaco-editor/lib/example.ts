@@ -1,3 +1,4 @@
+// Classic scenario
 self.whenFlag(() => {
     self.effects.brightness = 0;
     self.whenKeyPressed("any", () => {
@@ -8,6 +9,12 @@ self.whenFlag(() => {
     });
 });
 
-let a = 5;
+// ECMAScript APIs
+// Better than built-in, right?
+const fiveString = String(5); 
+const fiveNumber = Number("5");
+const one = Number(true);
 
-const c = String(a)
+// Arrays infer types
+const array = new Array(5, "30", false);
+const numberArray = new Array(5, 5, 40);

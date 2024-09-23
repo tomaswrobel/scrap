@@ -23,6 +23,9 @@ declare const blocks: {
 
         /** The mutator's blocks. */
         blocks?: string[];
+
+        /** There shouldn't be a default export. */
+        default: never;
     };
 };
 

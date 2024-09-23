@@ -183,6 +183,11 @@ languages.registerTokensProviderFactory("typescript", {
             "new",
             "namespace"
         ],
+        variables: [
+            "variables",
+            "showVariable",
+            "hideVariable",
+        ],
         operators: [
             "<=",
             ">=",
@@ -329,7 +334,7 @@ languages.registerTokensProviderFactory("typescript", {
                                 "costume": "costume",
                                 "backdrop": "costume",
                                 "effects": "costume",
-                                "variables": "variables",
+                                "@variables": "variables",
                                 "@default": "identifier"
                             }
                         }

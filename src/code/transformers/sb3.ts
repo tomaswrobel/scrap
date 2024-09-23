@@ -1129,7 +1129,8 @@ class SB3 {
 
         const name = `scratch_${init.name}_${Date.now().toString(36)}`;
         let block = app.current.workspace.newBlock("function");
-
+        block.setCommentText(init.comment);
+        
         block.loadExtraState!({
             name,
             params: init.args,

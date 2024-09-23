@@ -24,6 +24,7 @@
  *    - Callback will be filled with all the statements connected to the block.
  *    - Do not use statement inputs in that case. This is Blockly's, not Scrap's specific.
  * - If the block is used in any mutator, it will be ignored.
+ * - When neither "output", "previousStatement" or "nextStatement" is present, the block is ignored.
  */
 [
     {
@@ -2544,7 +2545,7 @@
         "previousStatement": "any"
     },
     {
-        "type": "spriteinfo",
+        "type": "spritePanel",
         "message0": "x %1 y %2 show %3 drag %4 size %5 direction %6",
         "args0": [
             {

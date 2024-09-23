@@ -74,7 +74,7 @@ export const MIXIN = {
             }, {
                 text: "Info",
                 enabled: true,
-                callback: async () => {
+                callback: () => {
                     const body = document.createElement("table");
                     const name = this.getFieldValue("VAR");
 
@@ -85,7 +85,7 @@ export const MIXIN = {
                         </tr>
                         <tr>
                             <td style="text-align:left;">Type:</td>
-                            <td>${new Array<string>().concat(this.type_ || "any").join(" or ")}</td>
+                            <td>${([] as string[]).concat(this.type_ || "any").join(" or ")}</td>
                         </tr>
                         <tr>
                             <td style="text-align:left;">Constant:</td>
@@ -93,11 +93,7 @@ export const MIXIN = {
                         </tr>
                     `;
 
-                    await Parley.fire({
-                        input: "none",
-                        title: "Variable Info",
-                        body
-                    });
+                    Parley.fire({input: "none", title: "Variable Info", body});
                 }
             });
         }

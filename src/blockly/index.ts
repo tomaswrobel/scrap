@@ -14,8 +14,14 @@ import theme from "./data/theme.json";
 import data from "./data/blocks.json";
 import {TypeScript, Order} from "../code/transformers/typescript";
 
-const mutatorBlocks: string[] = []; {
-	let start = 0;
+/**
+ * Blocks that are ignored by the TypeScript generator.
+ * These are blocks that are never part of the generated 
+ * code, as they are inside the mutator of another block.
+ * 
+ * (except for the spritePanel block, which is a special case)
+ */
+const mutatorBlocks = ["spritePanel"]; {
 	for (const name in blocks) {
 		const data = blocks[name];
 
@@ -23,13 +29,13 @@ const mutatorBlocks: string[] = []; {
 			continue;
 		}
 
+		if (data.blocks) {
+			mutatorBlocks.push(...data.blocks);
+		}
+
 		if ("init" in data.MIXIN) {
 			Blockly.Blocks[name] = data.MIXIN;
 		} else {
-			for (let i = 0; i < (data.blocks?.length || 0); i++) {
-				mutatorBlocks[i + start++] = data.blocks![i];
-			}
-
 			Blockly.Extensions.registerMutator(
 				name,
 				data.MIXIN,
@@ -70,7 +76,7 @@ Blockly.setLocale(En);
 export const properties = data.map(d => {
 	// Despite the name, this also handles the dynamic code generation. 
 	// It's placed here to minimize the amount of iterations.
-	
+
 	if (!(d.type in TypeScript.blocks) && mutatorBlocks.indexOf(d.type) === -1) {
 		const isEvent = !("output" in d) && !("previousStatement" in d);
 
@@ -123,3 +129,5 @@ Blockly.defineBlocksWithJsonArray(data);
 
 export {sprite, stage, theme, plugins};
 export * from "./types";
+
+console.log(mutatorBlocks);

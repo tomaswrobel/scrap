@@ -157,7 +157,7 @@ export class App {
         );
         workspace.showContextMenu = () => {};
 
-        this.spritePanelBlock = workspace.newBlock("spriteinfo", "root");
+        this.spritePanelBlock = workspace.newBlock("spritePanel", "root");
         this.setUpSpritePanelBlock();
 
         const scrappy = new Sprite("Scrappy");

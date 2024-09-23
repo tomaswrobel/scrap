@@ -32,12 +32,28 @@ declare const Scrap: {
 
 interface Stage<Variables = {}, Sound = string> {
     /**
-     * Graphical effects - each effect is a number between 0 and 100
+     * Graphical effects
      */
     readonly effects: {
+        /**
+         * Brightness of the sprite
+         * 0 - totally dark (black)
+         * 100 - normal
+         */
         brightness: number,
         color: number,
+        /**
+         * Transparency of the sprite
+         * 0 - visible
+         * 100 - invisible
+         */
         ghost: number,
+        /**
+         * Grayscale of the sprite
+         * 0 - normal
+         * 100 - grayscale
+         * Note: Scrappy is almost in grayscale by default.
+         */
         grayscale: number,
     };
 
@@ -711,7 +727,7 @@ declare interface String extends Iterable<string> {
  * Converts the value to a string
  * @param value any value
  */
-declare function String<const T>(value: T): T extends number | boolean ? `${T}` : string;
+declare function String<const T>(value: T): T extends number | boolean | string ? `${T}` : string;
 
 
 // Scrap's iterables
@@ -876,6 +892,7 @@ declare const Math: {
      * Returns the absolute value of a number
      * |x| = x if x > 0
      * |x| = -x if x < 0
+     * |0| = 0
      */
     abs(value: number): number;
 
@@ -930,7 +947,7 @@ declare const Math: {
     log10(value: number): number;
 };
 
-declare const window: typeof globalThis & {
+declare const window: {
     /**
      * Displays the native alert dialog with the specified message.
      * @param message the message to display

@@ -37,7 +37,7 @@ Blockly.ContextMenuRegistry.registry.register({
 		if (scope.block!.isInFlyout) {
 			return "hidden";
 		}
-		if (scope.block!.type === "spriteinfo") {
+		if (scope.block!.type === "spritePanel") {
 			return "hidden";
 		}
 		return "enabled";
