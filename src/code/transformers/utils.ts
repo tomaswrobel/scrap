@@ -1,6 +1,15 @@
-import type * as babel from "@babel/core";
-import {Types} from "../../blockly";
-
+/**
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview Transforming utilities
+ * @copyright Tomáš Wróbel 2024
+ */
 export const reserved = Object.getOwnPropertyNames(window);
 reserved.unshift(
 	// ECMAScript
@@ -85,53 +94,4 @@ export function escape(string: string) {
 
 export function identifier(this: import("blockly").FieldTextInput, value: string) {
 	return (value && reserved.indexOf(value) === -1 && /[$_\p{ID_Start}][$\u200c\u200d\p{ID_Continue}]*/u.test(value)) ? value : null;
-}
-
-export function getPropertyContents(property: babel.types.Identifier | babel.types.StringLiteral): string;
-export function getPropertyContents(property: babel.types.Node) {
-	if (property.type === "Identifier") {
-		return property.name;
-	} else if (property.type === "StringLiteral") {
-		return property.value;
-	} else {
-		return false;
-	}
-}
-
-export function getType(type: babel.types.TSType | null | undefined): app.Check {
-	if (type) switch (type.type) {
-		case "TSArrayType": return "Array";
-		case "TSBooleanKeyword": return "boolean";
-		case "TSNumberKeyword": return "number";
-		case "TSStringKeyword": return "string";
-		case "TSExpressionWithTypeArguments": {
-			if (type.expression.type === "Identifier" && Types.includes(type.expression.name)) {
-				return type.expression.name;
-			} else {
-				return "any";
-			}
-		}
-		case "TSTypeReference": {
-			if (type.typeName.type === "Identifier" && Types.includes(type.typeName.name)) {
-				return type.typeName.name;
-			} else {
-				return "any";
-			}
-		}
-		case "TSUnionType": {
-			return type.types.reduce((previous, current) => previous.concat(getType(current)), new Array<string>());
-		}
-	}
-	return "any";
-}
-
-export function isProperty(node: babel.types.MemberExpression, ...properties: unknown[]): node is babel.types.MemberExpression & {property: babel.types.Identifier | babel.types.StringLiteral;} {
-	return (
-		isIdentifier(node.property, ...properties) ||
-		(node.property.type === "StringLiteral" && properties.indexOf(node.property.value) > -1)
-	);
-}
-
-export function isIdentifier(node: babel.types.Node, ...names: unknown[]) {
-	return node.type === "Identifier" && names.indexOf(node.name) > -1;
 }

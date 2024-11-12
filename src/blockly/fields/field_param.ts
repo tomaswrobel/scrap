@@ -1,26 +1,28 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
- * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
- * @license MIT
- * @author Tomáš Wróbel
- * @fileoverview Custom Blockly field for parameters.
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
  *
- * scratch-blocks does this by creating an input with irremovable 
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @copyright Tomáš Wróbel 2024
+ * @fileoverview Field for parameters in typed blocks
+ *
+ * scratch-blocks does this by creating an input with irremovable
  * and copiable shadow block. But that requires a modification of
  * the Blockly's Gesture class, which is not possible here.
  * This approach is different, because it uses a field.
  * The field creates a new block and renders it to SVG.
- * 
+ *
  * Values are stored in the format "name:type".
  * Text is stored in the format "name".
  */
 import * as Blockly from "blockly";
 
 export default class FieldParam extends Blockly.Field<string> {
-	constructor(defaultVarName = "i", type?: app.Check) {
+	constructor(defaultVarName = "i", type?: Check) {
 		super(type ? `${defaultVarName}:${type}` : defaultVarName);
 	}
 
@@ -28,35 +30,36 @@ export default class FieldParam extends Blockly.Field<string> {
 	 * Extracts the name of the parameter from the value.
 	 * @returns The name of the parameter.
 	 */
-	protected getText_() {
-		return this.value_!.split(":")[0];
+	protected override getText_() {
+		return this.value_?.split(":")[0] ?? "";
 	}
 
 	/**
 	 * Extracts the type of the parameter from the value.
 	 * @returns The type of the parameter.
 	 */
-	getType() {
-		if (this.value_!.indexOf(":") === -1) {
+	public getType() {
+		if (!this.value_ || this.value_.indexOf(":") === -1) {
 			return "any";
 		}
-		return this.value_!.split(":")[1].split(",");
+
+		return this.value_.split(":")[1].split(",");
 	}
 
-	setType(newType: app.Check) {
-		this.setValue(`${this.value_!.split(":")[0]}:${newType}`);
+	public setType(newType: Check) {
+		this.setValue(`${this.value_?.split(":")[0] ?? ""}:${newType}`);
 	}
 
-	CURSOR = "COPY";
-	SERIALIZABLE = true;
+	public override CURSOR = "COPY";
+	public override SERIALIZABLE = true;
 
-	updateEditable() {
+	public override updateEditable() {
 		super.updateEditable();
 		// '.blocklyEditableText' makes text black and background white.
 		this.fieldGroup_!.classList.remove("blocklyEditableText");
 	}
 
-	protected onMouseDown_(e: PointerEvent): void {
+	protected override onMouseDown_(e: PointerEvent): void {
 		if (e.button !== 0) {
 			// We only want to handle left clicks.
 			return;
@@ -73,11 +76,15 @@ export default class FieldParam extends Blockly.Field<string> {
 				const transform = this.fieldGroup_!.getAttribute("transform");
 				const transformX = transform?.match(/translate\((\d+)/)?.[1] ?? 0;
 				const transformY = transform?.match(/translate\(\d+,(\d+)/)?.[1] ?? 0;
-				const {x, y} = this.sourceBlock_.getRelativeToSurfaceXY().translate(+transformX, +transformY);
+				const {x, y} = this.sourceBlock_
+					.getRelativeToSurfaceXY()
+					.translate(+transformX, +transformY);
 
 				block.loadExtraState!({
 					type: this.getType(), // Set the type of the parameter.
-					isConstant: this.sourceBlock_.type === "typed" && this.sourceBlock_.getParent()!.getFieldValue("kind") === "const"
+					isConstant:
+						this.sourceBlock_.type === "typed" &&
+						this.sourceBlock_.getParent()!.getFieldValue("kind") === "const",
 				});
 				block.setFieldValue(this.getText(), "VAR"); // Set the name of the parameter.
 				block.moveBy(x, y); // Move the block to the position of the field.
@@ -88,15 +95,15 @@ export default class FieldParam extends Blockly.Field<string> {
 		}
 	}
 
-	static fromJson(options: Record<string, any>) {
-		return new FieldParam(options.var, options.varType);
+	public static override fromJson(options: Record<string, unknown>) {
+		return new FieldParam(options.var as string, options.varType as Check);
 	}
 
 	// We do not need to initialize anything,
 	// all of the logic is in updateSize_().
-	initView() {}
+	protected override initView() {}
 
-	protected updateSize_() {
+	protected override updateSize_() {
 		const workspace = this.sourceBlock_?.workspace;
 		if (this.fieldGroup_ && workspace instanceof Blockly.WorkspaceSvg) {
 			const block = workspace.newBlock("parameter");

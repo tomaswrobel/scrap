@@ -1,13 +1,15 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license MIT
  * @fileoverview Export block as PNG image.
- * @author Tomáš Wróbel
- * 
+ * @copyright Tomáš Wróbel 2024
+ *
  * This file adds a context menu item to blocks that allows exporting
  * the block as a PNG image. This feature was inspired by Snap!.
  * Snap! is a canvas application, so it can easily export the canvas,
@@ -32,7 +34,7 @@ const SCALE = 2;
 
 Blockly.ContextMenuRegistry.registry.register({
 	displayText: "Save block image",
-	preconditionFn: (scope) => {
+	preconditionFn: scope => {
 		// Disable the option in the flyout.
 		if (scope.block!.isInFlyout) {
 			return "hidden";
@@ -77,7 +79,7 @@ Blockly.ContextMenuRegistry.registry.register({
 			    class="${renderer.getClassName()} ${theme.getClassName()}" 
 			>
 				<style>
-					${/*This is lost, because it's located in <head>.*/""}
+					${/*This is lost, because it's located in <head>.*/ ""}
 					.blocklyIconGroup {
 					    fill: #00f;
 					    stroke: #fff;

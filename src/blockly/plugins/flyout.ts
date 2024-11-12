@@ -1,29 +1,27 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomas-wrobel/scrap.
+ *
  * @license Apache-2.0
  * @author Google LLC
- * 
- * @license MIT
- * @author Tomáš Wróbel
- * 
+ *
  * From: @blockly/continuous-toolbox@1.0.5
  * To: TypeScript, Scrap modifications
  */
 import * as Blockly from "blockly";
 import type {Toolbox} from "./toolbox";
 import {FlyoutMetrics} from "./flyout-metrics";
-import {bind} from "../../decorators";
-
+import {bind} from "@scrap/utils/decorators";
 
 export class Flyout extends Blockly.VerticalFlyout {
-	scrollPositions: {name: string; position: {x: number; y: number;};}[] = [];
-	scrollTarget: number | null = null;
+	private scrollPositions: {name: string; position: {x: number; y: number}}[] = [];
+	private scrollTarget: number | null = null;
 	private recyclingEnabled_ = false;
-	scrollAnimationFraction = 0.3;
+	private scrollAnimationFraction = 0.3;
 
 	constructor(workspaceOptions: Blockly.Options) {
 		super(workspaceOptions);
@@ -39,14 +37,17 @@ export class Flyout extends Blockly.VerticalFlyout {
 		this.autoClose = false;
 	}
 
-	getParentToolbox_() {
-		const toolbox = this.targetWorkspace.getToolbox();
-		return toolbox as Toolbox;
+	private getParentToolbox() {
+		return this.targetWorkspace.getToolbox() as Toolbox;
 	}
 
-	recordScrollPositions() {
+	public recordScrollPositions() {
 		this.scrollPositions = [];
-		const categoryLabels = this.buttons_.filter(button => button.isLabel() && this.getParentToolbox_().getCategoryByName(button.getButtonText()));
+		const categoryLabels = this.buttons_.filter(
+			button =>
+				button.isLabel() &&
+				this.getParentToolbox().getCategoryByName(button.getButtonText())
+		);
 		for (const button of categoryLabels) {
 			if (button.isLabel()) {
 				this.scrollPositions.push({
@@ -57,7 +58,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 		}
 	}
 
-	getCategoryScrollPosition(name: string) {
+	public getCategoryScrollPosition(name: string) {
 		for (const scrollInfo of this.scrollPositions) {
 			if (scrollInfo.name === name) {
 				return scrollInfo.position;
@@ -67,7 +68,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 		return null;
 	}
 
-	selectCategoryByScrollPosition_(position: number) {
+	private selectCategoryByScrollPosition_(position: number) {
 		// If we are currently auto-scrolling, due to selecting a category by
 		// clicking on it, do not update the category selection.
 		if (this.scrollTarget) {
@@ -79,23 +80,26 @@ export class Flyout extends Blockly.VerticalFlyout {
 		for (let i = this.scrollPositions.length - 1; i >= 0; i--) {
 			const category = this.scrollPositions[i];
 			if (scaledPosition >= category.position.y) {
-				this.getParentToolbox_().selectCategoryByName(category.name);
+				this.getParentToolbox().selectCategoryByName(category.name);
 				return;
 			}
 		}
 	}
 
-	scrollTo(position: number) {
+	public scrollTo(position: number) {
 		// Set the scroll target to either the scaled position or the lowest
 		// possible scroll point, whichever is smaller.
 		const metrics = this.workspace_.getMetrics();
-		this.scrollTarget = Math.min(position * this.workspace_.scale, metrics.scrollHeight - metrics.viewHeight);
+		this.scrollTarget = Math.min(
+			position * this.workspace_.scale,
+			metrics.scrollHeight - metrics.viewHeight
+		);
 
 		this.stepScrollAnimation();
 	}
 
 	@bind
-	stepScrollAnimation() {
+	public stepScrollAnimation() {
 		if (!this.scrollTarget) {
 			return;
 		}
@@ -107,12 +111,14 @@ export class Flyout extends Blockly.VerticalFlyout {
 			this.scrollTarget = null;
 			return;
 		}
-		this.workspace_.scrollbar!.setY(currentScrollPos + diff * this.scrollAnimationFraction);
+		this.workspace_.scrollbar!.setY(
+			currentScrollPos + diff * this.scrollAnimationFraction
+		);
 
 		requestAnimationFrame(this.stepScrollAnimation);
 	}
 
-	calculateBottomPadding(
+	public calculateBottomPadding(
 		contentMetrics: {
 			height: number;
 			width: number;
@@ -132,8 +138,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 		return 0;
 	}
 
-	/** @override */
-	getX() {
+	public override getX() {
 		if (
 			this.isVisible() &&
 			this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
@@ -147,13 +152,13 @@ export class Flyout extends Blockly.VerticalFlyout {
 		return super.getX();
 	}
 
-	override show(flyoutDef: Blockly.utils.toolbox.FlyoutDefinition) {
+	public override show(flyoutDef: Blockly.utils.toolbox.FlyoutDefinition) {
 		super.show(flyoutDef);
 		this.recordScrollPositions();
 		this.workspace_.resizeContents();
 	}
 
-	blockIsRecyclable_(block: Blockly.BlockSvg) {
+	protected override blockIsRecyclable_(block: Blockly.BlockSvg) {
 		if (!this.recyclingEnabled_) {
 			return false;
 		}
@@ -186,11 +191,11 @@ export class Flyout extends Blockly.VerticalFlyout {
 		return true;
 	}
 
-	setBlockIsRecyclable(func: (block: Blockly.BlockSvg) => boolean) {
+	public setBlockIsRecyclable(func: (block: Blockly.BlockSvg) => boolean) {
 		this.blockIsRecyclable_ = func;
 	}
 
-	setRecyclingEnabled(isEnabled: boolean) {
+	public setRecyclingEnabled(isEnabled: boolean) {
 		this.recyclingEnabled_ = isEnabled;
 	}
 }

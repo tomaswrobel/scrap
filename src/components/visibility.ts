@@ -1,75 +1,76 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomas-wrobel/scrap.
+ *
  * @license MIT
- * @author Tomáš Wróbel
+ * @fileoverview Visibility utilities
+ * @copyright Tomáš Wróbel 2024
  */
 import TabComponent from "./tab";
 import type Tabs from "./tabs";
 import "./hidden.scss";
+import {app} from "@scrap/app";
 
 /**
- * Hidden tab component is displayed when the 
- * user resizes the output. That's because 
+ * Hidden tab component is displayed when the
+ * user resizes the output. That's because
  * both Blockly and Monaco editors cannot
  * adjust their size to the grid after
  * they are rendered.
  */
 export class Hidden implements TabComponent {
-    container!: HTMLDivElement;
-    name = 'Hidden';
+	public readonly container!: HTMLDivElement;
+	public name = "Hidden";
 
-    update() {
-        const {width, height} = app.getOutputSize();
-        this.container.dataset.size = `${width}x${height}`;
-    }
+	public update() {
+		const {width, height} = app.getOutputSize();
+		this.container.dataset.size = `${width}x${height}`;
+	}
 
-    dispose() {
-        this.container.remove();
-    }
+	public dispose() {
+		this.container.remove();
+	}
 
-    render() {
-        app.container.appendChild(this.container);
-    }
+	public render() {
+		app.container.appendChild(this.container);
+	}
 
-    constructor(readonly previous: TabComponent) {
-        if (previous instanceof Hidden) {
-            return previous;
-        }
+	constructor(public readonly previous: TabComponent) {
+		if (previous instanceof Hidden) {
+			return previous;
+		}
 
-        this.name = previous.name;
-        this.container = document.createElement("div");
+		this.name = previous.name;
+		this.container = document.createElement("div");
 
-        this.container.classList.add(
-            "tab-content",
-            "hidden-content"
-        );
-    }
+		this.container.classList.add("tab-content", "hidden-content");
+	}
 }
 
 export class Visibility {
-    constructor(private readonly tabs: Tabs) {}
+	constructor(private readonly tabs: Tabs) {}
 
-    /**
-     * Hide the active tab, show {@link Hidden placeholder}
-     * Do not forget to call {@link show}.     
-     */
-    hide() {
-        if (this.tabs.active) {
-            this.tabs.set(new Hidden(this.tabs.active));
-        }
-    }
+	/**
+	 * Hide the active tab, show {@link Hidden placeholder}
+	 * Do not forget to call {@link show}.
+	 */
+	public hide() {
+		if (this.tabs.active) {
+			this.tabs.set(new Hidden(this.tabs.active));
+		}
+	}
 
-    /**
-     * Show the active tab, hide {@link Hidden placeholder}
-     * This must be done after {@link hide} is called.
-     */
-    show() {
-        if (this.tabs.active instanceof Hidden) {
-            this.tabs.set(this.tabs.active.previous);
-        }
-    }
+	/**
+	 * Show the active tab, hide {@link Hidden placeholder}
+	 * This must be done after {@link hide} is called.
+	 */
+	public show() {
+		if (this.tabs.active instanceof Hidden) {
+			this.tabs.set(this.tabs.active.previous);
+		}
+	}
 }

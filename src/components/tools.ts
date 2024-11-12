@@ -1,11 +1,13 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * the official repository at https://github.com/tomas-wrobel/scrap.
  * 
  * @license MIT
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024
  * @fileoverview Tools for drawing on the canvas in the paint editor.
  */
 import line from "./icons/line.svg";
@@ -13,39 +15,40 @@ import brush from "./icons/brush.svg";
 import fill from "./icons/fill.svg";
 import eraser from "./icons/eraser.svg";
 import marquee from "./icons/marquee.svg";
+import {invoke} from "@tauri-apps/api/core";
 
 /**
  * A tool that can be used to draw on the canvas.
  */
 export abstract class Tool {
 	/** The activation button */
-	button = document.createElement("button");
+	public readonly button = document.createElement("button");
 	/** The canvas context used to draw on */
-	ctx?: CanvasRenderingContext2D;
+	public ctx?: CanvasRenderingContext2D;
 
-	startX = NaN;
-	startY = NaN;
-	lastX = NaN;
-	lastY = NaN;
-	width = 1;
+	public startX = NaN;
+	public startY = NaN;
+	public lastX = NaN;
+	public lastY = NaN;
+	public width = 1;
 
-	/** 
+	/**
 	 * Whether or not this tool requires a layer to be drawn on.
 	 *
 	 * If true, the layer will be created when this tool is selected.
 	 * After the tool ends, the layer becomes movable.
-	 * 
+	 *
 	 * If false, the tool will draw directly on the canvas.
 	 */
-	movable = true;
+	public movable = true;
 
-	readonly ICON_WIDTH = 24;
-	readonly ICON_HEIGHT = 24;
+	protected readonly ICON_WIDTH = 24;
+	protected readonly ICON_HEIGHT = 24;
 
 	/**
 	 * Selects this tool and returns an iterable of elements to be added to the tool container.
 	 */
-	*select(): Generator<Node> {
+	public *select(): Generator<Node> {
 		this.button.classList.add("selected");
 
 		const input = document.createElement("input");
@@ -80,14 +83,14 @@ export abstract class Tool {
 	 * Finishes drawing on the canvas
 	 * @param ctx The canvas context to merge the drawing into
 	 */
-	abstract end(ctx: CanvasRenderingContext2D): void;
+	public abstract end(ctx: CanvasRenderingContext2D): void;
 
 	/**
 	 * Draw on the canvas
 	 * @param x current x position
 	 * @param y current y position
 	 */
-	step(x: number, y: number) {
+	public step(x: number, y: number) {
 		this.lastX = x;
 		this.lastY = y;
 	}
@@ -95,7 +98,7 @@ export abstract class Tool {
 	/**
 	 * Deselect this tool
 	 */
-	deselect() {
+	public deselect() {
 		this.button.classList.remove("selected");
 	}
 
@@ -106,7 +109,7 @@ export abstract class Tool {
 	 * @param x The starting x position
 	 * @param y The starting y position
 	 */
-	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
+	public start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		ctx.strokeStyle = color;
 		ctx.fillStyle = color;
 
@@ -119,19 +122,12 @@ export abstract class Tool {
 		this.button.type = "button";
 		this.button.title = title;
 
-		img && this.button.appendChild(
-			Object.assign(
-				new Image(this.ICON_WIDTH, this.ICON_HEIGHT),
-				img
-			)
-		);
+		img && this.button.appendChild(Object.assign(new Image(this.ICON_WIDTH, this.ICON_HEIGHT), img));
 	}
 }
 
 export abstract class DrawingTool extends Tool {
-	width = 1;
-
-	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
+	public override start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		super.start(ctx, color, x, y);
 		ctx.lineWidth = this.width;
 
@@ -142,7 +138,7 @@ export abstract class DrawingTool extends Tool {
 		ctx.moveTo(x, y);
 	}
 
-	end(ctx: CanvasRenderingContext2D) {
+	public end(ctx: CanvasRenderingContext2D) {
 		ctx.drawImage(this.ctx!.canvas, 0, 0);
 
 		this.startX = NaN;
@@ -152,7 +148,7 @@ export abstract class DrawingTool extends Tool {
 		this.ctx = undefined;
 	}
 
-	step(x: number, y: number) {
+	public override step(x: number, y: number) {
 		super.step(x, y);
 		this.ctx!.lineTo(x, y);
 		this.ctx!.stroke();
@@ -166,7 +162,7 @@ export abstract class ShapeTool extends Tool {
 	/**
 	 * When true, shape will be outlined. Otherwise, it will be filled.
 	 */
-	outline = false;
+	public outline = false;
 
 	constructor(title: string) {
 		super(title);
@@ -189,7 +185,7 @@ export abstract class ShapeTool extends Tool {
 		return root;
 	}
 
-	*select(): Generator<Node> {
+	public override *select(): Generator<Node> {
 		this.button.classList.add("selected");
 
 		const filled = document.createElement("button");
@@ -222,7 +218,7 @@ export abstract class ShapeTool extends Tool {
 		yield* super.select();
 	}
 
-	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
+	public override start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		super.start(ctx, color, x, y);
 		ctx.lineCap = "square";
 		ctx.lineJoin = "miter";
@@ -233,7 +229,7 @@ export abstract class ShapeTool extends Tool {
 	 * Merges the drawing into the canvas
 	 * @param ctx The canvas context to draw on
 	 */
-	end(_ctx: CanvasRenderingContext2D) {
+	public end(_ctx: CanvasRenderingContext2D) {
 		// Actually, since my shape is drawn when the moving ends,
 		// I don't need to do anything here.
 	}
@@ -241,14 +237,14 @@ export abstract class ShapeTool extends Tool {
 	/**
 	 * Returns the SVG element to be used as the icon for this tool.
 	 */
-	abstract shape(): SVGElement;
+	public abstract shape(): SVGElement;
 }
 
 export class Brush extends DrawingTool {
 	constructor() {
 		super("Draw freely", {
 			src: brush,
-			alt: "Brush"
+			alt: "Brush",
 		});
 	}
 }
@@ -257,11 +253,11 @@ export class Line extends Tool {
 	constructor() {
 		super("Draw straight lines", {
 			src: line,
-			alt: "Line"
+			alt: "Line",
 		});
 	}
 
-	step(x: number, y: number) {
+	public override step(x: number, y: number) {
 		this.lastX = x;
 		this.lastY = y;
 
@@ -272,14 +268,14 @@ export class Line extends Tool {
 		this.ctx!.stroke();
 	}
 
-	end(_ctx: CanvasRenderingContext2D) {}
+	public end(_ctx: CanvasRenderingContext2D) {}
 }
 
 export class Rectangle extends ShapeTool {
 	constructor() {
 		super("Draw rectangles.");
 	}
-	shape() {
+	public shape() {
 		const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 		rect.setAttribute("x", "0");
 		rect.setAttribute("y", "0");
@@ -287,7 +283,7 @@ export class Rectangle extends ShapeTool {
 		rect.setAttribute("height", `${this.ICON_HEIGHT}`);
 		return rect;
 	}
-	step(x: number, y: number) {
+	public override step(x: number, y: number) {
 		super.step(x, y);
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 
@@ -304,7 +300,7 @@ export class Ellipse extends ShapeTool {
 		super("Draw ellipses.");
 	}
 
-	shape() {
+	public shape() {
 		const ellipse = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
 		ellipse.setAttribute("cx", `${this.ICON_WIDTH / 2}`);
 		ellipse.setAttribute("cy", `${this.ICON_HEIGHT / 2}`);
@@ -313,7 +309,7 @@ export class Ellipse extends ShapeTool {
 		return ellipse;
 	}
 
-	step(x: number, y: number) {
+	public override step(x: number, y: number) {
 		super.step(x, y);
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 
@@ -337,7 +333,7 @@ export class Triangle extends ShapeTool {
 		super("Draw triangles.");
 	}
 
-	shape() {
+	public shape() {
 		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		path.setAttribute(
 			"d",
@@ -346,7 +342,7 @@ export class Triangle extends ShapeTool {
 		return path;
 	}
 
-	step(x: number, y: number) {
+	public override step(x: number, y: number) {
 		super.step(x, y);
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 
@@ -361,83 +357,67 @@ export class Triangle extends ShapeTool {
 }
 
 export class Fill extends Tool {
-	color?: string;
+	private color?: string;
 
-	/**
-	 * If worker works too long,
-	 * app will show loading.
-	 * 
-	 * This property holds the timeout
-	 * necessary to the effect described above.
-	 */
-	done = NaN;
-
-	end(ctx: CanvasRenderingContext2D) {
+	public async end(ctx: CanvasRenderingContext2D) {
 		const data = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+		const index = (this.lastY * data.width + this.lastX) * 4;
 
-		this.done = window.setTimeout(
-			() => {
-				if (!this.done) {
-					app.showLoader("Filling");
-				}
-			},
-			500
-		);
-
-		this.worker.postMessage({
-			data,
+		// See Rust back-end,
+		// JavaScript is too slow
+		const result = await invoke<number[]>("fill", {
+			imageData: Array.from(data.data),
+			targetR: data.data[index],
+			targetG: data.data[index + 1],
+			targetB: data.data[index + 2],
+			targetA: data.data[index + 3],
 			color: this.color,
 			x: this.lastX,
 			y: this.lastY,
 		});
+
+		data.data.set(result);
+		ctx.putImageData(data, 0, 0);
 	}
 
-	start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
+	public override start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		this.ctx = ctx;
 		this.color = color;
 		this.lastX = x;
 		this.lastY = y;
 	}
 
-	*select() {
+	public override *select() {
 		this.button.classList.add("selected");
 	}
-
-	worker = new Worker(new URL("./assets/fill.worker.ts", import.meta.url));
 
 	constructor() {
 		super("Fill area with the same color", {
 			alt: "Fill",
-			src: fill
+			src: fill,
 		});
-
-		this.worker.onmessage = e => {
-			this.ctx!.putImageData(e.data, 0, 0);
-			window.clearTimeout(this.done);
-			app.hideLoader();
-		};
 
 		this.movable = false;
 	}
 }
 
 export class Eraser extends DrawingTool {
-	step(x: number, y: number) {
-		this.ctx!.globalCompositeOperation = 'destination-out';
+	public override step(x: number, y: number) {
+		this.ctx!.globalCompositeOperation = "destination-out";
 		super.step(x, y);
 	}
 
 	constructor() {
 		super("Erase pixels", {
 			alt: "Eraser",
-			src: eraser
+			src: eraser,
 		});
 		// Modify the canvas directly
 		this.movable = false;
 	}
 
-	end(ctx: CanvasRenderingContext2D) {
-		ctx.globalCompositeOperation = 'source-over';
+	public override end(ctx: CanvasRenderingContext2D) {
+		ctx.globalCompositeOperation = "source-over";
 
 		this.startX = NaN;
 		this.startY = NaN;
@@ -450,11 +430,11 @@ export class Eraser extends DrawingTool {
 }
 
 export class Select extends Tool {
-	*select(): Generator<Node> {
+	public override *select(): Generator<Node> {
 		this.button.classList.add("selected");
 	}
 
-	start(ctx: CanvasRenderingContext2D, _color: string, x: number, y: number) {
+	public override start(ctx: CanvasRenderingContext2D, _color: string, x: number, y: number) {
 		this.startX = x;
 		this.startY = y;
 		this.ctx = ctx;
@@ -464,7 +444,7 @@ export class Select extends Tool {
 		ctx.setLineDash([3]);
 	}
 
-	end(ctx: CanvasRenderingContext2D) {
+	public end(ctx: CanvasRenderingContext2D) {
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 		this.ctx!.drawImage(ctx.canvas, 0, 0);
 		ctx.clearRect(
@@ -475,20 +455,15 @@ export class Select extends Tool {
 		);
 	}
 
-	step(x: number, y: number) {
+	public override step(x: number, y: number) {
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
-		this.ctx!.strokeRect(
-			this.startX,
-			this.startY,
-			(this.lastX = x) - this.startX,
-			(this.lastY = y) - this.startY
-		);
+		this.ctx!.strokeRect(this.startX, this.startY, (this.lastX = x) - this.startX, (this.lastY = y) - this.startY);
 	}
 
 	constructor() {
 		super("Select an area", {
 			alt: "Select",
-			src: marquee
+			src: marquee,
 		});
 	}
 }

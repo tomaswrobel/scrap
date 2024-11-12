@@ -1,16 +1,15 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license Apache-2.0
  * @author Google LLC
- * 
- * @license MIT
- * @author Tomáš Wróbel
  * @fileoverview Defines the if mutator.
- * 
+ *
  * This mutator is taken from Blockly's built-in controls_if block.
  * The original isn't used only because of bundle size.
  */
@@ -56,9 +55,7 @@ export const MIXIN = {
 	/**
 	 * Applies the given state to this block.
 	 *
-	 * @param state The state to apply to this block, ie the else if count
-	 and
-	 *     else state.
+	 * @param state The state to apply to this block, ie the else if count and else state.
 	 */
 	loadExtraState(this: IfBlock, state: IfExtraState) {
 		this.elseifCount = state["elseIfCount"] || 0;
@@ -74,17 +71,17 @@ export const MIXIN = {
 	decompose(this: IfBlock, workspace: Blockly.WorkspaceSvg) {
 		const containerBlock = workspace.newBlock("controls_if_if");
 		containerBlock.initSvg();
-		let connection = containerBlock.nextConnection!;
+		let connection = containerBlock.nextConnection;
 		for (let i = 1; i <= this.elseifCount; i++) {
 			const elseifBlock = workspace.newBlock("controls_if_elseif");
 			elseifBlock.initSvg();
-			connection.connect(elseifBlock.previousConnection!);
+			connection.connect(elseifBlock.previousConnection);
 			connection = elseifBlock.nextConnection!;
 		}
 		if (this.elseCount) {
 			const elseBlock = workspace.newBlock("controls_if_else");
 			elseBlock.initSvg();
-			connection.connect(elseBlock.previousConnection!);
+			connection.connect(elseBlock.previousConnection);
 		}
 		return containerBlock;
 	},
@@ -94,7 +91,8 @@ export const MIXIN = {
 	 * @param containerBlock Root block in mutator.
 	 */
 	compose(this: IfBlock, containerBlock: Blockly.Block) {
-		let clauseBlock = containerBlock.nextConnection!.targetBlock() as ClauseBlock | null;
+		let clauseBlock =
+			containerBlock.nextConnection!.targetBlock() as ClauseBlock | null;
 		// Count number of inputs.
 		this.elseifCount = 0;
 		this.elseCount = 0;
@@ -126,7 +124,11 @@ export const MIXIN = {
 		}
 		this.updateShape();
 		// Reconnect any child blocks.
-		this.reconnectChildBlocks(valueConnections, statementConnections, elseStatementConnection);
+		this.reconnectChildBlocks(
+			valueConnections,
+			statementConnections,
+			elseStatementConnection
+		);
 	},
 	/**
 	 * Store pointers to any connected child blocks.
@@ -134,7 +136,8 @@ export const MIXIN = {
 	 * @param containerBlock Root block in mutator.
 	 */
 	saveConnections(this: IfBlock, containerBlock: Blockly.Block) {
-		let clauseBlock = containerBlock!.nextConnection!.targetBlock() as ClauseBlock | null;
+		let clauseBlock =
+			containerBlock.nextConnection!.targetBlock() as ClauseBlock | null;
 		let i = 1;
 		while (clauseBlock) {
 			if (clauseBlock.isInsertionMarker()) {
@@ -145,14 +148,17 @@ export const MIXIN = {
 				case "controls_if_elseif": {
 					const inputIf = this.getInput("IF" + i);
 					const inputDo = this.getInput("DO" + i);
-					clauseBlock.valueConnection = inputIf && inputIf.connection!.targetConnection;
-					clauseBlock.statementConnection = inputDo && inputDo.connection!.targetConnection;
+					clauseBlock.valueConnection =
+						inputIf && inputIf.connection!.targetConnection;
+					clauseBlock.statementConnection =
+						inputDo && inputDo.connection!.targetConnection;
 					i++;
 					break;
 				}
 				case "controls_if_else": {
 					const inputDo = this.getInput("ELSE");
-					clauseBlock.statementConnection = inputDo && inputDo.connection!.targetConnection;
+					clauseBlock.statementConnection =
+						inputDo && inputDo.connection!.targetConnection;
 					break;
 				}
 				default:
@@ -179,7 +185,11 @@ export const MIXIN = {
 			statementConnections.push(inputDo!.connection!.targetConnection);
 		}
 		this.updateShape();
-		this.reconnectChildBlocks(valueConnections, statementConnections, elseStatementConnection);
+		this.reconnectChildBlocks(
+			valueConnections,
+			statementConnections,
+			elseStatementConnection
+		);
 	},
 	/**
 	 * Modify this block to have the correct number of inputs.
@@ -204,7 +214,9 @@ export const MIXIN = {
 			this.appendStatementInput("DO" + i).setCheck("any");
 		}
 		if (this.elseCount) {
-			this.appendDummyInput("ELSE0").appendField(Blockly.Msg["CONTROLS_IF_MSG_ELSE"]);
+			this.appendDummyInput("ELSE0").appendField(
+				Blockly.Msg["CONTROLS_IF_MSG_ELSE"]
+			);
 			this.appendStatementInput("ELSE").setCheck("any");
 		}
 	},

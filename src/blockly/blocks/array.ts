@@ -1,13 +1,15 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license MIT
  * @fileoverview Defines the array mutator.
- * @author Tomáš Wróbel
- * 
+ * @copyright Tomáš Wróbel 2024
+ *
  * Array block is different from the Blockly's list block.
  * It supports two types of items: single and iterable.
  * Single items are just values, while iterable items
@@ -50,20 +52,15 @@ export const MIXIN = {
 	 * @param workspace Mutator's workspace.
 	 * @returns Root block in mutator.
 	 */
-	decompose: function (
-		this: ArrayBlock,
-		workspace: Blockly.WorkspaceSvg
-	) {
+	decompose: function (this: ArrayBlock, workspace: Blockly.WorkspaceSvg) {
 		const containerBlock = workspace.newBlock("array_items");
 		containerBlock.initSvg();
 
 		let connection = containerBlock.nextConnection;
 		for (const type of this.items) {
-			const itemBlock = workspace.newBlock(
-				"array_item_" + type
-			);
+			const itemBlock = workspace.newBlock("array_item_" + type);
 			itemBlock.initSvg();
-			connection!.connect(itemBlock.previousConnection);
+			connection.connect(itemBlock.previousConnection);
 			connection = itemBlock.nextConnection;
 		}
 		return containerBlock;
@@ -90,7 +87,7 @@ export const MIXIN = {
 	/**
 	 * Modify this block to have the correct number of inputs.
 	 */
-	updateShape(this: ArrayBlock, check: app.Check) {
+	updateShape(this: ArrayBlock, check: Check) {
 		// Remove inputs
 		for (let i = 0; this.removeInput("ADD" + i, true); i++);
 
@@ -104,13 +101,16 @@ export const MIXIN = {
 				input.appendField("...");
 			} else {
 				input.setCheck(check);
-				const type = typeof check === "string"
-					? check
-					: check.length === 1 ? check[0] : "any";
+				const type =
+					typeof check === "string"
+						? check
+						: check.length === 1
+						? check[0]
+						: "any";
 
 				if (type in TypeToShadow) {
 					input.connection!.setShadowState({
-						type: TypeToShadow[type]
+						type: TypeToShadow[type],
 					});
 				}
 			}
@@ -118,14 +118,18 @@ export const MIXIN = {
 	},
 
 	onchange(this: ArrayBlock, e: Blockly.Events.Abstract) {
-		if (e instanceof Blockly.Events.BlockMove && e.blockId && e.newParentId === this.id) {
+		if (
+			e instanceof Blockly.Events.BlockMove &&
+			e.blockId &&
+			e.newParentId === this.id
+		) {
 			const block = this.workspace.getBlockById(e.blockId)!;
 			if (block.type === "type") {
 				block.setShadow(true);
 				this.updateShape(toCheck(block));
 			}
 		}
-	}
+	},
 };
 
 export const blocks = ["array_item_single", "array_item_iterable"];

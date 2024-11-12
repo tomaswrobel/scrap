@@ -1,63 +1,66 @@
 /**
- * This file is a part of Scrap, an educational programming language.
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ *
  * You should have received a copy of the MIT License, if not, please 
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
  * the official repository at https://github.com/tomas-wrobel/scrap. 
  * 
  * @license MIT
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024
  */
-@import "./globals";
+@use "vars" as *;
 
 * {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: sans-serif;
+	margin: 0;
+	font-family: sans-serif;
 
-    &[data-loading]::after {
-        content: attr(data-loading) "...";
-        cursor: wait;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.75);
-        color: #fff;
-        z-index: 10000;
-        width: 100%;
-        height: 100%;
-    }
+	&[data-loading]::after {
+		content: attr(data-loading)"...";
+		cursor: wait;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(0, 0, 0, 0.75);
+		color: #fff;
+		z-index: 10000;
+		width: 100%;
+		height: 100%;
+	}
 }
 
 .fab {
-    align-self: end;
-    justify-self: center;
-    background: $primary;
-    border: 0;
-    border-radius: 50%;
-    width: 37.5px;
-    height: 37.5px;
-    color: #fff;
-    font-size: 30px;
-    line-height: 37.5px;
-    text-align: center;
-    cursor: pointer;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+	align-self: end;
+	justify-self: center;
+	background: $primary;
+	border: 0;
+	border-radius: 50%;
+	width: 37.5px;
+	height: 37.5px;
+	color: #fff;
+	font-size: 30px;
+	line-height: 37.5px;
+	text-align: center;
+	cursor: pointer;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 table {
-    width: 100%;
-    border-spacing: 0;
+	width: 100%;
+	border-spacing: 0;
 
-    td {
-        padding: 0.5em;
-        border: 1px solid #ddd;
-    }
+	td {
+		padding: 0.5em;
+		border: 1px solid #ddd;
+	}
 }

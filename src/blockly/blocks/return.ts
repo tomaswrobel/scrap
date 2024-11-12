@@ -1,25 +1,27 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license MIT
  * @fileoverview Defines the return block.
- * @author Tomáš Wróbel
- * 
+ * @copyright Tomáš Wróbel 2024
+ *
  * Return block is not a mutator, but a standalone block.
- * 
+ *
  * This dynamic block handles the return statement.
  * Since the return statement can appear in every function,
  * Scrap handles it for event callbacks and function definitions.
- * 
+ *
  * If the return block is inside a function block, it will
  * automatically adapt to the function's return type.
- * 
+ *
  * If the return block is not inside a function block, it
  * will remove its value input (return;) and serve like
- * the Scratch's "stop this script" block. 
+ * the Scratch's "stop this script" block.
  */
 import * as Blockly from "blockly";
 import {TypeToShadow, toCheck} from "../types";
@@ -27,7 +29,7 @@ import {TypeToShadow, toCheck} from "../types";
 export type ReturnBlock = Blockly.BlockSvg & ReturnBlockMixin;
 export interface ReturnBlockMixin extends ReturnBlockMixinType {}
 export type ReturnBlockMixinType = typeof MIXIN;
-export type ReturnBlockOutput = app.Check | false;
+export type ReturnBlockOutput = Check | false;
 
 export const MIXIN = {
 	init(this: ReturnBlock) {
@@ -39,7 +41,7 @@ export const MIXIN = {
 
 	saveExtraState(this: ReturnBlock) {
 		return {
-			output: this.getInput("VALUE")?.connection?.getCheck() || false
+			output: this.getInput("VALUE")?.connection?.getCheck() || false,
 		};
 	},
 
@@ -65,14 +67,18 @@ export const MIXIN = {
 	},
 
 	onchange(this: ReturnBlock, e: Blockly.Events.Abstract) {
-		if (e instanceof Blockly.Events.BlockMove && e.blockId === this.id && e.recordUndo) {
+		if (
+			e instanceof Blockly.Events.BlockMove &&
+			e.blockId === this.id &&
+			e.recordUndo
+		) {
 			const parent = this.getRootBlock();
 
 			if (parent.type === "function") {
 				const type = parent.getInput("RETURNS")?.connection?.targetBlock();
-				this.loadExtraState!({output: type ? toCheck(type) : false});
+				this.loadExtraState({output: type ? toCheck(type) : false});
 			} else {
-				this.loadExtraState!({output: false});
+				this.loadExtraState({output: false});
 			}
 		}
 	},
@@ -94,7 +100,7 @@ export const MIXIN = {
 
 		if (type in TypeToShadow) {
 			input.connection!.setShadowState({
-				type: TypeToShadow[type]
+				type: TypeToShadow[type],
 			});
 		}
 
@@ -121,5 +127,5 @@ export const MIXIN = {
 		}
 
 		return false;
-	}
+	},
 };

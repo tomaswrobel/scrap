@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0] - 2024-11-11
+
+### Changed
+
+- **Scrap is now a native desktop application**:
+- Scrap uses Tauri to create a native desktop application.
+- The project structure has been changed.
+- SWC used instead of Babel.
+- Dependencies update.
+- README.md has been updated.
+
+### Added 
+
 ## [5.4.0] - 2024-9-23
 
 ### Changed
@@ -841,7 +854,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v5.4.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.0.0...HEAD
+[6.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.0.0
 [5.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.4.0
 [5.3.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.4
 [5.3.3]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.3

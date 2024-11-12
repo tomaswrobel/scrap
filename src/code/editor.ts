@@ -1,24 +1,35 @@
-import {editor, Uri} from "monaco-editor";
-import "../monaco-editor/typescript";
-// Importing types
-import type TabComponent from "../components/tab";
-import {TypeScript} from "./transformers/typescript";
-
-import path from "path";
+/**
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview Code editor
+ * @copyright Tomáš Wróbel 2024
+ */
+import {app} from "@scrap/app";
 import fs from "fs";
+import {editor, Uri} from "monaco-editor";
+import path from "path";
 import type {Entity} from "../components/entity";
+import type TabComponent from "../components/tab";
+import "../monaco-editor/typescript";
+import {TypeScript} from "./transformers/typescript";
 
 const lib = fs.readFileSync(path.join(__dirname, "lib", "runtime.ts"), "utf-8");
 
 class CodeEditor implements TabComponent {
-	name = "Code";
-	hasError = false;
-	editor?: editor.IStandaloneCodeEditor;
+	public name = "Code";
+	public hasError = false;
+	private editor?: editor.IStandaloneCodeEditor;
 
 	// DOM
-	container = document.createElement("div");
-	main = editor.createModel("", "typescript", Uri.file("/script.ts"));
-	types = editor.createModel("", "typescript", Uri.file("/runtime.ts"));
+	public container = document.createElement("div");
+	private main = editor.createModel("", "typescript", Uri.file("/script.ts"));
+	private types = editor.createModel("", "typescript", Uri.file("/runtime.ts"));
 
 	constructor() {
 		this.container.classList.add("tab-content");
@@ -34,7 +45,7 @@ class CodeEditor implements TabComponent {
 		});
 	}
 
-	render() {
+	public render() {
 		app.container.append(this.container);
 
 		this.editor = editor.create(this.container, {
@@ -47,32 +58,30 @@ class CodeEditor implements TabComponent {
 		});
 	}
 
-	async prerender() {
+	public async prerender() {
 		if (app.current.isUsingBlocks()) {
 			const generator = new TypeScript(app.current);
-			app.current.code = generator.workspaceToCode(
-				app.current.workspace
-			);
+			app.current.code = generator.workspaceToCode(app.current.workspace);
 			app.current.variables = [];
 			this.update();
 		}
 	}
 
-	update() {
+	public update() {
 		this.main.setValue(app.current.code as string);
 		this.updateLib();
 	}
 
-	dispose() {
+	public dispose() {
 		this.editor?.dispose();
 		this.container.remove();
 
 		delete this.editor;
 	}
 
-	updateLib() {
+	public updateLib() {
 		this.types.setValue(lib.replace(/__(\w+)__/g, replacer));
-	} 
+	}
 }
 
 function replacer(_: string, key: string) {
@@ -117,13 +126,15 @@ function reducer(prev: string, entity: Entity) {
 	if (entity.isStage()) {
 		var constructor = `Stage<${getVariables(entity)}, ${getSounds(entity)}>`;
 	} else {
-		var constructor = `Sprite<${getVariables(entity)}, ${getSounds(entity)}, ${getCostumes(entity)}>`;
+		var constructor = `Sprite<${getVariables(entity)}, ${getSounds(
+			entity
+		)}, ${getCostumes(entity)}>`;
 	}
 
 	return `${prev}\t${JSON.stringify(entity.name)}: ${constructor};\n`;
 }
 
-function mapper([name, type]: app.Variable) {
+function mapper([name, type]: Variable) {
 	return `\t${JSON.stringify(name)}: ${([] as string[]).concat(type).join(" | ")};\n`;
 }
 

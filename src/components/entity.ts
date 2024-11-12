@@ -1,81 +1,83 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomas-wrobel/scrap.
+ *
  * @license MIT
  * @fileoverview Sprite and stage entities
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024
  */
 import * as Blockly from "blockly";
+import * as SWC from "../utils/swc";
 import JSZip from "jszip";
 import fs from "fs";
 import path from "path";
 import {reserved} from "../code/transformers/utils";
 import {TypeScript} from "../code/transformers/typescript";
-import Blocks from "../code/transformers/blocks";
+import {app} from "@scrap/app";
 
-const stage = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
+const stage =
+	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
 const scrappy = fs.readFileSync(path.join(__dirname, "assets", "scrappy.svg"), "utf-8");
 const click = fs.readFileSync(path.join(__dirname, "assets", "click.mp3"));
 
 /**
  * I represent both a sprite and the stage.
  * I am able to generate code, save, and load.
- * 
+ *
  * My {@link code} could be blocks or TypeScript
  */
 export class Entity {
 	// Costumes & Sounds are stored as files
-	costumes: File[] = [];
+	public costumes: File[] = [];
 	/**
 	 * Variables are stored as an array of
 	 * `[name, type]` tuples.
 	 */
-	variables: app.Variable[] = [];
-	sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
+	public variables: Variable[] = [];
+	public sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
 
-	// Thumbnail of the entity
-	thumbnail = new Image();
+	/** Thumbnail of the entity */
+	private readonly thumbnail = new Image();
 
-	// Costume / Backdrop shown in the paint editor
-	current = 0;
+	/** Costume / Backdrop shown in the paint editor */
+	public current = 0;
+
 	/** Helper workspace for generating code. */
-	workspace = new Blockly.Workspace();
-	generator = new TypeScript(this);
-	typescript?: string;
-	init = {};
+	public readonly workspace = new Blockly.Workspace();
+	public readonly generator = new TypeScript(this);
 
-	/**
-	 * Get the code as string, or the workspace as JSON.
-	 */
-	get code() {
+	public typescript?: string;
+	public init = {};
+
+	/** Get the code as string, or the workspace as JSON. */
+	public get code() {
 		if (this.typescript !== undefined) {
 			return this.typescript;
 		}
 		return Blockly.serialization.workspaces.save(this.workspace);
 	}
 
-	set code(value: Record<string, any> | string) {
+	public set code(value: Record<string, any> | string) {
 		if (typeof value === "string") {
 			this.typescript = value;
 		} else {
 			delete this.typescript;
-			Blockly.serialization.workspaces.load(
-				value,
-				this.workspace,
-				{recordUndo: false}
-			);
+			Blockly.serialization.workspaces.load(value, this.workspace, {
+				recordUndo: false,
+			});
 		}
 	}
 
-	isUsingBlocks() {
+	public isUsingBlocks() {
 		return this.typescript === undefined;
 	}
 
-	isUsingCode() {
-		return this.typescript !== undefined
+	public isUsingCode() {
+		return this.typescript !== undefined;
 	}
 
 	/**
@@ -94,7 +96,7 @@ export class Entity {
 	 * files will be added to the zip.
 	 * If not, Blob URLs will be returned.
 	 */
-	getURLs(type: "costumes" | "sounds", zip?: JSZip) {
+	public getURLs(type: "costumes" | "sounds", zip?: JSZip) {
 		if (!zip) {
 			// No zip provided
 			return this[type].reduce(
@@ -106,43 +108,40 @@ export class Entity {
 			);
 		}
 
-		return this[type].reduce(
-			(urls, file) => {
-				zip!.file(file.name, file);
-				return {
-					...urls,
-					// Path to file in zip
-					[path.parse(file.name).name]: path.join(this.name, file.name),
-				};
-			},
-			{} as Record<string, string>
-		);
+		return this[type].reduce((urls, file) => {
+			zip.file(file.name, file);
+			return {
+				...urls,
+				// Path to file in zip
+				[path.parse(file.name).name]: path.join(this.name, file.name),
+			};
+		}, {} as Record<string, string>);
 	}
 
-	async export(zip: JSZip) {
+	public async export(zip: JSZip) {
 		zip = zip.folder(this.name)!;
 		zip.file("script.js", await this.generator.ready(zip));
 	}
 
-	async preview() {
+	public async preview() {
 		return await this.generator.ready();
 	}
 
-	update() {
+	public update() {
 		this.thumbnail.src && URL.revokeObjectURL(this.thumbnail.src);
 		this.thumbnail.src = URL.createObjectURL(this.costumes[this.current]);
 	}
 
-	render(parent: Element): HTMLElement {
+	public render(parent: Element): HTMLElement {
 		return parent.appendChild(this.thumbnail);
 	}
 
 	/**
 	 * Called before the entity gets deselected
 	 */
-	async dispose() {
+	public async dispose() {
 		if (this.typescript !== undefined) {
-			this.variables = await Blocks.getVariables(this.typescript);
+			this.variables = await SWC.getVariables(this.typescript);
 		}
 	}
 
@@ -151,7 +150,7 @@ export class Entity {
 	 * @param zip The zip to save to
 	 * @returns JSON data
 	 */
-	save(zip: JSZip) {
+	public save(zip: JSZip) {
 		zip = zip.folder(this.name)!;
 
 		return {
@@ -166,17 +165,17 @@ export class Entity {
 			}),
 			code: this.code,
 			current: this.current,
-			variables: this.variables
+			variables: this.variables,
 		};
 	}
 
 	/**
 	 * Loads a file and returns a stage, or a sprite with that data
-	 * @param zip 
-	 * @param json 
-	 * @returns 
+	 * @param zip
+	 * @param json
+	 * @returns
 	 */
-	static async load(zip: JSZip, json: ReturnType<Entity["save"]>) {
+	public static async load(zip: JSZip, json: ReturnType<Entity["save"]>) {
 		const entity = json.name === "Stage" ? new Stage() : new Sprite(json.name);
 		const fn = this.loadFiles.bind(this, json.name, zip);
 		entity.costumes = await Promise.all(json.costumes.map(fn));
@@ -219,7 +218,7 @@ export class Entity {
 
 	/**
 	 * Returns the initial value of a key
-	 * 
+	 *
 	 * @param key The key to get the initial value of
 	 * @returns The value
 	 */
@@ -238,11 +237,11 @@ export class Sprite extends Entity {
 			size: 100,
 			rotationStyle: 0,
 			visible: true,
-			draggable: false
+			draggable: false,
 		};
 	}
 
-	override render(parent: Element) {
+	public override render(parent: Element) {
 		const sprite = document.createElement("div");
 		sprite.classList.add("media-element");
 		super.render(sprite);
@@ -297,13 +296,13 @@ export class Sprite extends Entity {
 }
 
 export class Stage extends Entity {
-	readonly __stage__ = true;
+	public declare readonly __STAGE__: true;
 
 	constructor() {
 		super(new File([stage], "stage.svg", {type: "image/svg+xml"}), "Stage");
 	}
 
-	override render(parent: Element): HTMLElement {
+	public override render(parent: Element): HTMLElement {
 		const img = super.render(parent);
 		img.removeAttribute("width");
 		img.removeAttribute("height");

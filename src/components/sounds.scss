@@ -1,17 +1,17 @@
 /**
- * This file is a part of Scrap, an educational programming language.
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
  * You should have received a copy of the MIT License, if not, please 
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomas-wrobel/scrap.
+ *
  * @license MIT
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024 
  */
 .sound {
 	display: grid;
-	grid-template-areas:
-		"sound ."
-	;
+	grid-template-areas: "sound .";
 	gap: 20px;
 
 	grid-template-columns: auto 1fr;

@@ -1,92 +1,95 @@
 /**
- * This file is a part of Scrap, an educational programming language.
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
  * You should have received a copy of the MIT License, if not, please 
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
  * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ *
  * @license MIT
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024
+ * @fileoverview Media list component.
  */
-@import "../scss/globals";
+@use "../scss/vars" as *;
 
 .media-list {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    overflow-y: auto;
-    gap: 15px;
-    padding: 7.5px;
-    background: $background;
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	overflow-y: auto;
+	gap: 15px;
+	padding: 7.5px;
+	background: $background;
 
-    + .fab {
-        margin-bottom: 15px;
-    }
+	+ .fab {
+		margin-bottom: 15px;
+	}
 }
 
 .media-element {
-    width: 67.5px;
-    height: 67.5px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 7.5px;
-    border: 2px solid hsla(0, 0%, 0%, 0.15);
+	width: 67.5px;
+	height: 67.5px;
+	display: flex;
+	flex-direction: column;
+	border-radius: 7.5px;
+	border: 2px solid hsla(0, 0%, 0%, 0.15);
 
-    > img {
-        display: block;
-        margin: auto;
-        height: 45px;
-        aspect-ratio: 1;
-        object-fit: contain;
-    }
+	> img {
+		display: block;
+		margin: auto;
+		height: 45px;
+		aspect-ratio: 1;
+		object-fit: contain;
+	}
 
-    .name {
-        padding: 3.75px;
-        text-align: center;
-        font-size: 9px;
-        border-radius: 0 0 3px 3px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+	.name {
+		padding: 3.75px;
+		text-align: center;
+		font-size: 9px;
+		border-radius: 0 0 3px 3px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-    input.name {
-        appearance: none;
-        border: none;
-        outline: none !important;
-        color: white;
-    }
+	input.name {
+		appearance: none;
+		border: none;
+		outline: none !important;
+		color: white;
+	}
 
-    .remove {
-        position: absolute;
-        background: #2fbf71;
-        border-radius: 50%;
-        top: -0.5em;
-        right: -0.5em;
-        user-select: none;
-        cursor: pointer;
+	.remove {
+		position: absolute;
+		background: #2fbf71;
+		border-radius: 50%;
+		top: -0.5em;
+		right: -0.5em;
+		user-select: none;
+		cursor: pointer;
 
-        width: 16px;
-        height: 16px;
+		width: 16px;
+		height: 16px;
 
-        line-height: 16px;
-        text-align: center;
-    }
+		line-height: 16px;
+		text-align: center;
+	}
 
-    &:only-child,
-    &:not(.selected) {
-        > .remove {
-            display: none;
-        }
-    }
+	&:only-child,
+	&:not(.selected) {
+		> .remove {
+			display: none;
+		}
+	}
 
-    &.selected {
-        border-color: $primary;
-        background-color: #FFF;
-        color: #FFF;
-        position: relative;
+	&.selected {
+		border-color: $primary;
+		background-color: #fff;
+		color: #fff;
+		position: relative;
 
-        .name {
-            background-color: $primary;
-        }
-    }
+		.name {
+			background-color: $primary;
+		}
+	}
 }

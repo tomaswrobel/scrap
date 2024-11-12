@@ -1,13 +1,74 @@
+/**
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @copyright Tomáš Wróbel 2024
+ * @fileoverview Visual Studio Code settings for Scrap Native.
+ */
 {
-    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
-    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-    "typescript.format.semicolons": "insert",
-    "editor.formatOnSave": true,
-    "files.associations": {
-        // Parcel supports JSONC by default
-        "*.json": "jsonc",
-    },
-    "typescript.tsdk": "node_modules\\typescript\\lib",
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true
+	// Set TypeScript SDK to the one in node_modules
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+
+	// ESLint settings
+	"eslint.enable": true,
+	"eslint.format.enable": false,
+	"eslint.onIgnoredFiles": "off",
+	"eslint.useFlatConfig": true,
+	"eslint.runtime": "node_modules/eslint/bin/eslint.js",
+
+	// Set Prettier settings to match Scrap Native's style
+	"prettier.arrowParens": "avoid",
+	"prettier.bracketSpacing": false,
+
+	// Tab configuration
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"prettier.useTabs": true,
+	"prettier.tabWidth": 4,
+	"prettier.printWidth": 90,
+
+	// YAML needs to be 2 spaces
+	"[yaml][github-actions-workflow]": {
+		"editor.insertSpaces": true,
+		"prettier.tabWidth": 2,
+		"editor.tabSize": 2,
+		"prettier.useTabs": false,
+		"editor.autoIndent": "advanced",
+		"editor.detectIndentation": false
+	},
+
+	// Set the default formatters
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[rust]": {
+		"editor.defaultFormatter": "rust-lang.rust-analyzer"
+	},
+	"[toml]": {
+		"editor.defaultFormatter": "tamasfe.even-better-toml"
+	},
+
+	// JSON files association
+	"files.associations": {
+		"*.json": "jsonc",
+		".*rc": "json",
+		"*.svg": "html"
+	},
+
+	// JSON Schemas for LiTScript
+	"json.schemas": [
+		{
+			"fileMatch": ["/litconfig.json"],
+			"url": "../node_modules/litscript/schemas/litsconfig-schema.json"
+		},
+		{
+			"fileMatch": ["/src-trauri/capabilities/*.json"],
+			"url": "../src-trauri/gen/schemas/desktop-schema.json"
+		}
+	]
 }

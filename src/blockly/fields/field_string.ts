@@ -1,22 +1,24 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license MIT
  * @copyright Microsoft
  * @author Sam El-Husseini
- * 
+ *
  * @license MIT
  * @fileoverview String field.
- * @author Tomáš Wróbel
- * 
+ * @copyright Tomáš Wróbel 2024
+ *
  * This file is taken from PXT blockly, with the following modifications:
  * 	- Conversion to TypeScript
  * 	- Using Modern ECMAScript
  * 	- Using Modern DOM API
- * 	- Color Validation
+ *
  */
 import * as Blockly from "blockly";
 
@@ -29,33 +31,17 @@ export default class FieldString extends Blockly.FieldTextInput {
 	private quoteLeft_!: SVGTextElement;
 	private quoteRight_!: SVGTextElement;
 
-	/**
-	 * Construct a FieldString from a JSON arg object.
-	 * @param {!Object} options A JSON object with options (text).
-	 * @returns {!Blockly.FieldString} The new field instance.
-	 * @package
-	 * @nocollapse
-	 */
-	static fromJson(options: any): FieldString {
-		const text = options["text"];
-		const field = new FieldString(text, options["class"]);
+	public static override fromJson(options: Record<string, unknown>) {
+		const text = options["text"] as string;
+		const validator = options["class"] as Blockly.FieldValidator<string>;
+		const field = new FieldString(text, validator);
 		if (typeof options["spellcheck"] == "boolean") {
 			field.setSpellcheck(options["spellcheck"]);
 		}
 		return field;
 	}
 
-	/**
-	 * Quote padding.
-	 * @type {number}
-	 * @public
-	 */
-	static quotePadding = 0;
-
-	/**
-	 * Create the block UI for this field.
-	 */
-	initView() {
+	public override initView() {
 		// Add quotes around the string
 		// Positioned on render, after text size is calculated.
 		this.quoteLeft_?.remove();
@@ -91,10 +77,10 @@ export default class FieldString extends Blockly.FieldTextInput {
 	/**
 	 * Updates the size of the field based on the text.
 	 */
-	protected updateSize_() {
+	protected override updateSize_() {
 		super.updateSize_();
 
-		let sWidth = this.value_ ? this.size_.width : 10;
+		const sWidth = this.value_ ? this.size_.width : 10;
 		let addedWidth = this.positionLeft(sWidth);
 
 		this.textElement_!.setAttribute("x", `${addedWidth}`);
@@ -104,67 +90,36 @@ export default class FieldString extends Blockly.FieldTextInput {
 	}
 
 	// Position Left
-	positionLeft(x: number) {
+	private positionLeft(x: number) {
 		if (!this.quoteLeft_) {
 			return 0;
 		}
-		let addedWidth = 0;
 		if (this.sourceBlock_!.RTL) {
-			this.quoteLeftX_ = x + this.quoteWidth_ + FieldString.quotePadding * 2;
-			addedWidth = this.quoteWidth_ + FieldString.quotePadding;
+			this.quoteLeftX_ = x + this.quoteWidth_;
 		} else {
 			this.quoteLeftX_ = 0;
-			addedWidth = this.quoteWidth_ + FieldString.quotePadding;
 		}
-		this.quoteLeft_.setAttribute("transform", `translate(${this.quoteLeftX_},${this.quoteY_})`);
-		return addedWidth;
+		this.quoteLeft_.setAttribute(
+			"transform",
+			`translate(${this.quoteLeftX_},${this.quoteY_})`
+		);
+		return this.quoteWidth_;
 	}
 
 	// Position Right
-	positionRight(x: number) {
+	private positionRight(x: number) {
 		if (!this.quoteRight_) {
 			return 0;
 		}
-		let addedWidth = 0;
 		if (this.sourceBlock_!.RTL) {
-			this.quoteRightX_ = FieldString.quotePadding;
-			addedWidth = this.quoteWidth_ + FieldString.quotePadding;
+			this.quoteRightX_ = 0;
 		} else {
-			this.quoteRightX_ = x + FieldString.quotePadding;
-			addedWidth = this.quoteWidth_ + FieldString.quotePadding;
+			this.quoteRightX_ = x;
 		}
-		this.quoteRight_.setAttribute("transform", `translate(${this.quoteRightX_},${this.quoteY_})`);
-		return addedWidth;
-	}
-
-	protected doClassValidation_(newValue?: any): string | null {
-		const index = this.sourceBlock_?.outputConnection?.targetConnection?.getCheck()?.indexOf("Color");
-		const isInColorInput = index === 0 || (index && index > 0);
-
-		if (!isInColorInput) {
-			return newValue;
-		}
-
-		newValue = newValue.toLowerCase();
-
-		const hex6 = /^#?[0-9A-F]{6}$/i;
-
-		if (hex6.test(newValue)) {
-			if (newValue[0] !== "#") {
-				newValue = "#" + newValue;
-			}
-			return newValue;
-		}
-
-		const hex3 = /^#?[0-9A-F]{3}$/i;
-
-		if (hex3.test(newValue)) {
-			if (newValue[0] !== "#") {
-				newValue = "#" + newValue;
-			}
-			return newValue.replace(/([0-9A-F])/gi, "$1$1");
-		}
-
-		return "#000000";
+		this.quoteRight_.setAttribute(
+			"transform",
+			`translate(${this.quoteRightX_},${this.quoteY_})`
+		);
+		return this.quoteWidth_;
 	}
 }

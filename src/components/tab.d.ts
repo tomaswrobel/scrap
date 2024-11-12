@@ -1,14 +1,16 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * the official repository at https://github.com/tomas-wrobel/scrap.
  * 
  * @license MIT
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024
  * @fileoverview Tab component interface.
  */
-import {App} from "../app";
+import App from "../app";
 import Tabs from "./tabs";
 
 /**
@@ -45,9 +47,9 @@ export default interface TabComponent {
 	 * Prerender is called before the tab is rendered
 	 * It can be used to do some heavy work
 	 * like compiling code or loading images.
-	 * 
+	 *
 	 * If it throws an error, the tab will not be rendered
-	 * 
+	 *
 	 * Usually, you should call {@link App.showLoader}
 	 * before doing any heavy work and {@link App.hideLoader}
 	 * after it is done

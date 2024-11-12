@@ -1,81 +1,82 @@
 /**
- * This file is a part of Scrap, an educational programming language.
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
  * You should have received a copy of the MIT License, if not, please 
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
  * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
- * @license MIT
- * @author Tomáš Wróbel
  */
-@import "../scss/globals";
+@use "../scss/vars" as *;
 
 #tabs {
-    grid-area: tabs;
-    display: flex;
-    align-items: end;
+	grid-area: tabs;
+	display: flex;
+	align-items: end;
 
-    button {
-        all: unset;
-        display: inline-block;
-        cursor: pointer;
-        border-radius: 16px 16px 0 0;
-        padding: 1px 16px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        position: relative;
-        margin-right: -12px;
-    }
+	button {
+		all: unset;
+		display: inline-block;
+		cursor: pointer;
+		border-radius: 16px 16px 0 0;
+		padding: 1px 16px;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		position: relative;
+		margin-right: -12px;
+	}
 
-    button:not(.selected) {
-        background-color: #d9e3f2;
-        color: hsla(225, 15%, 40%, 0.75);
-        height: 70%;
-        z-index: 1;
+	button:not(.selected) {
+		background-color: #d9e3f2;
+		color: hsla(225, 15%, 40%, 0.75);
+		height: 70%;
+		z-index: 1;
 
-        &:hover {
-            background-color: #e5f0ff;
-        }
-    }
+		&:hover {
+			background-color: #e5f0ff;
+		}
+	}
 
-    button.selected {
-        height: 80%;
-        z-index: 2;
-        color: $primary;
-        background-color: #fff;
-    }
+	button.selected {
+		height: 80%;
+		z-index: 2;
+		color: $primary;
+		background-color: #fff;
+	}
 }
 
 #buttons {
-    grid-area: buttons;
-    display: flex;
-    gap: $gap;
-    align-items: center;
+	grid-area: buttons;
+	display: flex;
+	gap: $gap;
+	align-items: center;
 
-    > a {
-        display: inline-flex;
-        justify-content: center;
-        align-content: center;
+	> a {
+		all: unset;
 
-        padding: 5px 7px;
-        border-radius: 5px;
+		display: inline-flex;
+		justify-content: center;
+		align-content: center;
 
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
+		padding: 5px 7px;
+		border-radius: 5px;
 
-        img {
-            width: 24px;
-            height: 24px;
-        }
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.1);
+		}
 
-        &:last-child {
-            margin-left: auto;
-            margin-right: $gap;
-        }
-    }
+		img {
+			width: 24px;
+			height: 24px;
+		}
+
+		&:last-child {
+			margin-left: auto;
+			margin-right: $gap;
+		}
+	}
 }
 
 .tab-content {
-    grid-area: tab-content;
-    font-size: 16px;
-    tab-size: 4;
+	grid-area: tab-content;
+	font-size: 16px;
+	tab-size: 4;
 }

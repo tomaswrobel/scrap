@@ -21,7 +21,14 @@
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+
+		// Parcel resolution
+		"paths": {
+			"@scrap/*": ["./src/*"],
+            "blockly": ["./node_modules/blockly/core/blockly.d.ts"]
+		}
     },
     "include": [
         "src",

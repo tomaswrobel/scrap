@@ -1,0 +1,17 @@
+/**
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ *
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @copyright Tomáš Wróbel 2024
+ */
+@use "sass:color";
+
+$gap: 5px;
+$primary: #2fbf71;
+$background: color.adjust($primary, $lightness: 40%);

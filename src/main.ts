@@ -1,52 +1,24 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license MIT
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024
  * @fileoverview Booting the Scrap app.
  */
 import "./scss/*.scss";
-import {App} from "./app";
-import {version} from "../package.json";
-
-if ("serviceWorker" in navigator) {
-	window.addEventListener("load", function () {
-		navigator.serviceWorker.register(
-			new URL("../pwa/sw.ts", import.meta.url),
-			{type: "module"}
-		);
-	});
-}
+import App from "./app";
 
 window.MonacoEnvironment = {
-	getWorker: () => new Worker(
-		new URL(
-			"./monaco-editor/ts.worker.ts",
-			import.meta.url
-		),
-		{type: "module"}
-	),
+	getWorker: () =>
+		new Worker(new URL("./monaco-editor/ts.worker.ts", import.meta.url), {
+			type: "module",
+		}),
 };
 
 window.app = new App();
-window.app.start(version);
-
-// Enable opening files via PWA
-window.launchQueue?.setConsumer(async launchParams => {
-	if (launchParams.files.length > 0) {
-		const fileHandle = launchParams.files[0];
-
-		if (fileHandle.kind === "file") {
-			if (fileHandle.name.endsWith(".scrap")) {
-				app.open(version, await fileHandle.getFile());
-			} else if (fileHandle.name.endsWith(".sb3")) {
-				app.import(await fileHandle.getFile());
-			} else {
-				window.alert("Unsupported file type");
-			}
-		}
-	}
-});
+window.app.start();

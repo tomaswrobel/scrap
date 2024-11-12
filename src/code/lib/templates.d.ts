@@ -1,15 +1,17 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
- * @license MIT
- * @author Tomáš Wróbel
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @fileoverview Declaration of valid templates
+ * @license MIT
+ * @copyright Tomáš Wróbel
  */
 
-/** `__SPRITE__` */
+/** `__SPRITE__` and `__SPRITES__` */
 declare const __SPRITE__: "__SPRITES__";
 
 /** `__BACKDROPS__` */

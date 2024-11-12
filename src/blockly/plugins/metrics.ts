@@ -1,15 +1,14 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license Apache-2.0
  * @author Google LLC
- * 
- * @license MIT
- * @author Tomáš Wróbel
- * 
+ *
  * From: @blockly/continuous-toolbox@1.0.5
  * To: TypeScript, Scrap modifications
  */
@@ -20,7 +19,7 @@ export class Metrics extends Blockly.MetricsManager {
 		super(workspace);
 	}
 
-	getViewMetrics(getWorkspaceCoordinates = undefined) {
+	public override getViewMetrics(getWorkspaceCoordinates = undefined) {
 		const scale = getWorkspaceCoordinates ? this.workspace_.scale : 1;
 		const svgMetrics = this.getSvgMetrics();
 		const toolboxMetrics = this.getToolboxMetrics();
@@ -30,9 +29,15 @@ export class Metrics extends Blockly.MetricsManager {
 		if (this.workspace_.getToolbox()) {
 			// Note: Not actually supported at this time due to ContinunousToolbox
 			// only supporting a vertical flyout. But included for completeness.
-			if (toolboxPosition == Blockly.TOOLBOX_AT_TOP || toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+			if (
+				toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
+				toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM
+			) {
 				svgMetrics.height -= toolboxMetrics.height + flyoutMetrics.height;
-			} else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT || toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+			} else if (
+				toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+				toolboxPosition == Blockly.TOOLBOX_AT_RIGHT
+			) {
 				svgMetrics.width -= toolboxMetrics.width + flyoutMetrics.width;
 			}
 		}
@@ -44,7 +49,7 @@ export class Metrics extends Blockly.MetricsManager {
 		};
 	}
 
-	getAbsoluteMetrics() {
+	public override getAbsoluteMetrics() {
 		const toolboxMetrics = this.getToolboxMetrics();
 		const flyoutMetrics = this.getFlyoutMetrics(false);
 		const toolboxPosition = toolboxMetrics.position;

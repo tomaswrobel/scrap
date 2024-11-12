@@ -1,3 +1,13 @@
+<!--
+	This file is a part of Scrap Native, an app for helping to migrate
+	from block-based programming into text-based programming languages.
+	You should have received a copy of the MIT License, if not, please
+	visit https://opensource.org/licenses/MIT. To verify the code, visit
+	the official repository at https://github.com/tomas-wrobel/scrap.
+
+	fileoverwiew: Scrappy is a character that represents the Scrap. He's a little screw!
+	copyright: Tomáš Wróbel 2024
+ -->
 <svg width="90.052" height="94" version="1.1" viewBox="0 0 183.11 191" xmlns="http://www.w3.org/2000/svg">
 	<g transform="matrix(1.2181 0 0 1.1426 -14.224 -7.324)">
 		<g stroke="#000">

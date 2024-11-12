@@ -1,118 +1,120 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
  * @license MIT
  * @fileoverview Blockly's JSON definition of scrap theme.
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2024
  *
- * Colors are taken from Blockly's zelos theme, matched to 
- * Scrap's categories, whích mirror Scratch's a lot.
+ * Colors are taken from Blockly's zelos theme, matched to
+ * Scrap's categories, which mirror Scratch's a lot.
  */
 {
-    "name": "scrap",
-    "startHats": true,
-    "blockStyles": {
-        // Block styles are capitalised
-        // They are written to match the category labels
-        "Motion": {
-            "colourPrimary": "#4C97FF",
-            "colourSecondary": "#4280D7",
-            "colourTertiary": "#3373CC"
-        },
-        "Looks": {
-            "colourPrimary": "#9966FF",
-            "colourSecondary": "#855CD6",
-            "colourTertiary": "#774DCB"
-        },
-        "Pen": {
-            "colourPrimary": "#0fBD8C",
-            "colourSecondary": "#0DA57A",
-            "colourTertiary": "#0B8E69"
-        },
-        "Events": {
-            "colourPrimary": "#FFBF00",
-            "colourSecondary": "#E6AC00",
-            "colourTertiary": "#CC9900"
-        },
-        "Controls": {
-            "colourPrimary": "#FFAB19",
-            "colourSecondary": "#EC9C13",
-            "colourTertiary": "#CF8B17"
-        },
-        "Sensing": {
-            "colourPrimary": "#5CB1D6",
-            "colourSecondary": "#47A8D1",
-            "colourTertiary": "#2E8EB8"
-        },
-        "Operators": {
-            "colourPrimary": "#59C059",
-            "colourSecondary": "#46B946",
-            "colourTertiary": "#389438"
-        },
-        "Iterables": {
-            "colourPrimary": "#FF661A",
-            "colourSecondary": "#FF5500",
-            "colourTertiary": "#E64D00"
-        },
-        "Sounds": {
-            "colourPrimary": "#CF63CF",
-            "colourSecondary": "#C94FC9",
-            "colourTertiary": "#BD42BD"
-        },
-        "Variables": {
-            "colourPrimary": "#FF8C1A",
-            "colourSecondary": "#FF8000",
-            "colourTertiary": "#DB6E00"
-        },
-        "Functions": {
-            "colourPrimary": "#FF6680",
-            "colourSecondary": "#FF4D6A",
-            "colourTertiary": "#FF3355"
-        }
-    },
-    "categoryStyles": {
-        // Category styles are lowercase
-        // They are written to match the category labels
-        "motion": {
-            "colour": "#4C97FF"
-        },
-        "looks": {
-            "colour": "#9966FF"
-        },
-        "pen": {
-            "colour": "#0FBD8C"
-        },
-        "events": {
-            "colour": "#FFBF00"
-        },
-        "controls": {
-            "colour": "#FFAB19"
-        },
-        "sensing": {
-            "colour": "#5CB1D6"
-        },
-        "operators": {
-            "colour": "#59C059"
-        },
-        "iterables": {
-            "colour": "#FF661A"
-        },
-        "sounds": {
-            "colour": "#CF63CF"
-        },
-        "variables": {
-            "colour": "#FF8C1A"
-        },
-        "functions": {
-            "colour": "#FF6680"
-        }
-    },
-    "componentStyles": {
-        "toolboxBackgroundColour": "#FFFFFF",
-        "flyoutBackgroundColour": "#FFFFFF"
-    },
-    "fontStyle": {}
+	"name": "scrap",
+	"startHats": true,
+	"blockStyles": {
+		// Block styles are capitalised
+		// They are written to match the category labels
+		"Motion": {
+			"colourPrimary": "#4C97FF",
+			"colourSecondary": "#4280D7",
+			"colourTertiary": "#3373CC"
+		},
+		"Looks": {
+			"colourPrimary": "#9966FF",
+			"colourSecondary": "#855CD6",
+			"colourTertiary": "#774DCB"
+		},
+		"Pen": {
+			"colourPrimary": "#0fBD8C",
+			"colourSecondary": "#0DA57A",
+			"colourTertiary": "#0B8E69"
+		},
+		"Events": {
+			"colourPrimary": "#FFBF00",
+			"colourSecondary": "#E6AC00",
+			"colourTertiary": "#CC9900"
+		},
+		"Controls": {
+			"colourPrimary": "#FFAB19",
+			"colourSecondary": "#EC9C13",
+			"colourTertiary": "#CF8B17"
+		},
+		"Sensing": {
+			"colourPrimary": "#5CB1D6",
+			"colourSecondary": "#47A8D1",
+			"colourTertiary": "#2E8EB8"
+		},
+		"Operators": {
+			"colourPrimary": "#59C059",
+			"colourSecondary": "#46B946",
+			"colourTertiary": "#389438"
+		},
+		"Iterables": {
+			"colourPrimary": "#FF661A",
+			"colourSecondary": "#FF5500",
+			"colourTertiary": "#E64D00"
+		},
+		"Sounds": {
+			"colourPrimary": "#CF63CF",
+			"colourSecondary": "#C94FC9",
+			"colourTertiary": "#BD42BD"
+		},
+		"Variables": {
+			"colourPrimary": "#FF8C1A",
+			"colourSecondary": "#FF8000",
+			"colourTertiary": "#DB6E00"
+		},
+		"Functions": {
+			"colourPrimary": "#FF6680",
+			"colourSecondary": "#FF4D6A",
+			"colourTertiary": "#FF3355"
+		}
+	},
+	"categoryStyles": {
+		// Category styles are lowercase
+		// They are written to match the category labels
+		"motion": {
+			"colour": "#4C97FF"
+		},
+		"looks": {
+			"colour": "#9966FF"
+		},
+		"pen": {
+			"colour": "#0FBD8C"
+		},
+		"events": {
+			"colour": "#FFBF00"
+		},
+		"controls": {
+			"colour": "#FFAB19"
+		},
+		"sensing": {
+			"colour": "#5CB1D6"
+		},
+		"operators": {
+			"colour": "#59C059"
+		},
+		"iterables": {
+			"colour": "#FF661A"
+		},
+		"sounds": {
+			"colour": "#CF63CF"
+		},
+		"variables": {
+			"colour": "#FF8C1A"
+		},
+		"functions": {
+			"colour": "#FF6680"
+		}
+	},
+	"componentStyles": {
+		"toolboxBackgroundColour": "#FFFFFF",
+		"flyoutBackgroundColour": "#FFFFFF"
+	},
+	"fontStyle": {}
 }

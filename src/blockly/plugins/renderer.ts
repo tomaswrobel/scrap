@@ -1,29 +1,48 @@
 /**
- * This file is a part of Scrap, an educational programming language.
- * You should have received a copy of the MIT License, if not, please 
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomas-wrobel/scrap. 
- * 
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @fileoverview Blockly renderer plugin
  * @license MIT
- * @author Tomáš Wróbel
- * @fileoverview Renderer with hexagonal shape for type blocks.
+ * @copyright Tomáš Wróbel 2024
+ *
+ * This plugin edits the default renderer so:
+ *
+ * - Checkboxes are a bit wider
+ * - Type connections are hexagonal (they look like Boolean connections)
+ *
+ * Note that Scrap uses a square shape for `typed` block, but this is
+ * handled in `src/blockly/blocks/typed.ts`. The reason behind the shape
+ * is that the `typed` block is just a container for the `type` block
+ * and `parameter` field, so it should not be
  */
 import * as Blockly from "blockly";
 
-export class Renderer extends Blockly.zelos.Renderer {
-    protected override makeConstants_() {
-        return new class extends Blockly.zelos.ConstantProvider {
-            FIELD_CHECKBOX_X_OFFSET = 9;
+class ScrapRenderer extends Blockly.zelos.Renderer {
+	protected override makeConstants_() {
+		// I am proud to say that... My coding style is disgusting!
 
-            shapeFor(connection: Blockly.RenderedConnection) {
-                const check = connection.getCheck();
+		return new (class extends Blockly.zelos.ConstantProvider {
+			// Make checkboxes a bit wider
+			public override FIELD_CHECKBOX_X_OFFSET = 9;
 
-                if (check?.some(a => a === "boolean" || a === "type")) {
-                    return this.HEXAGONAL!;
-                }
+			// Boolean is hexagonal
+			// Type is hexagonal
+			public override shapeFor(connection: Blockly.RenderedConnection) {
+				const check = connection.getCheck();
 
-                return super.shapeFor(connection);
-            }
-        };
-    }
+				if (check?.some(a => a === "boolean" || a === "type")) {
+					return this.HEXAGONAL!;
+				}
+
+				return super.shapeFor(connection);
+			}
+		})();
+	}
 }
+
+Blockly.blockRendering.register("scrap", ScrapRenderer);
