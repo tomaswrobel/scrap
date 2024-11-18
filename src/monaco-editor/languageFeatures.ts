@@ -10,7 +10,11 @@
  * @author Microsoft Corporation
  * @fileoverview Just remapped imports.
  */
-import {Diagnostic, DiagnosticRelatedInformation, LanguageServiceDefaults} from "./typescript";
+import {
+	Diagnostic,
+	DiagnosticRelatedInformation,
+	LanguageServiceDefaults,
+} from "./typescript";
 import ts from "typescript";
 import type {TypeScriptWorker} from "./tsWorker";
 import {
@@ -75,10 +79,10 @@ export abstract class Adapter {
 	constructor(protected _worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {}
 
 	protected _textSpanToRange(model: editor.ITextModel, span: ts.TextSpan): IRange {
-		let p1 = model.getPositionAt(span.start);
-		let p2 = model.getPositionAt(span.start + span.length);
-		let {lineNumber: startLineNumber, column: startColumn} = p1;
-		let {lineNumber: endLineNumber, column: endColumn} = p2;
+		const p1 = model.getPositionAt(span.start);
+		const p2 = model.getPositionAt(span.start + span.length);
+		const {lineNumber: startLineNumber, column: startColumn} = p1;
+		const {lineNumber: endLineNumber, column: endColumn} = p2;
 		return {startLineNumber, startColumn, endLineNumber, endColumn};
 	}
 }
@@ -110,13 +114,17 @@ export class LibFiles {
 			return model;
 		}
 		if (this.isLibFile(uri) && this._hasFetchedLibFiles) {
-			return editor.createModel(this._libFiles[uri.path.slice(1)], "typescript", uri);
+			return editor.createModel(
+				this._libFiles[uri.path.slice(1)],
+				"typescript",
+				uri
+			);
 		}
 		return null;
 	}
 
 	private _containsLibFile(uris: (Uri | null)[]): boolean {
-		for (let uri of uris) {
+		for (const uri of uris) {
 			if (this.isLibFile(uri)) {
 				return true;
 			}
@@ -232,7 +240,9 @@ export class DiagnosticsAdapter extends Adapter {
 			}
 		};
 
-		this._disposables.push(editor.onDidCreateModel(model => onModelAdd(<IInternalEditorModel>model)));
+		this._disposables.push(
+			editor.onDidCreateModel(model => onModelAdd(<IInternalEditorModel>model))
+		);
 		this._disposables.push(editor.onWillDisposeModel(onModelRemoved));
 		this._disposables.push(
 			editor.onDidChangeModelLanguage(event => {
@@ -297,13 +307,23 @@ export class DiagnosticsAdapter extends Adapter {
 
 		const diagnostics = allDiagnostics
 			.reduce((p, c) => c.concat(p), [])
-			.filter(d => (this._defaults.getDiagnosticsOptions().diagnosticCodesToIgnore || []).indexOf(d.code) === -1);
+			.filter(
+				d =>
+					(
+						this._defaults.getDiagnosticsOptions().diagnosticCodesToIgnore ||
+						[]
+					).indexOf(d.code) === -1
+			);
 
 		// Fetch lib files if necessary
 		const relatedUris = diagnostics
 			.map(d => d.relatedInformation || [])
 			.reduce((p, c) => c.concat(p), [])
-			.map(relatedInformation => (relatedInformation.file ? Uri.parse(relatedInformation.file.fileName) : null));
+			.map(relatedInformation =>
+				relatedInformation.file
+					? Uri.parse(relatedInformation.file.fileName)
+					: null
+			);
 
 		await this._libFiles.fetchLibFilesIfNecessary(relatedUris);
 
@@ -319,11 +339,17 @@ export class DiagnosticsAdapter extends Adapter {
 		);
 	}
 
-	private _convertDiagnostics(model: editor.ITextModel, diag: Diagnostic): editor.IMarkerData {
+	private _convertDiagnostics(
+		model: editor.ITextModel,
+		diag: Diagnostic
+	): editor.IMarkerData {
 		const diagStart = diag.start || 0;
 		const diagLength = diag.length || 1;
-		const {lineNumber: startLineNumber, column: startColumn} = model.getPositionAt(diagStart);
-		const {lineNumber: endLineNumber, column: endColumn} = model.getPositionAt(diagStart + diagLength);
+		const {lineNumber: startLineNumber, column: startColumn} =
+			model.getPositionAt(diagStart);
+		const {lineNumber: endLineNumber, column: endColumn} = model.getPositionAt(
+			diagStart + diagLength
+		);
 
 		const tags: MarkerTag[] = [];
 		if (diag.reportsUnnecessary) {
@@ -342,7 +368,10 @@ export class DiagnosticsAdapter extends Adapter {
 			message: flattenDiagnosticMessageText(diag.messageText, "\n"),
 			code: diag.code.toString(),
 			tags,
-			relatedInformation: this._convertRelatedInformation(model, diag.relatedInformation),
+			relatedInformation: this._convertRelatedInformation(
+				model,
+				diag.relatedInformation
+			),
 		};
 	}
 
@@ -366,10 +395,10 @@ export class DiagnosticsAdapter extends Adapter {
 			}
 			const infoStart = info.start || 0;
 			const infoLength = info.length || 1;
-			const {lineNumber: startLineNumber, column: startColumn} = relatedResource.getPositionAt(infoStart);
-			const {lineNumber: endLineNumber, column: endColumn} = relatedResource.getPositionAt(
-				infoStart + infoLength
-			);
+			const {lineNumber: startLineNumber, column: startColumn} =
+				relatedResource.getPositionAt(infoStart);
+			const {lineNumber: endLineNumber, column: endColumn} =
+				relatedResource.getPositionAt(infoStart + infoLength);
 
 			result.push({
 				resource: relatedResource.uri,
@@ -383,7 +412,9 @@ export class DiagnosticsAdapter extends Adapter {
 		return result;
 	}
 
-	private _tsDiagnosticCategoryToMarkerSeverity(category: ts.DiagnosticCategory): MarkerSeverity {
+	private _tsDiagnosticCategoryToMarkerSeverity(
+		category: ts.DiagnosticCategory
+	): MarkerSeverity {
 		switch (category) {
 			case DiagnosticCategory.Error:
 				return MarkerSeverity.Error;
@@ -415,10 +446,16 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 	public async provideCompletionItems(
 		model: editor.ITextModel,
 		position: Position,
-		_context: languages.CompletionContext
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		context: languages.CompletionContext
 	): Promise<languages.CompletionList | undefined> {
 		const wordInfo = model.getWordUntilPosition(position);
-		const wordRange = new Range(position.lineNumber, wordInfo.startColumn, position.lineNumber, wordInfo.endColumn);
+		const wordRange = new Range(
+			position.lineNumber,
+			wordInfo.startColumn,
+			position.lineNumber,
+			wordInfo.endColumn
+		);
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
 
@@ -438,12 +475,17 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 			let range = wordRange;
 			if (entry.replacementSpan) {
 				const p1 = model.getPositionAt(entry.replacementSpan.start);
-				const p2 = model.getPositionAt(entry.replacementSpan.start + entry.replacementSpan.length);
+				const p2 = model.getPositionAt(
+					entry.replacementSpan.start + entry.replacementSpan.length
+				);
 				range = new Range(p1.lineNumber, p1.column, p2.lineNumber, p2.column);
 			}
 
 			const tags: languages.CompletionItemTag[] = [];
-			if (entry.kindModifiers !== undefined && entry.kindModifiers.indexOf("deprecated") !== -1) {
+			if (
+				entry.kindModifiers !== undefined &&
+				entry.kindModifiers.indexOf("deprecated") !== -1
+			) {
 				tags.push(languages.CompletionItemTag.Deprecated);
 			}
 
@@ -465,14 +507,20 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 		};
 	}
 
-	public async resolveCompletionItem(item: languages.CompletionItem): Promise<languages.CompletionItem> {
+	public async resolveCompletionItem(
+		item: languages.CompletionItem
+	): Promise<languages.CompletionItem> {
 		const myItem = <MyCompletionItem>item;
 		const resource = myItem.uri;
 		const position = myItem.position;
 		const offset = myItem.offset;
 
 		const worker = await this._worker(resource);
-		const details = await worker.getCompletionEntryDetails(resource.toString(), offset, myItem.label);
+		const details = await worker.getCompletionEntryDetails(
+			resource.toString(),
+			offset,
+			myItem.label
+		);
 		if (!details) {
 			return myItem;
 		}
@@ -546,7 +594,10 @@ function tagToString(tag: ts.JSDocTagInfo): string {
 	return tagLabel;
 }
 
-export class SignatureHelpAdapter extends Adapter implements languages.SignatureHelpProvider {
+export class SignatureHelpAdapter
+	extends Adapter
+	implements languages.SignatureHelpProvider
+{
 	public signatureHelpTriggerCharacters = ["(", ","];
 
 	private static _toSignatureHelpTriggerReason(
@@ -556,9 +607,17 @@ export class SignatureHelpAdapter extends Adapter implements languages.Signature
 			case languages.SignatureHelpTriggerKind.TriggerCharacter:
 				if (context.triggerCharacter) {
 					if (context.isRetrigger) {
-						return {kind: "retrigger", triggerCharacter: context.triggerCharacter as any};
+						return {
+							kind: "retrigger",
+							triggerCharacter:
+								context.triggerCharacter as ts.SignatureHelpRetriggerCharacter,
+						};
 					} else {
-						return {kind: "characterTyped", triggerCharacter: context.triggerCharacter as any};
+						return {
+							kind: "characterTyped",
+							triggerCharacter:
+								context.triggerCharacter as ts.SignatureHelpTriggerCharacter,
+						};
 					}
 				} else {
 					return {kind: "invoked"};
@@ -639,7 +698,10 @@ export class SignatureHelpAdapter extends Adapter implements languages.Signature
 // --- hover ------
 
 export class QuickInfoAdapter extends Adapter implements languages.HoverProvider {
-	public async provideHover(model: editor.ITextModel, position: Position): Promise<languages.Hover | undefined> {
+	public async provideHover(
+		model: editor.ITextModel,
+		position: Position
+	): Promise<languages.Hover | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
 		const worker = await this._worker(resource);
@@ -655,7 +717,9 @@ export class QuickInfoAdapter extends Adapter implements languages.HoverProvider
 		}
 
 		const documentation = displayPartsToString(info.documentation);
-		const tags = info.tags ? info.tags.map(tag => tagToString(tag)).join("  \n\n") : "";
+		const tags = info.tags
+			? info.tags.map(tag => tagToString(tag)).join("  \n\n")
+			: "";
 		const contents = displayPartsToString(info.displayParts);
 		return {
 			range: this._textSpanToRange(model, info.textSpan),
@@ -673,7 +737,10 @@ export class QuickInfoAdapter extends Adapter implements languages.HoverProvider
 
 // --- occurrences ------
 
-export class DocumentHighlightAdapter extends Adapter implements languages.DocumentHighlightProvider {
+export class DocumentHighlightAdapter
+	extends Adapter
+	implements languages.DocumentHighlightProvider
+{
 	public async provideDocumentHighlights(
 		model: editor.ITextModel,
 		position: Position
@@ -686,7 +753,9 @@ export class DocumentHighlightAdapter extends Adapter implements languages.Docum
 			return;
 		}
 
-		const entries = await worker.getDocumentHighlights(resource.toString(), offset, [resource.toString()]);
+		const entries = await worker.getDocumentHighlights(resource.toString(), offset, [
+			resource.toString(),
+		]);
 
 		if (!entries || model.isDisposed()) {
 			return;
@@ -709,7 +778,10 @@ export class DocumentHighlightAdapter extends Adapter implements languages.Docum
 // --- definition ------
 
 export class DefinitionAdapter extends Adapter {
-	constructor(private readonly _libFiles: LibFiles, worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {
+	constructor(
+		private readonly _libFiles: LibFiles,
+		worker: (...uris: Uri[]) => Promise<TypeScriptWorker>
+	) {
 		super(worker);
 	}
 
@@ -732,14 +804,16 @@ export class DefinitionAdapter extends Adapter {
 		}
 
 		// Fetch lib files if necessary
-		await this._libFiles.fetchLibFilesIfNecessary(entries.map(entry => Uri.parse(entry.fileName)));
+		await this._libFiles.fetchLibFilesIfNecessary(
+			entries.map(entry => Uri.parse(entry.fileName))
+		);
 
 		if (model.isDisposed()) {
 			return;
 		}
 
 		const result: languages.Location[] = [];
-		for (let entry of entries) {
+		for (const entry of entries) {
 			const refModel = this._libFiles.getOrCreateModel(entry.fileName);
 			if (refModel) {
 				result.push({
@@ -755,7 +829,10 @@ export class DefinitionAdapter extends Adapter {
 // --- references ------
 
 export class ReferenceAdapter extends Adapter implements languages.ReferenceProvider {
-	constructor(private readonly _libFiles: LibFiles, worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {
+	constructor(
+		private readonly _libFiles: LibFiles,
+		worker: (...uris: Uri[]) => Promise<TypeScriptWorker>
+	) {
 		super(worker);
 	}
 
@@ -778,14 +855,16 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 		}
 
 		// Fetch lib files if necessary
-		await this._libFiles.fetchLibFilesIfNecessary(entries.map(entry => Uri.parse(entry.fileName)));
+		await this._libFiles.fetchLibFilesIfNecessary(
+			entries.map(entry => Uri.parse(entry.fileName))
+		);
 
 		if (model.isDisposed()) {
 			return;
 		}
 
 		const result: languages.Location[] = [];
-		for (let entry of entries) {
+		for (const entry of entries) {
 			const refModel = this._libFiles.getOrCreateModel(entry.fileName);
 			if (refModel) {
 				result.push({
@@ -801,7 +880,9 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 // --- outline ------
 
 export class OutlineAdapter extends Adapter implements languages.DocumentSymbolProvider {
-	public async provideDocumentSymbols(model: editor.ITextModel): Promise<languages.DocumentSymbol[] | undefined> {
+	public async provideDocumentSymbols(
+		model: editor.ITextModel
+	): Promise<languages.DocumentSymbol[] | undefined> {
 		const resource = model.uri;
 		const worker = await this._worker(resource);
 
@@ -815,11 +896,16 @@ export class OutlineAdapter extends Adapter implements languages.DocumentSymbolP
 			return;
 		}
 
-		const convert = (item: ts.NavigationTree, containerLabel?: string): languages.DocumentSymbol => {
+		const convert = (
+			item: ts.NavigationTree,
+			containerLabel?: string
+		): languages.DocumentSymbol => {
 			const result: languages.DocumentSymbol = {
 				name: item.text,
 				detail: "",
-				kind: <languages.SymbolKind>(outlineTypeTable[item.kind] || languages.SymbolKind.Variable),
+				kind: <languages.SymbolKind>(
+					(outlineTypeTable[item.kind] || languages.SymbolKind.Variable)
+				),
 				range: this._textSpanToRange(model, item.spans[0]),
 				selectionRange: this._textSpanToRange(model, item.spans[0]),
 				tags: [],
@@ -866,7 +952,7 @@ export class Kind {
 	public static warning: string = "warning";
 }
 
-let outlineTypeTable: {
+const outlineTypeTable: {
 	[kind: string]: languages.SymbolKind;
 } = Object.create(null);
 outlineTypeTable[Kind.module] = languages.SymbolKind.Module;
@@ -887,7 +973,9 @@ outlineTypeTable[Kind.localFunction] = languages.SymbolKind.Function;
 // --- formatting ----
 
 export abstract class FormatHelper extends Adapter {
-	protected static _convertOptions(options: languages.FormattingOptions): ts.FormatCodeOptions {
+	protected static _convertOptions(
+		options: languages.FormattingOptions
+	): ts.FormatCodeOptions {
 		return {
 			ConvertTabsToSpaces: options.insertSpaces,
 			TabSize: options.tabSize,
@@ -907,7 +995,10 @@ export abstract class FormatHelper extends Adapter {
 		};
 	}
 
-	protected _convertTextChanges(model: editor.ITextModel, change: ts.TextChange): languages.TextEdit {
+	protected _convertTextChanges(
+		model: editor.ITextModel,
+		change: ts.TextChange
+	): languages.TextEdit {
 		return {
 			text: change.newText,
 			range: this._textSpanToRange(model, change.span),
@@ -915,7 +1006,10 @@ export abstract class FormatHelper extends Adapter {
 	}
 }
 
-export class FormatAdapter extends FormatHelper implements languages.DocumentRangeFormattingEditProvider {
+export class FormatAdapter
+	extends FormatHelper
+	implements languages.DocumentRangeFormattingEditProvider
+{
 	public readonly canFormatMultipleRanges = false;
 
 	public async provideDocumentRangeFormattingEdits(
@@ -953,7 +1047,10 @@ export class FormatAdapter extends FormatHelper implements languages.DocumentRan
 	}
 }
 
-export class FormatOnTypeAdapter extends FormatHelper implements languages.OnTypeFormattingEditProvider {
+export class FormatOnTypeAdapter
+	extends FormatHelper
+	implements languages.OnTypeFormattingEditProvider
+{
 	public get autoFormatTriggerCharacters() {
 		return [";", "}", "\n"];
 	}
@@ -989,7 +1086,10 @@ export class FormatOnTypeAdapter extends FormatHelper implements languages.OnTyp
 
 // --- code actions ------
 
-export class CodeActionAdaptor extends FormatHelper implements languages.CodeActionProvider {
+export class CodeActionAdaptor
+	extends FormatHelper
+	implements languages.CodeActionProvider
+{
 	public async provideCodeActions(
 		model: editor.ITextModel,
 		range: Range,
@@ -1074,7 +1174,10 @@ export class CodeActionAdaptor extends FormatHelper implements languages.CodeAct
 // --- rename ----
 
 export class RenameAdapter extends Adapter implements languages.RenameProvider {
-	constructor(private readonly _libFiles: LibFiles, worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {
+	constructor(
+		private readonly _libFiles: LibFiles,
+		worker: (...uris: Uri[]) => Promise<TypeScriptWorker>
+	) {
 		super(worker);
 	}
 	public async provideRenameEdits(
@@ -1141,7 +1244,10 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
 // --- inlay hints ----
 
 export class InlayHintsAdapter extends Adapter implements languages.InlayHintsProvider {
-	public async provideInlayHints(model: editor.ITextModel, range: Range): Promise<languages.InlayHintList | null> {
+	public async provideInlayHints(
+		model: editor.ITextModel,
+		range: Range
+	): Promise<languages.InlayHintList | null> {
 		const resource = model.uri;
 		const fileName = resource.toString();
 		const start = model.getOffsetAt({

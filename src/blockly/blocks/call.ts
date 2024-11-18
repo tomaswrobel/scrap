@@ -61,14 +61,18 @@ export const MIXIN = {
 			try {
 				this.previousConnection?.disconnect();
 				this.nextConnection?.disconnect();
-			} catch {}
+			} catch {
+				// Do nothing
+			}
 			this.setOutput(true, returnType);
 			this.setNextStatement(false);
 			this.setPreviousStatement(false);
 		} else {
 			try {
 				this.outputConnection?.disconnect();
-			} catch {}
+			} catch {
+				// Do nothing
+			}
 			this.setOutput(false);
 			this.setNextStatement(true, "any");
 			this.setPreviousStatement(true, "any");

@@ -29,21 +29,14 @@ type Variable = [name: string, type: Check];
  */
 type Rectangular = Record<"x" | "y" | "width" | "height", number>;
 
-interface Window {
-	/**
-	 * Scrap app instance.
-	 * It is not moduled because:
-	 * - it is a singleton
-	 * - it is used everywhere
-	 * - it should be available in devtools
-	 *
-	 * Do not use this directly,
-	 * use `import {app} from "@scrap/app"` instead.
-	 *
-	 * See src/build/babel.js - the import gets removed.
-	 */
-	app: import("./app").default;
-}
+/**
+ * Scrap app instance.
+ * It is not moduled because:
+ * - it is a singleton
+ * - it is used everywhere
+ * - it should be available in devtools
+ */
+declare var app: import("./app").default;
 
 declare module "*.svg" {
 	const url: string;
@@ -57,9 +50,9 @@ declare module "*.svg" {
 declare module "monaco-editor/esm/vs/editor/editor.worker" {
 	import {worker} from "monaco-editor";
 
-	export interface InitializeCallback<Data = any> {
+	export interface InitializeCallback<Data> {
 		(ctx: worker.IWorkerContext, createData: Data): void;
 	}
 
-	export function initialize(fn: InitializeCallback): void;
+	export function initialize<Data>(fn: InitializeCallback<Data>): void;
 }

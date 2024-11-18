@@ -10,8 +10,6 @@
  * @copyright Tomáš Wróbel 2024
  * @fileoverview Tab component interface.
  */
-import App from "../app";
-import Tabs from "./tabs";
 
 /**
  * TabComponent is an interface for creating new tabs.
@@ -50,9 +48,8 @@ export default interface TabComponent {
 	 *
 	 * If it throws an error, the tab will not be rendered
 	 *
-	 * Usually, you should call {@link App.showLoader}
-	 * before doing any heavy work and {@link App.hideLoader}
-	 * after it is done
+	 * Usually, you should use {@link load @load} decorator
+	 * to do the heavy work
 	 */
 	prerender?(): Promise<void>;
 }

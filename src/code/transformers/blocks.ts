@@ -21,9 +21,9 @@ import * as SWC from "@scrap/utils/swc";
 import type {Entity} from "@scrap/components/entity";
 import {Error, properties, toCheck} from "@scrap/blockly";
 
-export default class Blocks {
+class Blocks {
 	private connection?: Blockly.Connection | null;
-	private readonly functions = new Map<string, any>();
+	private readonly functions = new Map<string, Blocks.Function>();
 	private readonly variables: Variable[] = [];
 
 	private constructor(public readonly workspace: Blockly.Workspace) {}
@@ -364,33 +364,30 @@ export default class Blocks {
 					this.connection = block.getInput("DO0")!.connection;
 					this.parse(node.consequent);
 
-					let elseIfCount = 0,
-						elseIfStatements: SWC.IfStatement[] = [],
-						alternate = node.alternate;
+					const elseIfStatements: SWC.IfStatement[] = [];
 
-					while (alternate && alternate.type === "IfStatement") {
-						elseIfCount++;
-						elseIfStatements.push(alternate);
+					while (node.alternate && node.alternate.type === "IfStatement") {
+						elseIfStatements.push(node.alternate);
 					}
 
-					const hasElse = alternate?.type === "BlockStatement";
+					const hasElse = node.alternate?.type === "BlockStatement";
 
 					block.loadExtraState!({
-						elseIfCount,
+						elseIfCount: elseIfStatements.length,
 						hasElse,
 					});
 
-					for (const elseIf of elseIfStatements) {
-						this.connection = block.getInput(`IF${elseIfCount}`)!.connection;
-						this.parse(elseIf.test);
+					for (let i = 0; i < elseIfStatements.length; i++) {
+						this.connection = block.getInput(`IF${i}`)!.connection;
+						this.parse(elseIfStatements[i].test);
 
-						this.connection = block.getInput(`DO${elseIfCount}`)!.connection;
-						this.parse(elseIf.consequent);
+						this.connection = block.getInput(`DO${i}`)!.connection;
+						this.parse(elseIfStatements[i].consequent);
 					}
 
 					if (hasElse) {
 						this.connection = block.getInput("ELSE")!.connection;
-						this.parse(alternate);
+						this.parse(node.alternate);
 					}
 
 					this.connection = block.nextConnection;
@@ -524,7 +521,7 @@ export default class Blocks {
 							this.parse(body);
 
 							this.connection = block.nextConnection;
-						} catch (e) {
+						} catch {
 							// Convert to "while" block
 							this.parse(node.init);
 
@@ -543,7 +540,6 @@ export default class Blocks {
 					break;
 				}
 				case "FunctionDeclaration": {
-					let commentText = "";
 					const params: string[] = [];
 
 					const block = this.workspace.newBlock("function");
@@ -599,8 +595,6 @@ export default class Blocks {
 							returnType: false,
 						});
 					}
-
-					block.setCommentText(commentText.trim());
 
 					this.connection = block.nextConnection;
 					this.parse(node.body);
@@ -1209,3 +1203,13 @@ export default class Blocks {
 			}
 	}
 }
+
+declare namespace Blocks {
+	interface Function {
+		params: string[];
+		name: string;
+		returnType: Check | false;
+	}
+}
+
+export default Blocks;

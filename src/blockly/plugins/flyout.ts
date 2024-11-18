@@ -13,7 +13,7 @@
  * To: TypeScript, Scrap modifications
  */
 import * as Blockly from "blockly";
-import type {Toolbox} from "./toolbox";
+import type Toolbox from "./toolbox";
 import {FlyoutMetrics} from "./flyout-metrics";
 import {bind} from "@scrap/utils/decorators";
 

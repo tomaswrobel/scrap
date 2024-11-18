@@ -18,7 +18,6 @@ import WaveSurfer from "wavesurfer.js";
 import TabComponent from "./tab";
 import {MediaList} from "./media-list";
 import "./sounds.scss";
-import {app} from "@scrap/app";
 
 export default class Sound implements TabComponent {
 	public readonly container = document.createElement("div");

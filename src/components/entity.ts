@@ -17,7 +17,6 @@ import fs from "fs";
 import path from "path";
 import {reserved} from "../code/transformers/utils";
 import {TypeScript} from "../code/transformers/typescript";
-import {app} from "@scrap/app";
 
 const stage =
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
@@ -61,7 +60,7 @@ export class Entity {
 		return Blockly.serialization.workspaces.save(this.workspace);
 	}
 
-	public set code(value: Record<string, any> | string) {
+	public set code(value: Record<string, unknown> | string) {
 		if (typeof value === "string") {
 			this.typescript = value;
 		} else {
@@ -128,7 +127,9 @@ export class Entity {
 	}
 
 	public update() {
-		this.thumbnail.src && URL.revokeObjectURL(this.thumbnail.src);
+		if (this.thumbnail.src) {
+			URL.revokeObjectURL(this.thumbnail.src);
+		}
 		this.thumbnail.src = URL.createObjectURL(this.costumes[this.current]);
 	}
 

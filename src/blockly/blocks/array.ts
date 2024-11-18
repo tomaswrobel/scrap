@@ -40,7 +40,7 @@ export const MIXIN = {
 	 *
 	 * @param state The state to apply to this block, ie the item count.
 	 */
-	loadExtraState(this: ArrayBlock, state: any) {
+	loadExtraState(this: ArrayBlock, state: {items?: string[]}) {
 		if (state.items) {
 			this.items = state.items;
 		}

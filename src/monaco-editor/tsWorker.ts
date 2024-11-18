@@ -72,7 +72,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	private _getModel(fileName: string): worker.IMirrorModel | null {
-		let models = this._ctx.getMirrorModels();
+		const models = this._ctx.getMirrorModels();
 		for (let i = 0; i < models.length; i++) {
 			const uri = models[i].uri;
 			if (uri.toString() === fileName || uri.toString(true) === fileName) {
@@ -83,7 +83,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	public getScriptVersion(fileName: string): string {
-		let model = this._getModel(fileName);
+		const model = this._getModel(fileName);
 		if (model) {
 			return model.version.toString();
 		} else if (this.isDefaultLibFileName(fileName)) {
@@ -98,19 +98,16 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	private _getScriptText(fileName: string): string | undefined {
-		let text: string;
-		let model = this._getModel(fileName);
+		const model = this._getModel(fileName);
 		if (model) {
 			// a true editor model
-			text = model.getValue();
+			return model.getValue();
 		} else if (fileName === "lib.d.ts") {
 			// default lib
-			text = DEFAULT_LIB;
+			return DEFAULT_LIB;
 		} else {
 			return;
 		}
-
-		return text;
 	}
 
 	public getScriptSnapshot(fileName: string): ts.IScriptSnapshot | undefined {
@@ -277,7 +274,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 								}
 							);
 							break;
-						case ts.SyntaxKind.InterfaceDeclaration:
+						case ts.SyntaxKind.InterfaceDeclaration: {
 							const interfaceNode = node as ts.InterfaceDeclaration;
 							if (interfaceNode.name.text === "Variables") {
 								if (interfaceNode.heritageClauses?.length) {
@@ -301,6 +298,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 								file: {fileName},
 							});
 							break;
+						}
 						case ts.SyntaxKind.EnumDeclaration:
 							diagnostics.push({
 								messageText: "Enums are not allowed",
@@ -610,7 +608,8 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		}
 	}
 
-	public async updateExtraLibs(_extraLibs: IExtraLibs) {}
+
+	public async updateExtraLibs() {}
 
 	public async provideInlayHints(fileName: string, start: number, end: number): Promise<readonly ts.InlayHint[]> {
 		if (fileNameIsLib(fileName)) {

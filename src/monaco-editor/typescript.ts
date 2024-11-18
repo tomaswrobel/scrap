@@ -167,7 +167,7 @@ class LanguageServiceDefaultsImplementation implements LanguageServiceDefaults {
 
 		return {
 			dispose: () => {
-				let extraLib = this._extraLibs[filePath];
+				const extraLib = this._extraLibs[filePath];
 				if (!extraLib) {
 					return;
 				}

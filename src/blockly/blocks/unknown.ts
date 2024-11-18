@@ -47,7 +47,7 @@ export const MIXIN = {
 		};
 	},
 
-	loadExtraState(this: UnknownBlock, state: any) {
+	loadExtraState(this: UnknownBlock, state: {shape: "command" | "reporter"; opcode: string}) {
 		this.shape = state.shape;
 		this.opcode = state.opcode;
 		this.updateShape();

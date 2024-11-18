@@ -16,6 +16,6 @@ import "../plugins/block-image";
 import "../plugins/category";
 
 export {ConnectionChecker as connectionChecker} from "../plugins/connection-checker";
-export {Metrics as metricsManager} from "../plugins/metrics";
-export {Toolbox as toolbox} from "../plugins/toolbox";
+export {default as metricsManager} from "../plugins/metrics";
+export {default as toolbox} from "../plugins/toolbox";
 export {Flyout as flyoutsVerticalToolbox} from "../plugins/flyout";

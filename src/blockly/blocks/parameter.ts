@@ -15,7 +15,6 @@
  * - a variable getter
  * - a block created by FieldParam, see fields/field_param.ts
  */
-import {app} from "@scrap/app";
 import Dialog from "@scrap/utils/dialog";
 import {ContextMenuRegistry, BlockSvg} from "blockly";
 export type ParameterBlock = BlockSvg & ParameterBlockMixin;
@@ -35,7 +34,7 @@ export const MIXIN = {
 		};
 	},
 
-	loadExtraState(this: ParameterBlock, state: any) {
+	loadExtraState(this: ParameterBlock, state: {type?: Check; isVariable?: boolean; isConstant?: boolean}) {
 		this.type_ = state.type || "any";
 		this.isVariable_ = state.isVariable || false;
 		this.isConstant_ = state.isConstant || false;

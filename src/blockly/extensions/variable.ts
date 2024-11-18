@@ -12,7 +12,6 @@
  *
  * This extension adds a dropdown with all the variables to the block.
  */
-import {app} from "@scrap/app";
 import * as Blockly from "blockly";
 
 export default function (this: Blockly.Block) {

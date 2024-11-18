@@ -14,6 +14,7 @@
  * Where noted, some parts are directly copied
  * from Blockly's JavaScript generator.
  */
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 import * as Blockly from "blockly";
 import type {Entity} from "../../components/entity";
 
@@ -29,7 +30,7 @@ import type {UnknownBlock} from "../../blockly/blocks/unknown";
 import type {CallBlock} from "../../blockly/blocks/call";
 import type {UnionBlock} from "../../blockly/blocks/union";
 
-interface BlockCallback<T extends Blockly.Block = any> {
+interface BlockCallback<T extends Blockly.Block> {
 	(block: T, ts: TypeScript): null | string | [string, Order];
 }
 
@@ -55,7 +56,7 @@ interface BlockCallback<T extends Blockly.Block = any> {
  * ```
  */
 class TypeScript extends Blockly.CodeGenerator {
-	public static blocks: Record<string, BlockCallback> = {};
+	public static blocks: Record<string, BlockCallback<Blockly.Block>> = {};
 
 	// Directly copied from Blockly's JavaScript generator.
 	public override ORDER_OVERRIDES = [

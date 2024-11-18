@@ -104,7 +104,9 @@ export const MIXIN = {
 			});
 		}
 
-		block && !input.connection!.connect(block.outputConnection!);
+		if (block && input.connection) {
+			block.outputConnection!.connect(input.connection);
+		}
 	},
 
 	isEqual(check1: ReturnBlockOutput, check2: ReturnBlockOutput) {

@@ -10,12 +10,11 @@
  * @copyright Tomáš Wróbel 2024
  * @fileoverview Tabs manager
  */
-import {Visibility, type Hidden} from "./visibility";
+import {Visibility} from "./visibility";
 import TabComponent from "./tab";
 import "./tabs.scss";
 
 import Dialog from "@scrap/utils/dialog";
-import {app} from "@scrap/app";
 
 export default class Tabs {
 	public active: TabComponent;
@@ -55,7 +54,6 @@ export default class Tabs {
 				await component.prerender();
 			} catch (error) {
 				console.error(error);
-				app.hideLoader();
 				await new Promise(resolve => setTimeout(resolve, 100));
 				await Dialog.scrap.fire({
 					title: "Error",

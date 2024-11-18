@@ -14,7 +14,6 @@
  * It should be always a shadow block, as it's used in the
  * switch-backdrop-to block.
  */
-import {app} from "@scrap/app";
 import * as Blockly from "blockly";
 import path from "path";
 

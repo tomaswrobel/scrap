@@ -17,7 +17,6 @@
  * Also, it has an option to select "self" which is
  * a reference to the sprite that the script is running
  */
-import {app} from "@scrap/app";
 import * as Blockly from "blockly";
 
 export const MIXIN = {

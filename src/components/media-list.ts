@@ -155,23 +155,15 @@ export class MediaList extends EventTarget {
 			if (e.target === remove) {
 				element.remove();
 				this.files.splice(this.files.indexOf(file), 1);
-				this.dispatchEvent(
-					new CustomEvent("select", {detail: this.files[0]})
-				);
+				this.dispatchEvent(new CustomEvent("select", {detail: this.files[0]}));
 
-				for (const child of this.root.getElementsByClassName(
-					"selected"
-				)) {
+				for (const child of this.root.getElementsByClassName("selected")) {
 					child.classList.remove("selected");
 				}
 
-				this.root
-					.querySelector(".media-element")!
-					.classList.add("selected");
+				this.root.querySelector(".media-element")!.classList.add("selected");
 			} else if (e.target !== span && e.target !== input) {
-				for (const child of this.root.getElementsByClassName(
-					"selected"
-				)) {
+				for (const child of this.root.getElementsByClassName("selected")) {
 					child.classList.remove("selected");
 				}
 
@@ -198,7 +190,7 @@ export class MediaList extends EventTarget {
 	};
 
 	public static readonly SOUND: MediaType = {
-		getURLFor(_file: File) {
+		getURLFor() {
 			return require("./assets/note.svg");
 		},
 		accept: ["audio/mpeg", "audio/ogg", "audio/wav"],

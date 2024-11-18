@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schema.tauri.app/config/2.0.0",
 	"productName": "Scrap",
-	"version": "6.0.0",
+	"version": "6.1.0",
 	"identifier": "dev.tomaswrobel.scrap",
 	"build": {
 		"beforeBuildCommand": "yarn build",
@@ -13,7 +13,7 @@
 		"withGlobalTauri": false,
 		"windows": [
 			{
-				"title": "Scrap Native",
+				"title": "Scrap",
 				"maximized": true,
 				"decorations": true
 			}

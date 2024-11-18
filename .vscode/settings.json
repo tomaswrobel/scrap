@@ -20,7 +20,6 @@
 	"eslint.format.enable": false,
 	"eslint.onIgnoredFiles": "off",
 	"eslint.useFlatConfig": true,
-	"eslint.runtime": "node_modules/eslint/bin/eslint.js",
 
 	// Set Prettier settings to match Scrap Native's style
 	"prettier.arrowParens": "avoid",

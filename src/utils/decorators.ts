@@ -15,13 +15,15 @@
  * @author Tomáš Wróbel
  */
 
-export interface Method<This, Args extends any[], Return> {
+import Dialog from "./dialog";
+
+export interface Method<This, Args extends unknown[], Return> {
 	(this: This, ...args: Args): Return;
 }
 
 export function bind<
 	K extends string,
-	A extends any[],
+	A extends unknown[],
 	R,
 	T extends Record<K, Method<T, A, R>>
 >(
@@ -43,30 +45,42 @@ export function bind<
 	};
 }
 
-export function load(reason: string) {
+export function load<B extends boolean>(title: string, dialog?: B) {
 	return function <
 		K extends string,
-		A extends any[],
-		R,
+		A extends unknown[],
+		R extends B extends true ? string | HTMLElement : void,
 		T extends Record<K, Method<T, A, Promise<R>>>
 	>(
-		_target: T,
-		_key: K,
+		target: T,
+		key: K,
 		descriptor: TypedPropertyDescriptor<Method<T, A, Promise<R>>>
 	): TypedPropertyDescriptor<Method<T, A, Promise<R>>> {
+		type S = Promise<string | HTMLElement>;
+
 		return {
 			configurable: true,
 			async value(this: T, ...args: A) {
-				const timeout = setTimeout(() => {
-					document.body.dataset.loading = reason;
-				}, 200);
+				if (dialog) {
+					await Dialog.scrap.fire({
+						input: "none",
+						title,
+						builder: () => descriptor.value!.apply(this, args) as S,
+					});
+				} else {
+					const timeout = setTimeout(() => {
+						document.body.dataset.loading = title;
+					}, 200);
 
-				const result = await descriptor.value!.call(this, ...args);
+					const result = await descriptor.value!.apply(this, args);
 
-				clearTimeout(timeout);
-				document.body.removeAttribute("data-loading");
+					clearTimeout(timeout);
+					document.body.removeAttribute("data-loading");
 
-				return result;
+					return result;
+				}
+
+				return {} as R;
 			},
 		};
 	};

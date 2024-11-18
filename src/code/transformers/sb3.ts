@@ -15,13 +15,17 @@ import * as Blockly from "blockly";
 import JSZip from "jszip";
 import {Sprite, Stage} from "../../components/entity";
 import {escape} from "./utils";
-import {app} from "@scrap/app";
 
-const illegalRe = /[\/\?<>\\:\*\|":#]+/g;
+const illegalRe = /[/?<>\\:*|":#]+/g;
+// eslint-disable-next-line no-control-regex
 const controlRe = /[\x00-\x1f\x80-\x9f]/g;
 const reservedRe = /^\.+$/;
 
 class SB3 {
+	private declare target: SB3.Target;
+	private declare provided: Record<string, string>;
+	private declare assetMap: Record<string, string>;
+
 	public static new() {
 		return this.transform.bind(new this());
 	}
@@ -1210,7 +1214,7 @@ class SB3 {
 		}
 
 		const name = `scratch_${init.name}_${Date.now().toString(36)}`;
-		let block = app.current.workspace.newBlock("function");
+		const block = app.current.workspace.newBlock("function");
 		block.setCommentText(init.comment);
 		block.setFieldValue(name, "NAME");
 
@@ -1220,10 +1224,12 @@ class SB3 {
 		});
 
 		for (let i = 0; i < init.args.length; i++) {
-			const typed = block.getInput(`PARAM_${i}`)?.connection!.targetBlock()!;
-			const type = typed.getInput("TYPE")?.connection!.targetBlock()!;
-
-			type.setFieldValue(init.args[i].type, "TYPE");
+			block
+				.getInput(`PARAM_${i}`)
+				?.connection!.targetBlock()
+				?.getInput("TYPE")
+				?.connection!.targetBlock()
+				?.setFieldValue(init.args[i].type, "TYPE");
 		}
 
 		block.nextConnection?.connect(_block.previousConnection!);
@@ -1317,12 +1323,6 @@ class SB3 {
 			return call;
 		};
 	}
-}
-
-interface SB3 {
-	target: SB3.Target;
-	provided: Record<string, string>;
-	assetMap: Record<string, string>;
 }
 
 declare namespace SB3 {

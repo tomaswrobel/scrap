@@ -13,7 +13,6 @@
  * Property block is a block that returns a property of a sprite.
  * It's a dropdown with all the properties (and variables) of a sprite.
  */
-import {app} from "@scrap/app";
 import * as Blockly from "blockly";
 
 export const MIXIN = {

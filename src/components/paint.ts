@@ -10,7 +10,6 @@
  * @fileoverview Paint editor
  * @copyright Tomáš Wróbel 2024
  */
-import {app} from "@scrap/app";
 import {bind, load} from "../utils/decorators";
 import {MediaList} from "./media-list";
 import "./paint.scss";
@@ -201,7 +200,7 @@ export default class Paint implements Component {
 						}
 					};
 
-					function mouseMove(e: MouseEvent) {
+					const mouseMove = function (e: MouseEvent) {
 						const x = e.pageX - bbox.left - window.scrollX - startX;
 						const y = e.pageY - bbox.top - window.scrollY - startY;
 
@@ -239,7 +238,7 @@ export default class Paint implements Component {
 						canvas.style.top = y + "px";
 					}
 
-					function mouseUp() {
+					const mouseUp = function () {
 						document.removeEventListener("mousemove", mouseMove);
 						document.removeEventListener("mouseup", mouseUp);
 						document.addEventListener("mousedown", mouseDown);

@@ -32,7 +32,7 @@ export const MIXIN = {
 	saveExtraState() {
 		return {count: this.count};
 	},
-	loadExtraState(this: UnionBlock, state: any) {
+	loadExtraState(this: UnionBlock, state: {count?: number}) {
 		const count = this.count;
 		this.count = state.count || 2;
 		this.updateShape(count);

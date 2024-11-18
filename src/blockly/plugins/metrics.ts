@@ -14,7 +14,7 @@
  */
 import * as Blockly from "blockly";
 
-export class Metrics extends Blockly.MetricsManager {
+export default class Metrics extends Blockly.MetricsManager {
 	constructor(workspace: Blockly.WorkspaceSvg) {
 		super(workspace);
 	}

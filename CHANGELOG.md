@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0] - 2024-11-18
+
+### Fixed
+
+- `app.hideLoader` usage in `tabs.ts` (the function was removed in the previous release)
+
+### Changed
+
+- removed `file-saver` as the file saving is now handled by the native desktop application
+- @load decorator now can be show loading dialog
+
+### Added
+
+- you can now choose export format of a block image (PNG or SVG)
+
 ## [6.0.0] - 2024-11-11
 
 ### Changed

@@ -29,6 +29,7 @@ import Tabs from "./components/tabs";
 
 import * as Blockly from "blockly";
 import {load} from "./utils/decorators";
+import savedAt from "./utils/saved-at";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -404,7 +405,7 @@ export default class App {
 	 * @param currentVersion Version of the current editor
 	 * @param file SCRAP file to open
 	 */
-	@load("Opening project")
+	@load("Opening project", true)
 	public async open(path: string) {
 		const file = await readFile(path);
 		const zip = await JSZip.loadAsync(file);
@@ -433,13 +434,14 @@ export default class App {
 		}
 
 		this.selectStage();
+		return savedAt(path);
 	}
 
 	/**
 	 * Import a project from a file
 	 * @param file SB3 file to import
 	 */
-	@load("Importing project")
+	@load("Importing project", true)
 	public async import(path: string) {
 		const file = await readFile(path);
 		this.entities = [];
@@ -457,6 +459,7 @@ export default class App {
 		}
 
 		this.current = this.entities[0];
+		return savedAt(path);
 	}
 
 	/**
@@ -474,7 +477,7 @@ export default class App {
 	 * Export the project to a zip file
 	 * containing all the entities and the engine
 	 */
-	@load("Exporting project")
+	@load("Exporting project", true)
 	public async export(path: string) {
 		const zip = new JSZip();
 
@@ -521,6 +524,7 @@ export default class App {
 		zip.file(`${width}x${height}.html`, sized.replace(indent, ""));
 
 		await writeFile(path, await zip.generateAsync({type: "uint8array"}));
+		return savedAt(path);
 	}
 
 	/**
@@ -528,7 +532,7 @@ export default class App {
 	 *
 	 * @param path Path to save the project
 	 */
-	@load("Saving project")
+	@load("Saving project", true)
 	public async save(path: string) {
 		const zip = new JSZip();
 		const entities = this.entities.map(e => e.save(zip));
@@ -544,6 +548,14 @@ export default class App {
 		);
 
 		await writeFile(path, await zip.generateAsync({type: "uint8array"}));
+
+		const italic = document.createElement("i");
+		italic.textContent = path;
+
+		const span = document.createElement("span");
+		span.append("Project saved at ", italic, ".");
+
+		return span;
 	}
 
 	/**
@@ -695,5 +707,3 @@ export default class App {
 		document.getElementById("import")!.onclick = App.openAs.bind(this, "sb3");
 	}
 }
-
-export declare const app: App;

@@ -28,22 +28,22 @@ export function getVariables(code: string) {
 }
 
 export function is<K extends keyof SWCNodeNameMap>(
-	node: any,
+	node: unknown,
 	type: K
 ): node is SWCNodeNameMap[K] {
-	return node.type === type;
+	if (typeof node !== "object" || !node) {
+		return false;
+	}
+
+	return "type" in node && node.type === type;
 }
 
 export interface WithTypeAnnotation {
 	typeAnnotation: Types.TsTypeAnnotation;
 }
 
-export function hasType<N extends Types.Node>(
-	node: N
-): node is N & WithTypeAnnotation {
-	return (
-		"typeAnnotation" in node && is(node.typeAnnotation, "TsTypeAnnotation")
-	);
+export function hasType<N extends Types.Node>(node: N): node is N & WithTypeAnnotation {
+	return "typeAnnotation" in node && is(node.typeAnnotation, "TsTypeAnnotation");
 }
 
 export interface TypedIdentifier extends Types.Identifier {
@@ -53,8 +53,7 @@ export interface TypedIdentifier extends Types.Identifier {
 export function hasSimpleProperty(node: Types.MemberExpression) {
 	return (
 		is(node.property, "Identifier") ||
-		(is(node.property, "Computed") &&
-			is(node.property.expression, "StringLiteral"))
+		(is(node.property, "Computed") && is(node.property.expression, "StringLiteral"))
 	);
 }
 
@@ -97,26 +96,17 @@ export function getType(type: Types.TsType | null | undefined): Check {
 	return "any";
 }
 
-export function isProperty(
-	node: Types.MemberExpression,
-	...properties: unknown[]
-) {
+export function isProperty(node: Types.MemberExpression, ...properties: unknown[]) {
 	if (isIdentifier(node.property, ...properties)) {
 		return true;
 	}
-	if (
-		is(node.property, "Computed") &&
-		is(node.property.expression, "StringLiteral")
-	) {
+	if (is(node.property, "Computed") && is(node.property.expression, "StringLiteral")) {
 		return properties.indexOf(node.property.expression.value) > -1;
 	}
 	return false;
 }
 
-export function isIdentifier(
-	node: Node,
-	...names: unknown[]
-): node is Types.Identifier {
+export function isIdentifier(node: Node, ...names: unknown[]): node is Types.Identifier {
 	return is(node, "Identifier") && names.indexOf(node.value) > -1;
 }
 

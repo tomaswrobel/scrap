@@ -43,7 +43,7 @@ export const MIXIN = {
 		};
 	},
 
-	loadExtraState(this: FunctionBlock, state: any) {
+	loadExtraState(this: FunctionBlock, state: {params?: string[]; returns?: boolean}) {
 		this.params = state.params || [];
 		this.returns = state.returns || false;
 		this.updateShape();

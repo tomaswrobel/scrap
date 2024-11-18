@@ -18,7 +18,7 @@ import type {Category} from "./category";
 import type {FunctionBlock} from "../blocks/function";
 import {toCheck} from "../types";
 
-export class Toolbox extends Blockly.Toolbox {
+export default class Toolbox extends Blockly.Toolbox {
 	public override init() {
 		super.init();
 
@@ -140,8 +140,6 @@ export class Toolbox extends Blockly.Toolbox {
 		}
 		return super.getClientRect();
 	}
-}
 
-export interface Toolbox {
-	getFlyout(): Flyout;
+	public declare getFlyout: () => Flyout;
 }

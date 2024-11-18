@@ -13,7 +13,6 @@
  * This file, including this comment, serves as a definition of the
  * TypeScript statically known types.
  */
-
 /**
  * Namespace for the functionality
  * handled by the Scrap engine

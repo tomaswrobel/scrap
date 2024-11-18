@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Dialog utility
- * @author Ivo Stratev
+ * @author Tomáš Wróbel
  */
 import * as tauri from "@tauri-apps/plugin-dialog";
 

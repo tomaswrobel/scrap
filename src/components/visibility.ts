@@ -13,7 +13,6 @@
 import TabComponent from "./tab";
 import type Tabs from "./tabs";
 import "./hidden.scss";
-import {app} from "@scrap/app";
 
 /**
  * Hidden tab component is displayed when the

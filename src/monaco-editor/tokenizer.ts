@@ -55,7 +55,15 @@ languages.registerTokensProviderFactory("typescript", {
 			"size",
 		],
 		sounds: ["playSound", "playSoundUntilDone", "volume", "stopSounds"],
-		pen: ["penClear", "penDown", "penUp", "isPenDown", "stamp", "penSize", "penColor"],
+		pen: [
+			"penClear",
+			"penDown",
+			"penUp",
+			"isPenDown",
+			"stamp",
+			"penSize",
+			"penColor",
+		],
 		events: [
 			"whenFlag",
 			"whenBackdropChangesTo",
@@ -67,7 +75,19 @@ languages.registerTokensProviderFactory("typescript", {
 			"whenReceiveMessage",
 			"broadcastMessageWait",
 		],
-		flow: ["if", "else", "for", "do", "while", "break", "continue", "try", "catch", "finally", "throw"],
+		flow: [
+			"if",
+			"else",
+			"for",
+			"do",
+			"while",
+			"break",
+			"continue",
+			"try",
+			"catch",
+			"finally",
+			"throw",
+		],
 		controls: ["wait", "delete", "clone", "stop", "whenCloned"],
 		sensing: [
 			"isTouching",
@@ -133,7 +153,17 @@ languages.registerTokensProviderFactory("typescript", {
 			"Boolean",
 		],
 		iterables: ["length", "reverse", "join", "includes", "indexOf", "slice"],
-		functions: ["function", "call", "window", "interface", "const", "var", "let", "new", "namespace"],
+		functions: [
+			"function",
+			"call",
+			"window",
+			"interface",
+			"const",
+			"var",
+			"let",
+			"new",
+			"namespace",
+		],
 		variables: ["variables", "showVariable", "hideVariable"],
 		operators: [
 			"<=",
@@ -217,19 +247,23 @@ languages.registerTokensProviderFactory("typescript", {
 		],
 		sprites: ["$", "self", "Date", "Sprite", "Stage"],
 		// we include these common regular expressions
-		symbols: /[=><!~?:&|+\-*\/\^%]+/,
+		symbols: /[=><!~?:&|+\-*/^%]+/,
 		escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
 		digits: /\d+(_+\d+)*/,
 		octaldigits: /[0-7]+(_+[0-7]+)*/,
 		binarydigits: /[0-1]+(_+[0-1]+)*/,
 		hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
-		regexpctl: /[(){}\[\]\$\^|\-*+?\.]/,
-		regexpesc: /\\(?:[bBdDfnrstvwWn0\\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
+		regexpctl: /[(){}[\]$^|\-*+?.]/,
+		regexpesc:
+			/\\(?:[bBdDfnrstvwWn0\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
 		// The main tokenizer for our languages
 		tokenizer: {
 			root: [[/[{}]/, "delimiter.bracket"], {include: "common"}],
 			common: [
-				[/(Color)([ \n\t\r]*\.[ \n\t\r]*)(fromHex|random|fromRGB|)/, ["Color", "delimiter", "pen"]],
+				[
+					/(Color)([ \n\t\r]*\.[ \n\t\r]*)(fromHex|random|fromRGB|)/,
+					["Color", "delimiter", "pen"],
+				],
 				[
 					/(\.[ \n\t\r]*)(costume|backdrop)([ \n\t\r]*\.[ \n\t\r]*)(all|index|name)/,
 					["delimiter", "costume", "delimiter", "looks"],
@@ -284,11 +318,11 @@ languages.registerTokensProviderFactory("typescript", {
 				{include: "@whitespace"},
 				// regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
 				[
-					/\/(?=([^\\\/]|\\.)+\/([dgimsuy]*)(\s*)(\.|;|,|\)|\]|\}|$))/,
+					/\/(?=([^\\/]|\\.)+\/([dgimsuy]*)(\s*)(\.|;|,|\)|\]|\}|$))/,
 					{token: "regexp", bracket: "@open", next: "@regexp"},
 				],
 				// delimiters and operators
-				[/[()\[\]]/, "@brackets"],
+				[/[()[\]]/, "@brackets"],
 				[/[<>](?!@symbols)/, "@brackets"],
 				[/!(?=([^=]|$))/, "delimiter"],
 				[
@@ -302,8 +336,8 @@ languages.registerTokensProviderFactory("typescript", {
 					},
 				],
 				// numbers
-				[/(@digits)[eE]([\-+]?(@digits))?/, "number.float"],
-				[/(@digits)\.(@digits)([eE][\-+]?(@digits))?/, "number.float"],
+				[/(@digits)[eE]([-+]?(@digits))?/, "number.float"],
+				[/(@digits)\.(@digits)([eE][-+]?(@digits))?/, "number.float"],
 				[/0[xX](@hexdigits)n?/, "number.hex"],
 				[/0[oO]?(@octaldigits)n?/, "number.octal"],
 				[/0[bB](@binarydigits)n?/, "number.binary"],
@@ -326,29 +360,42 @@ languages.registerTokensProviderFactory("typescript", {
 				[/\/\/.*$/, "comment"],
 			],
 			comment: [
-				[/[^\/*]+/, "comment"],
+				[/[^/*]+/, "comment"],
 				[/\*\//, "comment", "@pop"],
-				[/[\/*]/, "comment"],
+				[/[/*]/, "comment"],
 			],
 			jsdoc: [
-				[/[^\/*]+/, "comment.doc"],
+				[/[^/*]+/, "comment.doc"],
 				[/\*\//, "comment.doc", "@pop"],
-				[/[\/*]/, "comment.doc"],
+				[/[/*]/, "comment.doc"],
 			],
 			// We match regular expression quite precisely
 			regexp: [
-				[/(\{)(\d+(?:,\d*)?)(\})/, ["regexp.escape.control", "regexp.escape.control", "regexp.escape.control"]],
 				[
-					/(\[)(\^?)(?=(?:[^\]\\\/]|\\.)+)/,
-					["regexp.escape.control", {token: "regexp.escape.control", next: "@regexrange"}],
+					/(\{)(\d+(?:,\d*)?)(\})/,
+					[
+						"regexp.escape.control",
+						"regexp.escape.control",
+						"regexp.escape.control",
+					],
+				],
+				[
+					/(\[)(\^?)(?=(?:[^\]\\/]|\\.)+)/,
+					[
+						"regexp.escape.control",
+						{token: "regexp.escape.control", next: "@regexrange"},
+					],
 				],
 				[/(\()(\?:|\?=|\?!)/, ["regexp.escape.control", "regexp.escape.control"]],
 				[/[()]/, "regexp.escape.control"],
 				[/@regexpctl/, "regexp.escape.control"],
-				[/[^\\\/]/, "regexp"],
+				[/[^\\/]/, "regexp"],
 				[/@regexpesc/, "regexp.escape"],
 				[/\\\./, "regexp.invalid"],
-				[/(\/)([dgimsuy]*)/, [{token: "regexp", bracket: "@close", next: "@pop"}, "keyword.other"]],
+				[
+					/(\/)([dgimsuy]*)/,
+					[{token: "regexp", bracket: "@close", next: "@pop"}, "keyword.other"],
+				],
 			],
 			regexrange: [
 				[/-/, "regexp.escape.control"],
@@ -424,7 +471,9 @@ languages.onLanguageEncountered("typescript", () => {
 						range: info.range,
 						text:
 							code[0] === '"'
-								? `"#${rgb.map(s => s.toString(16).padStart(2, "0")).join("")}"`
+								? `"#${rgb
+										.map(s => s.toString(16).padStart(2, "0"))
+										.join("")}"`
 								: rgb.join(", "),
 					},
 				},
@@ -444,7 +493,9 @@ languages.onLanguageEncountered("typescript", () => {
 
 			while ((match = fromRGB.exec(text))) {
 				const start = model.getPositionAt(match.index + startOffset);
-				const end = model.getPositionAt(match.index + match[0].length - endOffset);
+				const end = model.getPositionAt(
+					match.index + match[0].length - endOffset
+				);
 				const [r, g, b] = match[1].split(/,\s*/).map(Number);
 
 				colors.push({
@@ -465,7 +516,9 @@ languages.onLanguageEncountered("typescript", () => {
 
 			while ((match = fromHex.exec(text))) {
 				const start = model.getPositionAt(match.index + startOffset);
-				const end = model.getPositionAt(match.index + match[0].length - endOffset);
+				const end = model.getPositionAt(
+					match.index + match[0].length - endOffset
+				);
 
 				const r = Number.parseInt(match[1].slice(1, 3), 16);
 				const g = Number.parseInt(match[1].slice(3, 5), 16);
@@ -491,7 +544,8 @@ languages.onLanguageEncountered("typescript", () => {
 		},
 	});
 	languages.setLanguageConfiguration("typescript", {
-		wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\@\#\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/g,
+		wordPattern:
+			/(-?\d*\.\d\w*)|([^`~!@#%^&*()\-=+[{\]}\\|;:'",.<>/?\s]+)/g,
 		comments: {
 			lineComment: "//",
 			blockComment: ["/*", "*/"],
@@ -504,7 +558,7 @@ languages.onLanguageEncountered("typescript", () => {
 		onEnterRules: [
 			{
 				// e.g. /** | */
-				beforeText: /^\s*\/\*\*(?!\/)([^\*]|\*(?!\/))*$/,
+				beforeText: /^\s*\/\*\*(?!\/)([^*]|\*(?!\/))*$/,
 				afterText: /^\s*\*\/$/,
 				action: {
 					indentAction: languages.IndentAction.IndentOutdent,
@@ -513,7 +567,7 @@ languages.onLanguageEncountered("typescript", () => {
 			},
 			{
 				// e.g. /** ...|
-				beforeText: /^\s*\/\*\*(?!\/)([^\*]|\*(?!\/))*$/,
+				beforeText: /^\s*\/\*\*(?!\/)([^*]|\*(?!\/))*$/,
 				action: {
 					indentAction: languages.IndentAction.None,
 					appendText: " * ",
@@ -521,7 +575,7 @@ languages.onLanguageEncountered("typescript", () => {
 			},
 			{
 				// e.g.  * ...|
-				beforeText: /^(\t|(\ \ ))*\ \*(\ ([^\*]|\*(?!\/))*)?$/,
+				beforeText: /^(\t|( {2}))* \*( ([^*]|\*(?!\/))*)?$/,
 				action: {
 					indentAction: languages.IndentAction.None,
 					appendText: "* ",
@@ -529,7 +583,7 @@ languages.onLanguageEncountered("typescript", () => {
 			},
 			{
 				// e.g.  */|
-				beforeText: /^(\t|(\ \ ))*\ \*\/\s*$/,
+				beforeText: /^(\t|( {2}))* \*\/\s*$/,
 				action: {
 					indentAction: languages.IndentAction.None,
 					removeText: 1,

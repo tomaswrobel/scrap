@@ -1,0 +1,39 @@
+{
+	"root": true,
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint"],
+	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+	"parserOptions": {
+		"projectService": true,
+		"tsconfigRootDir": "."
+	},
+	"rules": {
+		"@typescript-eslint/no-namespace": [
+			"error",
+			{
+				"allowDeclarations": true,
+				"allowDefinitionFiles": true
+			}
+		],
+		"@typescript-eslint/explicit-member-accessibility": [
+			"error",
+			{
+				"accessibility": "explicit",
+				"overrides": {
+					"constructors": "no-public"
+				}
+			}
+		],
+
+		"no-var": "off",
+		"require-yield": "off",
+
+		"@typescript-eslint/no-require-imports": "off",
+		"@typescript-eslint/no-empty-object-type": "off",
+		"@typescript-eslint/consistent-type-exports": "error",
+		"@typescript-eslint/no-unnecessary-type-assertion": "error"
+	},
+	"ignorePatterns": [
+		"**/lib/*.ts"
+	]
+}

@@ -10,7 +10,6 @@
  * @fileoverview Code editor
  * @copyright Tomáš Wróbel 2024
  */
-import {app} from "@scrap/app";
 import fs from "fs";
 import {editor, Uri} from "monaco-editor";
 import path from "path";

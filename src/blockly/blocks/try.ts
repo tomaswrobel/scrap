@@ -46,7 +46,7 @@ export const MIXIN = {
 		};
 	},
 
-	loadExtraState(this: TryBlock, state: any) {
+	loadExtraState(this: TryBlock, state: {catch: boolean | string; finally: boolean}) {
 		this.catch = state.catch;
 		this.finally = state.finally;
 		this.updateShape_();

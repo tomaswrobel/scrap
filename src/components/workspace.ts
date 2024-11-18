@@ -10,7 +10,6 @@
  * @fileoverview Workspace component.
  * @copyright Tomáš Wróbel 2024
  */
-import {app} from "@scrap/app";
 import Dialog from "@scrap/utils/dialog";
 import * as Blockly from "blockly";
 import {plugins, sprite, stage, theme, Types, TypeToShadow} from "../blockly";
@@ -311,7 +310,7 @@ export default class Workspace implements TabComponent {
 		});
 
 		Blockly.serialization.workspaces.load(
-			app.current.code as Record<string, any>,
+			app.current.code as Record<string, unknown>,
 			this.workspace
 		);
 		this.workspace.cleanUp();
