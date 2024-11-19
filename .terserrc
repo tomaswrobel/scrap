@@ -1,3 +1,15 @@
+/**
+ * This file is a part of Scrap Native, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @copyright Tomáš Wróbel 2024
+ * @fileoverview SWC minification configuration file (It has the same options as Terser).
+ */
 {
     "mangle": true,
     "compress": true,

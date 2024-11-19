@@ -55,8 +55,9 @@
 	// JSON files association
 	"files.associations": {
 		"*.json": "jsonc",
-		".*rc": "json",
-		"*.svg": "html"
+		".*rc": "jsonc",
+		"*.svg": "html",
+		"package.json": "json"
 	},
 
 	// JSON Schemas for LiTScript
