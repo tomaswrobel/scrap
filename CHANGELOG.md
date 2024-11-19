@@ -7,33 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [6.1.0] - 2024-11-18
+## [6.1.0] - 2024-11-19
 
 ### Fixed
 
-- `app.hideLoader` usage in `tabs.ts` (the function was removed in the previous release)
+-   `app.hideLoader` usage in `tabs.ts` (the function was removed in the previous release)
 
 ### Changed
 
-- removed `file-saver` as the file saving is now handled by the native desktop application
-- @load decorator now can be show loading dialog
+-   removed `file-saver` as the file saving is now handled by Tauri
+-   @load decorator now can be show loading dialog
+-   updating dependencies (parcel)
 
 ### Added
 
-- you can now choose export format of a block image (PNG or SVG)
+-   you can now choose export format of a block image (PNG or SVG)
 
 ## [6.0.0] - 2024-11-11
 
 ### Changed
 
-- **Scrap is now a native desktop application**:
-- Scrap uses Tauri to create a native desktop application.
-- The project structure has been changed.
-- SWC used instead of Babel.
-- Dependencies update.
-- README.md has been updated.
+-   **Scrap is now a native desktop application**:
+    -   Scrap uses Tauri to create a native desktop application.
+    -   The project structure has been changed.
+    -   SWC used instead of Babel.
+    -   Dependencies update.
+    -   README.md has been updated.
 
-### Added 
+### Added
 
 ## [5.4.0] - 2024-9-23
 
@@ -154,15 +155,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         -   `index.ts` lives in the `src` folder as `app.ts`
         -   SVG files are now in the `svgs` folder
         -   `style.scss` gets splitted into files inside `src/scss` folder
-    -   New glob typing files `*.d.ts` (literally with asterisk) files replace `index.js` files in:
+    -   New glob typing files `*.d.ts` (literally with asterisk) files replace `index.js`
+        files in:
         -   `src/blockly/blocks`
         -   `src/blockly/fields`
         -   `src/blockly/extensions`
-    -   Angle field now lives in `src/blockly/fields` folder (it was removed from Blockly core)
+    -   Angle field now lives in `src/blockly/fields` folder (it was removed from Blockly
+        core)
 -   Monaco Editor:
     -   Reporting advanced syntax (e.g. OOP) via diagnostics, not only highlighting
     -   Highlighted banned words:
-        -   null and undefined removed - they are standalone keywords, so the diagnostics does better job
+        -   null and undefined removed - they are standalone keywords, so the diagnostics
+            does better job
         -   added `class` and `extends` - they are a part of a bigger structure (class)
     -   Editing Microsoft's comments in `src/monaco-editor` to match Scrap's style
 -   Scrap Engine, **Blockly** and other dependencies **update**
@@ -224,7 +228,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Advanced for loop transformation from TS to blocks
 -   `blocks/parameter` - Variable removing, info
 -   `field_flag` - Flag icon in the `when flag clicked` block
--   `field_param` - Blockly's constant handling (you cannot change the value of a constant)
+-   `field_param` - Blockly's constant handling (you cannot change the value of a
+    constant)
 
 ## [4.4.1] - 2024-4-26
 
@@ -422,35 +427,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   User can now export the project with CDN links to Scrap Engine, minimizing the size of the project.
+-   User can now export the project with CDN links to Scrap Engine, minimizing the size of
+    the project.
 
 ## [3.4.0] - 2023-11-11
 
 ### Fixed
 
--   When mixing blocks & code, global variables are now correctly handled (via parsing the code)
+-   When mixing blocks & code, global variables are now correctly handled (via parsing the
+    code)
 -   Ask block now uses variable correctly.
 -   Global variables bugs
 -   Escaping Scrap names did not work correctly in many cases.
--   Await is now added to event handlers. Historically, Scrap Engine did not have await in event handlers, but it was added in v1.
+-   Await is now added to event handlers. Historically, Scrap Engine did not have await in
+    event handlers, but it was added in v1.
 -   Scrap 3 has been really unstable, and this release changes that. (I hope so.)
 
 ### Changed
 
--   Scratch's classic fields are no longer treated as strings, since they can be numbers as well.
--   SB3 compatibility lives in one file now. The typings were moved to the `SB3` namespace / class.
+-   Scratch's classic fields are no longer treated as strings, since they can be numbers
+    as well.
+-   SB3 compatibility lives in one file now. The typings were moved to the `SB3` namespace
+    / class.
 -   Scrap Engine update
 
 ### Added
 
 -   Scratch's procedures are now FULLY supported.
--   A lot of comments to make the code more readable. (I'm sorry for the mess, but I'm not used to writing comments. If you have any problems understanding the code, please let me know.)
+-   A lot of comments to make the code more readable. (I'm sorry for the mess, but I'm not
+    used to writing comments. If you have any problems understanding the code, please let
+    me know.)
 -   VS Code settings for comments in JSON files.
--   README.md now acknowledges the fact that Scrap does not use Scratch's code at all. (It is not a fork of Scratch.)
+-   README.md now acknowledges the fact that Scrap does not use Scratch's code at all. (It
+    is not a fork of Scratch.)
 
 ### Removed
 
--   function's label field - this was a historical thing, since Scrap v1 did support generators and it was used to distinguish between generators and functions.
+-   function's label field - this was a historical thing, since Scrap v1 did support
+    generators and it was used to distinguish between generators and functions.
 
 ## [3.3.0] - 2023-11-10
 
@@ -473,7 +487,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   variables and entities no longer require valid identifiers (e.g. `1` is now a valid variable name)
+-   variables and entities no longer require valid identifiers (e.g. `1` is now a valid
+    variable name)
 
 ## [3.2.0] - 2023-11-09
 
@@ -488,7 +503,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Instead of throwing an error, SB3 compatibility manner fills the missing blocks with `unknown` blocks.
+-   Instead of throwing an error, SB3 compatibility manner fills the missing blocks with
+    `unknown` blocks.
 
 ## [3.1.2] - 2023-11-09
 
@@ -869,7 +885,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.0.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.1.0...HEAD
+[6.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.0
 [6.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.0.0
 [5.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.4.0
 [5.3.4]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.3.4

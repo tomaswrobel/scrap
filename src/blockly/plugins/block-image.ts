@@ -144,19 +144,21 @@ class BlockSaver {
 
 Blockly.ContextMenuRegistry.registry.register({
 	displayText: "Save block image",
-	preconditionFn: scope => {
+	scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
+	id: "export_block_image",
+	weight: Infinity,
+
+	preconditionFn(scope) {
 		// Disable the option in the flyout.
 		if (scope.block!.isInFlyout) {
 			return "hidden";
 		}
+		// spritePanel is a special block that is not a block.
 		if (scope.block!.type === "spritePanel") {
 			return "hidden";
 		}
 		return "enabled";
 	},
-	scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
-	id: "export_png",
-	weight: Infinity,
 
 	callback: ({block}) => {
 		if (block) {
