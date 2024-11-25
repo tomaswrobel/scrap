@@ -12,7 +12,7 @@
 		"@blockly/field-angle": "5.0.9",
 		"@blockly/field-colour-hsv-sliders": "5.0.9",
 		"@blockly/field-date": "9.0.9",
-		"@parcel/service-worker": "2.12.0",
+		"@parcel/service-worker": "2.13.1",
 		"@tauri-apps/api": "2.1.1",
 		"@tauri-apps/plugin-dialog": "2.0.1",
 		"@tauri-apps/plugin-fs": "2.0.2",
