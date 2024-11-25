@@ -225,16 +225,6 @@
     "@parcel/utils" "2.13.0"
     nullthrows "^1.1.1"
 
-"@parcel/cache@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/cache/-/cache-2.12.0.tgz#b8fd2ea2bc7a2353a9b20344cc191bfb4f8284f3"
-  integrity sha512-FX5ZpTEkxvq/yvWklRHDESVRz+c7sLTXgFuzz6uEnBcXV38j6dMSikflNpHA6q/L4GKkCqRywm9R6XQwhwIMyw==
-  dependencies:
-    "@parcel/fs" "2.12.0"
-    "@parcel/logger" "2.12.0"
-    "@parcel/utils" "2.12.0"
-    lmdb "2.8.5"
-
 "@parcel/cache@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/cache/-/cache-2.13.0.tgz#99178de431de1fdff798eb1a13715ef4bde5e26a"
@@ -245,17 +235,17 @@
     "@parcel/utils" "2.13.0"
     lmdb "2.8.5"
 
-"@parcel/codeframe@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/codeframe/-/codeframe-2.12.0.tgz#9ea75bd7ae6c5f7fadf42a5e64657cf88fdcb29e"
-  integrity sha512-v2VmneILFiHZJTxPiR7GEF1wey1/IXPdZMcUlNXBiPZyWDfcuNgGGVQkx/xW561rULLIvDPharOMdxz5oHOKQg==
-  dependencies:
-    chalk "^4.1.0"
-
 "@parcel/codeframe@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/codeframe/-/codeframe-2.13.0.tgz#34ded7c9383cf25795a5f7e790ce187fffbae6df"
   integrity sha512-mKOQSDmRzWqC/ELwjGv9ZDqkYtHwkwvpLC4gb5mUAw6VJsDqraydtluxGR2NejYwETiS4j9mQElcbHZoRcZ9uA==
+  dependencies:
+    chalk "^4.1.2"
+
+"@parcel/codeframe@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/codeframe/-/codeframe-2.13.1.tgz#12c7c373e2f60fd7adcb95e64def81216a29e781"
+  integrity sha512-CTtHH6Q7+B3goMTcPqopDHXOYkhdZNpRAlzAs1GUaWEDfUYzu3TgXScd4FAz61pOp2HZeDYeRbgvAUPsH1/9Ng==
   dependencies:
     chalk "^4.1.2"
 
@@ -334,14 +324,6 @@
     nullthrows "^1.1.1"
     semver "^7.5.2"
 
-"@parcel/diagnostic@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/diagnostic/-/diagnostic-2.12.0.tgz#b38057d819ea2edc32018a1d51df434f07840be9"
-  integrity sha512-8f1NOsSFK+F4AwFCKynyIu9Kr/uWHC+SywAv4oS6Bv3Acig0gtwUjugk0C9UaB8ztBZiW5TQZhw+uPZn9T/lJA==
-  dependencies:
-    "@mischnic/json-sourcemap" "^0.1.0"
-    nullthrows "^1.1.1"
-
 "@parcel/diagnostic@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/diagnostic/-/diagnostic-2.13.0.tgz#838989c99d527d62c297193104aded6de76158ac"
@@ -350,31 +332,33 @@
     "@mischnic/json-sourcemap" "^0.1.0"
     nullthrows "^1.1.1"
 
-"@parcel/events@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/events/-/events-2.12.0.tgz#ef67e3fbb96806b3531a37bcf95e8fbb3818ffa2"
-  integrity sha512-nmAAEIKLjW1kB2cUbCYSmZOGbnGj8wCzhqnK727zCCWaA25ogzAtt657GPOeFyqW77KyosU728Tl63Fc8hphIA==
+"@parcel/diagnostic@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/diagnostic/-/diagnostic-2.13.1.tgz#0075cadce5fa33da9faea1d2620469cfb4ee2994"
+  integrity sha512-1uwmipR59yPdx3jDF48IbhYruXO37Evcb3vM7bRCaPK6e3JjALjnLTeQaBI3iYaNPUzw8wYrtlC8vS3Iq+eahg==
+  dependencies:
+    "@mischnic/json-sourcemap" "^0.1.0"
+    nullthrows "^1.1.1"
 
 "@parcel/events@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/events/-/events-2.13.0.tgz#abd4246fdf1ea62f1f5db3fee4e08e550a299a95"
   integrity sha512-vFB/GebsoiSxQy68DvrX8zpeJP2xWhSNYSN99ZbyADxutiAUnquu4nKMJCp4Pb+gNPHr2TitU6LKNGXqWLEE7w==
 
+"@parcel/events@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/events/-/events-2.13.1.tgz#f75ac4301963d0a507481a791c11f8e66161e518"
+  integrity sha512-welKWzNOWEuILgs6w67zB1+aX6UB/6wIHnc37fCNXpBo1JQGsmyrndJMLcmiZSenB7IbqlYxdfQ2w7vvl/KOrw==
+
 "@parcel/feature-flags@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/feature-flags/-/feature-flags-2.13.0.tgz#1da1335880436157e18126fb328c81affd96a79c"
   integrity sha512-HNTUy7DfEuowGqkKq2DGwhGEO9U3ORgIgRyxG4cXHMhx9BIE1lmB3ZVfu+dyq34GSYw6ceOgo0I3BZYs7rRKDA==
 
-"@parcel/fs@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/fs/-/fs-2.12.0.tgz#8c9029353888311ba2e9e2198dbe6c7c1da635c0"
-  integrity sha512-NnFkuvou1YBtPOhTdZr44WN7I60cGyly2wpHzqRl62yhObyi1KvW0SjwOMa0QGNcBOIzp4G0CapoZ93hD0RG5Q==
-  dependencies:
-    "@parcel/rust" "2.12.0"
-    "@parcel/types" "2.12.0"
-    "@parcel/utils" "2.12.0"
-    "@parcel/watcher" "^2.0.7"
-    "@parcel/workers" "2.12.0"
+"@parcel/feature-flags@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/feature-flags/-/feature-flags-2.13.1.tgz#afee9db5b197a2c7d1171553b039e1000f4c6020"
+  integrity sha512-7+/aI/7MP8aWX2Zm4eL+izYG2v8piIDgdTtZn5q7fHzot6rzdYrVsMg+RpaskWnB8YWEoITwt3ma8cp66o54lA==
 
 "@parcel/fs@2.13.0":
   version "2.13.0"
@@ -396,14 +380,6 @@
     "@parcel/feature-flags" "2.13.0"
     nullthrows "^1.1.1"
 
-"@parcel/logger@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/logger/-/logger-2.12.0.tgz#0b866b7aee8a0a462596a80cd46bd8b29c318758"
-  integrity sha512-cJ7Paqa7/9VJ7C+KwgJlwMqTQBOjjn71FbKk0G07hydUEBISU2aDfmc/52o60ErL9l+vXB26zTrIBanbxS8rVg==
-  dependencies:
-    "@parcel/diagnostic" "2.12.0"
-    "@parcel/events" "2.12.0"
-
 "@parcel/logger@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/logger/-/logger-2.13.0.tgz#1f0614b303f6d60740d19364aebe94ae4678fd3e"
@@ -412,17 +388,25 @@
     "@parcel/diagnostic" "2.13.0"
     "@parcel/events" "2.13.0"
 
-"@parcel/markdown-ansi@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/markdown-ansi/-/markdown-ansi-2.12.0.tgz#a4301321fa784a28ba817e65e41432fe8b3b3192"
-  integrity sha512-WZz3rzL8k0H3WR4qTHX6Ic8DlEs17keO9gtD4MNGyMNQbqQEvQ61lWJaIH0nAtgEetu0SOITiVqdZrb8zx/M7w==
+"@parcel/logger@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/logger/-/logger-2.13.1.tgz#b535001c9ae913f8314fc52d97315ca43f232468"
+  integrity sha512-0Nh3iXMvBpNrPdDz8KbTPIdd2thaVUz76dRtvxwAO20jCKEWInxRvcRYWqcYEfq2Iq3GeaXJAXhuLOkeI56iVA==
   dependencies:
-    chalk "^4.1.0"
+    "@parcel/diagnostic" "2.13.1"
+    "@parcel/events" "2.13.1"
 
 "@parcel/markdown-ansi@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/markdown-ansi/-/markdown-ansi-2.13.0.tgz#1945af2b0cdd68317cdfe787df0d78544ff3791d"
   integrity sha512-kznmctJ7myhu7/JKN9njHudBj4t8bv4oKW4/cvWgzVR7ftsw9oOJ8EE7eqtqOzzInyATZxXmbk+EYX4S04vLUg==
+  dependencies:
+    chalk "^4.1.2"
+
+"@parcel/markdown-ansi@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/markdown-ansi/-/markdown-ansi-2.13.1.tgz#cd480771e20fd2655e76413daf1cbb50ac6f0746"
+  integrity sha512-1nsgyQg1n2nUxXS1bvUkA5wzEfqb/qLwgwCGMwzSlJZPrG23YWKvXHLyB2wRFV1RTZ7uKHaCfbG45pY+LE0UIA==
   dependencies:
     chalk "^4.1.2"
 
@@ -434,19 +418,6 @@
     "@parcel/diagnostic" "2.13.0"
     "@parcel/plugin" "2.13.0"
     nullthrows "^1.1.1"
-
-"@parcel/node-resolver-core@3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@parcel/node-resolver-core/-/node-resolver-core-3.3.0.tgz#f40d80de800baa7cf230406b7122c8711ac4cdc8"
-  integrity sha512-rhPW9DYPEIqQBSlYzz3S0AjXxjN6Ub2yS6tzzsW/4S3Gpsgk/uEq4ZfxPvoPf/6TgZndVxmKwpmxaKtGMmf3cA==
-  dependencies:
-    "@mischnic/json-sourcemap" "^0.1.0"
-    "@parcel/diagnostic" "2.12.0"
-    "@parcel/fs" "2.12.0"
-    "@parcel/rust" "2.12.0"
-    "@parcel/utils" "2.12.0"
-    nullthrows "^1.1.1"
-    semver "^7.5.2"
 
 "@parcel/node-resolver-core@3.4.0":
   version "3.4.0"
@@ -518,21 +489,6 @@
     "@swc/core" "^1.7.26"
     nullthrows "^1.1.1"
 
-"@parcel/package-manager@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/package-manager/-/package-manager-2.12.0.tgz#7e1eb5f652544e045f7240fa6cf92e5ff1627624"
-  integrity sha512-0nvAezcjPx9FT+hIL+LS1jb0aohwLZXct7jAh7i0MLMtehOi0z1Sau+QpgMlA9rfEZZ1LIeFdnZZwqSy7Ccspw==
-  dependencies:
-    "@parcel/diagnostic" "2.12.0"
-    "@parcel/fs" "2.12.0"
-    "@parcel/logger" "2.12.0"
-    "@parcel/node-resolver-core" "3.3.0"
-    "@parcel/types" "2.12.0"
-    "@parcel/utils" "2.12.0"
-    "@parcel/workers" "2.12.0"
-    "@swc/core" "^1.3.36"
-    semver "^7.5.2"
-
 "@parcel/package-manager@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/package-manager/-/package-manager-2.13.0.tgz#8d2dd55cff616f6bdd3cc05a250c84c70990bd2b"
@@ -585,13 +541,13 @@
     globals "^13.2.0"
     nullthrows "^1.1.1"
 
-"@parcel/packager-raw-url@2.13.0":
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/@parcel/packager-raw-url/-/packager-raw-url-2.13.0.tgz#c09ac57d5be442a464e0f4516c9eb72f6d83da7c"
-  integrity sha512-4TZMw/H/+ZivY35Q8ME1dtLdqPH/4n5YxHS95IykSn5PgJqWs8/dv2yoX99CdII5gce7hmHCj2q0Stay4nth0A==
+"@parcel/packager-raw-url@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/packager-raw-url/-/packager-raw-url-2.13.1.tgz#64986974edebc551d9e85edc8b450d996edd35dc"
+  integrity sha512-s6tW9EshNyrspZ4irlbVnltpiqVwjXdVlZ1w6lBzO7bOSLoKdgEEpcgwJSL8VHvMxjS48gPSCIUNIfZSddbWrQ==
   dependencies:
-    "@parcel/plugin" "2.13.0"
-    "@parcel/utils" "2.13.0"
+    "@parcel/plugin" "2.13.1"
+    "@parcel/utils" "2.13.1"
 
 "@parcel/packager-raw@2.13.0":
   version "2.13.0"
@@ -624,21 +580,12 @@
   dependencies:
     "@parcel/types" "2.13.0"
 
-"@parcel/plugin@^2.0.0-beta.1":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/plugin/-/plugin-2.12.0.tgz#3db4237e8977ef5b5378b65eaffb809d2026431a"
-  integrity sha512-nc/uRA8DiMoe4neBbzV6kDndh/58a4wQuGKw5oEoIwBCHUvE2W8ZFSu7ollSXUGRzfacTt4NdY8TwS73ScWZ+g==
+"@parcel/plugin@2.13.1", "@parcel/plugin@^2.0.0-beta.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/plugin/-/plugin-2.13.1.tgz#ad50dcae0cdfe08d7abb7553e2c75a5b55c333d6"
+  integrity sha512-bagkxPnZlLDsWjPICdfurZixaWD9bAfta2jbSSkK0ng+qXc+p+tq2d8SIgtFbv5tURHBiWDCTNDmM1KhYAKZGA==
   dependencies:
-    "@parcel/types" "2.12.0"
-
-"@parcel/profiler@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/profiler/-/profiler-2.12.0.tgz#8541ca5d27500aebc843b1de081734442e5ee054"
-  integrity sha512-q53fvl5LDcFYzMUtSusUBZSjQrKjMlLEBgKeQHFwkimwR1mgoseaDBDuNz0XvmzDzF1UelJ02TUKCGacU8W2qA==
-  dependencies:
-    "@parcel/diagnostic" "2.12.0"
-    "@parcel/events" "2.12.0"
-    chrome-trace-event "^1.0.2"
+    "@parcel/types" "2.13.1"
 
 "@parcel/profiler@2.13.0":
   version "2.13.0"
@@ -648,6 +595,16 @@
     "@parcel/diagnostic" "2.13.0"
     "@parcel/events" "2.13.0"
     "@parcel/types-internal" "2.13.0"
+    chrome-trace-event "^1.0.2"
+
+"@parcel/profiler@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/profiler/-/profiler-2.13.1.tgz#c29542e29f5e44c78a97fdd6be47386f6b01c5f0"
+  integrity sha512-6K6N9RGIg/d4t+htiTqNV0DMWr/UgdDQ10ilc/ZsgclqPj/FBYJ5xhxyHDpeJYRdgJ3ob6pyGS60KuiqIWxi3g==
+  dependencies:
+    "@parcel/diagnostic" "2.13.1"
+    "@parcel/events" "2.13.1"
+    "@parcel/types-internal" "2.13.1"
     chrome-trace-event "^1.0.2"
 
 "@parcel/reporter-cli@2.13.0":
@@ -742,15 +699,15 @@
     "@parcel/utils" "2.13.0"
     nullthrows "^1.1.1"
 
-"@parcel/rust@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/rust/-/rust-2.12.0.tgz#135df4dd8c63d97720379777c5bb4a2680a201cd"
-  integrity sha512-005cldMdFZFDPOjbDVEXcINQ3wT4vrxvSavRWI3Az0e3E18exO/x/mW9f648KtXugOXMAqCEqhFHcXECL9nmMw==
-
 "@parcel/rust@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/rust/-/rust-2.13.0.tgz#f0ea5b4420f1449905662166540e6315829495f4"
   integrity sha512-7wPx5fma2imcIpwoBHxkt4yMDLYbnxQ1utswXaDj59iDu3mJkHU9/WyZWD2KzZdrADAdF8ulR1fg1woBYQ+nwA==
+
+"@parcel/rust@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/rust/-/rust-2.13.1.tgz#180f6485c3fff319cf2514a96225309aa89b38fd"
+  integrity sha512-32YgI6vLaKMD5Z8Y2aWIBIDc6qfbsUl1bQzk5/xu0CMvYsCp4FKCD0NLOFhkqF4dN5kQ/cN0tNQEJjYyJ8LDiA==
 
 "@parcel/service-worker@2.12.0":
   version "2.12.0"
@@ -927,17 +884,14 @@
     "@parcel/source-map" "^2.1.1"
     utility-types "^3.10.0"
 
-"@parcel/types@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/types/-/types-2.12.0.tgz#caf0af00ee0c7228b350eca5f4d3a5b85ce457ad"
-  integrity sha512-8zAFiYNCwNTQcglIObyNwKfRYQK5ELlL13GuBOrSMxueUiI5ylgsGbTS1N7J3dAGZixHO8KhHGv5a71FILn9rQ==
+"@parcel/types-internal@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/types-internal/-/types-internal-2.13.1.tgz#fd4f32d47361e46bbd7af8fdb10ef8f085ed5ab7"
+  integrity sha512-uY5lPDsinnyuk4qbvi04sQx2Zx0oBzjFZzhbWFcH2jWAWasHukK0w0wgLVXfGfP9hvgc/TIBgugCkvLbVJR1Iw==
   dependencies:
-    "@parcel/cache" "2.12.0"
-    "@parcel/diagnostic" "2.12.0"
-    "@parcel/fs" "2.12.0"
-    "@parcel/package-manager" "2.12.0"
+    "@parcel/diagnostic" "2.13.1"
+    "@parcel/feature-flags" "2.13.1"
     "@parcel/source-map" "^2.1.1"
-    "@parcel/workers" "2.12.0"
     utility-types "^3.10.0"
 
 "@parcel/types@2.13.0":
@@ -948,19 +902,13 @@
     "@parcel/types-internal" "2.13.0"
     "@parcel/workers" "2.13.0"
 
-"@parcel/utils@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/utils/-/utils-2.12.0.tgz#ac900726e7cb12a9e6392081fa05b756183f65fd"
-  integrity sha512-z1JhLuZ8QmDaYoEIuUCVZlhcFrS7LMfHrb2OCRui5SQFntRWBH2fNM6H/fXXUkT9SkxcuFP2DUA6/m4+Gkz72g==
+"@parcel/types@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/types/-/types-2.13.1.tgz#cb23b201a5f815852a3eca2fe3d299be273e0e40"
+  integrity sha512-ISSKEPW+JngnPJkR0Qvx8Bi59zNT4B6uFBPvtNTOu3Tapjljv0oI+fSSV3tN3xfPs62rxCoXTu+b3nzREyBNLA==
   dependencies:
-    "@parcel/codeframe" "2.12.0"
-    "@parcel/diagnostic" "2.12.0"
-    "@parcel/logger" "2.12.0"
-    "@parcel/markdown-ansi" "2.12.0"
-    "@parcel/rust" "2.12.0"
-    "@parcel/source-map" "^2.1.1"
-    chalk "^4.1.0"
-    nullthrows "^1.1.1"
+    "@parcel/types-internal" "2.13.1"
+    "@parcel/workers" "2.13.1"
 
 "@parcel/utils@2.13.0":
   version "2.13.0"
@@ -972,6 +920,20 @@
     "@parcel/logger" "2.13.0"
     "@parcel/markdown-ansi" "2.13.0"
     "@parcel/rust" "2.13.0"
+    "@parcel/source-map" "^2.1.1"
+    chalk "^4.1.2"
+    nullthrows "^1.1.1"
+
+"@parcel/utils@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/utils/-/utils-2.13.1.tgz#e9786fba698c0046d867370cf494def4e73dda51"
+  integrity sha512-GX/iV5owV92AfYvCCWbQURVWCDla5ExH2vPcNRqI4PG1d9SXbXJetbe0uqmeVz1MtA/F9+HBck/GP1TEa8WWcQ==
+  dependencies:
+    "@parcel/codeframe" "2.13.1"
+    "@parcel/diagnostic" "2.13.1"
+    "@parcel/logger" "2.13.1"
+    "@parcel/markdown-ansi" "2.13.1"
+    "@parcel/rust" "2.13.1"
     "@parcel/source-map" "^2.1.1"
     chalk "^4.1.2"
     nullthrows "^1.1.1"
@@ -1059,18 +1021,6 @@
     "@parcel/watcher-win32-ia32" "2.4.1"
     "@parcel/watcher-win32-x64" "2.4.1"
 
-"@parcel/workers@2.12.0":
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/@parcel/workers/-/workers-2.12.0.tgz#773182b5006741102de8ae36d18a5a9e3320ebd1"
-  integrity sha512-zv5We5Jmb+ZWXlU6A+AufyjY4oZckkxsZ8J4dvyWL0W8IQvGO1JB4FGeryyttzQv3RM3OxcN/BpTGPiDG6keBw==
-  dependencies:
-    "@parcel/diagnostic" "2.12.0"
-    "@parcel/logger" "2.12.0"
-    "@parcel/profiler" "2.12.0"
-    "@parcel/types" "2.12.0"
-    "@parcel/utils" "2.12.0"
-    nullthrows "^1.1.1"
-
 "@parcel/workers@2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@parcel/workers/-/workers-2.13.0.tgz#35b53a86a2d4c18d6a10c457ba1432960c1f1654"
@@ -1083,124 +1033,67 @@
     "@parcel/utils" "2.13.0"
     nullthrows "^1.1.1"
 
-"@swc/core-darwin-arm64@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.7.35.tgz#695fe6cff7b429513f0e942f242156ab1f69bc7b"
-  integrity sha512-BQSSozVxjxS+SVQz6e3GC/+OBWGIK3jfe52pWdANmycdjF3ch7lrCKTHTU7eHwyoJ96mofszPf5AsiVJF34Fwg==
+"@parcel/workers@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@parcel/workers/-/workers-2.13.1.tgz#62c2c6b4927b90cccf25e90511d00db5ddb4ef88"
+  integrity sha512-uNIksZaiU46qZMXqN9jYTvsPx9rjO4kNwkjLind29tj7mCYXm40I2YR9TV6IY5kvtN4WLMC1dz4Hot2vwc8JBA==
+  dependencies:
+    "@parcel/diagnostic" "2.13.1"
+    "@parcel/logger" "2.13.1"
+    "@parcel/profiler" "2.13.1"
+    "@parcel/types-internal" "2.13.1"
+    "@parcel/utils" "2.13.1"
+    nullthrows "^1.1.1"
 
 "@swc/core-darwin-arm64@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.9.2.tgz#98b60a56229c4341c1263723f985e04f3f82d499"
   integrity sha512-nETmsCoY29krTF2PtspEgicb3tqw7Ci5sInTI03EU5zpqYbPjoPH99BVTjj0OsF53jP5MxwnLI5Hm21lUn1d6A==
 
-"@swc/core-darwin-x64@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.7.35.tgz#c15c0fb11fb44e748d86d949911a6e416c7d36c9"
-  integrity sha512-44TYdKN/EWtkU88foXR7IGki9JzhEJzaFOoPevfi9Xe7hjAD/x2+AJOWWqQNzDPMz9+QewLdUVLyR6s5okRgtg==
-
 "@swc/core-darwin-x64@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.9.2.tgz#6bb1be573878acf42aa6abd6b602ef0136cc00de"
   integrity sha512-9gD+bwBz8ZByjP6nZTXe/hzd0tySIAjpDHgkFiUrc+5zGF+rdTwhcNrzxNHJmy6mw+PW38jqII4uspFHUqqxuQ==
-
-"@swc/core-linux-arm-gnueabihf@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.7.35.tgz#e40a31cbbef31b4ec0fa294eae4c51bf28f1622b"
-  integrity sha512-ccfA5h3zxwioD+/z/AmYtkwtKz9m4rWTV7RoHq6Jfsb0cXHrd6tbcvgqRWXra1kASlE+cDWsMtEZygs9dJRtUQ==
 
 "@swc/core-linux-arm-gnueabihf@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.9.2.tgz#e63f57f2e214f06d711bed830d53af0597749647"
   integrity sha512-kYq8ief1Qrn+WmsTWAYo4r+Coul4dXN6cLFjiPZ29Cv5pyU+GFvSPAB4bEdMzwy99rCR0u2P10UExaeCjurjvg==
 
-"@swc/core-linux-arm64-gnu@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.7.35.tgz#538d367d06d7f2cbee05b9e1357583574eb57601"
-  integrity sha512-hx65Qz+G4iG/IVtxJKewC5SJdki8PAPFGl6gC/57Jb0+jA4BIoGLD/J3Q3rCPeoHfdqpkCYpahtyUq8CKx41Jg==
-
 "@swc/core-linux-arm64-gnu@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.9.2.tgz#cb26240fe5769c1675ac75717ec836e99a7f7e93"
   integrity sha512-n0W4XiXlmEIVqxt+rD3ZpkogsEWUk1jJ+i5bQNgB+1JuWh0fBE8c/blDgTQXa0GB5lTPVDZQussgdNOCnAZwiA==
-
-"@swc/core-linux-arm64-musl@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.7.35.tgz#752e6b74c10113e1759e418906f48138dfd01a9f"
-  integrity sha512-kL6tQL9No7UEoEvDRuPxzPTpxrvbwYteNRbdChSSP74j13/55G2/2hLmult5yFFaWuyoyU/2lvzjRL/i8OLZxg==
 
 "@swc/core-linux-arm64-musl@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.9.2.tgz#0e4733e4e4398bee0c030a4e97279f78a65d4e61"
   integrity sha512-8xzrOmsyCC1zrx2Wzx/h8dVsdewO1oMCwBTLc1gSJ/YllZYTb04pNm6NsVbzUX2tKddJVRgSJXV10j/NECLwpA==
 
-"@swc/core-linux-x64-gnu@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.7.35.tgz#0cbade76e5abce7d13802d6c55dc0c21213f5d3d"
-  integrity sha512-Ke4rcLQSwCQ2LHdJX1FtnqmYNQ3IX6BddKlUtS7mcK13IHkQzZWp0Dcu6MgNA3twzb/dBpKX5GLy07XdGgfmyw==
-
 "@swc/core-linux-x64-gnu@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.9.2.tgz#6b4b86d06537004cc4477915b67f7d94d1b6ba33"
   integrity sha512-kZrNz/PjRQKcchWF6W292jk3K44EoVu1ad5w+zbS4jekIAxsM8WwQ1kd+yjUlN9jFcF8XBat5NKIs9WphJCVXg==
-
-"@swc/core-linux-x64-musl@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.7.35.tgz#ac60b88972cdbd2856cbe7b5b5ef1a1f54d906f6"
-  integrity sha512-T30tlLnz0kYyDFyO5RQF5EQ4ENjW9+b56hEGgFUYmfhFhGA4E4V67iEx7KIG4u0whdPG7oy3qjyyIeTb7nElEw==
 
 "@swc/core-linux-x64-musl@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.9.2.tgz#d6de84dbdcf69b1fdb45c8ae232b7d23ba92c7e2"
   integrity sha512-TTIpR4rjMkhX1lnFR+PSXpaL83TrQzp9znRdp2TzYrODlUd/R20zOwSo9vFLCyH6ZoD47bccY7QeGZDYT3nlRg==
 
-"@swc/core-win32-arm64-msvc@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.7.35.tgz#366f3e8cc387c539579e91a4ccf8a2b9a0083889"
-  integrity sha512-CfM/k8mvtuMyX+okRhemfLt784PLS0KF7Q9djA8/Dtavk0L5Ghnq+XsGltO3d8B8+XZ7YOITsB14CrjehzeHsg==
-
 "@swc/core-win32-arm64-msvc@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.9.2.tgz#a5c477f0296e499890f55cfaa7c0100152b1900b"
   integrity sha512-+Eg2d4icItKC0PMjZxH7cSYFLWk0aIp94LNmOw6tPq0e69ax6oh10upeq0D1fjWsKLmOJAWEvnXlayZcijEXDw==
-
-"@swc/core-win32-ia32-msvc@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.7.35.tgz#07fbda3ca8ac58f28cd441aa9ba082a3ea6d84fb"
-  integrity sha512-ATB3uuH8j/RmS64EXQZJSbo2WXfRNpTnQszHME/sGaexsuxeijrp3DTYSFAA3R2Bu6HbIIX6jempe1Au8I3j+A==
 
 "@swc/core-win32-ia32-msvc@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.9.2.tgz#66bbfea8cfcf6b602b8fb0d9ee788e92c8a736ed"
   integrity sha512-nLWBi4vZDdM/LkiQmPCakof8Dh1/t5EM7eudue04V1lIcqx9YHVRS3KMwEaCoHLGg0c312Wm4YgrWQd9vwZ5zQ==
 
-"@swc/core-win32-x64-msvc@1.7.35":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.7.35.tgz#043a54aaeb9b24f4f2405ac2cfa48891508ff1a6"
-  integrity sha512-iDGfQO1571NqWUXtLYDhwIELA/wadH42ioGn+J9R336nWx40YICzy9UQyslWRhqzhQ5kT+QXAW/MoCWc058N6Q==
-
 "@swc/core-win32-x64-msvc@1.9.2":
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.9.2.tgz#f609fefac8f412b445cb0a2bfec73a657e41d4db"
   integrity sha512-ik/k+JjRJBFkXARukdU82tSVx0CbExFQoQ78qTO682esbYXzjdB5eLVkoUbwen299pnfr88Kn4kyIqFPTje8Xw==
-
-"@swc/core@^1.3.36":
-  version "1.7.35"
-  resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.7.35.tgz#8a24041c8ef96477dd91aef9287d5fff79276e79"
-  integrity sha512-3cUteCTbr2r5jqfgx0r091sfq5Mgh6F1SQh8XAOnSvtKzwv2bC31mvBHVAieD1uPa2kHJhLav20DQgXOhpEitw==
-  dependencies:
-    "@swc/counter" "^0.1.3"
-    "@swc/types" "^0.1.13"
-  optionalDependencies:
-    "@swc/core-darwin-arm64" "1.7.35"
-    "@swc/core-darwin-x64" "1.7.35"
-    "@swc/core-linux-arm-gnueabihf" "1.7.35"
-    "@swc/core-linux-arm64-gnu" "1.7.35"
-    "@swc/core-linux-arm64-musl" "1.7.35"
-    "@swc/core-linux-x64-gnu" "1.7.35"
-    "@swc/core-linux-x64-musl" "1.7.35"
-    "@swc/core-win32-arm64-msvc" "1.7.35"
-    "@swc/core-win32-ia32-msvc" "1.7.35"
-    "@swc/core-win32-x64-msvc" "1.7.35"
 
 "@swc/core@^1.7.26":
   version "1.9.2"
@@ -1237,13 +1130,6 @@
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/@swc/types/-/types-0.1.12.tgz#7f632c06ab4092ce0ebd046ed77ff7557442282f"
   integrity sha512-wBJA+SdtkbFhHjTMYH+dEH1y4VpfGdAc2Kw/LK09i9bXd/K6j6PkDcFCEzb6iVfZMkPRrl/q0e3toqTAJdkIVA==
-  dependencies:
-    "@swc/counter" "^0.1.3"
-
-"@swc/types@^0.1.13":
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/@swc/types/-/types-0.1.13.tgz#441734f8bfa6e9e738f1c68e98be6da282ecc7db"
-  integrity sha512-JL7eeCk6zWCbiYQg2xQSdLXQJl8Qoc9rXmG2cEKvHe3CKwMHwHGpfOb8frzNLmbycOo6I51qxnLnn9ESf4I20Q==
   dependencies:
     "@swc/counter" "^0.1.3"
 
@@ -1586,7 +1472,7 @@ chalk@^2.4.2:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.2:
+chalk@^4.0.0, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
