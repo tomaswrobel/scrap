@@ -201,109 +201,46 @@ impl VisitMut for JavaScript {
             }
 
             Expr::Assign(assign) => {
-                assign.right.visit_mut_children_with(self); // Visit the right side first.
+                assign.right.visit_mut_with(self); // Visit the right side first.
 
                 let left = match &assign.left {
                     AssignTarget::Simple(SimpleAssignTarget::Member(t)) => t,
                     _ => return,
                 };
 
-                let argument = match &assign.op {
-                    AssignOp::Assign => assign.right.clone(),
-                    AssignOp::AddAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::Add,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::SubAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::Sub,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::MulAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::Mul,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::DivAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::Div,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::ModAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::Mod,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::AndAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::LogicalAnd,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::OrAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::LogicalOr,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::BitAndAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::BitAnd,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::BitOrAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::BitOr,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::BitXorAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::BitXor,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::LShiftAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::LShift,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::RShiftAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::RShift,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::ZeroFillRShiftAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::ZeroFillRShift,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::ExpAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::Exp,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
-                    AssignOp::NullishAssign => Box::new(Expr::Bin(BinExpr {
-                        op: BinaryOp::NullishCoalescing,
-                        left: Box::new(Expr::Member(left.clone())),
-                        right: assign.right.clone(),
-                        ..Default::default()
-                    })),
+                let operator = match &assign.op {
+                    AssignOp::Assign => Option::None,
+                    AssignOp::AddAssign => Option::Some(BinaryOp::Add),
+                    AssignOp::SubAssign => Option::Some(BinaryOp::Sub),
+                    AssignOp::MulAssign => Option::Some(BinaryOp::Mul),
+                    AssignOp::DivAssign => Option::Some(BinaryOp::Div),
+                    AssignOp::ModAssign => Option::Some(BinaryOp::Mod),
+                    AssignOp::AndAssign => Option::Some(BinaryOp::LogicalAnd),
+                    AssignOp::OrAssign => Option::Some(BinaryOp::LogicalOr),
+                    AssignOp::BitAndAssign => Option::Some(BinaryOp::BitAnd),
+                    AssignOp::BitOrAssign => Option::Some(BinaryOp::BitOr),
+                    AssignOp::BitXorAssign => Option::Some(BinaryOp::BitXor),
+                    AssignOp::LShiftAssign => Option::Some(BinaryOp::LShift),
+                    AssignOp::RShiftAssign => Option::Some(BinaryOp::RShift),
+                    AssignOp::ZeroFillRShiftAssign => Option::Some(BinaryOp::ZeroFillRShift),
+                    AssignOp::ExpAssign => Option::Some(BinaryOp::Exp),
+                    AssignOp::NullishAssign => Option::Some(BinaryOp::NullishCoalescing),
                 };
 
                 if let Expr::Member(effvar) = *left.clone().obj {
                     if is_property(&effvar, "variables") {
+                        let name_argument = ExprOrSpread {
+                            spread: None,
+                            expr: Box::new(Expr::Lit(Lit::Str(Str {
+                                span: DUMMY_SP,
+                                value: match get_property(&left.clone()) {
+                                    Some(atom) => atom,
+                                    None => return,
+                                },
+                                raw: None,
+                            }))),
+                        };
+
                         *node = Expr::Await(AwaitExpr {
                             span: DUMMY_SP,
                             arg: Box::new(Expr::Call(CallExpr {
@@ -317,20 +254,41 @@ impl VisitMut for JavaScript {
                                     }),
                                 }))),
                                 args: vec![
-                                    ExprOrSpread {
-                                        spread: None,
-                                        expr: Box::new(Expr::Lit(Lit::Str(Str {
-                                            span: DUMMY_SP,
-                                            value: match get_property(&left.clone()) {
-                                                Some(atom) => atom,
-                                                None => return,
-                                            },
-                                            raw: None,
-                                        }))),
-                                    },
-                                    ExprOrSpread {
-                                        spread: None,
-                                        expr: argument,
+                                    name_argument.clone(),
+                                    match operator {
+                                        Some(op) => ExprOrSpread {
+                                            expr: Box::new(Expr::Bin(BinExpr {
+                                                span: DUMMY_SP,
+                                                op,
+                                                left: Box::new(Expr::Await(AwaitExpr {
+                                                    span: DUMMY_SP,
+                                                    arg: Box::new(Expr::Call(CallExpr {
+                                                        span: DUMMY_SP,
+                                                        callee: Callee::Expr(Box::new(
+                                                            Expr::Member(MemberExpr {
+                                                                span: DUMMY_SP,
+                                                                obj: effvar.obj.clone(),
+                                                                prop: MemberProp::Ident(
+                                                                    IdentName {
+                                                                        sym: "getVariable".into(),
+                                                                        ..Default::default()
+                                                                    },
+                                                                ),
+                                                            }),
+                                                        )),
+                                                        args: vec![name_argument],
+                                                        type_args: None,
+                                                        ..Default::default()
+                                                    })),
+                                                })),
+                                                right: assign.right.clone(),
+                                            })),
+                                            spread: None,
+                                        },
+                                        None => ExprOrSpread {
+                                            expr: assign.right.clone(),
+                                            spread: None,
+                                        },
                                     },
                                 ],
                                 type_args: None,
@@ -338,6 +296,18 @@ impl VisitMut for JavaScript {
                             })),
                         });
                     } else if is_property(&effvar, "effects") {
+                        let name_argument = ExprOrSpread {
+                            spread: None,
+                            expr: Box::new(Expr::Lit(Lit::Str(Str {
+                                span: DUMMY_SP,
+                                value: match get_property(&left.clone()) {
+                                    Some(atom) => atom,
+                                    None => return,
+                                },
+                                raw: None,
+                            }))),
+                        };
+
                         *node = Expr::Await(AwaitExpr {
                             span: DUMMY_SP,
                             arg: Box::new(Expr::Call(CallExpr {
@@ -351,20 +321,41 @@ impl VisitMut for JavaScript {
                                     }),
                                 }))),
                                 args: vec![
-                                    ExprOrSpread {
-                                        spread: None,
-                                        expr: Box::new(Expr::Lit(Lit::Str(Str {
-                                            span: DUMMY_SP,
-                                            value: match get_property(&left.clone()) {
-                                                Some(atom) => atom,
-                                                None => return,
-                                            },
-                                            raw: None,
-                                        }))),
-                                    },
-                                    ExprOrSpread {
-                                        spread: None,
-                                        expr: argument,
+                                    name_argument.clone(),
+                                    match operator {
+                                        Some(op) => ExprOrSpread {
+                                            expr: Box::new(Expr::Bin(BinExpr {
+                                                span: DUMMY_SP,
+                                                op,
+                                                left: Box::new(Expr::Await(AwaitExpr {
+                                                    span: DUMMY_SP,
+                                                    arg: Box::new(Expr::Call(CallExpr {
+                                                        span: DUMMY_SP,
+                                                        callee: Callee::Expr(Box::new(
+                                                            Expr::Member(MemberExpr {
+                                                                span: DUMMY_SP,
+                                                                obj: effvar.obj.clone(),
+                                                                prop: MemberProp::Ident(
+                                                                    IdentName {
+                                                                        sym: "getEffect".into(),
+                                                                        ..Default::default()
+                                                                    },
+                                                                ),
+                                                            }),
+                                                        )),
+                                                        args: vec![name_argument],
+                                                        type_args: None,
+                                                        ..Default::default()
+                                                    })),
+                                                })),
+                                                right: assign.right.clone(),
+                                            })),
+                                            spread: None,
+                                        },
+                                        None => ExprOrSpread {
+                                            expr: assign.right.clone(),
+                                            spread: None,
+                                        },
                                     },
                                 ],
                                 type_args: None,
@@ -383,40 +374,56 @@ impl VisitMut for JavaScript {
                                 || atom == "penColor"
                                 || atom == "penSize"
                             {
-                                *node = Expr::Await(AwaitExpr {
-                                    span: DUMMY_SP,
-                                    arg: Box::new(Expr::Call(CallExpr {
+                                *node =
+                                    Expr::Await(AwaitExpr {
                                         span: DUMMY_SP,
-                                        callee: Callee::Expr(Box::new(Expr::Member(MemberExpr {
+                                        arg: Box::new(Expr::Call(CallExpr {
                                             span: DUMMY_SP,
-                                            obj: left.obj.clone(),
-                                            prop: MemberProp::Ident(IdentName {
-                                                sym: format!(
-                                                    "set{}",
-                                                    self.capitalize_first(atom.clone())
-                                                )
-                                                .into(),
-                                                ..Default::default()
-                                            }),
-                                        }))),
-                                        args: vec![
-                                            ExprOrSpread {
-                                                spread: None,
-                                                expr: Box::new(Expr::Lit(Lit::Str(Str {
+                                            callee: Callee::Expr(Box::new(Expr::Member(
+                                                MemberExpr {
                                                     span: DUMMY_SP,
-                                                    value: atom,
-                                                    raw: None,
-                                                }))),
-                                            },
-                                            ExprOrSpread {
-                                                spread: None,
-                                                expr: argument,
-                                            },
-                                        ],
-                                        type_args: None,
-                                        ..Default::default()
-                                    })),
-                                });
+                                                    obj: left.obj.clone(),
+                                                    prop: MemberProp::Ident(IdentName {
+                                                        sym: format!(
+                                                            "set{}",
+                                                            self.capitalize_first(atom.clone())
+                                                        )
+                                                        .into(),
+                                                        ..Default::default()
+                                                    }),
+                                                },
+                                            ))),
+                                            args: vec![
+												match operator {
+													Some(op) => ExprOrSpread {
+														expr: Box::new(Expr::Bin(BinExpr {
+															span: DUMMY_SP,
+															op,
+															left: Box::new(Expr::Await(AwaitExpr {
+																span: DUMMY_SP,
+																arg: Box::new(Expr::Member(MemberExpr {
+																	span: DUMMY_SP,
+																	obj: left.obj.clone(),
+																	prop: MemberProp::Ident(IdentName {
+																		sym: atom.clone().into(),
+																		..Default::default()
+																	}),
+																})),
+															})),
+															right: assign.right.clone(),
+														})),
+														spread: None,
+													},
+													None => ExprOrSpread {
+														expr: assign.right.clone(),
+														spread: None,
+													}
+												}
+											],
+                                            type_args: None,
+                                            ..Default::default()
+                                        })),
+                                    });
                             } else if atom == "direction" {
                                 *node = Expr::Await(AwaitExpr {
                                     span: DUMMY_SP,
@@ -430,20 +437,31 @@ impl VisitMut for JavaScript {
                                                 ..Default::default()
                                             }),
                                         }))),
-                                        args: vec![
-                                            ExprOrSpread {
-                                                spread: None,
-                                                expr: Box::new(Expr::Lit(Lit::Str(Str {
+                                        args: vec![match operator {
+                                            Some(op) => ExprOrSpread {
+                                                expr: Box::new(Expr::Bin(BinExpr {
                                                     span: DUMMY_SP,
-                                                    value: "direction".into(),
-                                                    raw: None,
-                                                }))),
-                                            },
-                                            ExprOrSpread {
+                                                    op,
+                                                    left: Box::new(Expr::Await(AwaitExpr {
+                                                        span: DUMMY_SP,
+                                                        arg: Box::new(Expr::Member(MemberExpr {
+                                                            span: DUMMY_SP,
+                                                            obj: left.obj.clone(),
+                                                            prop: MemberProp::Ident(IdentName {
+                                                                sym: atom.clone().into(),
+                                                                ..Default::default()
+                                                            }),
+                                                        })),
+                                                    })),
+                                                    right: assign.right.clone(),
+                                                })),
                                                 spread: None,
-                                                expr: argument,
                                             },
-                                        ],
+                                            None => ExprOrSpread {
+                                                expr: assign.right.clone(),
+                                                spread: None,
+                                            },
+                                        }],
                                         type_args: None,
                                         ..Default::default()
                                     })),

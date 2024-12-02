@@ -54,7 +54,6 @@ export default class Tabs {
 				await component.prerender();
 			} catch (error) {
 				console.error(error);
-				await new Promise(resolve => setTimeout(resolve, 100));
 				await Dialog.scrap.fire({
 					title: "Error",
 					body: String(error),

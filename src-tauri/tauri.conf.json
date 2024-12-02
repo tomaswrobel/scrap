@@ -4,8 +4,8 @@
 	"version": "6.1.0",
 	"identifier": "dev.tomaswrobel.scrap",
 	"build": {
-		"beforeBuildCommand": "yarn build",
-		"beforeDevCommand": "yarn serve",
+		"beforeBuildCommand": "pnpm build",
+		"beforeDevCommand": "pnpm dev",
 		"devUrl": "http://localhost:1234",
 		"frontendDist": "../dist"
 	},

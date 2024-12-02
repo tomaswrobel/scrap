@@ -105,6 +105,7 @@ languages.registerTokensProviderFactory("typescript", {
 			"resetTimer",
 			// Date
 			"getFullYear",
+			"getTime",
 			"getMonth",
 			"getDate",
 			"getDay",
@@ -151,6 +152,7 @@ languages.registerTokensProviderFactory("typescript", {
 			"String",
 			"NUmber",
 			"Boolean",
+			"toString"
 		],
 		iterables: ["length", "reverse", "join", "includes", "indexOf", "slice"],
 		functions: [
@@ -544,8 +546,7 @@ languages.onLanguageEncountered("typescript", () => {
 		},
 	});
 	languages.setLanguageConfiguration("typescript", {
-		wordPattern:
-			/(-?\d*\.\d\w*)|([^`~!@#%^&*()\-=+[{\]}\\|;:'",.<>/?\s]+)/g,
+		wordPattern: /(-?\d*\.\d\w*)|([^`~!@#%^&*()\-=+[{\]}\\|;:'",.<>/?\s]+)/g,
 		comments: {
 			lineComment: "//",
 			blockComment: ["/*", "*/"],

@@ -72,12 +72,12 @@ export function load<B extends boolean>(title: string, dialog?: B) {
 						document.body.dataset.loading = title;
 					}, 200);
 
-					const result = await descriptor.value!.apply(this, args);
-
-					clearTimeout(timeout);
-					document.body.removeAttribute("data-loading");
-
-					return result;
+					try {
+						return await descriptor.value!.apply(this, args);
+					} finally {
+						clearTimeout(timeout);
+						document.body.removeAttribute("data-loading");
+					}
 				}
 
 				return {} as R;

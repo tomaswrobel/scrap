@@ -768,12 +768,26 @@ declare type MouseEvent =
 
 // For TypeScript to work
 declare interface RegExp {}
-declare interface Boolean {}
-declare interface Object {}
 declare interface Function {}
 declare interface IArguments {}
 
+declare interface Object {
+	/**
+	 * Returns the string representation of the object
+	 */
+	toString(): string;
+
+	/**
+	 * Returns the number representation of the object
+	 * 
+	 * Note: not all objects have a number representation, in that case
+	 * the method returns `NaN`.
+	 */
+	valueOf(): number;
+}
+
 // Scrap's primitives
+declare interface Boolean {}
 declare interface Number {}
 
 /**
@@ -906,6 +920,11 @@ declare const Array: {
 };
 
 declare interface Date {
+	/**
+	 * Returns the milliseconds since the Unix Epoch
+	 */
+	getTime(): number;
+
 	/**
 	 * Returns the year of the specified date according to local time.
 	 */

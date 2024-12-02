@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- dependencies update
+
+## [6.1.1] - 2024-12-3
+
+### Fixed
+
+- UI freeze when switching from bad code ([#158](https://github.com/tomaswrobel/scrap/issues/158))
+- Assigning with `+=`, `-=`, `*=`, `/=`, `%=`, `**=`, `<<=`, `>>=`, `>>>=`, `&=`, `|=`, `^=`
+- ParenthesisExpression causes errors in the compilation ([#158](https://github.com/tomaswrobel/scrap/issues/158))
+
+### Added
+
+- Support for `getTime` and `valueOf` methods in `Date` ([#158](https://github.com/tomaswrobel/scrap/issues/158))
+- Support for `toString` and `valueOf` methods in `Object`
+
+### Changed
+
+- dependencies update
+
 ## [6.1.0] - 2024-11-19
 
 ### Fixed
@@ -885,7 +906,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.1.0...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.1.1...HEAD
+[6.1.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.1
 [6.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.0
 [6.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.0.0
 [5.4.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v5.4.0

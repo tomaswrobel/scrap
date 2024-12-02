@@ -177,8 +177,8 @@ class Blocks {
 								node.arguments[0].expression.value,
 								"DATE"
 							);
-							break;
 						}
+						break;
 					} else if (SWC.isIdentifier(node.callee, "Array")) {
 						const block = this.block("array");
 						block.loadExtraState!({
@@ -670,6 +670,14 @@ class Blocks {
 						) {
 							this.block("stop");
 							this.connection = null;
+						} else if (SWC.isProperty(node.callee, "getTime", "valueOf")) {
+							const block = this.block("number");
+							this.connection = block.getInput("VALUE")!.connection;
+							this.parse(node.callee.object);
+						} else if (SWC.isProperty(node.callee, "toString")) {
+							const block = this.block("string");
+							this.connection = block.getInput("VALUE")!.connection;
+							this.parse(node.callee.object);
 						} else if (SWC.isProperty(node.callee, "clone")) {
 							const block = this.block("clone");
 							this.connection = block.getInput("SPRITE")!.connection!;
@@ -1197,6 +1205,10 @@ class Blocks {
 					} else {
 						throw new SyntaxError("Only 'Variables' interface is supported");
 					}
+				}
+				case "ParenthesisExpression": {
+					this.parse(node.expression);
+					break;
 				}
 				default:
 					throw new SyntaxError(`Unsupported node type ${node.type}. ${Error}`);
