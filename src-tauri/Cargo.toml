@@ -32,6 +32,6 @@ swc_core = { version = "6.0.2", features = [
 	"ecma_transforms_typescript",
 ] }
 swc = "6.0.0"
-anyhow = "1.0.92"
+anyhow = "1.0.94"
 tauri-plugin-fs = "2.0.3"
 tauri-plugin-dialog = "2.0.3"
