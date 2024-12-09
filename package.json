@@ -11,7 +11,7 @@
 	"dependencies": {
 		"@blockly/field-angle": "5.0.9",
 		"@blockly/field-colour-hsv-sliders": "5.0.9",
-		"@blockly/field-date": "9.0.9",
+		"@blockly/field-date": "9.0.12",
 		"@parcel/service-worker": "2.13.2",
 		"@tauri-apps/api": "2.1.1",
 		"@tauri-apps/plugin-dialog": "2.0.1",

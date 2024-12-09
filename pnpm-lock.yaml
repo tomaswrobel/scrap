@@ -15,8 +15,8 @@ importers:
         specifier: 5.0.9
         version: 5.0.9(blockly@11.1.1)
       '@blockly/field-date':
-        specifier: 9.0.9
-        version: 9.0.9(blockly@11.1.1)
+        specifier: 9.0.12
+        version: 9.0.12(blockly@11.1.1)
       '@parcel/service-worker':
         specifier: 2.13.2
         version: 2.13.2
@@ -134,8 +134,8 @@ packages:
     peerDependencies:
       blockly: ^11.0.0
 
-  '@blockly/field-date@9.0.9':
-    resolution: {integrity: sha512-MoriCotoPtBAnI/SsKu8KaUKJVea7CH/Im/F5KsETjpsnicro3i1eHBlR53uBuBH+jc/3NIuvfW4adapeZTlCw==}
+  '@blockly/field-date@9.0.12':
+    resolution: {integrity: sha512-mKvFqqgPPOu3ClcA6BkA4HorXgtyFxBj9hozW8zEJRj4CngN4dY54iq5k1X3Ace7HhSyVoMUEIm9IW5AJvha1w==}
     engines: {node: '>=8.0.0'}
     peerDependencies:
       blockly: ^11.0.0
@@ -1852,7 +1852,7 @@ snapshots:
     dependencies:
       blockly: 11.1.1
 
-  '@blockly/field-date@9.0.9(blockly@11.1.1)':
+  '@blockly/field-date@9.0.12(blockly@11.1.1)':
     dependencies:
       blockly: 11.1.1
 
