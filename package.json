@@ -36,7 +36,7 @@
 		"@tauri-apps/cli": "2.1.0",
 		"@types/node": "22.10.1",
 		"buffer": "6.0.3",
-		"eslint": "8.57.1",
+		"eslint": "9.16.0",
 		"keep-a-changelog": "2.5.3",
 		"parcel": "2.13.2",
 		"path-browserify": "1.0.1",
