@@ -18,7 +18,7 @@
 		"@tauri-apps/plugin-fs": "2.0.3",
 		"blockly": "11.1.1",
 		"jszip": "3.10.1",
-		"monaco-editor": "0.52.0",
+		"monaco-editor": "0.52.2",
 		"process": "0.11.10",
 		"scrap-engine": "2.5.3",
 		"typescript": "5.7.2",
