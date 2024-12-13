@@ -23,32 +23,33 @@
 import * as Blockly from "blockly";
 
 export default class FieldString extends Blockly.FieldTextInput {
-	private quoteSize_ = 16;
-	private quoteWidth_ = 8;
-	private quoteLeftX_ = 0;
-	private quoteRightX_ = 0;
-	private quoteY_ = 10;
-	private quoteLeft_!: SVGTextElement;
-	private quoteRight_!: SVGTextElement;
+	private quoteSize = 16;
+	private quoteWidth = 8;
+	private quoteLeftX = 0;
+	private quoteRightX = 0;
+	private quoteY = 10;
+	private quoteLeft!: SVGTextElement;
+	private quoteRight!: SVGTextElement;
 
 	public static override fromJson(options: Record<string, unknown>) {
-		const text = options["text"] as string;
-		const validator = options["class"] as Blockly.FieldValidator<string>;
-		const field = new FieldString(text, validator);
-		if (typeof options["spellcheck"] == "boolean") {
-			field.setSpellcheck(options["spellcheck"]);
+		const validator = options.class as Blockly.FieldValidator<string>;
+		const field = new FieldString(options.text as string, validator);
+
+		if (typeof options.spellcheck === "boolean") {
+			field.setSpellcheck(options.spellcheck);
 		}
+
 		return field;
 	}
 
 	public override initView() {
 		// Add quotes around the string
 		// Positioned on render, after text size is calculated.
-		this.quoteLeft_?.remove();
-		this.quoteLeft_ = Blockly.utils.dom.createSvgElement(
+		this.quoteLeft?.remove();
+		this.quoteLeft = Blockly.utils.dom.createSvgElement(
 			"text",
 			{
-				"font-size": this.quoteSize_ + "px",
+				"font-size": `${this.quoteSize}px`,
 				"font-family": "monospace",
 			},
 			this.fieldGroup_
@@ -56,22 +57,22 @@ export default class FieldString extends Blockly.FieldTextInput {
 
 		super.initView();
 
-		this.quoteRight_?.remove();
-		this.quoteRight_ = Blockly.utils.dom.createSvgElement(
+		this.quoteRight?.remove();
+		this.quoteRight = Blockly.utils.dom.createSvgElement(
 			"text",
 			{
-				"font-size": this.quoteSize_ + "px",
+				"font-size": `${this.quoteSize}px`,
 				"font-family": "monospace",
 			},
 			this.fieldGroup_
 		);
 
-		this.quoteLeft_.style.setProperty("fill", "#A31515");
-		this.quoteRight_.style.setProperty("fill", "#A31515");
+		this.quoteLeft.style.setProperty("fill", "#A31515");
+		this.quoteRight.style.setProperty("fill", "#A31515");
 		this.textElement_!.style.setProperty("fill", "#A31515");
 
-		this.quoteLeft_.append('"');
-		this.quoteRight_.append('"');
+		this.quoteLeft.append('"');
+		this.quoteRight.append('"');
 	}
 
 	/**
@@ -81,45 +82,37 @@ export default class FieldString extends Blockly.FieldTextInput {
 		super.updateSize_();
 
 		const sWidth = this.value_ ? this.size_.width : 10;
-		let addedWidth = this.positionLeft(sWidth);
+		const addedWidth = this.positionLeft(sWidth);
 
 		this.textElement_!.setAttribute("x", `${addedWidth}`);
-		addedWidth += this.positionRight(addedWidth + sWidth);
-
-		this.size_.width = sWidth + addedWidth;
+		this.size_.width = this.positionRight(addedWidth + sWidth);
 	}
 
 	// Position Left
 	private positionLeft(x: number) {
-		if (!this.quoteLeft_) {
+		if (!this.quoteLeft) {
 			return 0;
 		}
 		if (this.sourceBlock_!.RTL) {
-			this.quoteLeftX_ = x + this.quoteWidth_;
+			this.quoteLeftX = x + this.quoteWidth;
 		} else {
-			this.quoteLeftX_ = 0;
+			this.quoteLeftX = 0;
 		}
-		this.quoteLeft_.setAttribute(
-			"transform",
-			`translate(${this.quoteLeftX_},${this.quoteY_})`
-		);
-		return this.quoteWidth_;
+		this.quoteLeft.setAttribute("transform", `translate(${this.quoteLeftX},${this.quoteY})`);
+		return this.quoteWidth;
 	}
 
 	// Position Right
 	private positionRight(x: number) {
-		if (!this.quoteRight_) {
+		if (!this.quoteRight) {
 			return 0;
 		}
 		if (this.sourceBlock_!.RTL) {
-			this.quoteRightX_ = 0;
+			this.quoteRightX = 0;
 		} else {
-			this.quoteRightX_ = x;
+			this.quoteRightX = x;
 		}
-		this.quoteRight_.setAttribute(
-			"transform",
-			`translate(${this.quoteRightX_},${this.quoteY_})`
-		);
-		return this.quoteWidth_;
+		this.quoteRight.setAttribute("transform", `translate(${this.quoteRightX},${this.quoteY})`);
+		return x + this.quoteWidth;
 	}
 }

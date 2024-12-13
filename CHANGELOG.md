@@ -2,31 +2,61 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Changed
 
-- dependencies update
+-   dependencies update
+-   native context menus
+
+## [6.1.2] - 2024-12-3
+
+### Fixed
+
+-   HTML Projects are now saved with the correct extension (`zip` instead of `html`)
+-	Header comment inside `src/scss/blockly.scss` is now correctly formatted (JSdoc @)
+
+### Changed
+
+-   Performance:
+    -   side jobs in the paint editor are now handled via Rust, not web workers
+    -   Rust is now used to crop and fill images
+-   Behavior:
+    -   `@load` decorator waits 500ms before showing the loader
+    -   HTML export is now called "Web app" export
+-   Coding style:
+    -   removing underscores from private methods
+    -   ESLint update to 9.x, these being newly enforced:
+        -   `import type`
+        -   dot notation
+        -   `as` keyword in type assertions
+        -   string template literals
+    -   Increasing prettier print width to 120
+
+### Removed
+
+-   `src/components/assets/fill.worker.ts` (replaced by Rust)
+-   `src/components/assets/crop.worker.ts` (replaced by Rust)
 
 ## [6.1.1] - 2024-12-3
 
 ### Fixed
 
-- UI freeze when switching from bad code ([#158](https://github.com/tomaswrobel/scrap/issues/158))
-- Assigning with `+=`, `-=`, `*=`, `/=`, `%=`, `**=`, `<<=`, `>>=`, `>>>=`, `&=`, `|=`, `^=`
-- ParenthesisExpression causes errors in the compilation ([#158](https://github.com/tomaswrobel/scrap/issues/158))
+-   UI freeze when switching from bad code ([#158](https://github.com/tomaswrobel/scrap/issues/158))
+-   Assigning with `+=`, `-=`, `*=`, `/=`, `%=`, `**=`, `<<=`, `>>=`, `>>>=`, `&=`, `|=`, `^=`
+-   ParenthesisExpression causes errors in the compilation ([#158](https://github.com/tomaswrobel/scrap/issues/158))
 
 ### Added
 
-- Support for `getTime` and `valueOf` methods in `Date` ([#158](https://github.com/tomaswrobel/scrap/issues/158))
-- Support for `toString` and `valueOf` methods in `Object`
+-   Support for `getTime` and `valueOf` methods in `Date` ([#158](https://github.com/tomaswrobel/scrap/issues/158))
+-   Support for `toString` and `valueOf` methods in `Object`
 
 ### Changed
 
-- dependencies update
+-   dependencies update
 
 ## [6.1.0] - 2024-11-19
 
@@ -176,18 +206,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         -   `index.ts` lives in the `src` folder as `app.ts`
         -   SVG files are now in the `svgs` folder
         -   `style.scss` gets splitted into files inside `src/scss` folder
-    -   New glob typing files `*.d.ts` (literally with asterisk) files replace `index.js`
-        files in:
+    -   New glob typing files `*.d.ts` (literally with asterisk) files replace `index.js` files in:
         -   `src/blockly/blocks`
         -   `src/blockly/fields`
         -   `src/blockly/extensions`
-    -   Angle field now lives in `src/blockly/fields` folder (it was removed from Blockly
-        core)
+    -   Angle field now lives in `src/blockly/fields` folder (it was removed from Blockly core)
 -   Monaco Editor:
     -   Reporting advanced syntax (e.g. OOP) via diagnostics, not only highlighting
     -   Highlighted banned words:
-        -   null and undefined removed - they are standalone keywords, so the diagnostics
-            does better job
+        -   null and undefined removed - they are standalone keywords, so the diagnostics does better job
         -   added `class` and `extends` - they are a part of a bigger structure (class)
     -   Editing Microsoft's comments in `src/monaco-editor` to match Scrap's style
 -   Scrap Engine, **Blockly** and other dependencies **update**
@@ -249,8 +276,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Advanced for loop transformation from TS to blocks
 -   `blocks/parameter` - Variable removing, info
 -   `field_flag` - Flag icon in the `when flag clicked` block
--   `field_param` - Blockly's constant handling (you cannot change the value of a
-    constant)
+-   `field_param` - Blockly's constant handling (you cannot change the value of a constant)
 
 ## [4.4.1] - 2024-4-26
 
@@ -448,44 +474,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--   User can now export the project with CDN links to Scrap Engine, minimizing the size of
-    the project.
+-   User can now export the project with CDN links to Scrap Engine, minimizing the size of the project.
 
 ## [3.4.0] - 2023-11-11
 
 ### Fixed
 
--   When mixing blocks & code, global variables are now correctly handled (via parsing the
-    code)
+-   When mixing blocks & code, global variables are now correctly handled (via parsing the code)
 -   Ask block now uses variable correctly.
 -   Global variables bugs
 -   Escaping Scrap names did not work correctly in many cases.
--   Await is now added to event handlers. Historically, Scrap Engine did not have await in
-    event handlers, but it was added in v1.
+-   Await is now added to event handlers. Historically, Scrap Engine did not have await in event handlers, but it was
+    added in v1.
 -   Scrap 3 has been really unstable, and this release changes that. (I hope so.)
 
 ### Changed
 
--   Scratch's classic fields are no longer treated as strings, since they can be numbers
-    as well.
--   SB3 compatibility lives in one file now. The typings were moved to the `SB3` namespace
-    / class.
+-   Scratch's classic fields are no longer treated as strings, since they can be numbers as well.
+-   SB3 compatibility lives in one file now. The typings were moved to the `SB3` namespace / class.
 -   Scrap Engine update
 
 ### Added
 
 -   Scratch's procedures are now FULLY supported.
--   A lot of comments to make the code more readable. (I'm sorry for the mess, but I'm not
-    used to writing comments. If you have any problems understanding the code, please let
-    me know.)
+-   A lot of comments to make the code more readable. (I'm sorry for the mess, but I'm not used to writing comments. If
+    you have any problems understanding the code, please let me know.)
 -   VS Code settings for comments in JSON files.
--   README.md now acknowledges the fact that Scrap does not use Scratch's code at all. (It
-    is not a fork of Scratch.)
+-   README.md now acknowledges the fact that Scrap does not use Scratch's code at all. (It is not a fork of Scratch.)
 
 ### Removed
 
--   function's label field - this was a historical thing, since Scrap v1 did support
-    generators and it was used to distinguish between generators and functions.
+-   function's label field - this was a historical thing, since Scrap v1 did support generators and it was used to
+    distinguish between generators and functions.
 
 ## [3.3.0] - 2023-11-10
 
@@ -508,8 +528,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   variables and entities no longer require valid identifiers (e.g. `1` is now a valid
-    variable name)
+-   variables and entities no longer require valid identifiers (e.g. `1` is now a valid variable name)
 
 ## [3.2.0] - 2023-11-09
 
@@ -524,8 +543,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
--   Instead of throwing an error, SB3 compatibility manner fills the missing blocks with
-    `unknown` blocks.
+-   Instead of throwing an error, SB3 compatibility manner fills the missing blocks with `unknown` blocks.
 
 ## [3.1.2] - 2023-11-09
 
@@ -906,7 +924,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.1.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.1.2...HEAD
+[6.1.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.2
 [6.1.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.1
 [6.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.0
 [6.0.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.0.0

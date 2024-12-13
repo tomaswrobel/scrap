@@ -10,21 +10,12 @@
  * @fileoverview Paint editor
  * @copyright Tomáš Wróbel 2024
  */
+import {invoke} from "@tauri-apps/api/core";
 import {bind, load} from "../utils/decorators";
 import {MediaList} from "./media-list";
 import "./paint.scss";
-import Component from "./tab";
-import {
-	Brush,
-	Ellipse,
-	Eraser,
-	Fill,
-	Line,
-	Rectangle,
-	Select,
-	type Tool,
-	Triangle,
-} from "./tools";
+import type Component from "./tab";
+import {Brush, Ellipse, Eraser, Fill, Line, Rectangle, Select, type Tool, Triangle} from "./tools";
 
 export default class Paint implements Component {
 	public context: CanvasRenderingContext2D;
@@ -44,7 +35,6 @@ export default class Paint implements Component {
 	public file?: File;
 
 	public name = "Costumes";
-	private cropWorker = new Worker(new URL("./assets/crop.worker.ts", import.meta.url));
 
 	constructor() {
 		this.container.classList.add("paint", "tab-content");
@@ -116,23 +106,14 @@ export default class Paint implements Component {
 
 		this.setChanged(false);
 
-		this.container.append(
-			this.toolContainer,
-			this.canvasContainer,
-			this.controls,
-			colorInput,
-			colorDiv
-		);
+		this.container.append(this.toolContainer, this.canvasContainer, this.controls, colorInput, colorDiv);
 	}
 
 	@bind
 	public mouseMove(e: MouseEvent) {
 		const bbox = this.canvas.getBoundingClientRect();
 		if (this.currentTool && this.mouseDown) {
-			this.currentTool.step(
-				e.pageX - bbox.left - window.scrollX,
-				e.pageY - bbox.top - window.scrollY
-			);
+			this.currentTool.step(e.pageX - bbox.left - window.scrollX, e.pageY - bbox.top - window.scrollY);
 		}
 	}
 
@@ -144,38 +125,29 @@ export default class Paint implements Component {
 		if (this.currentTool) {
 			this.currentTool.end(this.context);
 			if (this.currentTool.movable) {
-				const width = Math.round(
-					Math.abs(this.currentTool.lastX - this.currentTool.startX)
-				);
-				const height = Math.round(
-					Math.abs(this.currentTool.lastY - this.currentTool.startY)
-				);
+				const width = Math.round(Math.abs(this.currentTool.lastX - this.currentTool.startX));
+				const height = Math.round(Math.abs(this.currentTool.lastY - this.currentTool.startY));
 
 				if (width && height) {
-					const x = Math.round(
-						Math.min(this.currentTool.lastX, this.currentTool.startX)
-					);
-					const y = Math.round(
-						Math.min(this.currentTool.lastY, this.currentTool.startY)
-					);
+					const x = Math.round(Math.min(this.currentTool.lastX, this.currentTool.startX));
+					const y = Math.round(Math.min(this.currentTool.lastY, this.currentTool.startY));
 
 					const canvas = document.createElement("canvas");
 					canvas.width = width;
 					canvas.height = height;
 					canvas.style.cursor = "move";
 
-					canvas
-						.getContext("2d")!
-						.drawImage(this.layer, x, y, width, height, 0, 0, width, height);
+					canvas.getContext("2d")!.drawImage(this.layer, x, y, width, height, 0, 0, width, height);
 					canvas.style.position = "absolute";
-					canvas.style.left = x + "px";
-					canvas.style.top = y + "px";
+					canvas.style.left = `${x}px`;
+					canvas.style.top = `${y}px`;
 					canvas.style.outline = "3px dashed #575E75";
 
 					const bbox = this.canvas.getBoundingClientRect();
 
 					let startX = 0,
 						startY = 0;
+
 					const mouseDown = (e: MouseEvent) => {
 						document.removeEventListener("mousedown", mouseDown);
 						if (e.target !== canvas) {
@@ -205,44 +177,28 @@ export default class Paint implements Component {
 						const y = e.pageY - bbox.top - window.scrollY - startY;
 
 						// Make sure the image doesn't go out of bounds
-						let clipLeft = 0,
-							clipTop = 0,
-							clipRight = 0,
-							clipBottom = 0;
+						const clip = [
+							x < 0 && -x,
+							y < 0 && -y,
+							x + canvas.width > bbox.width && x + canvas.width - bbox.width,
+							y + canvas.height > bbox.height && y + canvas.height - bbox.height,
+						];
 
-						if (x < 0) {
-							clipLeft = -x;
-						}
-
-						if (x + canvas.width > bbox.width) {
-							clipRight = x + canvas.width - bbox.width;
-						}
-
-						if (y < 0) {
-							clipTop = -y;
-						}
-
-						if (y + canvas.height > bbox.height) {
-							clipBottom = y + canvas.height - bbox.height;
-						}
-
-						if (clipLeft || clipTop || clipRight || clipBottom) {
-							canvas.style.clipPath = `inset(${clipTop - 3}px ${
-								clipRight - 3
-							}px ${clipBottom - 3}px ${clipLeft - 3}px)`;
+						if (clip.some(Boolean)) {
+							canvas.style.clipPath = `inset(${clip.map(v => `${v || 0}px`).join(" ")})`;
 						} else {
-							canvas.style.clipPath = "unset";
+							canvas.style.removeProperty("clip-path");
 						}
 
-						canvas.style.left = x + "px";
-						canvas.style.top = y + "px";
-					}
+						canvas.style.left = `${x}px`;
+						canvas.style.top = `${y}px`;
+					};
 
 					const mouseUp = function () {
 						document.removeEventListener("mousemove", mouseMove);
 						document.removeEventListener("mouseup", mouseUp);
 						document.addEventListener("mousedown", mouseDown);
-					}
+					};
 
 					const keydown = (e: KeyboardEvent) => {
 						if (e.key === "Delete") {
@@ -265,9 +221,7 @@ export default class Paint implements Component {
 					this.canvasContainer.appendChild(canvas);
 				}
 
-				this.layer
-					.getContext("2d")!
-					.clearRect(0, 0, this.layer.width, this.layer.height);
+				this.layer.getContext("2d")!.clearRect(0, 0, this.layer.width, this.layer.height);
 				this.canvasContainer.removeChild(this.layer);
 			} else {
 				this.setChanged(true);
@@ -285,13 +239,7 @@ export default class Paint implements Component {
 				const image = new Image();
 				image.onload = () => {
 					if (app.current.isStage()) {
-						this.context.drawImage(
-							image,
-							0,
-							0,
-							this.canvas.width,
-							this.canvas.height
-						);
+						this.context.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
 					} else {
 						// Center the image
 						const x = (this.canvas.width - image.width) / 2;
@@ -309,33 +257,6 @@ export default class Paint implements Component {
 		this.file = file;
 	}
 
-	public crop() {
-		return new Promise<HTMLCanvasElement>((resolve, reject) => {
-			this.cropWorker.onmessage = e => {
-				const canvas = document.createElement("canvas");
-				const {width, height, x, y} = e.data;
-				canvas.width = width;
-				canvas.height = height;
-				canvas
-					.getContext("2d")!
-					.putImageData(this.context.getImageData(x, y, width, height), 0, 0);
-
-				resolve(canvas);
-			};
-			this.cropWorker.onerror = reject;
-			this.cropWorker.postMessage({
-				imageData: this.context.getImageData(
-					0,
-					0,
-					this.canvas.width,
-					this.canvas.height
-				),
-				width: this.canvas.width,
-				height: this.canvas.height,
-			});
-		});
-	}
-
 	public addTool(tool: Tool) {
 		const button = this.toolContainer.appendChild(tool.button);
 
@@ -347,12 +268,7 @@ export default class Paint implements Component {
 			} else {
 				this.currentTool?.deselect();
 				this.currentTool = tool;
-				this.controls.append(
-					...tool.select(),
-					this.seperator,
-					this.cancelButton,
-					this.saveButton
-				);
+				this.controls.append(...tool.select(), this.seperator, this.cancelButton, this.saveButton);
 			}
 		});
 	}
@@ -400,18 +316,19 @@ export default class Paint implements Component {
 			const {
 				detail: {file, name},
 			} = e as CustomEvent<{file: File; name: string}>;
-			app.current.costumes[app.current.costumes.indexOf(file)] = new File(
-				[file],
-				name,
-				{type: file.type}
-			);
+			app.current.costumes[app.current.costumes.indexOf(file)] = new File([file], name, {type: file.type});
 		});
 
 		this.mediaList.render(this.container);
 
 		this.load(app.current.costumes[0]);
 
-		this.saveButton.onclick = this.save;
+		this.saveButton.onclick = () => {
+			if (this.changed) {
+				this.setChanged(false);
+				this.save();
+			}
+		};
 
 		this.cancelButton.onclick = () => {
 			if (this.changed) {
@@ -425,46 +342,28 @@ export default class Paint implements Component {
 
 	@load("Saving costume")
 	public async save() {
-		if (this.changed && this.file) {
-			this.setChanged(false);
-			const name = this.file.name;
-			const file = await new Promise<File>((resolve, reject) => {
-				this.cropWorker.onmessage = e => {
-					const canvas = document.createElement("canvas");
-					const {width, height, x, y} = e.data;
-					canvas.width = width;
-					canvas.height = height;
-					canvas
-						.getContext("2d")!
-						.putImageData(
-							this.context.getImageData(x, y, width, height),
-							0,
-							0
-						);
+		const file = await invoke<[number, number, number, number]>("crop", {
+			imageData: Array.from(this.context.getImageData(0, 0, this.canvas.width, this.canvas.height).data),
+			width: this.canvas.width,
+			height: this.canvas.height,
+		}).then(xywh => {
+			const canvas = document.createElement("canvas");
+			const data = this.context.getImageData(...xywh);
+			({width: canvas.width, height: canvas.height} = data);
+			canvas.getContext("2d")!.putImageData(data, 0, 0);
 
-					canvas.toBlob(blob => {
-						if (!blob) {
-							reject();
-						} else {
-							resolve(new File([blob], name, {type: "image/png"}));
-						}
-					});
-				};
-				this.cropWorker.onerror = reject;
-				this.cropWorker.postMessage({
-					imageData: this.context.getImageData(
-						0,
-						0,
-						this.canvas.width,
-						this.canvas.height
-					),
-					width: this.canvas.width,
-					height: this.canvas.height,
+			return new Promise<File>((resolve, reject) => {
+				canvas.toBlob(blob => {
+					if (!blob) {
+						reject();
+					} else {
+						resolve(new File([blob], this.file!.name, {type: "image/png"}));
+					}
 				});
 			});
+		});
 
-			app.current.costumes[app.current.costumes.indexOf(this.file)] = file;
-			this.update();
-		}
+		app.current.costumes[app.current.costumes.indexOf(this.file!)] = file;
+		this.update();
 	}
 }

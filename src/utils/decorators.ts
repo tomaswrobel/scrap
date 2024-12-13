@@ -21,12 +21,7 @@ export interface Method<This, Args extends unknown[], Return> {
 	(this: This, ...args: Args): Return;
 }
 
-export function bind<
-	K extends string,
-	A extends unknown[],
-	R,
-	T extends Record<K, Method<T, A, R>>
->(
+export function bind<K extends string, A extends unknown[], R, T extends Record<K, Method<T, A, R>>>(
 	_target: T,
 	key: K,
 	descriptor: TypedPropertyDescriptor<Method<T, A, R>>
@@ -70,7 +65,7 @@ export function load<B extends boolean>(title: string, dialog?: B) {
 				} else {
 					const timeout = setTimeout(() => {
 						document.body.dataset.loading = title;
-					}, 200);
+					}, 501);
 
 					try {
 						return await descriptor.value!.apply(this, args);

@@ -26,7 +26,7 @@ class Dialog {
 		this.element.appendChild(this.message);
 		this.element.appendChild(this.form);
 
-		const id = "close" + Math.random().toString(36).slice(2);
+		const id = `close${Math.random().toString(36).slice(2)}`;
 		Object.assign(globalThis, {[id]: this.close.bind(this)});
 		this.form.action = `javascript:${id}();`;
 

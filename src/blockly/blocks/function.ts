@@ -95,7 +95,7 @@ export const MIXIN = {
 		}
 
 		for (var i = 0; i < this.params.length; i++) {
-			const typed = this.getInput("PARAM_" + i);
+			const typed = this.getInput(`PARAM_${i}`);
 
 			if (!typed) {
 				const block = this.workspace.newBlock("typed");
@@ -104,37 +104,25 @@ export const MIXIN = {
 				block.initSvg?.();
 				block.render?.();
 
-				this.appendValueInput("PARAM_" + i).connection!.connect(
-					block.outputConnection
-				);
+				this.appendValueInput(`PARAM_${i}`).connection!.connect(block.outputConnection);
 			} else {
 				const block = typed.connection!.targetBlock()!;
 				const value = block.getFieldValue("PARAM");
 
-				block.setFieldValue(
-					`${this.params[i]}:${value.split(":")[1] || "any"}`,
-					"PARAM"
-				);
+				block.setFieldValue(`${this.params[i]}:${value.split(":")[1] || "any"}`, "PARAM");
 			}
 
 			if (input) {
-				this.moveInputBefore("PARAM_" + i, "RETURNS");
+				this.moveInputBefore(`PARAM_${i}`, "RETURNS");
 			}
 		}
 
-		for (
-			let input = this.getInput("PARAM_" + i);
-			input;
-			input = this.getInput("PARAM_" + ++i)
-		) {
-			this.removeInput("PARAM_" + i);
+		for (let input = this.getInput(`PARAM_${i}`); input; input = this.getInput(`PARAM_${++i}`)) {
+			this.removeInput(`PARAM_${i}`);
 		}
 
 		if (!input && this.returns) {
-			this.appendValueInput("RETURNS")
-				.setCheck("type")
-				.setShadowDom(dom)
-				.appendField("returns");
+			this.appendValueInput("RETURNS").setCheck("type").setShadowDom(dom).appendField("returns");
 		}
 	},
 };

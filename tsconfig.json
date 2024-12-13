@@ -11,44 +11,35 @@
  * @fileoverview TypeScript configuration file.
  */
 {
-    "compilerOptions": {
-        "target": "ES2017",
-        "lib": [
-            "ES2017",
-            "DOM",
-            "DOM.Iterable"
-        ],
-        "experimentalDecorators": true,
-        "useDefineForClassFields": true,
+	"compilerOptions": {
+		"target": "ES2017",
+		"lib": ["ES2017", "DOM", "DOM.Iterable"],
+		"experimentalDecorators": true,
+		"useDefineForClassFields": true,
 
-        // Bundler mode
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
-        "resolveJsonModule": true,
-        "module": "Preserve",
-        "allowJs": true,
-        "noEmit": true,
-    
-        // Linting
-        "strict": true,
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"module": "Preserve",
+		"allowJs": true,
+		"checkJs": true,
+		"noEmit": true,
+
+		// Linting
+		"strict": true,
 		"noImplicitOverride": true,
 
 		// Parcel resolution
 		"paths": {
 			"@scrap/*": ["./src/*"],
-            "blockly": ["./node_modules/blockly/core/blockly.d.ts"]
+			"blockly": ["./node_modules/blockly/core/blockly.d.ts"]
 		}
-    },
-    "include": [
-        "src",
-        "pwa"
-    ],
-    "exclude": [
-        "src/monaco-editor/lib",
-        "src/code/lib"
-    ],
-    "references": [
-        {"path": "./src/monaco-editor/lib/tsconfig.json"},
-        {"path": "./src/code/lib/tsconfig.json"}
-    ]
+	},
+	"include": ["src", "pwa"],
+	"exclude": ["src/monaco-editor/lib", "src/code/lib"],
+	"references": [
+		{"path": "./src/monaco-editor/lib/tsconfig.json"},
+		{"path": "./src/code/lib/tsconfig.json"}
+	]
 }

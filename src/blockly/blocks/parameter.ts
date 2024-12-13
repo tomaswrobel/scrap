@@ -16,7 +16,7 @@
  * - a block created by FieldParam, see fields/field_param.ts
  */
 import Dialog from "@scrap/utils/dialog";
-import {ContextMenuRegistry, BlockSvg} from "blockly";
+import type {ContextMenuRegistry, BlockSvg} from "blockly";
 export type ParameterBlock = BlockSvg & ParameterBlockMixin;
 export interface ParameterBlockMixin extends ParameterBlockMixinType {}
 export type ParameterBlockMixinType = typeof MIXIN;
@@ -54,10 +54,7 @@ export const MIXIN = {
 		}
 	},
 
-	customContextMenu(
-		this: ParameterBlock,
-		options: ContextMenuRegistry.LegacyContextMenuOption[]
-	) {
+	customContextMenu(this: ParameterBlock, options: ContextMenuRegistry.LegacyContextMenuOption[]) {
 		if (this.isInFlyout && this.isVariable_) {
 			options.push(
 				{

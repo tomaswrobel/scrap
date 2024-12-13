@@ -43,12 +43,15 @@ declare module "*.svg" {
 	export default url;
 }
 
+declare module "*.scss";
+declare module "*.css";
+
 /*
  * I don't understand why Microsoft doesn't
  * ship this with the monaco-editor package.
  */
 declare module "monaco-editor/esm/vs/editor/editor.worker" {
-	import {worker} from "monaco-editor";
+	import type {worker} from "monaco-editor";
 
 	export interface InitializeCallback<Data> {
 		(ctx: worker.IWorkerContext, createData: Data): void;

@@ -5,7 +5,7 @@
  * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
  * the official repository at https://github.com/tomas-wrobel/scrap.
- * 
+ *
  * @license MIT
  * @copyright Tomáš Wróbel 2024
  * @fileoverview @scrap/blockly entry point.
@@ -92,10 +92,11 @@ export const properties = data.map(d => {
 					let arg = "() => {";
 
 					if (next) {
-						arg += "\n" + ts.prefixLines(ts.blockToCode(next) as string, "\t");
+						arg += "\n";
+						arg += ts.prefixLines(ts.blockToCode(next) as string, "\t");
 					}
 
-					args.push(arg + "}");
+					args.push(`${arg}}`);
 				}
 
 				// add arguments
@@ -106,7 +107,7 @@ export const properties = data.map(d => {
 				return [code, Order.FUNCTION_CALL];
 			}
 
-			return code + ";\n";
+			return `${code};\n`;
 		});
 
 		return d.type;

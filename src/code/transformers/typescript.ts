@@ -101,63 +101,47 @@ class TypeScript extends Blockly.CodeGenerator {
 	public override init(workspace: Blockly.Workspace) {
 		super.init(workspace);
 		const vars = this.entity.variables.map(
-			([name, type]) =>
-				`\t${JSON.stringify(name)}: ${
-					typeof type === "string" ? type : type.join(" | ")
-				};\n`
+			([name, type]) => `\t${JSON.stringify(name)}: ${typeof type === "string" ? type : type.join(" | ")};\n`
 		);
 
 		if (vars.length > 0) {
-			this.definitions_.variables = `interface Variables {\n${vars.join(
-				""
-			)}}`;
+			this.definitions_.variables = `interface Variables {\n${vars.join("")}}`;
 		}
 
 		this.isInitialized = true;
 	}
 
-	public override scrub_(block: Blockly.Block, code: string, opt_thisOnly?: boolean): string {
+	public override scrub_(block: Blockly.Block, code: string, thisOnly?: boolean): string {
 		let commentCode = "";
+
 		// Only collect comments for blocks that aren't inline.
-		if (
-			!block.outputConnection ||
-			!block.outputConnection.targetConnection
-		) {
+		if (!block.outputConnection || !block.outputConnection.targetConnection) {
 			// Collect comment for this block.
-			let comment = block.getCommentText();
+			const comment = block.getCommentText();
 			if (comment) {
-				comment = Blockly.utils.string.wrap(
-					comment,
-					this.COMMENT_WRAP - 3
-				);
-				commentCode += this.prefixLines(comment + "\n", "// ");
+				commentCode += this.prefixLines(Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3), "// ");
+				commentCode += "\n";
 			}
 			// Collect comments for all value arguments.
 			// Don't collect comments for nested statements.
 			for (let i = 0; i < block.inputList.length; i++) {
-				if (
-					block.inputList[i].type === Blockly.inputs.inputTypes.VALUE
-				) {
-					const childBlock =
-						block.inputList[i].connection?.targetBlock();
+				if (block.inputList[i].type === Blockly.inputs.inputTypes.VALUE) {
+					const childBlock = block.inputList[i].connection?.targetBlock();
 					if (childBlock) {
-						comment = this.allNestedComments(childBlock);
+						const comment = this.allNestedComments(childBlock);
 						if (comment) {
 							commentCode += this.prefixLines(comment, "// ");
+							commentCode += "\n";
 						}
 					}
 				}
 			}
 		}
 
-		const nextBlock =
-			block.nextConnection && block.nextConnection.targetBlock();
-		const nextCode =
-			opt_thisOnly || !block.previousConnection
-				? ""
-				: this.blockToCode(nextBlock);
+		const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+		const nextCode = (thisOnly || !block.previousConnection) && this.blockToCode(nextBlock);
 
-		return commentCode + code + nextCode;
+		return `${commentCode}${code}${nextCode || ""}`;
 	}
 
 	public override finish(result: string) {
@@ -169,15 +153,13 @@ class TypeScript extends Blockly.CodeGenerator {
 	}
 
 	public override scrubNakedValue(line: string) {
-		return line + ";";
+		return `${line};`;
 	}
 
 	public async ready(zip?: JSZip) {
 		const code = this.entity.code;
 		const result = await SWC.transform(
-			typeof code === "string"
-				? code
-				: this.workspaceToCode(this.entity.workspace)
+			typeof code === "string" ? code : this.workspaceToCode(this.entity.workspace)
 		);
 		const body = this.prefixLines(result, "\t");
 		const isStage = this.entity.isStage();
@@ -188,17 +170,15 @@ class TypeScript extends Blockly.CodeGenerator {
 			sounds: this.entity.getURLs("sounds", zip),
 		};
 		const entity = `$[${JSON.stringify(this.entity.name)}]`;
-		const init = `${entity} = new Scrap.${
-			isStage ? "Stage" : "Sprite"
-		}(${JSON.stringify(configuration, null, "\t")});`;
-		return `${init}\n${entity}.init(async self => {\n${body}});\n${
-			isStage ? "" : `${entity}.addTo($["Stage"])`
-		}\n`;
+		const init = `${entity} = new Scrap.${isStage ? "Stage" : "Sprite"}(${JSON.stringify(
+			configuration,
+			null,
+			"\t"
+		)});`;
+		return `${init}\n${entity}.init(async self => {\n${body}});\n${isStage ? "" : `${entity}.addTo($["Stage"])`}\n`;
 	}
 
-	public static register<Block extends Blockly.Block>(
-		...args: [...string[], BlockCallback<Block>]
-	) {
+	public static register<Block extends Blockly.Block>(...args: [...string[], BlockCallback<Block>]) {
 		const callback = args.pop() as BlockCallback<Blockly.Block>;
 
 		for (const type of args) {
@@ -207,7 +187,7 @@ class TypeScript extends Blockly.CodeGenerator {
 	}
 
 	public set(name: string, value: string) {
-		this.definitions_["%" + name] = value;
+		this.definitions_[`%${name}`] = value;
 	}
 }
 
@@ -237,15 +217,11 @@ TypeScript.register("variable", (block, ts) => {
 });
 
 TypeScript.register("showVariable", block => {
-	return `self.showVariable(${JSON.stringify(
-		block.getFieldValue("VAR")
-	)});\n`;
+	return `self.showVariable(${JSON.stringify(block.getFieldValue("VAR"))});\n`;
 });
 
 TypeScript.register("hideVariable", block => {
-	return `self.hideVariable(${JSON.stringify(
-		block.getFieldValue("VAR")
-	)});\n`;
+	return `self.hideVariable(${JSON.stringify(block.getFieldValue("VAR"))});\n`;
 });
 
 TypeScript.register("iterables_string", block => {
@@ -289,10 +265,7 @@ TypeScript.register("while", (block, ts) => {
 
 TypeScript.register("doWhile", (block, ts) => {
 	const condition = ts.valueToCode(block, "CONDITION", Order.NONE) || "false";
-	return `do {\n${ts.statementToCode(
-		block,
-		"STACK"
-	)}} while (${condition});\n`;
+	return `do {\n${ts.statementToCode(block, "STACK")}} while (${condition});\n`;
 });
 
 TypeScript.register("break", "continue", block => {
@@ -313,10 +286,7 @@ TypeScript.register("clone", (block, ts) => {
 
 TypeScript.register<ParameterBlock>("parameter", block => {
 	if (block.isVariable_) {
-		return [
-			`self.variables[${JSON.stringify(block.getFieldValue("VAR"))}]`,
-			Order.MEMBER,
-		];
+		return [`self.variables[${JSON.stringify(block.getFieldValue("VAR"))}]`, Order.MEMBER];
 	}
 	return [block.getFieldValue("VAR"), Order.ATOMIC];
 });
@@ -343,7 +313,7 @@ TypeScript.register<TryBlock>("tryCatch", (block, ts) => {
 		code += ts.statementToCode(block, "FINALLY");
 	}
 
-	return code + "}\n";
+	return `${code}}\n`;
 });
 
 TypeScript.register("throw", (block, ts) => {
@@ -359,35 +329,26 @@ TypeScript.register("controls_if", (block, ts) => {
 	// If/elseif/else condition.
 	let code = "";
 
-	for (let i = 0; block.getInput("IF" + i); i++) {
-		const conditionCode =
-			ts.valueToCode(block, "IF" + i, Order.NONE) || "false";
-		const branchCode = ts.statementToCode(block, "DO" + i);
+	for (let i = 0; block.getInput(`IF${i}`); i++) {
+		const conditionCode = ts.valueToCode(block, `IF${i}`, Order.NONE) || "false";
+		const branchCode = ts.statementToCode(block, `DO${i}`);
 		code += `${i ? " else " : ""}if (${conditionCode}) {\n${branchCode}}`;
 	}
 
 	if (block.getInput("ELSE")) {
 		code += ` else {\n${ts.statementToCode(block, "ELSE")}}`;
 	}
-	return code + "\n";
+	return `${code}\n`;
 });
 
 TypeScript.register("foreach", (block, ts) => {
 	const item = block.getFieldValue("VAR");
 	const iterable = ts.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
-	return `for (const ${item} of ${iterable}) {\n${ts.statementToCode(
-		block,
-		"DO"
-	)}}\n`;
+	return `for (const ${item} of ${iterable}) {\n${ts.statementToCode(block, "DO")}}\n`;
 });
 
 TypeScript.register("property", block => {
-	return [
-		`$[${JSON.stringify(
-			block.getFieldValue("SPRITE")
-		)}].${block.getFieldValue("PROPERTY")}`,
-		Order.MEMBER,
-	];
+	return [`$[${JSON.stringify(block.getFieldValue("SPRITE"))}].${block.getFieldValue("PROPERTY")}`, Order.MEMBER];
 });
 
 TypeScript.blocks.isTurbo = function () {
@@ -401,17 +362,12 @@ TypeScript.register("array", (block: ArrayBlock, ts) => {
 	for (let i = 0; i < block.items.length; i++) {
 		const item = block.items[i];
 		if (item === "iterable") {
-			items.push(
-				`...${ts.valueToCode(block, `ADD${i}`, Order.NONE) || "[]"}`
-			);
+			items.push(`...${ts.valueToCode(block, `ADD${i}`, Order.NONE) || "[]"}`);
 		} else {
 			items.push(ts.valueToCode(block, `ADD${i}`, Order.NONE) || "null");
 		}
 	}
-	return [
-		`new Array${type === "any" ? "" : `<${type}>`}(${items.join(", ")})`,
-		Order.FUNCTION_CALL,
-	];
+	return [`new Array${type === "any" ? "" : `<${type}>`}(${items.join(", ")})`, Order.FUNCTION_CALL];
 });
 
 TypeScript.register("length", (block, ts) => {
@@ -450,53 +406,34 @@ TypeScript.register("indexOf", (block, ts) => {
 });
 
 TypeScript.register("string", (block, ts) => {
-	return [
-		`String(${ts.valueToCode(block, "VALUE", Order.NONE) || "null"})`,
-		Order.FUNCTION_CALL,
-	];
+	return [`String(${ts.valueToCode(block, "VALUE", Order.NONE) || "null"})`, Order.FUNCTION_CALL];
 });
 
 TypeScript.register("number", (block, ts) => {
-	return [
-		`Number(${ts.valueToCode(block, "VALUE", Order.NONE) || "null"})`,
-		Order.FUNCTION_CALL,
-	];
+	return [`Number(${ts.valueToCode(block, "VALUE", Order.NONE) || "null"})`, Order.FUNCTION_CALL];
 });
 
 TypeScript.register("function", (block: FunctionBlock, ts) => {
 	const params = new Array<string>(block.params.length);
 	const nextBlock = block.getNextBlock();
 	const name = block.getFieldValue("NAME");
-	const returns = block.returns
-		? ts.valueToCode(block, "RETURNS", Order.NONE)
-		: "void";
+	const returns = block.returns ? ts.valueToCode(block, "RETURNS", Order.NONE) : "void";
 	for (let i = 0; i < params.length; i++) {
-		params[i] = ts.valueToCode(block, "PARAM_" + i, Order.NONE);
+		params[i] = ts.valueToCode(block, `PARAM_${i}`, Order.NONE);
 	}
 
 	if (nextBlock) {
-		var body = ts.prefixLines(
-			ts.blockToCode(nextBlock) as string,
-			ts.INDENT
-		);
+		var body = ts.prefixLines(ts.blockToCode(nextBlock) as string, ts.INDENT);
 	} else {
 		var body = "\t\n";
 	}
 
-	ts.set(
-		name,
-		`function ${name}(${params.join(", ")}): ${returns} {\n${body}}`
-	);
+	ts.set(name, `function ${name}(${params.join(", ")}): ${returns} {\n${body}}`);
 	return null;
 });
 
 TypeScript.register("generic", (block, ts) => {
-	return [
-		`${block.getFieldValue("ITERABLE")}<${
-			ts.valueToCode(block, "TYPE", Order.NONE) || "any"
-		}>`,
-		0,
-	];
+	return [`${block.getFieldValue("ITERABLE")}<${ts.valueToCode(block, "TYPE", Order.NONE) || "any"}>`, 0];
 });
 
 TypeScript.register<UnionBlock>("union", (block, ts) => {
@@ -516,9 +453,7 @@ TypeScript.register("type", block => {
 
 TypeScript.register("typed", (block, ts) => {
 	return [
-		`${block.getField("PARAM")!.getText()}: ${
-			ts.valueToCode(block, "TYPE", Order.ATOMIC) || "any"
-		}`,
+		`${block.getField("PARAM")!.getText()}: ${ts.valueToCode(block, "TYPE", Order.ATOMIC) || "any"}`,
 		Order.NONE,
 	];
 });
@@ -542,15 +477,13 @@ TypeScript.register("text_or_number", block => {
 });
 
 TypeScript.register("call", (block: CallBlock, ts) => {
-	const args = block.params_.map(
-		(_, i) => ts.valueToCode(block, "PARAM_" + i, Order.NONE) || "null"
-	);
+	const args = block.params_.map((_, i) => ts.valueToCode(block, `PARAM_${i}`, Order.NONE) || "null");
 	const code = `${block.getFieldValue("NAME")}(${args.join(", ")})`;
 
 	if (block.outputConnection) {
 		return [code, Order.FUNCTION_CALL];
 	} else {
-		return code + ";\n";
+		return `${code};\n`;
 	}
 });
 
@@ -558,9 +491,7 @@ TypeScript.register("return", (block, ts) => {
 	const hasInput = !!block.getInput("VALUE");
 
 	if (hasInput) {
-		return `return ${
-			ts.valueToCode(block, "VALUE", Order.NONE) || "null"
-		};\n`;
+		return `return ${ts.valueToCode(block, "VALUE", Order.NONE) || "null"};\n`;
 	} else {
 		return "return;\n";
 	}
@@ -623,10 +554,7 @@ TypeScript.register("compare", (block, ts) => {
 });
 
 TypeScript.register("not", (block, ts) => {
-	return [
-		`!${ts.valueToCode(block, "BOOL", Order.LOGICAL_NOT) || "false"}`,
-		Order.LOGICAL_NOT,
-	];
+	return [`!${ts.valueToCode(block, "BOOL", Order.LOGICAL_NOT) || "false"}`, Order.LOGICAL_NOT];
 });
 
 TypeScript.register("boolean", block => {
@@ -639,10 +567,7 @@ TypeScript.register("math_number", block => {
 
 TypeScript.register("math", (block, ts) => {
 	const number = ts.valueToCode(block, "NUM", Order.NONE) || "0";
-	return [
-		`Math.${block.getFieldValue("OP")}(${number})`,
-		Order.FUNCTION_CALL,
-	];
+	return [`Math.${block.getFieldValue("OP")}(${number})`, Order.FUNCTION_CALL];
 });
 
 TypeScript.register("constant", block => {
@@ -673,10 +598,7 @@ TypeScript.register("operation", (block, ts) => {
 });
 
 TypeScript.register("logic_negate", (block, ts) => {
-	return [
-		ts.valueToCode(block, "BOOL", Order.LOGICAL_NOT) || "false",
-		Order.LOGICAL_NOT,
-	];
+	return [ts.valueToCode(block, "BOOL", Order.LOGICAL_NOT) || "false", Order.LOGICAL_NOT];
 });
 
 TypeScript.blocks.random = function () {
@@ -714,32 +636,19 @@ TypeScript.blocks.today = function () {
 };
 
 TypeScript.register("dateProperty", (block, ts) => {
-	return [
-		`${ts.valueToCode(block, "DATE", Order.MEMBER)}.${block.getFieldValue(
-			"PROPERTY"
-		)}()`,
-		Order.FUNCTION_CALL,
-	];
+	return [`${ts.valueToCode(block, "DATE", Order.MEMBER)}.${block.getFieldValue("PROPERTY")}()`, Order.FUNCTION_CALL];
 });
 
 TypeScript.register("alert", (block, ts) => {
-	return `window.alert(${
-		ts.valueToCode(block, "TEXT", Order.NONE) || '""'
-	});\n`;
+	return `window.alert(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'});\n`;
 });
 
 TypeScript.register("prompt", (block, ts) => {
-	return [
-		`window.prompt(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'})`,
-		Order.FUNCTION_CALL,
-	];
+	return [`window.prompt(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'})`, Order.FUNCTION_CALL];
 });
 
 TypeScript.register("confirm", (block, ts) => {
-	return [
-		`window.confirm(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'})`,
-		Order.FUNCTION_CALL,
-	];
+	return [`window.confirm(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'})`, Order.FUNCTION_CALL];
 });
 
 enum Order {

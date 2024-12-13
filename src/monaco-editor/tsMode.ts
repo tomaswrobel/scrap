@@ -14,7 +14,8 @@ import {WorkerManager} from "./workerManager";
 import type {TypeScriptWorker} from "./tsWorker";
 import type {LanguageServiceDefaults} from "./typescript";
 import * as languageFeatures from "./languageFeatures";
-import {languages, IDisposable, Uri} from "monaco-editor";
+import type {IDisposable, Uri} from "monaco-editor";
+import {languages} from "monaco-editor";
 
 let javaScriptWorker: (...uris: Uri[]) => Promise<TypeScriptWorker>;
 let typeScriptWorker: (...uris: Uri[]) => Promise<TypeScriptWorker>;

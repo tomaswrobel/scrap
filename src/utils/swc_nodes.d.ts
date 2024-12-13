@@ -10,7 +10,7 @@
  * @fileoverview SWC node name map
  * @author Ivo Stratev
  */
-import * as SWC from "@swc/types";
+import type * as SWC from "@swc/types";
 
 export default interface SWCNodeNameMap {
 	ClassProperty: SWC.ClassProperty;

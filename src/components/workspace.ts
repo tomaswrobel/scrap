@@ -16,7 +16,7 @@ import {plugins, sprite, stage, theme, Types, TypeToShadow} from "../blockly";
 import Blocks from "../code/transformers/blocks";
 import {bind, load} from "../utils/decorators";
 import {Sprite, Stage} from "./entity";
-import TabComponent from "./tab";
+import type TabComponent from "./tab";
 import "./workspace.scss";
 
 /**
@@ -92,10 +92,7 @@ export default class Workspace implements TabComponent {
 
 			const type = await Dialog.scrap.fire({
 				input: "select",
-				inputOptions: Types.reduce(
-					(acc, type) => ({...acc, [type]: type || "any"}),
-					{}
-				),
+				inputOptions: Types.reduce((acc, type) => ({...acc, [type]: type || "any"}), {}),
 				title: "Create Variable",
 				body: "Type:",
 			});
@@ -109,11 +106,7 @@ export default class Workspace implements TabComponent {
 		});
 
 		this.workspace.registerToolboxCategoryCallback("TYPED_VARIABLE", () => {
-			const json = [
-				"const",
-				"let",
-				"var",
-			].map<Blockly.utils.toolbox.FlyoutItemInfo>((kind, i) => ({
+			const json = ["const", "let", "var"].map<Blockly.utils.toolbox.FlyoutItemInfo>((kind, i) => ({
 				kind: "block",
 				type: "variable",
 				fields: {kind},
@@ -179,12 +172,8 @@ export default class Workspace implements TabComponent {
 			}
 
 			if (json.length > 5) {
-				const [VAR, type] =
-					app.current.variables[0] || app.entities[0].variables[0] || [];
-				const inputs: Record<
-					string,
-					Blockly.serialization.blocks.ConnectionState
-				> = {};
+				const [VAR, type] = app.current.variables[0] || app.entities[0].variables[0] || [];
+				const inputs: Record<string, Blockly.serialization.blocks.ConnectionState> = {};
 
 				if (!VAR) {
 					return json;
@@ -309,10 +298,7 @@ export default class Workspace implements TabComponent {
 			],
 		});
 
-		Blockly.serialization.workspaces.load(
-			app.current.code as Record<string, unknown>,
-			this.workspace
-		);
+		Blockly.serialization.workspaces.load(app.current.code as Record<string, unknown>, this.workspace);
 		this.workspace.cleanUp();
 		this.workspace.refreshToolboxSelection();
 		this.workspace.addChangeListener(this.changed);

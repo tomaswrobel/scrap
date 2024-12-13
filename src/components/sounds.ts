@@ -15,7 +15,7 @@
  * the sound files and play them only.
  */
 import WaveSurfer from "wavesurfer.js";
-import TabComponent from "./tab";
+import type TabComponent from "./tab";
 import {MediaList} from "./media-list";
 import "./sounds.scss";
 

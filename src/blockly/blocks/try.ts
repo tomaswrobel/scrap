@@ -28,7 +28,7 @@
  * the TypeScript, but the Monaco editor is of course
  * aware of the incorrect syntax.
  */
-import * as Blockly from "blockly";
+import type * as Blockly from "blockly";
 import FieldParam from "../fields/field_param";
 
 export type TryBlock = Blockly.BlockSvg & TryBlockMixin;
@@ -112,11 +112,7 @@ export const MIXIN = {
 		this.catch = false;
 		this.finally = false;
 
-		for (
-			let block = containerBlock.getNextBlock();
-			block;
-			block = block.getNextBlock()
-		) {
+		for (let block = containerBlock.getNextBlock(); block; block = block.getNextBlock()) {
 			if (block.type === "catch") {
 				this.catch = true;
 			} else if (block.type === "catchVar") {

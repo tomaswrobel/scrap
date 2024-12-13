@@ -10,7 +10,7 @@
  * @fileoverview Visibility utilities
  * @copyright Tomáš Wróbel 2024
  */
-import TabComponent from "./tab";
+import type TabComponent from "./tab";
 import type Tabs from "./tabs";
 import "./hidden.scss";
 

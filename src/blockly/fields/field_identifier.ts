@@ -17,16 +17,14 @@ export default class FieldIdentifier extends Blockly.FieldTextInput {
 	public onFinish?: (result: string) => void;
 
 	public static override fromJson(options: Record<string, unknown>) {
-		return new FieldIdentifier(options["value"] as string);
+		return new FieldIdentifier(options.value as string);
 	}
 
 	protected override doClassValidation_(value: string) {
 		const banned = [...reserved];
 
 		if (this.sourceBlock_?.type.startsWith("function")) {
-			for (const block of this.sourceBlock_.workspace.getBlocksByType(
-				this.sourceBlock_.type
-			)) {
+			for (const block of this.sourceBlock_.workspace.getBlocksByType(this.sourceBlock_.type)) {
 				if (block !== this.sourceBlock_) {
 					banned.push(block.getFieldValue("NAME"));
 				}
@@ -36,11 +34,7 @@ export default class FieldIdentifier extends Blockly.FieldTextInput {
 		if (value) {
 			const name = value.replace(/ /g, "_");
 			for (var i = 0; banned.includes(`${name}${i || ""}`); i++);
-			if (
-				/[$_\p{ID_Start}][$\u200c\u200d\p{ID_Continue}]*/u.test(
-					`${name}${i || ""}`
-				)
-			) {
+			if (/[$_\p{ID_Start}][$\u200c\u200d\p{ID_Continue}]*/u.test(`${name}${i || ""}`)) {
 				return `${name}${i || ""}`;
 			}
 		}

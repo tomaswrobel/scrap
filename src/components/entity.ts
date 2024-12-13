@@ -12,7 +12,7 @@
  */
 import * as Blockly from "blockly";
 import * as SWC from "../utils/swc";
-import JSZip from "jszip";
+import type JSZip from "jszip";
 import fs from "fs";
 import path from "path";
 import {reserved} from "../code/transformers/utils";
@@ -133,8 +133,8 @@ export class Entity {
 		this.thumbnail.src = URL.createObjectURL(this.costumes[this.current]);
 	}
 
-	public render(parent: Element): HTMLElement {
-		return parent.appendChild(this.thumbnail);
+	public render(parent: Element) {
+		return parent.appendChild<HTMLElement>(this.thumbnail);
 	}
 
 	/**
@@ -250,7 +250,7 @@ export class Sprite extends Entity {
 		const input = document.createElement("input");
 		input.classList.add("name");
 
-		const span = document.createElement("span");
+		const span = sprite.appendChild(document.createElement("span"));
 		span.textContent = this.name;
 		span.classList.add("name");
 
@@ -279,9 +279,7 @@ export class Sprite extends Entity {
 			sprite.replaceChild(span, input);
 		};
 
-		sprite.appendChild(span);
-
-		const remove = document.createElement("div");
+		const remove = sprite.appendChild(document.createElement("div"));
 
 		remove.textContent = "×";
 		remove.classList.add("remove");
@@ -290,9 +288,7 @@ export class Sprite extends Entity {
 			app.removeSprite(this);
 		};
 
-		sprite.appendChild(remove);
-
-		return parent.appendChild(sprite);
+		return parent.appendChild<HTMLElement>(sprite);
 	}
 }
 

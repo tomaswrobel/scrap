@@ -10,74 +10,73 @@
  * @author Microsoft Corporation
  * @fileoverview Just remapped imports.
  */
-import {LanguageServiceDefaults} from "./typescript";
-import {TypeScriptWorker} from "./tsWorker";
-import {editor, Uri, IDisposable} from "monaco-editor";
+import type {LanguageServiceDefaults} from "./typescript";
+import type {TypeScriptWorker} from "./tsWorker";
+import type { Uri, IDisposable} from "monaco-editor";
+import {editor} from "monaco-editor";
 
 export class WorkerManager {
-	private _configChangeListener: IDisposable;
+	private configChangeListener: IDisposable;
 
-	private _worker: editor.MonacoWebWorker<TypeScriptWorker> | null;
-	private _client: Promise<TypeScriptWorker> | null;
+	private worker?: editor.MonacoWebWorker<TypeScriptWorker>;
+	private client?: Promise<TypeScriptWorker>;
 
-	constructor(private readonly _modeId: string, private readonly _defaults: LanguageServiceDefaults) {
-		this._worker = null;
-		this._client = null;
-		this._configChangeListener = this._defaults.onDidChange(() => this._stopWorker());
+	constructor(private readonly modeId: string, private readonly defaults: LanguageServiceDefaults) {
+		this.configChangeListener = defaults.onDidChange(() => this.stopWorker());
 	}
 
 	public dispose() {
-		this._configChangeListener.dispose();
-		this._stopWorker();
+		this.configChangeListener.dispose();
+		this.stopWorker();
 	}
 
-	private _stopWorker() {
-		if (this._worker) {
-			this._worker.dispose();
-			this._worker = null;
+	private stopWorker() {
+		if (this.worker) {
+			this.worker.dispose();
+			delete this.worker;
 		}
-		this._client = null;
+		delete this.client;
 	}
 
-	private _getClient(): Promise<TypeScriptWorker> {
-		if (!this._client) {
-			this._client = (async () => {
-				this._worker = editor.createWebWorker<TypeScriptWorker>({
+	private getClient(): Promise<TypeScriptWorker> {
+		if (!this.client) {
+			this.client = (async () => {
+				this.worker = editor.createWebWorker<TypeScriptWorker>({
 					// module that exports the create() method and returns a `TypeScriptWorker` instance
 					moduleId: "vs/language/typescript/tsWorker",
 
-					label: this._modeId,
+					label: this.modeId,
 
 					keepIdleModels: true,
 
 					// passed in to the create() method
 					createData: {
-						compilerOptions: this._defaults.getCompilerOptions(),
-						customWorkerPath: this._defaults.workerOptions.customWorkerPath,
-						inlayHintsOptions: this._defaults.inlayHintsOptions,
+						compilerOptions: this.defaults.getCompilerOptions(),
+						customWorkerPath: this.defaults.workerOptions.customWorkerPath,
+						inlayHintsOptions: this.defaults.inlayHintsOptions,
 					},
 				});
 
-				if (this._defaults.getEagerModelSync()) {
-					return await this._worker.withSyncedResources(
+				if (this.defaults.getEagerModelSync()) {
+					return await this.worker.withSyncedResources(
 						editor
 							.getModels()
-							.filter(model => model.getLanguageId() === this._modeId)
+							.filter(model => model.getLanguageId() === this.modeId)
 							.map(model => model.uri)
 					);
 				}
 
-				return await this._worker.getProxy();
+				return await this.worker.getProxy();
 			})();
 		}
 
-		return this._client;
+		return this.client;
 	}
 
 	public async getLanguageServiceWorker(...resources: Uri[]): Promise<TypeScriptWorker> {
-		const client = await this._getClient();
-		if (this._worker) {
-			await this._worker.withSyncedResources(resources);
+		const client = await this.getClient();
+		if (this.worker) {
+			await this.worker.withSyncedResources(resources);
 		}
 		return client;
 	}

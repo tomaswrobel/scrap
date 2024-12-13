@@ -643,9 +643,9 @@ export default class App {
 	/**
 	 * Save Dialog
 	 */
-	public static async saveAs(this: App, type: "html" | "scrap") {
+	public static async saveAs(this: App, type: "zip" | "scrap") {
 		const filters: Dialog.native.DialogFilter[] = [
-			{name: "HTML", extensions: ["html"]},
+			{name: "Web app", extensions: ["zip"]},
 			{name: "Scrap project", extensions: ["scrap"]},
 		];
 
@@ -663,7 +663,7 @@ export default class App {
 			return;
 		}
 
-		if (type === "html") {
+		if (type === "zip") {
 			await this.export(path);
 		} else {
 			await this.save(path);
@@ -702,7 +702,7 @@ export default class App {
 
 	constructor() {
 		document.getElementById("save")!.onclick = App.saveAs.bind(this, "scrap");
-		document.getElementById("export")!.onclick = App.saveAs.bind(this, "html");
+		document.getElementById("export")!.onclick = App.saveAs.bind(this, "zip");
 		document.getElementById("open")!.onclick = App.openAs.bind(this, "scrap");
 		document.getElementById("import")!.onclick = App.openAs.bind(this, "sb3");
 	}

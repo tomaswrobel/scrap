@@ -20,6 +20,7 @@
 	"eslint.format.enable": false,
 	"eslint.onIgnoredFiles": "off",
 	"eslint.runtime": "node",
+	"eslint.useFlatConfig": true,
 
 	// Set Prettier settings to match Scrap Native's style
 	"prettier.arrowParens": "avoid",
@@ -31,7 +32,7 @@
 	"editor.tabSize": 4,
 	"prettier.useTabs": true,
 	"prettier.tabWidth": 4,
-	"prettier.printWidth": 90,
+	"prettier.printWidth": 120,
 
 	// YAML needs to be 2 spaces
 	"[yaml][github-actions-workflow]": {

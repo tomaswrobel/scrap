@@ -15,18 +15,15 @@
 import * as Blockly from "blockly";
 
 export class Category extends Blockly.ToolboxCategory {
-	constructor(
-		categoryDef: Blockly.utils.toolbox.CategoryInfo,
-		toolbox: Blockly.IToolbox
-	) {
+	constructor(categoryDef: Blockly.utils.toolbox.CategoryInfo, toolbox: Blockly.IToolbox) {
 		super(categoryDef, toolbox);
 	}
 
 	protected override createLabelDom_(name: string) {
 		const label = document.createElement("div");
-		label.setAttribute("id", this.getId() + ".label");
+		label.setAttribute("id", `${this.getId()}.label`);
 		label.textContent = name;
-		label.classList.add(this.cssConfig_["label"]);
+		label.classList.add(this.cssConfig_.label);
 		return label;
 	}
 
@@ -43,15 +40,11 @@ export class Category extends Blockly.ToolboxCategory {
 
 	public override setSelected(isSelected: boolean) {
 		if (isSelected) {
-			Blockly.utils.dom.addClass(this.rowDiv_, this.cssConfig_["selected"]);
+			Blockly.utils.dom.addClass(this.rowDiv_, this.cssConfig_.selected);
 		} else {
-			Blockly.utils.dom.removeClass(this.rowDiv_, this.cssConfig_["selected"]);
+			Blockly.utils.dom.removeClass(this.rowDiv_, this.cssConfig_.selected);
 		}
-		Blockly.utils.aria.setState(
-			this.htmlDiv_,
-			Blockly.utils.aria.State.SELECTED,
-			isSelected
-		);
+		Blockly.utils.aria.setState(this.htmlDiv_, Blockly.utils.aria.State.SELECTED, isSelected);
 	}
 
 	public override getName() {

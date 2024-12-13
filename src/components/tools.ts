@@ -133,12 +133,7 @@ export abstract class Tool {
 }
 
 export abstract class DrawingTool extends Tool {
-	public override start(
-		ctx: CanvasRenderingContext2D,
-		color: string,
-		x: number,
-		y: number
-	) {
+	public override start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		super.start(ctx, color, x, y);
 		ctx.lineWidth = this.width;
 
@@ -229,12 +224,7 @@ export abstract class ShapeTool extends Tool {
 		yield* super.select();
 	}
 
-	public override start(
-		ctx: CanvasRenderingContext2D,
-		color: string,
-		x: number,
-		y: number
-	) {
+	public override start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		super.start(ctx, color, x, y);
 		ctx.lineCap = "square";
 		ctx.lineJoin = "miter";
@@ -245,7 +235,7 @@ export abstract class ShapeTool extends Tool {
 	 * Merges the drawing into the canvas
 	 * @param ctx The canvas context to draw on
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 	public end(ctx: CanvasRenderingContext2D) {
 		// Actually, since my shape is drawn when the moving ends,
 		// I don't need to do anything here.
@@ -285,7 +275,6 @@ export class Line extends Tool {
 		this.ctx!.stroke();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public end(ctx: CanvasRenderingContext2D) {}
 }
 
@@ -306,19 +295,9 @@ export class Rectangle extends ShapeTool {
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
 
 		if (this.outline) {
-			this.ctx!.strokeRect(
-				this.startX,
-				this.startY,
-				x - this.startX,
-				y - this.startY
-			);
+			this.ctx!.strokeRect(this.startX, this.startY, x - this.startX, y - this.startY);
 		} else {
-			this.ctx!.fillRect(
-				this.startX,
-				this.startY,
-				x - this.startX,
-				y - this.startY
-			);
+			this.ctx!.fillRect(this.startX, this.startY, x - this.startX, y - this.startY);
 		}
 	}
 }
@@ -365,9 +344,7 @@ export class Triangle extends ShapeTool {
 		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		path.setAttribute(
 			"d",
-			`M ${this.ICON_WIDTH / 2} 0 L ${this.ICON_WIDTH} ${this.ICON_HEIGHT} L 0 ${
-				this.ICON_HEIGHT
-			} Z`
+			`M ${this.ICON_WIDTH / 2} 0 L ${this.ICON_WIDTH} ${this.ICON_HEIGHT} L 0 ${this.ICON_HEIGHT} Z`
 		);
 		return path;
 	}
@@ -410,12 +387,7 @@ export class Fill extends Tool {
 		ctx.putImageData(data, 0, 0);
 	}
 
-	public override start(
-		ctx: CanvasRenderingContext2D,
-		color: string,
-		x: number,
-		y: number
-	) {
+	public override start(ctx: CanvasRenderingContext2D, color: string, x: number, y: number) {
 		this.ctx = ctx;
 		this.color = color;
 		this.lastX = x;
@@ -469,12 +441,7 @@ export class Select extends Tool {
 		this.button.classList.add("selected");
 	}
 
-	public override start(
-		ctx: CanvasRenderingContext2D,
-		_color: string,
-		x: number,
-		y: number
-	) {
+	public override start(ctx: CanvasRenderingContext2D, _color: string, x: number, y: number) {
 		this.startX = x;
 		this.startY = y;
 		this.ctx = ctx;
@@ -497,12 +464,7 @@ export class Select extends Tool {
 
 	public override step(x: number, y: number) {
 		this.ctx!.clearRect(0, 0, this.ctx!.canvas.width, this.ctx!.canvas.height);
-		this.ctx!.strokeRect(
-			this.startX,
-			this.startY,
-			(this.lastX = x) - this.startX,
-			(this.lastY = y) - this.startY
-		);
+		this.ctx!.strokeRect(this.startX, this.startY, (this.lastX = x) - this.startX, (this.lastY = y) - this.startY);
 	}
 
 	constructor() {

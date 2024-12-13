@@ -18,7 +18,7 @@
  * blocks, each with a different shape, but those would need
  * different names. This way, we can reuse the same block.
  */
-import * as Blockly from "blockly";
+import type * as Blockly from "blockly";
 
 export type UnknownBlock = Blockly.BlockSvg & UnknownBlockMixin;
 export interface UnknownBlockMixin extends UnknownBlockMixinType {}
@@ -34,9 +34,7 @@ export const MIXIN = {
 	opcode: "unknown",
 
 	init(this: UnknownBlock) {
-		this.appendDummyInput()
-			.appendField("Unknown block:")
-			.appendField(this.opcode, "OPCODE");
+		this.appendDummyInput().appendField("Unknown block:").appendField(this.opcode, "OPCODE");
 		this.setCommentText(COMMENT);
 	},
 

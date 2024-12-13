@@ -82,12 +82,56 @@ fn fill(
     return data;
 }
 
+#[tauri::command]
+fn crop(
+	image_data: Vec<u8>,
+	width: usize,
+	height: usize,
+) -> Vec<usize> {
+	let mut min_x = width;
+	let mut max_x = 0;
+
+	let mut min_y = height;
+	let mut max_y = 0;
+
+	for y in 0..height {
+		for x in 0..width {
+			let index = (y * width + x) * 4;
+
+			if image_data[index + 3] > 0 {
+				if x < min_x {
+					min_x = x;
+				}
+
+				if x > max_x {
+					max_x = x;
+				}
+
+				if y < min_y {
+					min_y = y;
+				}
+
+				if y > max_y {
+					max_y = y;
+				}
+			}
+		}
+	}
+
+	vec![
+		min_x,
+		min_y,
+		max_x - min_x,
+		max_y - min_y,
+	]
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
-        .invoke_handler(tauri::generate_handler![parse, transform, variables, fill])
+        .invoke_handler(tauri::generate_handler![parse, transform, variables, fill, crop])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

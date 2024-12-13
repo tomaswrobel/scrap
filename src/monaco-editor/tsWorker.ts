@@ -41,25 +41,18 @@ function fileNameIsLib(resource: Uri | string): boolean {
 export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWorker {
 	// --- model sync -----------------------
 
-	private _ctx: worker.IWorkerContext;
-	private _languageService = ts.createLanguageService(this);
-	private _compilerOptions: ts.CompilerOptions;
-	private _inlayHintsOptions?: ts.UserPreferences;
+	private languageService = ts.createLanguageService(this);
 
-	constructor(ctx: worker.IWorkerContext, createData: ICreateData) {
-		this._ctx = ctx;
-		this._compilerOptions = createData.compilerOptions;
-		this._inlayHintsOptions = createData.inlayHintsOptions;
-	}
+	constructor(private ctx: worker.IWorkerContext, private createData: ICreateData) {}
 
 	// --- language service host ---------------
 
 	public getCompilationSettings(): ts.CompilerOptions {
-		return this._compilerOptions;
+		return this.createData.compilerOptions;
 	}
 
 	public getLanguageService(): ts.LanguageService {
-		return this._languageService;
+		return this.languageService;
 	}
 
 	public getExtraLibs(): IExtraLibs {
@@ -67,12 +60,12 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	public getScriptFileNames(): string[] {
-		const allModels = this._ctx.getMirrorModels().map(model => model.uri);
+		const allModels = this.ctx.getMirrorModels().map(model => model.uri);
 		return allModels.filter(uri => !fileNameIsLib(uri)).map(uri => uri.toString());
 	}
 
-	private _getModel(fileName: string): worker.IMirrorModel | null {
-		const models = this._ctx.getMirrorModels();
+	private getModel(fileName: string): worker.IMirrorModel | null {
+		const models = this.ctx.getMirrorModels();
 		for (let i = 0; i < models.length; i++) {
 			const uri = models[i].uri;
 			if (uri.toString() === fileName || uri.toString(true) === fileName) {
@@ -83,7 +76,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	public getScriptVersion(fileName: string): string {
-		const model = this._getModel(fileName);
+		const model = this.getModel(fileName);
 		if (model) {
 			return model.version.toString();
 		} else if (this.isDefaultLibFileName(fileName)) {
@@ -94,11 +87,11 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	public async getScriptText(fileName: string): Promise<string | undefined> {
-		return this._getScriptText(fileName);
+		return this.getScriptTextSync(fileName);
 	}
 
-	private _getScriptText(fileName: string): string | undefined {
-		const model = this._getModel(fileName);
+	private getScriptTextSync(fileName: string): string | undefined {
+		const model = this.getModel(fileName);
 		if (model) {
 			// a true editor model
 			return model.getValue();
@@ -111,8 +104,8 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	public getScriptSnapshot(fileName: string): ts.IScriptSnapshot | undefined {
-		const text = this._getScriptText(fileName);
-		
+		const text = this.getScriptTextSync(fileName);
+
 		if (text === undefined) {
 			return;
 		}
@@ -153,11 +146,11 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	public readFile(path: string): string | undefined {
-		return this._getScriptText(path);
+		return this.getScriptTextSync(path);
 	}
 
 	public fileExists(path: string): boolean {
-		return this._getScriptText(path) !== undefined;
+		return this.getScriptTextSync(path) !== undefined;
 	}
 
 	public async getLibFiles(): Promise<Record<string, string>> {
@@ -167,8 +160,8 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	// --- language features
 
 	public static clearFiles<T extends TypeScriptWorker>(
-		_target: T,
-		_key: string,
+		target: T,
+		key: string,
 		value: TypedPropertyDescriptor<(this: T, fileName: string) => Promise<Diagnostic[]>>
 	): typeof value {
 		return {
@@ -202,13 +195,13 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	 * A decorator that adds Scrap related diagnostics.
 	 * Add this to either a semantic or syntactic diagnostic method.
 	 *
-	 * @param _target A TypeScriptWorker instance
-	 * @param _key A string
+	 * @param target A TypeScriptWorker instance
+	 * @param key A string
 	 * @param value A TypedPropertyDescriptor
 	 */
 	public static scrap<T extends TypeScriptWorker>(
-		_target: T,
-		_key: string,
+		target: T,
+		key: string,
 		value: TypedPropertyDescriptor<(this: T, fileName: string) => Promise<Diagnostic[]>>
 	): typeof value {
 		return {
@@ -216,7 +209,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 			enumerable: false,
 			async value(fileName: string) {
 				const diagnostics = await value.value!.call(this, fileName);
-				const program = this._languageService.getProgram();
+				const program = this.languageService.getProgram();
 
 				if (!program) {
 					return diagnostics;
@@ -410,7 +403,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		return this._languageService.getSyntacticDiagnostics(fileName);
+		return this.languageService.getSyntacticDiagnostics(fileName);
 	}
 
 	@TypeScriptWorker.scrap
@@ -419,7 +412,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		return this._languageService.getSemanticDiagnostics(fileName);
+		return this.languageService.getSemanticDiagnostics(fileName);
 	}
 
 	@TypeScriptWorker.clearFiles
@@ -427,7 +420,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		return this._languageService.getSuggestionDiagnostics(fileName);
+		return this.languageService.getSuggestionDiagnostics(fileName);
 	}
 
 	@TypeScriptWorker.clearFiles
@@ -435,14 +428,14 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		return this._languageService.getCompilerOptionsDiagnostics();
+		return this.languageService.getCompilerOptionsDiagnostics();
 	}
 
 	public async getCompletionsAtPosition(fileName: string, position: number): Promise<ts.CompletionInfo | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.getCompletionsAtPosition(fileName, position, undefined);
+		return this.languageService.getCompletionsAtPosition(fileName, position, undefined);
 	}
 
 	public async getCompletionEntryDetails(
@@ -450,7 +443,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		position: number,
 		entry: string
 	): Promise<ts.CompletionEntryDetails | undefined> {
-		return this._languageService.getCompletionEntryDetails(
+		return this.languageService.getCompletionEntryDetails(
 			fileName,
 			position,
 			entry,
@@ -469,14 +462,14 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.getSignatureHelpItems(fileName, position, options);
+		return this.languageService.getSignatureHelpItems(fileName, position, options);
 	}
 
 	public async getQuickInfoAtPosition(fileName: string, position: number): Promise<ts.QuickInfo | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.getQuickInfoAtPosition(fileName, position);
+		return this.languageService.getQuickInfoAtPosition(fileName, position);
 	}
 
 	public async getDocumentHighlights(
@@ -487,7 +480,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.getDocumentHighlights(fileName, position, filesToSearch);
+		return this.languageService.getDocumentHighlights(fileName, position, filesToSearch);
 	}
 
 	public async getDefinitionAtPosition(
@@ -497,52 +490,55 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.getDefinitionAtPosition(fileName, position);
+		return this.languageService.getDefinitionAtPosition(fileName, position);
 	}
 
 	public async getReferencesAtPosition(fileName: string, position: number): Promise<ts.ReferenceEntry[] | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.getReferencesAtPosition(fileName, position);
+		return this.languageService.getReferencesAtPosition(fileName, position);
 	}
 
 	public async getNavigationTree(fileName: string): Promise<ts.NavigationTree | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.getNavigationTree(fileName);
+		return this.languageService.getNavigationTree(fileName);
 	}
 
-	public async getFormattingEditsForDocument(fileName: string, options: ts.FormatCodeOptions): Promise<ts.TextChange[]> {
+	public async getFormattingEditsForDocument(
+		fileName: string,
+		options: ts.FormatCodeSettings
+	): Promise<ts.TextChange[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		return this._languageService.getFormattingEditsForDocument(fileName, options);
+		return this.languageService.getFormattingEditsForDocument(fileName, options);
 	}
 
 	public async getFormattingEditsForRange(
 		fileName: string,
 		start: number,
 		end: number,
-		options: ts.FormatCodeOptions
+		options: ts.FormatCodeSettings
 	): Promise<ts.TextChange[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		return this._languageService.getFormattingEditsForRange(fileName, start, end, options);
+		return this.languageService.getFormattingEditsForRange(fileName, start, end, options);
 	}
 
 	public async getFormattingEditsAfterKeystroke(
 		fileName: string,
 		postion: number,
 		ch: string,
-		options: ts.FormatCodeOptions
+		options: ts.FormatCodeSettings
 	): Promise<ts.TextChange[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		return this._languageService.getFormattingEditsAfterKeystroke(fileName, postion, ch, options);
+		return this.languageService.getFormattingEditsAfterKeystroke(fileName, postion, ch, options);
 	}
 
 	public async findRenameLocations(
@@ -555,7 +551,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		if (fileNameIsLib(fileName)) {
 			return undefined;
 		}
-		return this._languageService.findRenameLocations(
+		return this.languageService.findRenameLocations(
 			fileName,
 			position,
 			findInStrings,
@@ -564,11 +560,15 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		);
 	}
 
-	public async getRenameInfo(fileName: string, position: number, options: ts.UserPreferences): Promise<ts.RenameInfo> {
+	public async getRenameInfo(
+		fileName: string,
+		position: number,
+		options: ts.UserPreferences
+	): Promise<ts.RenameInfo> {
 		if (fileNameIsLib(fileName)) {
 			return {canRename: false, localizedErrorMessage: "Cannot rename in lib file"};
 		}
-		return this._languageService.getRenameInfo(fileName, position, options);
+		return this.languageService.getRenameInfo(fileName, position, options);
 	}
 
 	public async getEmitOutput(fileName: string) {
@@ -580,7 +580,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 			};
 		}
 
-		return this._languageService.getEmitOutput(fileName) as languages.typescript.EmitOutput;
+		return this.languageService.getEmitOutput(fileName) as languages.typescript.EmitOutput;
 	}
 
 	public async getCodeFixesAtPosition(
@@ -595,7 +595,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		}
 		const preferences = {};
 		try {
-			return this._languageService.getCodeFixesAtPosition(
+			return this.languageService.getCodeFixesAtPosition(
 				fileName,
 				start,
 				end,
@@ -608,21 +608,22 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 		}
 	}
 
-
 	public async updateExtraLibs() {}
 
 	public async provideInlayHints(fileName: string, start: number, end: number): Promise<readonly ts.InlayHint[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}
-		const preferences: ts.UserPreferences = this._inlayHintsOptions ?? {};
-		const span: ts.TextSpan = {
-			start,
-			length: end - start,
-		};
 
 		try {
-			return this._languageService.provideInlayHints(fileName, span, preferences);
+			return this.languageService.provideInlayHints(
+				fileName,
+				{
+					start,
+					length: end - start,
+				},
+				this.createData.inlayHintsOptions ?? {}
+			);
 		} catch {
 			return [];
 		}

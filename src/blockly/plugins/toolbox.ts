@@ -61,9 +61,7 @@ export default class Toolbox extends Blockly.Toolbox {
 			const params = new Array(block.params.length);
 
 			for (let i = 0; i < params.length; i++) {
-				params[i] = toCheck(
-					block.getInput("PARAM_" + i)!.connection!.targetBlock()
-				);
+				params[i] = toCheck(block.getInput(`PARAM_${i}`)!.connection!.targetBlock());
 			}
 
 			contents.push({
@@ -72,9 +70,7 @@ export default class Toolbox extends Blockly.Toolbox {
 				extraState: {
 					name: block.getFieldValue("NAME"),
 					params,
-					returnType:
-						block.returns &&
-						toCheck(block.getInput("RETURNS")?.connection?.targetBlock()),
+					returnType: block.returns && toCheck(block.getInput("RETURNS")?.connection?.targetBlock()),
 				},
 			});
 		}
@@ -85,10 +81,7 @@ export default class Toolbox extends Blockly.Toolbox {
 		this.getFlyout().show(this.getInitialFlyoutContents_());
 	}
 
-	protected override updateFlyout_(
-		_oldItem: Category | null,
-		newItem: Category | null
-	) {
+	protected override updateFlyout_(_oldItem: Category | null, newItem: Category | null) {
 		if (newItem) {
 			const flyout = this.getFlyout();
 			const name = newItem.getName();
@@ -97,19 +90,13 @@ export default class Toolbox extends Blockly.Toolbox {
 		}
 	}
 
-	protected override shouldDeselectItem_(
-		oldItem: Category | null,
-		newItem: Category | null
-	) {
+	protected override shouldDeselectItem_(oldItem: Category | null, newItem: Category | null) {
 		return !!oldItem && oldItem !== newItem;
 	}
 
 	public getCategoryByName(name: string) {
 		const category = this.contents_.find(
-			item =>
-				item instanceof Blockly.ToolboxCategory &&
-				item.isSelectable() &&
-				name === item.getName()
+			item => item instanceof Blockly.ToolboxCategory && item.isSelectable() && name === item.getName()
 		);
 		if (category) {
 			return category as Category;

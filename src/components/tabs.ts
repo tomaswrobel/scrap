@@ -11,7 +11,7 @@
  * @fileoverview Tabs manager
  */
 import {Visibility} from "./visibility";
-import TabComponent from "./tab";
+import type TabComponent from "./tab";
 import "./tabs.scss";
 
 import Dialog from "@scrap/utils/dialog";

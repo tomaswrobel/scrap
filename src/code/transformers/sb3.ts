@@ -12,7 +12,7 @@
  */
 import type {FunctionBlock} from "@scrap/blockly/blocks/function";
 import * as Blockly from "blockly";
-import JSZip from "jszip";
+import type JSZip from "jszip";
 import {Sprite, Stage} from "../../components/entity";
 import {escape} from "./utils";
 
@@ -30,10 +30,7 @@ class SB3 {
 		return this.transform.bind(new this());
 	}
 
-	private readonly transformers: Record<
-		string,
-		(data: SB3.Block) => Promise<Blockly.Block> | Blockly.Block
-	> = {};
+	private readonly transformers: Record<string, (data: SB3.Block) => Promise<Blockly.Block> | Blockly.Block> = {};
 
 	private constructor() {
 		this.transformers.motion_movesteps = this.override({
@@ -106,33 +103,27 @@ class SB3 {
 		this.transformers.looks_hide = this.override({
 			opcode: "hide",
 		});
-		this.transformers.looks_changeeffectby = this.transformers.looks_seteffectto =
-			async data => {
-				if (
-					data.fields.EFFECT[0] !== "color" &&
-					data.fields.EFFECT[0] !== "brightness" &&
-					data.fields.EFFECT[0] !== "ghost"
-				) {
-					return this.unknown(
-						`${data.opcode} [${data.fields.EFFECT[0]}]`,
-						"command"
-					);
-				}
+		this.transformers.looks_changeeffectby = this.transformers.looks_seteffectto = async data => {
+			if (
+				data.fields.EFFECT[0] !== "color" &&
+				data.fields.EFFECT[0] !== "brightness" &&
+				data.fields.EFFECT[0] !== "ghost"
+			) {
+				return this.unknown(`${data.opcode} [${data.fields.EFFECT[0]}]`, "command");
+			}
 
-				const value = await this.input(data.inputs.VALUE);
-				const block = app.current.workspace.newBlock(
-					data.opcode === "looks_seteffectto" ? "set" : "change"
-				);
-				block.getInput("VAR")?.connection!.setShadowState({
-					type: "effect",
-					fields: {
-						EFFECT: data.fields.EFFECT[0],
-					},
-				});
-				block.getInput("VALUE")?.connection?.connect(value!.outputConnection!);
+			const value = await this.input(data.inputs.VALUE);
+			const block = app.current.workspace.newBlock(data.opcode === "looks_seteffectto" ? "set" : "change");
+			block.getInput("VAR")?.connection!.setShadowState({
+				type: "effect",
+				fields: {
+					EFFECT: data.fields.EFFECT[0],
+				},
+			});
+			block.getInput("VALUE")?.connection?.connect(value!.outputConnection!);
 
-				return block;
-			};
+			return block;
+		};
 		this.transformers.looks_cleargraphiceffects = this.override({
 			opcode: "clearEffects",
 		});
@@ -163,9 +154,7 @@ class SB3 {
 				subtract.getInput("A")?.connection?.connect(input!.outputConnection!);
 				subtract.getInput("B")?.connection?.connect(one.outputConnection!);
 
-				block
-					.getInput("COSTUME")
-					?.connection?.connect(subtract.outputConnection!);
+				block.getInput("COSTUME")?.connection?.connect(subtract.outputConnection!);
 			} else {
 				block.getInput("COSTUME")?.connection?.connect(input!.outputConnection!);
 			}
@@ -189,9 +178,7 @@ class SB3 {
 				subtract.getInput("A")?.connection?.connect(input!.outputConnection!);
 				subtract.getInput("B")?.connection?.connect(one.outputConnection!);
 
-				block
-					.getInput("COSTUME")
-					?.connection?.connect(subtract.outputConnection!);
+				block.getInput("COSTUME")?.connection?.connect(subtract.outputConnection!);
 			} else {
 				block.getInput("COSTUME")?.connection?.connect(input!.outputConnection!);
 			}
@@ -239,11 +226,7 @@ class SB3 {
 			opcode: "stopSounds",
 		});
 		this.transformers.sound_setvolumeto = this.setter("set", "volume", "VOLUME");
-		this.transformers.sound_changevolumeby = this.setter(
-			"change",
-			"volume",
-			"VOLUME"
-		);
+		this.transformers.sound_changevolumeby = this.setter("change", "volume", "VOLUME");
 		this.transformers.sound_volume = this.reporter("volume");
 
 		// Pen
@@ -259,11 +242,7 @@ class SB3 {
 		this.transformers.pen_penUp = this.override({
 			opcode: "penUp",
 		});
-		this.transformers.pen_setPenColorToColor = this.setter(
-			"set",
-			"penColor",
-			"COLOR"
-		);
+		this.transformers.pen_setPenColorToColor = this.setter("set", "penColor", "COLOR");
 		this.transformers.pen_changePenSizeBy = this.setter("change", "penSize", "SIZE");
 		this.transformers.pen_setPenSizeTo = this.setter("set", "penSize", "SIZE");
 
@@ -286,8 +265,7 @@ class SB3 {
 			block.getInput("EVENT")?.connection!.setShadowState({type: "event"});
 			return block;
 		};
-		this.transformers.event_whenstageclicked =
-			this.transformers.event_whenthisspriteclicked;
+		this.transformers.event_whenstageclicked = this.transformers.event_whenthisspriteclicked;
 		this.transformers.event_whenbroadcastreceived = data => {
 			const block = app.current.workspace.newBlock("whenReceiveMessage");
 			block.getInput("MESSAGE")?.connection!.setShadowState({
@@ -408,9 +386,7 @@ class SB3 {
 			opcode: "whenCloned",
 		});
 		this.transformers.control_create_clone_of = data => {
-			const field =
-				this.target.blocks[data.inputs.CLONE_OPTION[1] as string].fields
-					.CLONE_OPTION[0];
+			const field = this.target.blocks[data.inputs.CLONE_OPTION[1] as string].fields.CLONE_OPTION[0];
 			const block = app.current.workspace.newBlock("clone");
 			block.getInput("SPRITE")?.connection!.setShadowState({
 				type: "sprite",
@@ -420,8 +396,7 @@ class SB3 {
 			});
 			return block;
 		};
-		this.transformers.control_delete_this_clone = () =>
-			app.current.workspace.newBlock("delete");
+		this.transformers.control_delete_this_clone = () => app.current.workspace.newBlock("delete");
 		this.transformers.control_forever = async data => {
 			const block = app.current.workspace.newBlock("while");
 
@@ -458,14 +433,10 @@ class SB3 {
 
 		// Sensing
 		this.transformers.sensing_of = async data => {
-			const fieldValue =
-				this.target.blocks[data.inputs.OBJECT[1] as string].fields.OBJECT[0];
+			const fieldValue = this.target.blocks[data.inputs.OBJECT[1] as string].fields.OBJECT[0];
 
 			const block = app.current.workspace.newBlock("property");
-			block.setFieldValue(
-				fieldValue === "_stage_" ? "Stage" : fieldValue,
-				"SPRITE"
-			);
+			block.setFieldValue(fieldValue === "_stage_" ? "Stage" : fieldValue, "SPRITE");
 
 			switch (data.fields.PROPERTY[0]) {
 				case "x position":
@@ -482,8 +453,7 @@ class SB3 {
 		};
 		this.transformers.sensing_touchingobject = data => {
 			const fieldValue =
-				this.target.blocks[data.inputs.TOUCHINGOBJECTMENU[1] as string].fields
-					.TOUCHINGOBJECTMENU[0];
+				this.target.blocks[data.inputs.TOUCHINGOBJECTMENU[1] as string].fields.TOUCHINGOBJECTMENU[0];
 
 			if (fieldValue === "_edge_") {
 				return app.current.workspace.newBlock("isTouchingEdge");
@@ -506,21 +476,11 @@ class SB3 {
 		this.transformers.sensing_distanceto = data => {
 			// Scrap does not have "distance to [object]" block,
 			// rather it has "distance to [x: number] [y: number]" block.
-			const fieldValue =
-				this.target.blocks[data.inputs.DISTANCETOMENU[1] as string].fields
-					.DISTANCETOMENU[0];
+			const fieldValue = this.target.blocks[data.inputs.DISTANCETOMENU[1] as string].fields.DISTANCETOMENU[0];
 			const block = app.current.workspace.newBlock("distanceTo");
 			if (fieldValue === "_mouse_") {
-				block
-					.getInput("X")
-					?.connection?.connect(
-						app.current.workspace.newBlock("mouseX").outputConnection!
-					);
-				block
-					.getInput("Y")
-					?.connection?.connect(
-						app.current.workspace.newBlock("mouseY").outputConnection!
-					);
+				block.getInput("X")?.connection?.connect(app.current.workspace.newBlock("mouseX").outputConnection!);
+				block.getInput("Y")?.connection?.connect(app.current.workspace.newBlock("mouseY").outputConnection!);
 			} else {
 				const x = app.current.workspace.newBlock("property");
 				x.setFieldValue("x", "PROPERTY");
@@ -617,9 +577,7 @@ class SB3 {
 			} else if (data.fields.DRAG_MODE[0] === "not draggable") {
 				const falseBlock = app.current.workspace.newBlock("boolean");
 				falseBlock.setFieldValue("false", "BOOL");
-				block
-					.getInput("VALUE")
-					?.connection?.connect(falseBlock.outputConnection!);
+				block.getInput("VALUE")?.connection?.connect(falseBlock.outputConnection!);
 			}
 			return block;
 		};
@@ -815,10 +773,7 @@ class SB3 {
 					return block;
 				}
 				default:
-					return this.unknown(
-						`operator_mathop [${data.fields.OPERATOR[0]}]`,
-						"reporter"
-					);
+					return this.unknown(`operator_mathop [${data.fields.OPERATOR[0]}]`, "reporter");
 			}
 		};
 		this.transformers.operator_join = async data => {
@@ -832,20 +787,19 @@ class SB3 {
 		};
 
 		// Variables
-		this.transformers.data_setvariableto = this.transformers.data_changevariableby =
-			async data => {
-				const block = app.current.workspace.newBlock(data.opcode.slice(5, -10));
-				const value = await this.input(data.inputs.VALUE);
-				block.getInput("VALUE")?.connection?.connect(value!.outputConnection!);
+		this.transformers.data_setvariableto = this.transformers.data_changevariableby = async data => {
+			const block = app.current.workspace.newBlock(data.opcode.slice(5, -10));
+			const value = await this.input(data.inputs.VALUE);
+			block.getInput("VALUE")?.connection?.connect(value!.outputConnection!);
 
-				const variable = app.current.workspace.newBlock("parameter");
-				variable.loadExtraState!({isVariable: true});
-				variable.setFieldValue(data.fields.VARIABLE[0], "VAR");
+			const variable = app.current.workspace.newBlock("parameter");
+			variable.loadExtraState!({isVariable: true});
+			variable.setFieldValue(data.fields.VARIABLE[0], "VAR");
 
-				block.getInput("VAR")?.connection?.connect(variable.outputConnection!);
+			block.getInput("VAR")?.connection?.connect(variable.outputConnection!);
 
-				return block;
-			};
+			return block;
+		};
 		this.transformers.data_showvariable = data => {
 			const block = app.current.workspace.newBlock("showVariable");
 			block.setFieldValue(data.fields.VARIABLE[0], "VAR");
@@ -882,9 +836,7 @@ class SB3 {
 						PARAM: `${block.params[i]}:${types[paramTypes![i]]}`,
 					},
 				});
-				block
-					.appendValueInput(`PARAM_${i}`)
-					.connection?.connect(typed.outputConnection!);
+				block.appendValueInput(`PARAM_${i}`).connection?.connect(typed.outputConnection!);
 			}
 
 			return block;
@@ -893,12 +845,7 @@ class SB3 {
 			const name = data.mutation!.proccode.replace(/%[nbs]/g, "()").trim();
 			const call = app.current.workspace.newBlock("call");
 			const types = (data.mutation!.proccode.match(/%[bns]/g) ?? []).map(e => ({
-				type:
-					e[1] === "s"
-						? ["string", "number"]
-						: e[1] === "b"
-						? "boolean"
-						: "number",
+				type: e[1] === "s" ? ["string", "number"] : e[1] === "b" ? "boolean" : "number",
 			}));
 			const args: string[] = JSON.parse(data.mutation!.argumentids);
 
@@ -912,9 +859,7 @@ class SB3 {
 				if (content) {
 					// Boolean inputs can be empty
 					const value = await this.input(content);
-					call.getInput(`PARAM_${i}`)?.connection?.connect(
-						value!.outputConnection!
-					);
+					call.getInput(`PARAM_${i}`)?.connection?.connect(value!.outputConnection!);
 				}
 			}
 
@@ -950,9 +895,7 @@ class SB3 {
 	}
 
 	private static async transform(this: SB3, zip: JSZip) {
-		const project: SB3.Project = JSON.parse(
-			await zip.file("project.json")!.async("text")
-		);
+		const project: SB3.Project = JSON.parse(await zip.file("project.json")!.async("text"));
 		this.isProjectCompatible(project);
 		this.assetMap = {};
 
@@ -963,18 +906,13 @@ class SB3 {
 			app.current.costumes = [];
 			for (const costume of target.costumes) {
 				const filename = `${costume.assetId}.${costume.dataFormat}`;
-				const name = costume.name
-					.replace(illegalRe, "_")
-					.replace(controlRe, "_")
-					.replace(reservedRe, "_");
+				const name = costume.name.replace(illegalRe, "_").replace(controlRe, "_").replace(reservedRe, "_");
 				app.current.costumes.push(
 					new File(
 						[await zip.file(filename)!.async("blob")],
 						`${(this.assetMap[costume.name] = name)}.${costume.dataFormat}`,
 						{
-							type: `image/${costume.dataFormat}${
-								costume.dataFormat === "svg" ? "+xml" : ""
-							}`,
+							type: `image/${costume.dataFormat}${costume.dataFormat === "svg" ? "+xml" : ""}`,
 						}
 					)
 				);
@@ -984,13 +922,9 @@ class SB3 {
 			for (const sound of target.sounds) {
 				const filename = `${sound.assetId}.${sound.dataFormat}`;
 				app.current.sounds.push(
-					new File(
-						[await zip.file(filename)!.async("blob")],
-						`${sound.name}.${sound.dataFormat}`,
-						{
-							type: `audio/${sound.dataFormat}`,
-						}
-					)
+					new File([await zip.file(filename)!.async("blob")], `${sound.name}.${sound.dataFormat}`, {
+						type: `audio/${sound.dataFormat}`,
+					})
 				);
 			}
 			app.current.workspace.clear();
@@ -1095,13 +1029,8 @@ class SB3 {
 			}
 
 			for (const [name, input] of Object.entries(data.inputs)) {
-				const {connection} = block.getInput(
-					name in inputs ? inputs[name][0] : name
-				)!;
-				const inner = await this.input(
-					input,
-					name in inputs ? inputs[name][1] : false
-				);
+				const {connection} = block.getInput(name in inputs ? inputs[name][0] : name)!;
+				const inner = await this.input(input, name in inputs ? inputs[name][1] : false);
 
 				if (inner && inner.previousConnection) {
 					connection?.connect(inner.previousConnection);
@@ -1113,18 +1042,14 @@ class SB3 {
 						switch (connection!.getCheck()![0]) {
 							case "number": {
 								const block = app.current.workspace.newBlock("number");
-								block
-									.getInput("VALUE")
-									?.connection?.connect(inner.outputConnection);
+								block.getInput("VALUE")?.connection?.connect(inner.outputConnection);
 
 								connection?.connect(block.outputConnection!);
 								break;
 							}
 							case "string": {
 								const block = app.current.workspace.newBlock("string");
-								block
-									.getInput("VALUE")
-									?.connection?.connect(inner.outputConnection);
+								block.getInput("VALUE")?.connection?.connect(inner.outputConnection);
 
 								connection?.connect(block.outputConnection!);
 								break;
@@ -1133,16 +1058,11 @@ class SB3 {
 								const block = app.current.workspace.newBlock("compare");
 								block.setFieldValue("==", "OP");
 
-								const trueBlock =
-									app.current.workspace.newBlock("iterables_string");
+								const trueBlock = app.current.workspace.newBlock("iterables_string");
 								trueBlock.setFieldValue("true", "TEXT");
 
-								block
-									.getInput("A")
-									?.connection?.connect(trueBlock.outputConnection!);
-								block
-									.getInput("B")
-									?.connection?.connect(inner.outputConnection);
+								block.getInput("A")?.connection?.connect(trueBlock.outputConnection!);
+								block.getInput("B")?.connection?.connect(inner.outputConnection);
 
 								connection?.connect(block.outputConnection!);
 								break;
@@ -1274,10 +1194,7 @@ class SB3 {
 				const assetBlock = app.current.workspace.newBlock(type);
 				const nameBlock = app.current.workspace.newBlock("iterables_string");
 
-				nameBlock.setFieldValue(
-					this.assetMap[this.target.costumes[i].name],
-					"TEXT"
-				);
+				nameBlock.setFieldValue(this.assetMap[this.target.costumes[i].name], "TEXT");
 				equals.getInput("A")?.connection?.connect(assetBlock.outputConnection!);
 				equals.getInput("B")?.connection?.connect(nameBlock.outputConnection!);
 
@@ -1292,9 +1209,7 @@ class SB3 {
 					.getInput("VALUE")
 					?.connection!.targetBlock()!
 					.setFieldValue(this.target.costumes[i].name, "TEXT");
-				block
-					.getInput(`DO${i}`)
-					?.connection?.connect(returnBlock.previousConnection!);
+				block.getInput(`DO${i}`)?.connection?.connect(returnBlock.previousConnection!);
 			}
 
 			const throwBlock = app.current.workspace.newBlock("throw");

@@ -10,25 +10,11 @@
  * @author Microsoft Corporation
  * @fileoverview Just remapped imports.
  */
-import {
-	Diagnostic,
-	DiagnosticRelatedInformation,
-	LanguageServiceDefaults,
-} from "./typescript";
-import ts from "typescript";
+import type {Diagnostic, DiagnosticRelatedInformation, LanguageServiceDefaults} from "./typescript";
+import type ts from "typescript";
 import type {TypeScriptWorker} from "./tsWorker";
-import {
-	editor,
-	languages,
-	Uri,
-	Position,
-	Range,
-	CancellationToken,
-	IDisposable,
-	IRange,
-	MarkerTag,
-	MarkerSeverity,
-} from "monaco-editor";
+import type {Position, CancellationToken, IDisposable, IRange} from "monaco-editor";
+import {editor, languages, Uri, Range, MarkerTag, MarkerSeverity} from "monaco-editor";
 
 //#region utils copied from typescript to prevent loading the entire typescriptServices ---
 
@@ -76,9 +62,9 @@ function displayPartsToString(displayParts: ts.SymbolDisplayPart[] | undefined):
 //#endregion
 
 export abstract class Adapter {
-	constructor(protected _worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {}
+	constructor(protected worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {}
 
-	protected _textSpanToRange(model: editor.ITextModel, span: ts.TextSpan): IRange {
+	protected textSpanToRange(model: editor.ITextModel, span: ts.TextSpan): IRange {
 		const p1 = model.getPositionAt(span.start);
 		const p2 = model.getPositionAt(span.start + span.length);
 		const {lineNumber: startLineNumber, column: startColumn} = p1;
@@ -90,15 +76,11 @@ export abstract class Adapter {
 // --- lib files
 
 export class LibFiles {
-	private _libFiles: Record<string, string>;
-	private _hasFetchedLibFiles: boolean;
-	private _fetchLibFilesPromise: Promise<void> | null;
+	private libFiles: Record<string, string> = {};
+	private hasFetchedLibFiles = false;
+	private fetchLibFilesPromise?: Promise<void>;
 
-	constructor(private readonly _worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {
-		this._libFiles = {};
-		this._hasFetchedLibFiles = false;
-		this._fetchLibFilesPromise = null;
-	}
+	constructor(private readonly worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {}
 
 	public isLibFile(uri: Uri | null): boolean {
 		if (!uri) {
@@ -113,17 +95,13 @@ export class LibFiles {
 		if (model) {
 			return model;
 		}
-		if (this.isLibFile(uri) && this._hasFetchedLibFiles) {
-			return editor.createModel(
-				this._libFiles[uri.path.slice(1)],
-				"typescript",
-				uri
-			);
+		if (this.isLibFile(uri) && this.hasFetchedLibFiles) {
+			return editor.createModel(this.libFiles[uri.path.slice(1)], "typescript", uri);
 		}
 		return null;
 	}
 
-	private _containsLibFile(uris: (Uri | null)[]): boolean {
+	private containsLibFile(uris: (Uri | null)[]): boolean {
 		for (const uri of uris) {
 			if (this.isLibFile(uri)) {
 				return true;
@@ -133,23 +111,17 @@ export class LibFiles {
 	}
 
 	public async fetchLibFilesIfNecessary(uris: (Uri | null)[]): Promise<void> {
-		if (!this._containsLibFile(uris)) {
+		if (!this.containsLibFile(uris)) {
 			// no lib files necessary
 			return;
 		}
-		await this._fetchLibFiles();
+		await (this.fetchLibFilesPromise ??= this.fetchLibFiles());
 	}
 
-	private _fetchLibFiles(): Promise<void> {
-		if (!this._fetchLibFilesPromise) {
-			this._fetchLibFilesPromise = this._worker()
-				.then(w => w.getLibFiles())
-				.then(libFiles => {
-					this._hasFetchedLibFiles = true;
-					this._libFiles = libFiles;
-				});
-		}
-		return this._fetchLibFilesPromise;
+	private async fetchLibFiles() {
+		const worker = await this.worker();
+		this.libFiles = await worker.getLibFiles();
+		this.hasFetchedLibFiles = true;
 	}
 }
 
@@ -172,30 +144,30 @@ interface IInternalEditorModel extends editor.IModel {
 }
 
 export class DiagnosticsAdapter extends Adapter {
-	private _disposables: IDisposable[] = [];
-	private _listener: {[uri: string]: IDisposable} = Object.create(null);
+	private disposables: IDisposable[] = [];
+	private listener: {[uri: string]: IDisposable} = Object.create(null);
 
 	constructor(
-		private readonly _libFiles: LibFiles,
-		private _defaults: LanguageServiceDefaults,
-		private _selector: string,
+		private readonly libFiles: LibFiles,
+		private defaults: LanguageServiceDefaults,
+		private selector: string,
 		worker: (...uris: Uri[]) => Promise<TypeScriptWorker>
 	) {
 		super(worker);
 
 		const onModelAdd = (model: IInternalEditorModel): void => {
-			if (model.getLanguageId() !== _selector) {
+			if (model.getLanguageId() !== selector) {
 				return;
 			}
 
 			const maybeValidate = () => {
-				const {onlyVisible} = this._defaults.getDiagnosticsOptions();
+				const {onlyVisible} = this.defaults.getDiagnosticsOptions();
 				if (onlyVisible) {
 					if (model.isAttachedToEditor()) {
-						this._doValidate(model);
+						this.doValidate(model);
 					}
 				} else {
-					this._doValidate(model);
+					this.doValidate(model);
 				}
 			};
 
@@ -206,7 +178,7 @@ export class DiagnosticsAdapter extends Adapter {
 			});
 
 			const visibleSubscription = model.onDidChangeAttached(() => {
-				const {onlyVisible} = this._defaults.getDiagnosticsOptions();
+				const {onlyVisible} = this.defaults.getDiagnosticsOptions();
 				if (onlyVisible) {
 					if (model.isAttachedToEditor()) {
 						// this model is now attached to an editor
@@ -215,12 +187,12 @@ export class DiagnosticsAdapter extends Adapter {
 					} else {
 						// this model is no longer attached to an editor
 						// => clear existing diagnostics
-						editor.setModelMarkers(model, this._selector, []);
+						editor.setModelMarkers(model, this.selector, []);
 					}
 				}
 			});
 
-			this._listener[model.uri.toString()] = {
+			this.listener[model.uri.toString()] = {
 				dispose() {
 					changeSubscription.dispose();
 					visibleSubscription.dispose();
@@ -232,26 +204,24 @@ export class DiagnosticsAdapter extends Adapter {
 		};
 
 		const onModelRemoved = (model: editor.IModel): void => {
-			editor.setModelMarkers(model, this._selector, []);
+			editor.setModelMarkers(model, this.selector, []);
 			const key = model.uri.toString();
-			if (this._listener[key]) {
-				this._listener[key].dispose();
-				delete this._listener[key];
+			if (this.listener[key]) {
+				this.listener[key].dispose();
+				delete this.listener[key];
 			}
 		};
 
-		this._disposables.push(
-			editor.onDidCreateModel(model => onModelAdd(<IInternalEditorModel>model))
-		);
-		this._disposables.push(editor.onWillDisposeModel(onModelRemoved));
-		this._disposables.push(
+		this.disposables.push(editor.onDidCreateModel(model => onModelAdd(model as IInternalEditorModel)));
+		this.disposables.push(editor.onWillDisposeModel(onModelRemoved));
+		this.disposables.push(
 			editor.onDidChangeModelLanguage(event => {
 				onModelRemoved(event.model);
-				onModelAdd(<IInternalEditorModel>event.model);
+				onModelAdd(event.model as IInternalEditorModel);
 			})
 		);
 
-		this._disposables.push({
+		this.disposables.push({
 			dispose() {
 				for (const model of editor.getModels()) {
 					onModelRemoved(model);
@@ -263,22 +233,22 @@ export class DiagnosticsAdapter extends Adapter {
 			// redo diagnostics when options change
 			for (const model of editor.getModels()) {
 				onModelRemoved(model);
-				onModelAdd(<IInternalEditorModel>model);
+				onModelAdd(model as IInternalEditorModel);
 			}
 		};
-		this._disposables.push(this._defaults.onDidChange(recomputeDiagostics));
-		this._disposables.push(this._defaults.onDidExtraLibsChange(recomputeDiagostics));
+		this.disposables.push(this.defaults.onDidChange(recomputeDiagostics));
+		this.disposables.push(this.defaults.onDidExtraLibsChange(recomputeDiagostics));
 
-		editor.getModels().forEach(model => onModelAdd(<IInternalEditorModel>model));
+		editor.getModels().forEach(model => onModelAdd(model as IInternalEditorModel));
 	}
 
 	public dispose(): void {
-		this._disposables.forEach(d => d && d.dispose());
-		this._disposables = [];
+		this.disposables.forEach(d => d && d.dispose());
+		this.disposables = [];
 	}
 
-	private async _doValidate(model: editor.ITextModel): Promise<void> {
-		const worker = await this._worker(model.uri);
+	private async doValidate(model: editor.ITextModel): Promise<void> {
+		const worker = await this.worker(model.uri);
 
 		if (model.isDisposed()) {
 			// model was disposed in the meantime
@@ -287,7 +257,7 @@ export class DiagnosticsAdapter extends Adapter {
 
 		const promises: Promise<Diagnostic[]>[] = [];
 		const {noSyntaxValidation, noSemanticValidation, noSuggestionDiagnostics} =
-			this._defaults.getDiagnosticsOptions();
+			this.defaults.getDiagnosticsOptions();
 		if (!noSyntaxValidation) {
 			promises.push(worker.getSyntacticDiagnostics(model.uri.toString()));
 		}
@@ -307,25 +277,15 @@ export class DiagnosticsAdapter extends Adapter {
 
 		const diagnostics = allDiagnostics
 			.reduce((p, c) => c.concat(p), [])
-			.filter(
-				d =>
-					(
-						this._defaults.getDiagnosticsOptions().diagnosticCodesToIgnore ||
-						[]
-					).indexOf(d.code) === -1
-			);
+			.filter(d => (this.defaults.getDiagnosticsOptions().diagnosticCodesToIgnore || []).indexOf(d.code) === -1);
 
 		// Fetch lib files if necessary
 		const relatedUris = diagnostics
 			.map(d => d.relatedInformation || [])
 			.reduce((p, c) => c.concat(p), [])
-			.map(relatedInformation =>
-				relatedInformation.file
-					? Uri.parse(relatedInformation.file.fileName)
-					: null
-			);
+			.map(relatedInformation => (relatedInformation.file ? Uri.parse(relatedInformation.file.fileName) : null));
 
-		await this._libFiles.fetchLibFilesIfNecessary(relatedUris);
+		await this.libFiles.fetchLibFilesIfNecessary(relatedUris);
 
 		if (model.isDisposed()) {
 			// model was disposed in the meantime
@@ -334,22 +294,16 @@ export class DiagnosticsAdapter extends Adapter {
 
 		editor.setModelMarkers(
 			model,
-			this._selector,
-			diagnostics.map(d => this._convertDiagnostics(model, d))
+			this.selector,
+			diagnostics.map(d => this.convertDiagnostics(model, d))
 		);
 	}
 
-	private _convertDiagnostics(
-		model: editor.ITextModel,
-		diag: Diagnostic
-	): editor.IMarkerData {
+	private convertDiagnostics(model: editor.ITextModel, diag: Diagnostic): editor.IMarkerData {
 		const diagStart = diag.start || 0;
 		const diagLength = diag.length || 1;
-		const {lineNumber: startLineNumber, column: startColumn} =
-			model.getPositionAt(diagStart);
-		const {lineNumber: endLineNumber, column: endColumn} = model.getPositionAt(
-			diagStart + diagLength
-		);
+		const {lineNumber: startLineNumber, column: startColumn} = model.getPositionAt(diagStart);
+		const {lineNumber: endLineNumber, column: endColumn} = model.getPositionAt(diagStart + diagLength);
 
 		const tags: MarkerTag[] = [];
 		if (diag.reportsUnnecessary) {
@@ -360,7 +314,7 @@ export class DiagnosticsAdapter extends Adapter {
 		}
 
 		return {
-			severity: this._tsDiagnosticCategoryToMarkerSeverity(diag.category),
+			severity: this.tsDiagnosticCategoryToMarkerSeverity(diag.category),
 			startLineNumber,
 			startColumn,
 			endLineNumber,
@@ -368,14 +322,11 @@ export class DiagnosticsAdapter extends Adapter {
 			message: flattenDiagnosticMessageText(diag.messageText, "\n"),
 			code: diag.code.toString(),
 			tags,
-			relatedInformation: this._convertRelatedInformation(
-				model,
-				diag.relatedInformation
-			),
+			relatedInformation: this.convertRelatedInformation(model, diag.relatedInformation),
 		};
 	}
 
-	private _convertRelatedInformation(
+	private convertRelatedInformation(
 		model: editor.ITextModel,
 		relatedInformation?: DiagnosticRelatedInformation[]
 	): editor.IRelatedInformation[] {
@@ -387,7 +338,7 @@ export class DiagnosticsAdapter extends Adapter {
 		relatedInformation.forEach(info => {
 			let relatedResource: editor.ITextModel | null = model;
 			if (info.file) {
-				relatedResource = this._libFiles.getOrCreateModel(info.file.fileName);
+				relatedResource = this.libFiles.getOrCreateModel(info.file.fileName);
 			}
 
 			if (!relatedResource) {
@@ -395,10 +346,10 @@ export class DiagnosticsAdapter extends Adapter {
 			}
 			const infoStart = info.start || 0;
 			const infoLength = info.length || 1;
-			const {lineNumber: startLineNumber, column: startColumn} =
-				relatedResource.getPositionAt(infoStart);
-			const {lineNumber: endLineNumber, column: endColumn} =
-				relatedResource.getPositionAt(infoStart + infoLength);
+			const {lineNumber: startLineNumber, column: startColumn} = relatedResource.getPositionAt(infoStart);
+			const {lineNumber: endLineNumber, column: endColumn} = relatedResource.getPositionAt(
+				infoStart + infoLength
+			);
 
 			result.push({
 				resource: relatedResource.uri,
@@ -412,9 +363,7 @@ export class DiagnosticsAdapter extends Adapter {
 		return result;
 	}
 
-	private _tsDiagnosticCategoryToMarkerSeverity(
-		category: ts.DiagnosticCategory
-	): MarkerSeverity {
+	private tsDiagnosticCategoryToMarkerSeverity(category: ts.DiagnosticCategory): MarkerSeverity {
 		switch (category) {
 			case DiagnosticCategory.Error:
 				return MarkerSeverity.Error;
@@ -446,20 +395,15 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 	public async provideCompletionItems(
 		model: editor.ITextModel,
 		position: Position,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 		context: languages.CompletionContext
 	): Promise<languages.CompletionList | undefined> {
 		const wordInfo = model.getWordUntilPosition(position);
-		const wordRange = new Range(
-			position.lineNumber,
-			wordInfo.startColumn,
-			position.lineNumber,
-			wordInfo.endColumn
-		);
+		const wordRange = new Range(position.lineNumber, wordInfo.startColumn, position.lineNumber, wordInfo.endColumn);
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
 
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -475,17 +419,12 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 			let range = wordRange;
 			if (entry.replacementSpan) {
 				const p1 = model.getPositionAt(entry.replacementSpan.start);
-				const p2 = model.getPositionAt(
-					entry.replacementSpan.start + entry.replacementSpan.length
-				);
+				const p2 = model.getPositionAt(entry.replacementSpan.start + entry.replacementSpan.length);
 				range = new Range(p1.lineNumber, p1.column, p2.lineNumber, p2.column);
 			}
 
 			const tags: languages.CompletionItemTag[] = [];
-			if (
-				entry.kindModifiers !== undefined &&
-				entry.kindModifiers.indexOf("deprecated") !== -1
-			) {
+			if (entry.kindModifiers !== undefined && entry.kindModifiers.indexOf("deprecated") !== -1) {
 				tags.push(languages.CompletionItemTag.Deprecated);
 			}
 
@@ -507,26 +446,16 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 		};
 	}
 
-	public async resolveCompletionItem(
-		item: languages.CompletionItem
-	): Promise<languages.CompletionItem> {
-		const myItem = <MyCompletionItem>item;
-		const resource = myItem.uri;
-		const position = myItem.position;
-		const offset = myItem.offset;
+	public async resolveCompletionItem(item: MyCompletionItem): Promise<MyCompletionItem> {
+		const worker = await this.worker(item.uri);
+		const details = await worker.getCompletionEntryDetails(item.uri.toString(), item.offset, item.label);
 
-		const worker = await this._worker(resource);
-		const details = await worker.getCompletionEntryDetails(
-			resource.toString(),
-			offset,
-			myItem.label
-		);
 		if (!details) {
-			return myItem;
+			return item;
 		}
-		return <MyCompletionItem>{
-			uri: resource,
-			position: position,
+
+		return {
+			...item,
 			label: details.name,
 			kind: SuggestAdapter.convertKind(details.kind),
 			detail: displayPartsToString(details.displayParts),
@@ -594,29 +523,22 @@ function tagToString(tag: ts.JSDocTagInfo): string {
 	return tagLabel;
 }
 
-export class SignatureHelpAdapter
-	extends Adapter
-	implements languages.SignatureHelpProvider
-{
+export class SignatureHelpAdapter extends Adapter implements languages.SignatureHelpProvider {
 	public signatureHelpTriggerCharacters = ["(", ","];
 
-	private static _toSignatureHelpTriggerReason(
-		context: languages.SignatureHelpContext
-	): ts.SignatureHelpTriggerReason {
+	private toSignatureHelpTriggerReason(context: languages.SignatureHelpContext): ts.SignatureHelpTriggerReason {
 		switch (context.triggerKind) {
 			case languages.SignatureHelpTriggerKind.TriggerCharacter:
 				if (context.triggerCharacter) {
 					if (context.isRetrigger) {
 						return {
 							kind: "retrigger",
-							triggerCharacter:
-								context.triggerCharacter as ts.SignatureHelpRetriggerCharacter,
+							triggerCharacter: context.triggerCharacter as ts.SignatureHelpRetriggerCharacter,
 						};
 					} else {
 						return {
 							kind: "characterTyped",
-							triggerCharacter:
-								context.triggerCharacter as ts.SignatureHelpTriggerCharacter,
+							triggerCharacter: context.triggerCharacter as ts.SignatureHelpTriggerCharacter,
 						};
 					}
 				} else {
@@ -635,19 +557,19 @@ export class SignatureHelpAdapter
 	public async provideSignatureHelp(
 		model: editor.ITextModel,
 		position: Position,
-		_token: CancellationToken,
+		token: CancellationToken,
 		context: languages.SignatureHelpContext
 	): Promise<languages.SignatureHelpResult | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
 		}
 
 		const info = await worker.getSignatureHelpItems(resource.toString(), offset, {
-			triggerReason: SignatureHelpAdapter._toSignatureHelpTriggerReason(context),
+			triggerReason: this.toSignatureHelpTriggerReason(context),
 		});
 
 		if (!info || model.isDisposed()) {
@@ -698,13 +620,10 @@ export class SignatureHelpAdapter
 // --- hover ------
 
 export class QuickInfoAdapter extends Adapter implements languages.HoverProvider {
-	public async provideHover(
-		model: editor.ITextModel,
-		position: Position
-	): Promise<languages.Hover | undefined> {
+	public async provideHover(model: editor.ITextModel, position: Position): Promise<languages.Hover | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -717,18 +636,16 @@ export class QuickInfoAdapter extends Adapter implements languages.HoverProvider
 		}
 
 		const documentation = displayPartsToString(info.documentation);
-		const tags = info.tags
-			? info.tags.map(tag => tagToString(tag)).join("  \n\n")
-			: "";
+		const tags = info.tags ? info.tags.map(tag => tagToString(tag)).join("  \n\n") : "";
 		const contents = displayPartsToString(info.displayParts);
 		return {
-			range: this._textSpanToRange(model, info.textSpan),
+			range: this.textSpanToRange(model, info.textSpan),
 			contents: [
 				{
-					value: "```typescript\n" + contents + "\n```\n",
+					value: `\`\`\`typescript\n${contents}\n\`\`\`\n`,
 				},
 				{
-					value: documentation + (tags ? "\n\n" + tags : ""),
+					value: documentation + (tags ? `\n\n${tags}` : ""),
 				},
 			],
 		};
@@ -737,51 +654,41 @@ export class QuickInfoAdapter extends Adapter implements languages.HoverProvider
 
 // --- occurrences ------
 
-export class DocumentHighlightAdapter
-	extends Adapter
-	implements languages.DocumentHighlightProvider
-{
+export class DocumentHighlightAdapter extends Adapter implements languages.DocumentHighlightProvider {
 	public async provideDocumentHighlights(
 		model: editor.ITextModel,
 		position: Position
 	): Promise<languages.DocumentHighlight[] | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
 		}
 
-		const entries = await worker.getDocumentHighlights(resource.toString(), offset, [
-			resource.toString(),
-		]);
+		const entries = await worker.getDocumentHighlights(resource.toString(), offset, [resource.toString()]);
 
 		if (!entries || model.isDisposed()) {
 			return;
 		}
 
-		return entries.flatMap(entry => {
-			return entry.highlightSpans.map(highlightSpans => {
-				return <languages.DocumentHighlight>{
-					range: this._textSpanToRange(model, highlightSpans.textSpan),
-					kind:
-						highlightSpans.kind === "writtenReference"
-							? languages.DocumentHighlightKind.Write
-							: languages.DocumentHighlightKind.Text,
-				};
-			});
-		});
+		return entries.flatMap(entry =>
+			entry.highlightSpans.map<languages.DocumentHighlight>(highlightSpans => ({
+				range: this.textSpanToRange(model, highlightSpans.textSpan),
+				kind:
+					highlightSpans.kind === "writtenReference"
+						? languages.DocumentHighlightKind.Write
+						: languages.DocumentHighlightKind.Text,
+			}))
+		);
 	}
 }
 
 // --- definition ------
 
 export class DefinitionAdapter extends Adapter {
-	constructor(
-		private readonly _libFiles: LibFiles,
-		worker: (...uris: Uri[]) => Promise<TypeScriptWorker>
-	) {
+	constructor(private readonly libFiles: LibFiles, worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {
 		super(worker);
 	}
 
@@ -791,7 +698,7 @@ export class DefinitionAdapter extends Adapter {
 	): Promise<languages.Definition | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -804,9 +711,7 @@ export class DefinitionAdapter extends Adapter {
 		}
 
 		// Fetch lib files if necessary
-		await this._libFiles.fetchLibFilesIfNecessary(
-			entries.map(entry => Uri.parse(entry.fileName))
-		);
+		await this.libFiles.fetchLibFilesIfNecessary(entries.map(entry => Uri.parse(entry.fileName)));
 
 		if (model.isDisposed()) {
 			return;
@@ -814,11 +719,11 @@ export class DefinitionAdapter extends Adapter {
 
 		const result: languages.Location[] = [];
 		for (const entry of entries) {
-			const refModel = this._libFiles.getOrCreateModel(entry.fileName);
+			const refModel = this.libFiles.getOrCreateModel(entry.fileName);
 			if (refModel) {
 				result.push({
 					uri: refModel.uri,
-					range: this._textSpanToRange(refModel, entry.textSpan),
+					range: this.textSpanToRange(refModel, entry.textSpan),
 				});
 			}
 		}
@@ -829,10 +734,7 @@ export class DefinitionAdapter extends Adapter {
 // --- references ------
 
 export class ReferenceAdapter extends Adapter implements languages.ReferenceProvider {
-	constructor(
-		private readonly _libFiles: LibFiles,
-		worker: (...uris: Uri[]) => Promise<TypeScriptWorker>
-	) {
+	constructor(private readonly libFiles: LibFiles, worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {
 		super(worker);
 	}
 
@@ -842,7 +744,7 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 	): Promise<languages.Location[] | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -855,9 +757,7 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 		}
 
 		// Fetch lib files if necessary
-		await this._libFiles.fetchLibFilesIfNecessary(
-			entries.map(entry => Uri.parse(entry.fileName))
-		);
+		await this.libFiles.fetchLibFilesIfNecessary(entries.map(entry => Uri.parse(entry.fileName)));
 
 		if (model.isDisposed()) {
 			return;
@@ -865,11 +765,11 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 
 		const result: languages.Location[] = [];
 		for (const entry of entries) {
-			const refModel = this._libFiles.getOrCreateModel(entry.fileName);
+			const refModel = this.libFiles.getOrCreateModel(entry.fileName);
 			if (refModel) {
 				result.push({
 					uri: refModel.uri,
-					range: this._textSpanToRange(refModel, entry.textSpan),
+					range: this.textSpanToRange(refModel, entry.textSpan),
 				});
 			}
 		}
@@ -880,11 +780,9 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 // --- outline ------
 
 export class OutlineAdapter extends Adapter implements languages.DocumentSymbolProvider {
-	public async provideDocumentSymbols(
-		model: editor.ITextModel
-	): Promise<languages.DocumentSymbol[] | undefined> {
+	public async provideDocumentSymbols(model: editor.ITextModel): Promise<languages.DocumentSymbol[] | undefined> {
 		const resource = model.uri;
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -896,18 +794,13 @@ export class OutlineAdapter extends Adapter implements languages.DocumentSymbolP
 			return;
 		}
 
-		const convert = (
-			item: ts.NavigationTree,
-			containerLabel?: string
-		): languages.DocumentSymbol => {
+		const convert = (item: ts.NavigationTree, containerLabel?: string): languages.DocumentSymbol => {
 			const result: languages.DocumentSymbol = {
 				name: item.text,
 				detail: "",
-				kind: <languages.SymbolKind>(
-					(outlineTypeTable[item.kind] || languages.SymbolKind.Variable)
-				),
-				range: this._textSpanToRange(model, item.spans[0]),
-				selectionRange: this._textSpanToRange(model, item.spans[0]),
+				kind: (outlineTypeTable[item.kind] || languages.SymbolKind.Variable) as languages.SymbolKind,
+				range: this.textSpanToRange(model, item.spans[0]),
+				selectionRange: this.textSpanToRange(model, item.spans[0]),
 				tags: [],
 				children: item.childItems?.map(child => convert(child, item.text)),
 				containerName: containerLabel,
@@ -973,43 +866,35 @@ outlineTypeTable[Kind.localFunction] = languages.SymbolKind.Function;
 // --- formatting ----
 
 export abstract class FormatHelper extends Adapter {
-	protected static _convertOptions(
-		options: languages.FormattingOptions
-	): ts.FormatCodeOptions {
+	protected convertOptions(options: languages.FormattingOptions): ts.FormatCodeSettings {
 		return {
-			ConvertTabsToSpaces: options.insertSpaces,
-			TabSize: options.tabSize,
-			IndentSize: options.tabSize,
-			IndentStyle: IndentStyle.Smart,
-			NewLineCharacter: "\n",
-			InsertSpaceAfterCommaDelimiter: true,
-			InsertSpaceAfterSemicolonInForStatements: true,
-			InsertSpaceBeforeAndAfterBinaryOperators: true,
-			InsertSpaceAfterKeywordsInControlFlowStatements: true,
-			InsertSpaceAfterFunctionKeywordForAnonymousFunctions: true,
-			InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-			InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-			InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-			PlaceOpenBraceOnNewLineForControlBlocks: false,
-			PlaceOpenBraceOnNewLineForFunctions: false,
+			convertTabsToSpaces: options.insertSpaces,
+			tabSize: options.tabSize,
+			indentSize: options.tabSize,
+			indentStyle: IndentStyle.Smart,
+			newLineCharacter: "\n",
+			insertSpaceAfterCommaDelimiter: true,
+			insertSpaceAfterSemicolonInForStatements: true,
+			insertSpaceBeforeAndAfterBinaryOperators: true,
+			insertSpaceAfterKeywordsInControlFlowStatements: true,
+			insertSpaceAfterFunctionKeywordForAnonymousFunctions: true,
+			insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+			insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+			insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+			placeOpenBraceOnNewLineForControlBlocks: false,
+			placeOpenBraceOnNewLineForFunctions: false,
 		};
 	}
 
-	protected _convertTextChanges(
-		model: editor.ITextModel,
-		change: ts.TextChange
-	): languages.TextEdit {
+	protected convertTextChanges(model: editor.ITextModel, change: ts.TextChange): languages.TextEdit {
 		return {
 			text: change.newText,
-			range: this._textSpanToRange(model, change.span),
+			range: this.textSpanToRange(model, change.span),
 		};
 	}
 }
 
-export class FormatAdapter
-	extends FormatHelper
-	implements languages.DocumentRangeFormattingEditProvider
-{
+export class FormatAdapter extends FormatHelper implements languages.DocumentRangeFormattingEditProvider {
 	public readonly canFormatMultipleRanges = false;
 
 	public async provideDocumentRangeFormattingEdits(
@@ -1026,7 +911,7 @@ export class FormatAdapter
 			lineNumber: range.endLineNumber,
 			column: range.endColumn,
 		});
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -1036,21 +921,18 @@ export class FormatAdapter
 			resource.toString(),
 			startOffset,
 			endOffset,
-			FormatHelper._convertOptions(options)
+			this.convertOptions(options)
 		);
 
 		if (!edits || model.isDisposed()) {
 			return;
 		}
 
-		return edits.map(edit => this._convertTextChanges(model, edit));
+		return edits.map(edit => this.convertTextChanges(model, edit));
 	}
 }
 
-export class FormatOnTypeAdapter
-	extends FormatHelper
-	implements languages.OnTypeFormattingEditProvider
-{
+export class FormatOnTypeAdapter extends FormatHelper implements languages.OnTypeFormattingEditProvider {
 	public get autoFormatTriggerCharacters() {
 		return [";", "}", "\n"];
 	}
@@ -1063,7 +945,7 @@ export class FormatOnTypeAdapter
 	): Promise<languages.TextEdit[] | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -1073,23 +955,20 @@ export class FormatOnTypeAdapter
 			resource.toString(),
 			offset,
 			ch,
-			FormatHelper._convertOptions(options)
+			this.convertOptions(options)
 		);
 
 		if (!edits || model.isDisposed()) {
 			return;
 		}
 
-		return edits.map(edit => this._convertTextChanges(model, edit));
+		return edits.map(edit => this.convertTextChanges(model, edit));
 	}
 }
 
 // --- code actions ------
 
-export class CodeActionAdaptor
-	extends FormatHelper
-	implements languages.CodeActionProvider
-{
+export class CodeActionAdaptor extends FormatHelper implements languages.CodeActionProvider {
 	public async provideCodeActions(
 		model: editor.ITextModel,
 		range: Range,
@@ -1104,12 +983,12 @@ export class CodeActionAdaptor
 			lineNumber: range.endLineNumber,
 			column: range.endColumn,
 		});
-		const formatOptions = FormatHelper._convertOptions(model.getOptions());
+		const formatOptions = this.convertOptions(model.getOptions());
 		const errorCodes = context.markers
 			.filter(m => m.code)
 			.map(m => m.code)
 			.map(Number);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -1133,7 +1012,7 @@ export class CodeActionAdaptor
 				return fix.changes.filter(change => change.isNewFile).length === 0;
 			})
 			.map(fix => {
-				return this._tsCodeFixActionToMonacoCodeAction(model, context, fix);
+				return this.tsCodeFixActionToMonacoCodeAction(model, context, fix);
 			});
 
 		return {
@@ -1142,7 +1021,7 @@ export class CodeActionAdaptor
 		};
 	}
 
-	private _tsCodeFixActionToMonacoCodeAction(
+	private tsCodeFixActionToMonacoCodeAction(
 		model: editor.ITextModel,
 		context: languages.CodeActionContext,
 		codeFix: ts.CodeFixAction
@@ -1154,7 +1033,7 @@ export class CodeActionAdaptor
 					resource: model.uri,
 					versionId: undefined,
 					textEdit: {
-						range: this._textSpanToRange(model, textChange.span),
+						range: this.textSpanToRange(model, textChange.span),
 						text: textChange.newText,
 					},
 				});
@@ -1174,10 +1053,7 @@ export class CodeActionAdaptor
 // --- rename ----
 
 export class RenameAdapter extends Adapter implements languages.RenameProvider {
-	constructor(
-		private readonly _libFiles: LibFiles,
-		worker: (...uris: Uri[]) => Promise<TypeScriptWorker>
-	) {
+	constructor(private readonly libFiles: LibFiles, worker: (...uris: Uri[]) => Promise<TypeScriptWorker>) {
 		super(worker);
 	}
 	public async provideRenameEdits(
@@ -1188,7 +1064,7 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
 		const resource = model.uri;
 		const fileName = resource.toString();
 		const offset = model.getOffsetAt(position);
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 
 		if (model.isDisposed()) {
 			return;
@@ -1222,13 +1098,13 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
 
 		const edits: languages.IWorkspaceTextEdit[] = [];
 		for (const renameLocation of renameLocations) {
-			const model = this._libFiles.getOrCreateModel(renameLocation.fileName);
+			const model = this.libFiles.getOrCreateModel(renameLocation.fileName);
 			if (model) {
 				edits.push({
 					resource: model.uri,
 					versionId: undefined,
 					textEdit: {
-						range: this._textSpanToRange(model, renameLocation.textSpan),
+						range: this.textSpanToRange(model, renameLocation.textSpan),
 						text: newName,
 					},
 				});
@@ -1244,10 +1120,7 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
 // --- inlay hints ----
 
 export class InlayHintsAdapter extends Adapter implements languages.InlayHintsProvider {
-	public async provideInlayHints(
-		model: editor.ITextModel,
-		range: Range
-	): Promise<languages.InlayHintList | null> {
+	public async provideInlayHints(model: editor.ITextModel, range: Range): Promise<languages.InlayHintList | null> {
 		const resource = model.uri;
 		const fileName = resource.toString();
 		const start = model.getOffsetAt({
@@ -1258,7 +1131,7 @@ export class InlayHintsAdapter extends Adapter implements languages.InlayHintsPr
 			lineNumber: range.endLineNumber,
 			column: range.endColumn,
 		});
-		const worker = await this._worker(resource);
+		const worker = await this.worker(resource);
 		if (model.isDisposed()) {
 			return null;
 		}
@@ -1269,13 +1142,13 @@ export class InlayHintsAdapter extends Adapter implements languages.InlayHintsPr
 				...hint,
 				label: hint.text,
 				position: model.getPositionAt(hint.position),
-				kind: this._convertHintKind(hint.kind),
+				kind: this.convertHintKind(hint.kind),
 			};
 		});
 		return {hints, dispose: () => {}};
 	}
 
-	private _convertHintKind(kind?: ts.InlayHintKind) {
+	private convertHintKind(kind?: ts.InlayHintKind) {
 		switch (kind) {
 			case "Parameter":
 				return languages.InlayHintKind.Parameter;

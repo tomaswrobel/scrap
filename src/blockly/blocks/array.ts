@@ -58,7 +58,7 @@ export const MIXIN = {
 
 		let connection = containerBlock.nextConnection;
 		for (const type of this.items) {
-			const itemBlock = workspace.newBlock("array_item_" + type);
+			const itemBlock = workspace.newBlock(`array_item_${type}`);
 			itemBlock.initSvg();
 			connection.connect(itemBlock.previousConnection);
 			connection = itemBlock.nextConnection;
@@ -89,24 +89,17 @@ export const MIXIN = {
 	 */
 	updateShape(this: ArrayBlock, check: Check) {
 		// Remove inputs
-		for (let i = 0; this.removeInput("ADD" + i, true); i++);
+		for (let i = 0; this.removeInput(`ADD${i}`, true); i++);
 
 		// Add new inputs.
 		for (let i = 0; i < this.items.length; i++) {
-			const input = this.appendValueInput("ADD" + i).setAlign(
-				Blockly.inputs.Align.RIGHT
-			);
+			const input = this.appendValueInput(`ADD${i}`).setAlign(Blockly.inputs.Align.RIGHT);
 			if (this.items[i] === "iterable") {
 				input.setCheck("Iterable");
 				input.appendField("...");
 			} else {
 				input.setCheck(check);
-				const type =
-					typeof check === "string"
-						? check
-						: check.length === 1
-						? check[0]
-						: "any";
+				const type = typeof check === "string" ? check : check.length === 1 ? check[0] : "any";
 
 				if (type in TypeToShadow) {
 					input.connection!.setShadowState({
@@ -118,11 +111,7 @@ export const MIXIN = {
 	},
 
 	onchange(this: ArrayBlock, e: Blockly.Events.Abstract) {
-		if (
-			e instanceof Blockly.Events.BlockMove &&
-			e.blockId &&
-			e.newParentId === this.id
-		) {
+		if (e instanceof Blockly.Events.BlockMove && e.blockId && e.newParentId === this.id) {
 			const block = this.workspace.getBlockById(e.blockId)!;
 			if (block.type === "type") {
 				block.setShadow(true);

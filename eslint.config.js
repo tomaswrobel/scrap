@@ -10,16 +10,25 @@
  * @copyright Tomáš Wróbel 2024
  * @fileoverview ESLint configuration file.
  */
-{
-	"root": true,
-	"parser": "@typescript-eslint/parser",
-	"plugins": ["@typescript-eslint"],
-	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-	"parserOptions": {
-		"projectService": true,
-		"tsconfigRootDir": "."
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config({
+	languageOptions: {
+		parser: tseslint.parser,
+		parserOptions: {
+			projectService: true,
+			tsconfigRootDir: "."
+		}
 	},
-	"rules": {
+	plugins: {
+		"@typescript-eslint": tseslint.plugin,
+	},
+	extends: [
+		eslint.configs.recommended,
+		...tseslint.configs.recommended,
+	],
+	rules: {
 		"@typescript-eslint/no-namespace": [
 			"error",
 			{
@@ -36,18 +45,37 @@
 				}
 			}
 		],
+		"@typescript-eslint/consistent-type-assertions": [
+			"error",
+			{
+				"assertionStyle": "as"
+			}
+		],
+		"@typescript-eslint/no-explicit-any": [
+			"error",
+			{
+				"ignoreRestArgs": true,
+				"fixToUnknown": true
+			}
+		],
+		"@typescript-eslint/consistent-type-imports": [
+			"error",
+			{
+				"disallowTypeAnnotations": false
+			}
+		],
+		"@typescript-eslint/dot-notation": "error",
+		"@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
 
 		// These rules are for people
 		// who don't know JavaScript well.
 		"no-var": "off",
 		"require-yield": "off",
-
+		"prefer-template": "error",
 		"@typescript-eslint/no-require-imports": "off",
 		"@typescript-eslint/no-empty-object-type": "off",
-		"@typescript-eslint/consistent-type-exports": "error",
 		"@typescript-eslint/no-unnecessary-type-assertion": "error"
 	},
-	"ignorePatterns": [
-		"**/lib/*.ts"
-	]
-}
+	ignores: ["**/lib/*.ts", "*.js"],
+	files: ["**/*.ts"]
+});

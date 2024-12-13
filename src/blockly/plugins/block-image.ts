@@ -127,7 +127,7 @@ class BlockSaver {
 					canvas.toBlob(resolve);
 				};
 
-				img.src = "data:image/svg+xml;utf-8," + encodeURIComponent(svgData);
+				img.src = `data:image/svg+xml;utf-8,${encodeURIComponent(svgData)}`;
 			});
 
 			if (!blob) {

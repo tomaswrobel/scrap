@@ -35,7 +35,7 @@
  * * Parameters are of a specific type.
  * * Corresponding shadow blocks are used inside the parameters.
  */
-import * as Blockly from "blockly";
+import type * as Blockly from "blockly";
 import {TypeToShadow} from "../types";
 
 export type CallExtraState = {
@@ -78,7 +78,7 @@ export const MIXIN = {
 			this.setPreviousStatement(true, "any");
 		}
 
-		for (let i = 0; this.removeInput("PARAM_" + i, true); i++);
+		for (let i = 0; this.removeInput(`PARAM_${i}`, true); i++);
 
 		for (let i = 0; i < this.params_.length; i++) {
 			const type = this.params_[i];
