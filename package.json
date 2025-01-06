@@ -34,7 +34,7 @@
 		"@parcel/transformer-sass": "2.13.3",
 		"@parcel/transformer-webmanifest": "2.13.3",
 		"@swc/types": "0.1.17",
-		"@tauri-apps/cli": "2.1.0",
+		"@tauri-apps/cli": "2.2.2",
 		"@types/node": "22.10.3",
 		"buffer": "6.0.3",
 		"csstype": "3.1.3",
