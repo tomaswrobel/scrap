@@ -48,8 +48,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       wavesurfer.js:
-        specifier: 7.8.14
-        version: 7.8.14
+        specifier: 7.8.15
+        version: 7.8.15
     devDependencies:
       '@eslint/js':
         specifier: ^9.17.0
@@ -1746,8 +1746,8 @@ packages:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
     engines: {node: '>=18'}
 
-  wavesurfer.js@7.8.14:
-    resolution: {integrity: sha512-VwljnCf97GxpA/I6gKWVriBvGYEcwAsOCaLb3vauPE4Jm6rIl1C9zVZ2S0a9CCLjVzeG0UukHZxXSblQV8dReA==}
+  wavesurfer.js@7.8.15:
+    resolution: {integrity: sha512-fWNnQt5BEGzuoJ7HRxfvpT1rOEI1AmCGPZ/+7QDkDVN/m2vIBeLVQ+5vENRMz1YwvZ/u1No0UV492/o8G++KXQ==}
 
   weak-lru-cache@1.2.2:
     resolution: {integrity: sha512-DEAoo25RfSYMuTGc9vPJzZcZullwIqRDSI9LOy+fkCJPi6hykCnfKaXTuPBDuXAUcqHXyOgFtHNp/kB2FjYHbw==}
@@ -3672,7 +3672,7 @@ snapshots:
     dependencies:
       xml-name-validator: 5.0.0
 
-  wavesurfer.js@7.8.14: {}
+  wavesurfer.js@7.8.15: {}
 
   weak-lru-cache@1.2.2: {}
 
