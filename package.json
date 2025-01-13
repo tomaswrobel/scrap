@@ -22,7 +22,7 @@
 		"process": "0.11.10",
 		"scrap-engine": "2.5.3",
 		"typescript": "5.7.2",
-		"wavesurfer.js": "7.8.14"
+		"wavesurfer.js": "7.8.16"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.17.0",
