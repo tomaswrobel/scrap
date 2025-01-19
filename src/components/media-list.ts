@@ -148,7 +148,6 @@ export class MediaList extends EventTarget {
 
 		const remove = document.createElement("div");
 		remove.classList.add("remove");
-		remove.textContent = "×";
 		element.appendChild(remove);
 
 		element.onclick = e => {

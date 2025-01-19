@@ -1244,6 +1244,30 @@
 		"style": "Controls"
 	},
 	{
+		"type": "ternary",
+		"inputsInline": true,
+		"message0": "if %1 ? %2 else %3",
+		"args0": [
+			{
+				"type": "input_value",
+				"name": "CONDITION",
+				"check": "boolean"
+			},
+			{
+				"type": "input_value",
+				"name": "THEN",
+				"check": "any"
+			},
+			{
+				"type": "input_value",
+				"name": "ELSE",
+				"check": "any"
+			}
+		],
+		"output": "any",
+		"style": "Controls"
+	},
+	{
 		"type": "break",
 		"inputsInline": true,
 		"message0": "break",
@@ -2086,7 +2110,7 @@
 				"check": "number"
 			}
 		],
-		"colour": "#2fbf71",
+		"colour": "#199950",
 		"inputsInline": true
 	}
 ]

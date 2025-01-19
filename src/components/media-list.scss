@@ -61,18 +61,25 @@
 
 	.remove {
 		position: absolute;
-		background: #2fbf71;
+		background: $primary;
 		border-radius: 50%;
 		top: -0.5em;
 		right: -0.5em;
 		user-select: none;
 		cursor: pointer;
 
-		width: 16px;
-		height: 16px;
+		padding: 0 4px;
+		aspect-ratio: 1;
 
-		line-height: 16px;
-		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&::before {
+			content: "×";
+			font-size: 12px;
+			color: white;
+		}
 	}
 
 	&:only-child,

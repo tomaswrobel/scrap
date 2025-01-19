@@ -12,6 +12,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 -   dependencies update
 -   native context menus
 
+## [6.2.0] - 2025-01-19
+
+### Added
+
+-   ternary operator
+
+### Changed
+
+-   primary color is now darker
+-   dependencies update
+
+### Fixed
+
+-   block to code conversion
+
 ## [6.1.2] - 2024-12-3
 
 ### Fixed
@@ -924,7 +939,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 -   Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.1.2...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.2.0...HEAD
+[6.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.2.0
 [6.1.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.2
 [6.1.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.1
 [6.1.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.0

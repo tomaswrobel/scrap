@@ -280,9 +280,8 @@ export class Sprite extends Entity {
 		};
 
 		const remove = sprite.appendChild(document.createElement("div"));
-
-		remove.textContent = "×";
 		remove.classList.add("remove");
+		
 		remove.onclick = () => {
 			parent.removeChild(sprite);
 			app.removeSprite(this);

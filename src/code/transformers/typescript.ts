@@ -138,10 +138,7 @@ class TypeScript extends Blockly.CodeGenerator {
 			}
 		}
 
-		const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-		const nextCode = (thisOnly || !block.previousConnection) && this.blockToCode(nextBlock);
-
-		return `${commentCode}${code}${nextCode || ""}`;
+		return commentCode + code + (thisOnly || !block.previousConnection ? "" : this.blockToCode(block.nextConnection && block.nextConnection.targetBlock()));
 	}
 
 	public override finish(result: string) {
@@ -190,6 +187,13 @@ class TypeScript extends Blockly.CodeGenerator {
 		this.definitions_[`%${name}`] = value;
 	}
 }
+
+TypeScript.register("ternary", (block, ts) => {
+	const condition = ts.valueToCode(block, "CONDITION", Order.NONE) || "false";
+	const then = ts.valueToCode(block, "THEN", Order.NONE) || "null";
+	const otherwise = ts.valueToCode(block, "ELSE", Order.NONE) || "null";
+	return [`${condition} ? ${then} : ${otherwise}`, Order.CONDITIONAL];
+});
 
 TypeScript.register<UnknownBlock>("unknown", block => {
 	if (block.shape === "reporter") {

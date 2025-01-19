@@ -405,6 +405,10 @@
 			},
 			{
 				"kind": "block",
+				"type": "ternary"
+			},
+			{
+				"kind": "block",
 				"type": "tryCatch",
 				"extraState": {
 					"catch": "error",

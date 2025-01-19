@@ -213,10 +213,6 @@
 		align-content: baseline;
 		position: relative;
 
-		> .media-element.selected > .remove {
-			display: block;
-		}
-
 		&::before {
 			content: "";
 			position: absolute;
@@ -265,6 +261,7 @@
 		stroke: none !important;
 	}
 }
+
 #load,
 #sb3 {
 	display: none;

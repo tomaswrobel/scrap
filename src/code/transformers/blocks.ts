@@ -135,7 +135,8 @@ class Blocks {
 					break;
 				}
 				case "TsParenthesizedType": {
-					return this.parse(node.typeAnnotation);
+					this.parse(node.typeAnnotation);
+					break;
 				}
 				case "TsTypeReference": {
 					if (node.typeName.type === "Identifier") {
@@ -154,6 +155,22 @@ class Blocks {
 				}
 				case "ExpressionStatement": {
 					this.parse(node.expression);
+					break;
+				}
+				case "ConditionalExpression": {
+					const block = this.block("ternary");
+
+					this.connection = block.getInput("CONDITION")!.connection;
+					this.parse(node.test);
+
+					this.connection = block.getInput("THEN")!.connection;
+					this.parse(node.consequent);
+
+					this.connection = block.getInput("ELSE")!.connection;
+					this.parse(node.alternate);
+
+					this.connection = null;
+
 					break;
 				}
 				case "NewExpression": {
@@ -581,7 +598,6 @@ class Blocks {
 					break;
 				}
 				case "CallExpression": {
-					console.log(node);
 					if (node.callee.type === "MemberExpression") {
 						if (
 							SWC.isIdentifier(node.callee.object, "window") &&
