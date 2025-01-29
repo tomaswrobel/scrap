@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Blockly's extension for `for` block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This extension adds a context menu item to rename the variable
  * in the `for` block.

@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Scratch-like flag icon.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import * as Blockly from "blockly";
 import fs from "fs";

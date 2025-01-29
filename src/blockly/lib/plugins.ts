@@ -8,12 +8,13 @@
  *
  * @license MIT
  * @fileoverview Plugins export file.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 
 import "../plugins/renderer";
 import "../plugins/block-image";
 import "../plugins/category";
+import "../plugins/context-menu";
 
 export {ConnectionChecker as connectionChecker} from "../plugins/connection-checker";
 export {default as metricsManager} from "../plugins/metrics";

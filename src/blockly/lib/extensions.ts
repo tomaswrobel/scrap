@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Typings for the glob import
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import type * as Blockly from "blockly";
 

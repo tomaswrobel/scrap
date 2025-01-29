@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Field for parameters in typed blocks
  *
  * scratch-blocks does this by creating an input with irremovable
@@ -76,9 +76,7 @@ export default class FieldParam extends Blockly.Field<string> {
 				const transform = this.fieldGroup_!.getAttribute("transform");
 				const transformX = transform?.match(/translate\((\d+)/)?.[1] ?? 0;
 				const transformY = transform?.match(/translate\(\d+,(\d+)/)?.[1] ?? 0;
-				const {x, y} = this.sourceBlock_
-					.getRelativeToSurfaceXY()
-					.translate(+transformX, +transformY);
+				const {x, y} = this.sourceBlock_.getRelativeToSurfaceXY().translate(+transformX, +transformY);
 
 				block.loadExtraState!({
 					type: this.getType(), // Set the type of the parameter.

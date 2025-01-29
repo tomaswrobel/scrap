@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Re-exports the FieldAngle from Blockly.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Since Blockly v11, the field angle is a separate module.
  * Moreover, it doesn't get registered in the field registry.

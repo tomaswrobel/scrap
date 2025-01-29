@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license Apache-2.0
- * @author Google LLC
+ * @copyright Google LLC 2025
  *
  * From: @blockly/continuous-toolbox@1.0.5
  * To: TypeScript, Scrap modifications

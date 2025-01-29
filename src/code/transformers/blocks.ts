@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Typescript → Blocks
  *
  * This file is responsible for transforming TypeScript code into Blockly

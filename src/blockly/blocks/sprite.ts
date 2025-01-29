@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Sprite block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Sprite block is a dropdown with all the sprtes. It
  * should be always a shadow block, and it adapts to
@@ -26,10 +26,7 @@ export const MIXIN = {
 		if (this.workspace instanceof Blockly.WorkspaceSvg) {
 			this.appendDummyInput().appendField<string>(
 				new Blockly.FieldDropdown(() => {
-					const result = app.entities.map<[string, string]>(e => [
-						e.name,
-						e.name,
-					]);
+					const result = app.entities.map<[string, string]>(e => [e.name, e.name]);
 					result[0] = ["self", "self"]; // Replace Stage with self
 					return result;
 				}),

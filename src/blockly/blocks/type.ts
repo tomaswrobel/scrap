@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Type block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Type block is a dropdown with all the types.
  *
@@ -42,8 +42,7 @@ export const MIXIN = {
 						param.markDirty();
 
 						if (this.parentBlock_.parentBlock_?.type === "variable") {
-							const input =
-								this.parentBlock_.parentBlock_.getInput("VALUE")!;
+							const input = this.parentBlock_.parentBlock_.getInput("VALUE")!;
 							input.connection?.targetBlock()?.dispose(false);
 							input.setCheck(type);
 

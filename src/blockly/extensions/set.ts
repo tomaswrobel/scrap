@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Blockly's extension for `set` block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This extension adds corresponding shadow block to the `value` input
  * when the variable is moved to the `set` block.
@@ -27,19 +27,13 @@ export default function (this: Blockly.BlockSvg) {
 			const block = input.connection!.targetBlock()!;
 			const value = this.getInput("VALUE")!;
 
-			const check = block.outputConnection
-				?.getCheck()
-				?.filter((c: string) => c !== "Variable");
+			const check = block.outputConnection?.getCheck()?.filter((c: string) => c !== "Variable");
 			const type = check?.length === 1 ? check[0] : "any";
 
 			if (type in TypeToShadow) {
 				const thisBlock = value.connection!.targetBlock();
 
-				if (
-					thisBlock &&
-					thisBlock.isShadow() &&
-					thisBlock.type !== TypeToShadow[type]
-				) {
+				if (thisBlock && thisBlock.isShadow() && thisBlock.type !== TypeToShadow[type]) {
 					value.connection!.setShadowState({
 						type: TypeToShadow[type],
 					});

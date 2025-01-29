@@ -8,11 +8,11 @@
  *
  * @license MIT
  * @fileoverview Bind decorator
- * @author Ivo Stratev
+ * @copyright Ivo Stratev 2025
  *
  * @license MIT
  * @fileoverview App loader decorator
- * @author Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2025
  */
 
 import Dialog from "./dialog";

@@ -8,8 +8,10 @@
  *
  * @license MIT
  * @fileoverview Media list component
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
+import {Menu, MenuItem} from "@tauri-apps/api/menu";
+import {LogicalPosition} from "@tauri-apps/api/dpi";
 import "./media-list.scss";
 import path from "path";
 
@@ -99,12 +101,14 @@ export class MediaList extends EventTarget {
 		const input = document.createElement("input");
 		input.classList.add("name");
 
-		span.ondblclick = () => {
+		function rename() {
 			input.value = span.textContent!;
 			element.replaceChild(input, span);
 			input.focus();
 			input.select();
-		};
+		}
+
+		span.ondblclick = rename;
 
 		input.onkeyup = e => {
 			if (e.key === "Enter") {
@@ -146,21 +150,13 @@ export class MediaList extends EventTarget {
 
 		element.appendChild(span);
 
-		const remove = document.createElement("div");
-		remove.classList.add("remove");
-		element.appendChild(remove);
+		const removeButton = document.createElement("div");
+		removeButton.classList.add("remove");
+		element.appendChild(removeButton);
 
 		element.onclick = e => {
-			if (e.target === remove) {
-				element.remove();
-				this.files.splice(this.files.indexOf(file), 1);
-				this.dispatchEvent(new CustomEvent("select", {detail: this.files[0]}));
-
-				for (const child of this.root.getElementsByClassName("selected")) {
-					child.classList.remove("selected");
-				}
-
-				this.root.querySelector(".media-element")!.classList.add("selected");
+			if (e.target === removeButton) {
+				this.removeElement(file, element);
 			} else if (e.target !== span && e.target !== input) {
 				for (const child of this.root.getElementsByClassName("selected")) {
 					child.classList.remove("selected");
@@ -171,7 +167,40 @@ export class MediaList extends EventTarget {
 			}
 		};
 
+		element.oncontextmenu = async e => {
+			e.preventDefault();
+
+			const menu = await Menu.new({
+				items: [
+					await MenuItem.new({
+						text: "Rename",
+						enabled: true,
+						action: rename,
+					}),
+					await MenuItem.new({
+						text: "Delete",
+						enabled: this.files.length > 1,
+						action: () => this.removeElement(file, element),
+					}),
+				],
+			});
+
+			menu.popup(new LogicalPosition(e.clientX, e.clientY));
+		};
+
 		this.root.appendChild(element);
+	}
+
+	private removeElement(file: File, element: Element) {
+		element.remove();
+		this.files.splice(this.files.indexOf(file), 1);
+		this.dispatchEvent(new CustomEvent("select", {detail: this.files[0]}));
+
+		for (const child of this.root.getElementsByClassName("selected")) {
+			child.classList.remove("selected");
+		}
+
+		this.root.querySelector(".media-element")!.classList.add("selected");
 	}
 
 	public dispose() {

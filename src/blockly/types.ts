@@ -5,9 +5,9 @@
  * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
  * the official repository at https://github.com/tomas-wrobel/scrap.
- * 
+ *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Type utilities for Scrap.
  */
 import type * as Blockly from "blockly";
@@ -23,16 +23,7 @@ import type * as Blockly from "blockly";
  * const types = Types.map(type => type || "any") // or "void"
  * ```
  */
-export const Types = [
-	"",
-	"number",
-	"string",
-	"boolean",
-	"Color",
-	"Array",
-	"Sprite",
-	"Date",
-];
+export const Types = ["", "number", "string", "boolean", "Color", "Array", "Sprite", "Date"];
 
 /** Error message for invalid type. */
 export const Error = `Type must be one of void${Types.join(", ")}`;
@@ -63,10 +54,7 @@ export function toCheck(block?: Blockly.Block | null): Check {
 	if (block.type === "union") {
 		const set = new Set(
 			block.inputList.reduce(
-				(previous, current) =>
-					previous.concat(
-						toCheck(current.connection!.targetBlock())
-					),
+				(previous, current) => previous.concat(toCheck(current.connection!.targetBlock())),
 				[] as string[]
 			)
 		);

@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview SWC node name map
- * @author Ivo Stratev
+ * @copyright Tomáš Wróbel 2025
  */
 import type * as SWC from "@swc/types";
 

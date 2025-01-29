@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Sound block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Sound block is a dropdown with all the sounds. It
  * should be always a shadow block, as it's used in

@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Scratch converter
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import type {FunctionBlock} from "@scrap/blockly/blocks/function";
 import * as Blockly from "blockly";

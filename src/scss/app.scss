@@ -8,7 +8,7 @@
  * the official repository at https://github.com/tomas-wrobel/scrap. 
  * 
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 @use "vars" as *;
 
@@ -29,7 +29,7 @@
 	grid-template-rows: 40px calc((var(--output) + 100) * 3px / 4) 1fr;
 	grid-template-columns: 1fr $gap calc(var(--output) * 1px + $gap) 100px;
 	background: $background;
-	padding-top: env(titlebar-area-height, 45px);
+	padding-top: var(--titlebar-area-height, 45px);
 
 	#handler {
 		cursor: ew-resize;
@@ -53,15 +53,15 @@
 		margin: 0;
 		padding: 0;
 		z-index: 10000;
-		font-size: calc(env(titlebar-area-height, 45px) / 3);
+		font-size: calc(var(--titlebar-area-height, 45px) / 3);
 		background-color: $primary;
 		-webkit-app-region: drag;
 
 		position: fixed;
-		left: env(titlebar-area-x, 0);
-		top: env(titlebar-area-y, 0);
-		height: env(titlebar-area-height, 45px);
-		width: env(titlebar-area-width, 100%);
+		left: var(--titlebar-area-x, 0);
+		top: var(--titlebar-area-y, 0);
+		height: var(--titlebar-area-height, 45px);
+		width: var(--titlebar-area-width, 100%);
 
 		li.dropdown {
 			display: inline-block;
@@ -110,7 +110,7 @@
 		> li {
 			float: left;
 			height: 100%;
-			line-height: env(titlebar-area-height, 45px);
+			line-height: var(--titlebar-area-height, 45px);
 			-webkit-app-region: none;
 
 			> a {

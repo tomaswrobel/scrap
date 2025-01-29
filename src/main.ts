@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Booting the Scrap app.
  */
 import "./scss/*.scss";

@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Sprite and stage entities
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import * as Blockly from "blockly";
 import * as SWC from "../utils/swc";
@@ -17,6 +17,8 @@ import fs from "fs";
 import path from "path";
 import {reserved} from "../code/transformers/utils";
 import {TypeScript} from "../code/transformers/typescript";
+import {Menu, MenuItem} from "@tauri-apps/api/menu";
+import {LogicalPosition} from "@tauri-apps/api/dpi";
 
 const stage =
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
@@ -254,11 +256,18 @@ export class Sprite extends Entity {
 		span.textContent = this.name;
 		span.classList.add("name");
 
-		span.ondblclick = () => {
+		function rename() {
 			input.value = span.textContent!;
 			sprite.replaceChild(input, span);
 			input.focus();
 			input.select();
+		}
+
+		span.onclick = rename;
+
+		const remove = () => {
+			parent.removeChild(sprite);
+			app.removeSprite(this);
 		};
 
 		input.onkeyup = e => {
@@ -271,6 +280,25 @@ export class Sprite extends Entity {
 			}
 		};
 
+		sprite.oncontextmenu = async e => {
+			e.preventDefault();
+
+			const menu = await Menu.new({
+				items: [
+					await MenuItem.new({
+						text: "Rename",
+						action: rename,
+					}),
+					await MenuItem.new({
+						text: "Delete",
+						action: remove,
+					}),
+				],
+			});
+
+			menu.popup(new LogicalPosition(e.clientX, e.clientY));
+		};
+
 		input.onblur = () => {
 			if (reserved.indexOf(input.value) === -1) {
 				span.textContent = input.value;
@@ -279,13 +307,9 @@ export class Sprite extends Entity {
 			sprite.replaceChild(span, input);
 		};
 
-		const remove = sprite.appendChild(document.createElement("div"));
-		remove.classList.add("remove");
-		
-		remove.onclick = () => {
-			parent.removeChild(sprite);
-			app.removeSprite(this);
-		};
+		const button = sprite.appendChild(document.createElement("div"));
+		button.classList.add("remove");
+		button.onclick = remove;
 
 		return parent.appendChild<HTMLElement>(sprite);
 	}

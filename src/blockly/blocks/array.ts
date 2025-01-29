@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Defines the array mutator.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Array block is different from the Blockly's list block.
  * It supports two types of items: single and iterable.

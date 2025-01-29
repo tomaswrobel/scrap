@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomas-wrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Tools for drawing on the canvas in the paint editor.
  */
 import line from "./icons/line.svg";

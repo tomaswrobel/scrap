@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Blockly's JSON definition of the stage's toolbox
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 [
 	{
@@ -983,7 +983,10 @@
 				"kind": "block",
 				"type": "array",
 				"extraState": {
-					"items": ["single", "single"]
+					"items": [
+						"single",
+						"single"
+					]
 				},
 				"inputs": {
 					"TYPE": {

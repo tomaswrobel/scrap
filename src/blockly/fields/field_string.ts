@@ -8,11 +8,11 @@
  *
  * @license MIT
  * @copyright Microsoft
- * @author Sam El-Husseini
+ * @copyright Sam El-Husseini 2025
  *
  * @license MIT
  * @fileoverview String field.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This file is taken from PXT blockly, with the following modifications:
  * 	- Conversion to TypeScript

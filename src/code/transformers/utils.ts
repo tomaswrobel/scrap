@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Transforming utilities
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 export const reserved = Object.getOwnPropertyNames(window);
 reserved.unshift(
@@ -93,5 +93,7 @@ export function escape(string: string) {
 }
 
 export function identifier(this: import("blockly").FieldTextInput, value: string) {
-	return (value && reserved.indexOf(value) === -1 && /[$_\p{ID_Start}][$\u200c\u200d\p{ID_Continue}]*/u.test(value)) ? value : null;
+	return value && reserved.indexOf(value) === -1 && /[$_\p{ID_Start}][$\u200c\u200d\p{ID_Continue}]*/u.test(value)
+		? value
+		: null;
 }

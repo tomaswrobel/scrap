@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Scrap Engine's static types.
  *
  * This file, including this comment, serves as a definition of the
@@ -451,9 +451,7 @@ interface Sprite<Variables = {}, Sound = string, Costume = string>
 	 * Sets the rotation style of the sprite. It is visible only when the sprite is rotated.
 	 * @param style 0: don't rotate, 1: left-right, 2: all around
 	 */
-	setRotationStyle(
-		style: 0 | 1 | 2 | "left-right" | "don't rotate" | "all around"
-	): void;
+	setRotationStyle(style: 0 | 1 | 2 | "left-right" | "don't rotate" | "all around"): void;
 
 	/**
 	 * If I am touching the edge, I bounce.
@@ -757,14 +755,7 @@ declare type Key =
 	| "x"
 	| "y"
 	| "z";
-declare type MouseEvent =
-	| "clicked"
-	| "pressed"
-	| "released"
-	| "left"
-	| "entered"
-	| "moved"
-	| "double-clicked";
+declare type MouseEvent = "clicked" | "pressed" | "released" | "left" | "entered" | "moved" | "double-clicked";
 
 // For TypeScript to work
 declare interface RegExp {}
@@ -779,7 +770,7 @@ declare interface Object {
 
 	/**
 	 * Returns the number representation of the object
-	 * 
+	 *
 	 * Note: not all objects have a number representation, in that case
 	 * the method returns `NaN`.
 	 */
@@ -830,9 +821,7 @@ declare interface String extends Iterable<string> {
  * Converts the value to a string
  * @param value any value
  */
-declare function String<const T>(
-	value: T
-): T extends number | boolean | string ? `${T}` : string;
+declare function String<const T>(value: T): T extends number | boolean | string ? `${T}` : string;
 
 // Scrap's iterables
 declare interface Symbol {}

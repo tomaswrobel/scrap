@@ -10,6 +10,7 @@
 		"dialog:allow-save",
 		"fs:allow-app-read",
 		"fs:allow-app-write",
-		"core:path:default"
+		"core:path:default",
+		"core:menu:default"
 	]
 }

@@ -8,7 +8,7 @@
  *
  * @fileoverview Declaration of valid templates
  * @license MIT
- * @copyright Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2025
  */
 
 /** `__SPRITE__` and `__SPRITES__` */

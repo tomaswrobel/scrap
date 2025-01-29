@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Costume menu block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Costume menu block is a dropdown with all the costumes.
  * It should be always a shadow block, as it's used in the

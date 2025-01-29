@@ -8,7 +8,7 @@
  *
  * @fileoverview Blockly renderer plugin
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This plugin edits the default renderer so:
  *

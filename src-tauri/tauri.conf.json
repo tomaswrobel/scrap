@@ -15,7 +15,9 @@
 			{
 				"title": "Scrap",
 				"maximized": true,
-				"decorations": true
+				"decorations": true,
+				"theme": "Light",
+				"backgroundColor": "#ffffff"
 			}
 		],
 		"security": {

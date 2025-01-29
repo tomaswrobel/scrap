@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomas-wrobel/scrap.
  *
  * @license MIT [from-monaco-editor]
- * @author Microsoft Corporation
+ * @copyright Microsoft Corporation 2025
  * @fileoverview Platform utilities for Monaco Editor.
  *
  * Replacement for monaco-editor/esm/vs/base/common/platform.js

@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Paint editor
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import {invoke} from "@tauri-apps/api/core";
 import {bind, load} from "../utils/decorators";

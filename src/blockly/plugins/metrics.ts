@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license Apache-2.0
- * @author Google LLC
+ * @copyright Google LLC 2025
  *
  * From: @blockly/continuous-toolbox@1.0.5
  * To: TypeScript, Scrap modifications
@@ -29,15 +29,9 @@ export default class Metrics extends Blockly.MetricsManager {
 		if (this.workspace_.getToolbox()) {
 			// Note: Not actually supported at this time due to ContinunousToolbox
 			// only supporting a vertical flyout. But included for completeness.
-			if (
-				toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
-				toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM
-			) {
+			if (toolboxPosition == Blockly.TOOLBOX_AT_TOP || toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
 				svgMetrics.height -= toolboxMetrics.height + flyoutMetrics.height;
-			} else if (
-				toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
-				toolboxPosition == Blockly.TOOLBOX_AT_RIGHT
-			) {
+			} else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT || toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
 				svgMetrics.width -= toolboxMetrics.width + flyoutMetrics.width;
 			}
 		}

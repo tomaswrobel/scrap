@@ -10,7 +10,7 @@
  * Also it handles custom toolbox, see it at src/blockly/plugins/. 
  * 
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 .blockly {
 	&TreeLabel {
@@ -28,6 +28,7 @@
 		line-height: 22px;
 		white-space: nowrap;
 		padding: 6px 0;
+		height: unset;
 	}
 
 	&TreeSelected {
@@ -94,8 +95,8 @@
 	border-radius: 100%;
 	position: relative;
 	margin-bottom: 4px;
-	width: 17px;
-	height: 17px;
+	width: 20px;
+	height: 20px;
 
 	&::after {
 		all: inherit;

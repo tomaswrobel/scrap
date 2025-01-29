@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Code editor
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import fs from "fs";
 import {editor, Uri} from "monaco-editor";
@@ -125,9 +125,7 @@ function reducer(prev: string, entity: Entity) {
 	if (entity.isStage()) {
 		var constructor = `Stage<${getVariables(entity)}, ${getSounds(entity)}>`;
 	} else {
-		var constructor = `Sprite<${getVariables(entity)}, ${getSounds(
-			entity
-		)}, ${getCostumes(entity)}>`;
+		var constructor = `Sprite<${getVariables(entity)}, ${getSounds(entity)}, ${getCostumes(entity)}>`;
 	}
 
 	return `${prev}\t${JSON.stringify(entity.name)}: ${constructor};\n`;

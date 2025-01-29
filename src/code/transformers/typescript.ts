@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Scrap's code generator.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Inspired by Blockly's JavaScript generator.
  * Where noted, some parts are directly copied
@@ -138,7 +138,13 @@ class TypeScript extends Blockly.CodeGenerator {
 			}
 		}
 
-		return commentCode + code + (thisOnly || !block.previousConnection ? "" : this.blockToCode(block.nextConnection && block.nextConnection.targetBlock()));
+		return (
+			commentCode +
+			code +
+			(thisOnly || !block.previousConnection
+				? ""
+				: this.blockToCode(block.nextConnection && block.nextConnection.targetBlock()))
+		);
 	}
 
 	public override finish(result: string) {

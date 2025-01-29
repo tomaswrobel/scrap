@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomas-wrobel/scrap.
  *
  * @license MIT [from-monaco-editor]
- * @author Microsoft Corporation
+ * @copyright Microsoft Corporation 2025
  *
  * The tokenizer is created by Microsoft, I only mapped identifiers
  * to Scrap blocks. For that, I created a new theme on my own.
@@ -55,15 +55,7 @@ languages.registerTokensProviderFactory("typescript", {
 			"size",
 		],
 		sounds: ["playSound", "playSoundUntilDone", "volume", "stopSounds"],
-		pen: [
-			"penClear",
-			"penDown",
-			"penUp",
-			"isPenDown",
-			"stamp",
-			"penSize",
-			"penColor",
-		],
+		pen: ["penClear", "penDown", "penUp", "isPenDown", "stamp", "penSize", "penColor"],
 		events: [
 			"whenFlag",
 			"whenBackdropChangesTo",
@@ -75,19 +67,7 @@ languages.registerTokensProviderFactory("typescript", {
 			"whenReceiveMessage",
 			"broadcastMessageWait",
 		],
-		flow: [
-			"if",
-			"else",
-			"for",
-			"do",
-			"while",
-			"break",
-			"continue",
-			"try",
-			"catch",
-			"finally",
-			"throw",
-		],
+		flow: ["if", "else", "for", "do", "while", "break", "continue", "try", "catch", "finally", "throw"],
 		controls: ["wait", "delete", "clone", "stop", "whenCloned"],
 		sensing: [
 			"isTouching",
@@ -152,20 +132,10 @@ languages.registerTokensProviderFactory("typescript", {
 			"String",
 			"NUmber",
 			"Boolean",
-			"toString"
+			"toString",
 		],
 		iterables: ["length", "reverse", "join", "includes", "indexOf", "slice"],
-		functions: [
-			"function",
-			"call",
-			"window",
-			"interface",
-			"const",
-			"var",
-			"let",
-			"new",
-			"namespace",
-		],
+		functions: ["function", "call", "window", "interface", "const", "var", "let", "new", "namespace"],
 		variables: ["variables", "showVariable", "hideVariable"],
 		operators: [
 			"<=",
@@ -256,16 +226,12 @@ languages.registerTokensProviderFactory("typescript", {
 		binarydigits: /[0-1]+(_+[0-1]+)*/,
 		hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
 		regexpctl: /[(){}[\]$^|\-*+?.]/,
-		regexpesc:
-			/\\(?:[bBdDfnrstvwWn0\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
+		regexpesc: /\\(?:[bBdDfnrstvwWn0\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
 		// The main tokenizer for our languages
 		tokenizer: {
 			root: [[/[{}]/, "delimiter.bracket"], {include: "common"}],
 			common: [
-				[
-					/(Color)([ \n\t\r]*\.[ \n\t\r]*)(fromHex|random|fromRGB|)/,
-					["Color", "delimiter", "pen"],
-				],
+				[/(Color)([ \n\t\r]*\.[ \n\t\r]*)(fromHex|random|fromRGB|)/, ["Color", "delimiter", "pen"]],
 				[
 					/(\.[ \n\t\r]*)(costume|backdrop)([ \n\t\r]*\.[ \n\t\r]*)(all|index|name)/,
 					["delimiter", "costume", "delimiter", "looks"],
@@ -373,20 +339,10 @@ languages.registerTokensProviderFactory("typescript", {
 			],
 			// We match regular expression quite precisely
 			regexp: [
-				[
-					/(\{)(\d+(?:,\d*)?)(\})/,
-					[
-						"regexp.escape.control",
-						"regexp.escape.control",
-						"regexp.escape.control",
-					],
-				],
+				[/(\{)(\d+(?:,\d*)?)(\})/, ["regexp.escape.control", "regexp.escape.control", "regexp.escape.control"]],
 				[
 					/(\[)(\^?)(?=(?:[^\]\\/]|\\.)+)/,
-					[
-						"regexp.escape.control",
-						{token: "regexp.escape.control", next: "@regexrange"},
-					],
+					["regexp.escape.control", {token: "regexp.escape.control", next: "@regexrange"}],
 				],
 				[/(\()(\?:|\?=|\?!)/, ["regexp.escape.control", "regexp.escape.control"]],
 				[/[()]/, "regexp.escape.control"],
@@ -394,10 +350,7 @@ languages.registerTokensProviderFactory("typescript", {
 				[/[^\\/]/, "regexp"],
 				[/@regexpesc/, "regexp.escape"],
 				[/\\\./, "regexp.invalid"],
-				[
-					/(\/)([dgimsuy]*)/,
-					[{token: "regexp", bracket: "@close", next: "@pop"}, "keyword.other"],
-				],
+				[/(\/)([dgimsuy]*)/, [{token: "regexp", bracket: "@close", next: "@pop"}, "keyword.other"]],
 			],
 			regexrange: [
 				[/-/, "regexp.escape.control"],
@@ -473,9 +426,7 @@ languages.onLanguageEncountered("typescript", () => {
 						range: info.range,
 						text:
 							code[0] === '"'
-								? `"#${rgb
-										.map(s => s.toString(16).padStart(2, "0"))
-										.join("")}"`
+								? `"#${rgb.map(s => s.toString(16).padStart(2, "0")).join("")}"`
 								: rgb.join(", "),
 					},
 				},
@@ -495,9 +446,7 @@ languages.onLanguageEncountered("typescript", () => {
 
 			while ((match = fromRGB.exec(text))) {
 				const start = model.getPositionAt(match.index + startOffset);
-				const end = model.getPositionAt(
-					match.index + match[0].length - endOffset
-				);
+				const end = model.getPositionAt(match.index + match[0].length - endOffset);
 				const [r, g, b] = match[1].split(/,\s*/).map(Number);
 
 				colors.push({
@@ -518,9 +467,7 @@ languages.onLanguageEncountered("typescript", () => {
 
 			while ((match = fromHex.exec(text))) {
 				const start = model.getPositionAt(match.index + startOffset);
-				const end = model.getPositionAt(
-					match.index + match[0].length - endOffset
-				);
+				const end = model.getPositionAt(match.index + match[0].length - endOffset);
 
 				const r = Number.parseInt(match[1].slice(1, 3), 16);
 				const g = Number.parseInt(match[1].slice(3, 5), 16);

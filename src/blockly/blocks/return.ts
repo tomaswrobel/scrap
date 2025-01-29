@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Defines the return block.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Return block is not a mutator, but a standalone block.
  *
@@ -67,11 +67,7 @@ export const MIXIN = {
 	},
 
 	onchange(this: ReturnBlock, e: Blockly.Events.Abstract) {
-		if (
-			e instanceof Blockly.Events.BlockMove &&
-			e.blockId === this.id &&
-			e.recordUndo
-		) {
+		if (e instanceof Blockly.Events.BlockMove && e.blockId === this.id && e.recordUndo) {
 			const parent = this.getRootBlock();
 
 			if (parent.type === "function") {

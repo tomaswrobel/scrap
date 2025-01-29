@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Defines the call mutator.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Similar to variables, Scrap does not use Blockly's built-in
  * functions. Instead, it uses its own function blocks.

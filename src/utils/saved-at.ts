@@ -8,8 +8,8 @@
  *
  * @license MIT
  * @fileoverview A helper function for displaying the path of the saved file.
- * @author Tomáš Wróbel
- * 
+ * @copyright Tomáš Wróbel 2025
+ *
  * @param path The path of the saved file.
  * @returns The element with the path of the saved file.
  */

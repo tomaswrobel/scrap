@@ -7,13 +7,18 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 {
 	"compilerOptions": {
 		"composite": true,
 		"noLib": true, // ECMAScript API is defined below:
-		"types": ["../../monaco-editor/lib/static.d.ts"]
+		"types": [
+			"../../monaco-editor/lib/static.d.ts"
+		]
 	},
-	"files": ["runtime.ts", "templates.d.ts"]
+	"files": [
+		"runtime.ts",
+		"templates.d.ts"
+	]
 }

@@ -7,12 +7,12 @@
  * the official repository at https://github.com/tomas-wrobel/scrap.
  *
  * @license MIT [from-monaco-editor]
- * @author Microsoft Corporation
+ * @copyright Microsoft Corporation 2025
  * @fileoverview Just remapped imports.
  */
 import type {LanguageServiceDefaults} from "./typescript";
 import type {TypeScriptWorker} from "./tsWorker";
-import type { Uri, IDisposable} from "monaco-editor";
+import type {Uri, IDisposable} from "monaco-editor";
 import {editor} from "monaco-editor";
 
 export class WorkerManager {

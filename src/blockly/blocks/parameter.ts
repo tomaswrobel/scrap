@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Defines the parameter mutator.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This mutator is used to update the type of the parameter block.
  * The parameter block is:

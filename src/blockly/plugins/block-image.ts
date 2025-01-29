@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Export block as PNG image.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This file adds a context menu item to blocks that allows exporting
  * the block as a PNG image. This feature was inspired by Snap!.

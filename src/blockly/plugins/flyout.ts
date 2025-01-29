@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomas-wrobel/scrap.
  *
  * @license Apache-2.0
- * @author Google LLC
+ * @copyright Google LLC 2025
  *
  * From: @blockly/continuous-toolbox@1.0.5
  * To: TypeScript, Scrap modifications
@@ -22,6 +22,8 @@ export class Flyout extends Blockly.VerticalFlyout {
 	private scrollTarget: number | null = null;
 	private recyclingEnabled_ = false;
 	private scrollAnimationFraction = 0.3;
+
+	public override CORNER_RADIUS = 0;
 
 	constructor(workspaceOptions: Blockly.Options) {
 		super(workspaceOptions);
@@ -44,9 +46,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 	public recordScrollPositions() {
 		this.scrollPositions = [];
 		const categoryLabels = this.buttons_.filter(
-			button =>
-				button.isLabel() &&
-				this.getParentToolbox().getCategoryByName(button.getButtonText())
+			button => button.isLabel() && this.getParentToolbox().getCategoryByName(button.getButtonText())
 		);
 		for (const button of categoryLabels) {
 			if (button.isLabel()) {
@@ -90,10 +90,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 		// Set the scroll target to either the scaled position or the lowest
 		// possible scroll point, whichever is smaller.
 		const metrics = this.workspace_.getMetrics();
-		this.scrollTarget = Math.min(
-			position * this.workspace_.scale,
-			metrics.scrollHeight - metrics.viewHeight
-		);
+		this.scrollTarget = Math.min(position * this.workspace_.scale, metrics.scrollHeight - metrics.viewHeight);
 
 		this.stepScrollAnimation();
 	}
@@ -111,9 +108,7 @@ export class Flyout extends Blockly.VerticalFlyout {
 			this.scrollTarget = null;
 			return;
 		}
-		this.workspace_.scrollbar!.setY(
-			currentScrollPos + diff * this.scrollAnimationFraction
-		);
+		this.workspace_.scrollbar!.setY(currentScrollPos + diff * this.scrollAnimationFraction);
 
 		requestAnimationFrame(this.stepScrollAnimation);
 	}

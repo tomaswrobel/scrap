@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Typed block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Typed block is inside the variable block or the function block.
  * It serves as a container with own data model.

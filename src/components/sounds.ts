@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomas-wrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Sound preview component.
  *
  * Unfortunately, Scrap does not support sound editing yet. This component

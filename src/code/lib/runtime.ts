@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Runtime
- * @copyright Tomáš Wróbel
+ * @copyright Tomáš Wróbel 2025
  *
  * This file, including this comment, serves as a definition of the
  * TypeScript runtime. For example, it defines `self`. For this to

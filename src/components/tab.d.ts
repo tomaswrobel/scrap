@@ -5,9 +5,9 @@
  * You should have received a copy of the MIT License, if not, please
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
  * the official repository at https://github.com/tomas-wrobel/scrap.
- * 
+ *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Tab component interface.
  */
 

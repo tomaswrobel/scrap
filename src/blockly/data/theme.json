@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Blockly's JSON definition of scrap theme.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Colors are taken from Blockly's zelos theme, matched to
  * Scrap's categories, which mirror Scratch's a lot.
@@ -114,7 +114,9 @@
 	},
 	"componentStyles": {
 		"toolboxBackgroundColour": "#FFFFFF",
-		"flyoutBackgroundColour": "#FFFFFF"
+		"flyoutBackgroundColour": "#FFFFFF",
+		"flyoutOpacity": 1,
+		"workspaceBackgroundColour": "#FFFFFF"
 	},
 	"fontStyle": {}
 }

@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Main application entry point.
  */
 import {Entity, Sprite, Stage} from "@scrap/components/entity";
@@ -127,28 +127,20 @@ export default class App {
 		});
 
 		document.getElementById("add")!.addEventListener("click", () => {
-			for (
-				var n = 1, name = "Scrappy";
-				this.entities.some(e => e.name === name);
-				name = `Scrappy ${n++}`
-			);
+			for (var n = 1, name = "Scrappy"; this.entities.some(e => e.name === name); name = `Scrappy ${n++}`);
 			this.addSprite(new Sprite(name));
 		});
 
 		document.getElementById("handler")!.addEventListener("mousedown", this);
 
 		// Sprite panel
-		const workspace = Blockly.inject(
-			this.spritePanel.querySelector(".sprite-info")!,
-			{
-				renderer: "scrap",
-				zoom: {
-					startScale: 0.65,
-				},
-				media: "blockly-media/",
-				css: false,
-			}
-		);
+		const workspace = Blockly.inject(this.spritePanel.querySelector(".sprite-info")!, {
+			renderer: "scrap",
+			zoom: {
+				startScale: 0.65,
+			},
+			media: "blockly-media/",
+		});
 		workspace.showContextMenu = () => {};
 
 		this.spritePanelBlock = workspace.newBlock("spritePanel", "root");
@@ -186,14 +178,8 @@ export default class App {
 		} else {
 			this.spritePanelBlock.setEditable(true);
 
-			this.spritePanelBlock
-				.getInput("x")!
-				.connection!.targetBlock()!
-				.setFieldValue(entity.getInit("x"), "NUM");
-			this.spritePanelBlock
-				.getInput("y")!
-				.connection!.targetBlock()!
-				.setFieldValue(entity.getInit("y"), "NUM");
+			this.spritePanelBlock.getInput("x")!.connection!.targetBlock()!.setFieldValue(entity.getInit("x"), "NUM");
+			this.spritePanelBlock.getInput("y")!.connection!.targetBlock()!.setFieldValue(entity.getInit("y"), "NUM");
 			this.spritePanelBlock
 				.getInput("size")!
 				.connection!.targetBlock()!
@@ -203,12 +189,8 @@ export default class App {
 				.connection!.targetBlock()!
 				.setFieldValue(entity.getInit("direction"), "VALUE");
 
-			this.spritePanelBlock
-				.getField("draggable")!
-				.setValue(entity.getInit("draggable") ? "TRUE" : "FALSE");
-			this.spritePanelBlock
-				.getField("visible")!
-				.setValue(entity.getInit("visible") ? "TRUE" : "FALSE");
+			this.spritePanelBlock.getField("draggable")!.setValue(entity.getInit("draggable") ? "TRUE" : "FALSE");
+			this.spritePanelBlock.getField("visible")!.setValue(entity.getInit("visible") ? "TRUE" : "FALSE");
 		}
 	}
 
@@ -221,12 +203,8 @@ export default class App {
 		const size = this.spritePanelBlock.getInput("size")!;
 		const direction = this.spritePanelBlock.getInput("direction")!;
 
-		const draggable = this.spritePanelBlock.getField(
-			"draggable"
-		) as Blockly.FieldCheckbox;
-		const visible = this.spritePanelBlock.getField(
-			"visible"
-		) as Blockly.FieldCheckbox;
+		const draggable = this.spritePanelBlock.getField("draggable") as Blockly.FieldCheckbox;
+		const visible = this.spritePanelBlock.getField("visible") as Blockly.FieldCheckbox;
 
 		x.connection!.setShadowState({
 			type: "math_number",
@@ -410,11 +388,7 @@ export default class App {
 		const file = await readFile(path);
 		const zip = await JSZip.loadAsync(file);
 
-		const {
-			entities,
-			name,
-			size = 380,
-		} = JSON.parse(await zip.file("project.json")!.async("string"));
+		const {entities, name, size = 380} = JSON.parse(await zip.file("project.json")!.async("string"));
 
 		this.input.value = name;
 		this.container.style.setProperty("--output", `${size}`);
@@ -633,10 +607,7 @@ export default class App {
 		this.output.dataset.mode = mode;
 
 		for (const m of this.modes) {
-			m.style.setProperty(
-				"visibility",
-				m.dataset.for === mode ? "visible" : "hidden"
-			);
+			m.style.setProperty("visibility", m.dataset.for === mode ? "visible" : "hidden");
 		}
 	}
 

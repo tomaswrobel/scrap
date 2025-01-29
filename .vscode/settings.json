@@ -14,18 +14,15 @@
 	// Set TypeScript SDK to the one in node_modules
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-
 	// ESLint settings
 	"eslint.enable": true,
 	"eslint.format.enable": false,
 	"eslint.onIgnoredFiles": "off",
 	"eslint.runtime": "node",
 	"eslint.useFlatConfig": true,
-
 	// Set Prettier settings to match Scrap Native's style
 	"prettier.arrowParens": "avoid",
 	"prettier.bracketSpacing": false,
-
 	// Tab configuration
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
@@ -33,7 +30,6 @@
 	"prettier.useTabs": true,
 	"prettier.tabWidth": 4,
 	"prettier.printWidth": 120,
-
 	// YAML needs to be 2 spaces
 	"[yaml][github-actions-workflow]": {
 		"editor.insertSpaces": true,
@@ -43,7 +39,6 @@
 		"editor.autoIndent": "advanced",
 		"editor.detectIndentation": false
 	},
-
 	// Set the default formatters
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"[rust]": {
@@ -52,7 +47,6 @@
 	"[toml]": {
 		"editor.defaultFormatter": "tamasfe.even-better-toml"
 	},
-
 	// JSON files association
 	"files.associations": {
 		"*.json": "jsonc",
@@ -60,16 +54,22 @@
 		"*.svg": "html",
 		"package.json": "json"
 	},
-
 	// JSON Schemas for LiTScript
 	"json.schemas": [
 		{
-			"fileMatch": ["/litconfig.json"],
+			"fileMatch": [
+				"/litconfig.json"
+			],
 			"url": "../node_modules/litscript/schemas/litsconfig-schema.json"
 		},
 		{
-			"fileMatch": ["/src-trauri/capabilities/*.json"],
+			"fileMatch": [
+				"/src-trauri/capabilities/*.json"
+			],
 			"url": "../src-trauri/gen/schemas/desktop-schema.json"
 		}
-	]
+	],
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
 }

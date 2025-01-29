@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Block imported from Scratch with unknown opcode
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This block is a placeholder for a block that was imported from
  * Scratch and is not compatible with Scrap. It will not be executed.

@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview SWC utilities
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import {invoke} from "@tauri-apps/api/core";
 import type * as Types from "@swc/types";
@@ -27,10 +27,7 @@ export function getVariables(code: string) {
 	return invoke<Variable[]>("variables", {code});
 }
 
-export function is<K extends keyof SWCNodeNameMap>(
-	node: unknown,
-	type: K
-): node is SWCNodeNameMap[K] {
+export function is<K extends keyof SWCNodeNameMap>(node: unknown, type: K): node is SWCNodeNameMap[K] {
 	if (typeof node !== "object" || !node) {
 		return false;
 	}
@@ -61,9 +58,7 @@ export function getPropertyContents(property: Node) {
 	if (is(property, "Identifier") || is(property, "StringLiteral")) {
 		return property.value;
 	} else if (is(property, "Computed")) {
-		return property.expression.type === "StringLiteral"
-			? property.expression.value
-			: "";
+		return property.expression.type === "StringLiteral" ? property.expression.value : "";
 	} else {
 		return "";
 	}
@@ -77,20 +72,14 @@ export function getType(type: Types.TsType | null | undefined): Check {
 			case "TsKeywordType":
 				return type.kind;
 			case "TsTypeReference": {
-				if (
-					type.typeName.type === "Identifier" &&
-					types.includes(type.typeName.value)
-				) {
+				if (type.typeName.type === "Identifier" && types.includes(type.typeName.value)) {
 					return type.typeName.value;
 				} else {
 					return "any";
 				}
 			}
 			case "TsUnionType": {
-				return type.types.reduce(
-					(previous, current) => previous.concat(getType(current)),
-					new Array<string>()
-				);
+				return type.types.reduce((previous, current) => previous.concat(getType(current)), new Array<string>());
 			}
 		}
 	return "any";

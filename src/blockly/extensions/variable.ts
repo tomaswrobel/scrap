@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Blockly's extension for `showVariable` and `hideVariable` blocks
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * This extension adds a dropdown with all the variables to the block.
  */

@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Workspace component.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import Dialog from "@scrap/utils/dialog";
 import * as Blockly from "blockly";
@@ -63,6 +63,11 @@ export default class Workspace implements TabComponent {
 			zoom: {
 				startScale: 0.65,
 			},
+			grid: {
+				spacing: 20,
+				length: 1,
+				colour: "#ddd",
+			},
 			move: {
 				drag: false,
 				wheel: true,
@@ -73,7 +78,6 @@ export default class Workspace implements TabComponent {
 			oneBasedIndex: false,
 			disable: false,
 			plugins,
-			css: false,
 		});
 
 		this.workspace.registerButtonCallback("createVariableButton", async () => {

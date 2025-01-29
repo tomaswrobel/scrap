@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview Global types for Scrap.
  */
 
@@ -43,6 +43,16 @@ declare module "*.svg" {
 	export default url;
 }
 
+declare module "*.png" {
+	const url: string;
+	export default url;
+}
+
+declare module "*.cur" {
+	const url: string;
+	export default url;
+}
+
 declare module "*.scss";
 declare module "*.css";
 
@@ -59,3 +69,5 @@ declare module "monaco-editor/esm/vs/editor/editor.worker" {
 
 	export function initialize<Data>(fn: InitializeCallback<Data>): void;
 }
+
+declare module "monaco-editor/*";

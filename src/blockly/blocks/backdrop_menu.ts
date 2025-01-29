@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Backdrop menu block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Backdrop menu block is a dropdown with all the backdrops.
  * It should be always a shadow block, as it's used in the

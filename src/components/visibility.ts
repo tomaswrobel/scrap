@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Visibility utilities
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 import type TabComponent from "./tab";
 import type Tabs from "./tabs";

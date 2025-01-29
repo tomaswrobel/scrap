@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Property block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Property block is a block that returns a property of a sprite.
  * It's a dropdown with all the properties (and variables) of a sprite.
@@ -34,9 +34,7 @@ export const MIXIN = {
 								["brightness effect", "effects.brightness"],
 							];
 
-							const sprite = app.entities.find(
-								e => e.name === this.getFieldValue("SPRITE")
-							);
+							const sprite = app.entities.find(e => e.name === this.getFieldValue("SPRITE"));
 
 							if (!sprite) {
 								return result;
@@ -67,9 +65,7 @@ export const MIXIN = {
 							if (value === "draggable" || value === "visible") {
 								this.setOutput(true, ["boolean", "Variable"]);
 							} else if (value.startsWith("variables")) {
-								const sprite = app.entities.find(
-									e => e.name === this.getFieldValue("SPRITE")
-								)!;
+								const sprite = app.entities.find(e => e.name === this.getFieldValue("SPRITE"))!;
 								const [, type] = sprite.variables.find(
 									v => JSON.stringify(v[0]) === value.slice(10, -1)
 								)!;

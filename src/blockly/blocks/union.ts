@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Union block
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Union block groups types together. It's a
  * dynamic block with a mutator.

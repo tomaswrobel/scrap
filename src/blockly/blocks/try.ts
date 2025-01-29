@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @fileoverview Try mutator
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  *
  * Try muator is necessary for the try-catch-finally block.
  *
