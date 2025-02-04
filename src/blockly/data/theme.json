@@ -113,10 +113,10 @@
 		}
 	},
 	"componentStyles": {
-		"toolboxBackgroundColour": "#FFFFFF",
-		"flyoutBackgroundColour": "#FFFFFF",
 		"flyoutOpacity": 1,
-		"workspaceBackgroundColour": "#FFFFFF"
+		"toolboxBackgroundColour": "#FFFFFF",
+		"workspaceBackgroundColour": "#FDFDFD",
+		"flyoutBackgroundColour": "#FFFFFF"
 	},
 	"fontStyle": {}
 }

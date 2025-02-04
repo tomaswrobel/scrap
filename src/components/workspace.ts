@@ -74,7 +74,6 @@ export default class Workspace implements TabComponent {
 				scrollbars: true,
 			},
 			collapse: false,
-			trashcan: false,
 			oneBasedIndex: false,
 			disable: false,
 			plugins,
@@ -310,6 +309,11 @@ export default class Workspace implements TabComponent {
 
 	public dispose() {
 		this.container.remove();
-		this.workspace.dispose();
+
+		try {
+			this.workspace.dispose();
+		} catch {
+			// Probably already disposed.
+		}
 	}
 }

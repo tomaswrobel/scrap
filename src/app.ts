@@ -140,6 +140,11 @@ export default class App {
 				startScale: 0.65,
 			},
 			media: "blockly-media/",
+			trashcan: false,
+			collapse: false,
+			scrollbars: false,
+			oneBasedIndex: false,
+			disable: false,			
 		});
 		workspace.showContextMenu = () => {};
 
