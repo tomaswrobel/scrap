@@ -48,7 +48,7 @@
 		"keep-a-changelog": "2.5.3",
 		"parcel": "2.13.3",
 		"path-browserify": "1.0.1",
-		"sass": "1.83.4",
+		"sass": "1.84.0",
 		"svgo": "3.3.2",
 		"typescript-eslint": "8.23.0"
 	},
