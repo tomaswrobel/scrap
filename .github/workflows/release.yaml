@@ -39,7 +39,7 @@ jobs:
           node-version: lts/*
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.82.0
         with:
           targets: ${{ join(matrix.targets, ',') }}
 

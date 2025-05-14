@@ -33,7 +33,7 @@
 		// Parcel resolution
 		"paths": {
 			"@scrap/*": ["./src/*"],
-			"blockly": ["./node_modules/blockly/core/blockly.d.ts"]
+			"blockly": ["./node_modules/blockly/core.d.ts"]
 		}
 	},
 	"include": ["src", "pwa"],

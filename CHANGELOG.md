@@ -11,6 +11,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Better Paint editor
 
+## [6.2.2] - 2025-05-14
+
+### Changed
+
+-   dependencies update
+-   PNPM updated to 10.10.0
+
+### Fixed
+
+-	Rust toolchain has fixed version so it can be used with Tauri
+
 ## [6.2.1] - 2025-01-30
 
 ### Changed
