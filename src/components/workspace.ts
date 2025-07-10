@@ -12,10 +12,10 @@
  */
 import Dialog from "@scrap/utils/dialog";
 import * as Blockly from "blockly";
-import {plugins, sprite, stage, theme, Types, TypeToShadow} from "../blockly";
-import Blocks from "../code/transformers/blocks";
+import {plugins, sprite, stage, theme, ScrapTypes, TypeToShadowMap} from "../blockly";
+import Blocks from "../code-transformers/codeToBlocks";
 import {bind, load} from "../utils/decorators";
-import {Sprite, Stage} from "./entity";
+import {Sprite, Stage} from "../entity";
 import type TabComponent from "./tab";
 import "./workspace.scss";
 
@@ -95,7 +95,7 @@ export default class Workspace implements TabComponent {
 
 			const type = await Dialog.scrap.fire({
 				input: "select",
-				inputOptions: Types.reduce((acc, type) => ({...acc, [type]: type || "any"}), {}),
+				inputOptions: ScrapTypes.reduce((acc, type) => ({...acc, [type]: type || "any"}), {}),
 				title: "Create Variable",
 				body: "Type:",
 			});
@@ -197,10 +197,10 @@ export default class Workspace implements TabComponent {
 
 				const shadow =
 					typeof type === "string"
-						? TypeToShadow[type]
+						? TypeToShadowMap[type]
 						: type.length === 1
-						? TypeToShadow[type[0]]
-						: TypeToShadow.any;
+						? TypeToShadowMap[type[0]]
+						: TypeToShadowMap.any;
 				if (shadow) {
 					inputs.VALUE = {shadow: {type: shadow}};
 				}

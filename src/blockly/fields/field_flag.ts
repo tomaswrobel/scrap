@@ -13,7 +13,7 @@
 import * as Blockly from "blockly";
 import fs from "fs";
 
-const data = fs.readFileSync("src/svgs/flag.svg", "base64");
+const data = fs.readFileSync("src/assets/icons/stage/flag.svg", "base64");
 
 export default class extends Blockly.FieldImage {
 	constructor() {

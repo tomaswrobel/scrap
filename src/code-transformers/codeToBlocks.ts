@@ -18,12 +18,12 @@
  */
 import * as Blockly from "blockly";
 import * as SWC from "@scrap/utils/swc";
-import type {Entity} from "@scrap/components/entity";
-import {Error, properties, toCheck} from "@scrap/blockly";
+import type {Entity} from "@scrap/entity";
+import {properties, blockToCheck, ScrapTypes} from "@scrap/blockly";
 
-class Blocks {
+class CodeToBlocks {
 	private connection?: Blockly.Connection | null;
-	private readonly functions = new Map<string, Blocks.Function>();
+	private readonly functions = new Map<string, CodeToBlocks.Function>();
 	private readonly variables: Variable[] = [];
 
 	private constructor(public readonly workspace: Blockly.Workspace) {}
@@ -558,7 +558,7 @@ class Blocks {
 						this.functions.set(node.identifier.value, {
 							params,
 							name: node.identifier.value,
-							returnType: toCheck(this.connection.targetBlock()),
+							returnType: blockToCheck(this.connection.targetBlock()),
 						});
 					} else {
 						this.functions.set(node.identifier.value, {
@@ -1089,12 +1089,14 @@ class Blocks {
 					break;
 				}
 				default:
-					throw new SyntaxError(`Unsupported node type ${node.type}. ${Error}`);
+					throw new SyntaxError(
+						`Unsupported node type ${node.type}. Type must be one of void${ScrapTypes.join(", ")}`
+					);
 			}
 	}
 }
 
-declare namespace Blocks {
+declare namespace CodeToBlocks {
 	interface Function {
 		params: string[];
 		name: string;
@@ -1102,4 +1104,4 @@ declare namespace Blocks {
 	}
 }
 
-export default Blocks;
+export default CodeToBlocks;

@@ -29,6 +29,7 @@
 		// Linting
 		"strict": true,
 		"noImplicitOverride": true,
+		"verbatimModuleSyntax": true,
 
 		// Parcel resolution
 		"paths": {
@@ -37,9 +38,6 @@
 		}
 	},
 	"include": ["src", "pwa"],
-	"exclude": ["src/monaco-editor/lib", "src/code/lib"],
-	"references": [
-		{"path": "./src/monaco-editor/lib/tsconfig.json"},
-		{"path": "./src/code/lib/tsconfig.json"}
-	]
+	"exclude": ["src/dts"],
+	"references": [{"path": "./src/dts/static/tsconfig.json"}, {"path": "./src/dts/runtime/tsconfig.json"}]
 }

@@ -11,7 +11,7 @@
  * @fileoverview Custom Blockly field for valid JS identifier.
  */
 import * as Blockly from "blockly";
-import {reserved} from "../../code/transformers/utils";
+import {reservedWords} from "../../code-transformers/utils";
 
 export default class FieldIdentifier extends Blockly.FieldTextInput {
 	public onFinish?: (result: string) => void;
@@ -21,7 +21,7 @@ export default class FieldIdentifier extends Blockly.FieldTextInput {
 	}
 
 	protected override doClassValidation_(value: string) {
-		const banned = [...reserved];
+		const banned = [...reservedWords];
 
 		if (this.sourceBlock_?.type.startsWith("function")) {
 			for (const block of this.sourceBlock_.workspace.getBlocksByType(this.sourceBlock_.type)) {
@@ -38,6 +38,7 @@ export default class FieldIdentifier extends Blockly.FieldTextInput {
 				return `${name}${i || ""}`;
 			}
 		}
+
 		return null;
 	}
 

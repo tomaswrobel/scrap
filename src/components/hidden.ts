@@ -7,11 +7,10 @@
  * the official repository at https://github.com/tomas-wrobel/scrap.
  *
  * @license MIT
- * @fileoverview Visibility utilities
+ * @fileoverview Hidden tab component
  * @copyright Tomáš Wróbel 2025
  */
 import type TabComponent from "./tab";
-import type Tabs from "./tabs";
 import "./hidden.scss";
 
 /**
@@ -21,7 +20,7 @@ import "./hidden.scss";
  * adjust their size to the grid after
  * they are rendered.
  */
-export class Hidden implements TabComponent {
+export default class Hidden implements TabComponent {
 	public readonly container!: HTMLDivElement;
 	public name = "Hidden";
 
@@ -47,29 +46,5 @@ export class Hidden implements TabComponent {
 		this.container = document.createElement("div");
 
 		this.container.classList.add("tab-content", "hidden-content");
-	}
-}
-
-export class Visibility {
-	constructor(private readonly tabs: Tabs) {}
-
-	/**
-	 * Hide the active tab, show {@link Hidden placeholder}
-	 * Do not forget to call {@link show}.
-	 */
-	public hide() {
-		if (this.tabs.active) {
-			this.tabs.set(new Hidden(this.tabs.active));
-		}
-	}
-
-	/**
-	 * Show the active tab, hide {@link Hidden placeholder}
-	 * This must be done after {@link hide} is called.
-	 */
-	public show() {
-		if (this.tabs.active instanceof Hidden) {
-			this.tabs.set(this.tabs.active.previous);
-		}
 	}
 }

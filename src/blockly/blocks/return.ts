@@ -24,7 +24,7 @@
  * the Scratch's "stop this script" block.
  */
 import * as Blockly from "blockly";
-import {TypeToShadow, toCheck} from "../types";
+import {TypeToShadowMap, blockToCheck} from "../types";
 
 export type ReturnBlock = Blockly.BlockSvg & ReturnBlockMixin;
 export interface ReturnBlockMixin extends ReturnBlockMixinType {}
@@ -72,7 +72,7 @@ export const MIXIN = {
 
 			if (parent.type === "function") {
 				const type = parent.getInput("RETURNS")?.connection?.targetBlock();
-				this.loadExtraState({output: type ? toCheck(type) : false});
+				this.loadExtraState({output: type ? blockToCheck(type) : false});
 			} else {
 				this.loadExtraState({output: false});
 			}
@@ -94,9 +94,9 @@ export const MIXIN = {
 			var type = "any";
 		}
 
-		if (type in TypeToShadow) {
+		if (type in TypeToShadowMap) {
 			input.connection!.setShadowState({
-				type: TypeToShadow[type],
+				type: TypeToShadowMap[type],
 			});
 		}
 

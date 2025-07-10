@@ -14,24 +14,23 @@
  * Where noted, some parts are directly copied
  * from Blockly's JavaScript generator.
  */
-/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 import * as Blockly from "blockly";
-import type {Entity} from "../../components/entity";
+import type {Entity} from "../entity";
 
 import type JSZip from "jszip";
-import {reserved} from "./utils";
+import {Order, reservedWords} from "./utils";
 import * as SWC from "@scrap/utils/swc";
 
-import type {FunctionBlock} from "../../blockly/blocks/function";
-import type {ParameterBlock} from "../../blockly/blocks/parameter";
-import type {TryBlock} from "../../blockly/blocks/try";
-import type {ArrayBlock} from "../../blockly/blocks/array";
-import type {UnknownBlock} from "../../blockly/blocks/unknown";
-import type {CallBlock} from "../../blockly/blocks/call";
-import type {UnionBlock} from "../../blockly/blocks/union";
+import type {FunctionBlock} from "../blockly/blocks/function";
+import type {ParameterBlock} from "../blockly/blocks/parameter";
+import type {TryBlock} from "../blockly/blocks/try";
+import type {ArrayBlock} from "../blockly/blocks/array";
+import type {UnknownBlock} from "../blockly/blocks/unknown";
+import type {CallBlock} from "../blockly/blocks/call";
+import type {UnionBlock} from "../blockly/blocks/union";
 
 interface BlockCallback<T extends Blockly.Block> {
-	(block: T, ts: TypeScript): null | string | [string, Order];
+	(block: T, ts: BlocksToCode): null | string | [string, Order];
 }
 
 /**
@@ -55,7 +54,7 @@ interface BlockCallback<T extends Blockly.Block> {
  * });
  * ```
  */
-class TypeScript extends Blockly.CodeGenerator {
+class BlocksToCode extends Blockly.CodeGenerator {
 	public static blocks: Record<string, BlockCallback<Blockly.Block>> = {};
 
 	// Directly copied from Blockly's JavaScript generator.
@@ -92,9 +91,9 @@ class TypeScript extends Blockly.CodeGenerator {
 
 		super("ScrapScript");
 		this.isInitialized = false;
-		this.addReservedWords(`${reserved}`);
+		this.addReservedWords(`${reservedWords}`);
 
-		this.forBlock = TypeScript.blocks;
+		this.forBlock = BlocksToCode.blocks;
 		this.INDENT = "\t";
 	}
 
@@ -194,71 +193,71 @@ class TypeScript extends Blockly.CodeGenerator {
 	}
 }
 
-TypeScript.register("ternary", (block, ts) => {
+BlocksToCode.register("ternary", (block, ts) => {
 	const condition = ts.valueToCode(block, "CONDITION", Order.NONE) || "false";
 	const then = ts.valueToCode(block, "THEN", Order.NONE) || "null";
 	const otherwise = ts.valueToCode(block, "ELSE", Order.NONE) || "null";
 	return [`${condition} ? ${then} : ${otherwise}`, Order.CONDITIONAL];
 });
 
-TypeScript.register<UnknownBlock>("unknown", block => {
+BlocksToCode.register<UnknownBlock>("unknown", block => {
 	if (block.shape === "reporter") {
 		return [`/* this.${block.opcode}() */`, Order.ATOMIC];
 	}
 	return `/* this.${block.opcode}(); */\n`;
 });
 
-TypeScript.register("set", (block, ts) => {
+BlocksToCode.register("set", (block, ts) => {
 	const variable = ts.valueToCode(block, "VAR", Order.NONE);
 	const value = ts.valueToCode(block, "VALUE", Order.NONE);
 	return `${variable} = ${value || "null"};\n`;
 });
 
-TypeScript.register("change", (block, ts) => {
+BlocksToCode.register("change", (block, ts) => {
 	const variable = ts.valueToCode(block, "VAR", Order.NONE);
 	const value = ts.valueToCode(block, "VALUE", Order.NONE);
 	return `${variable} += ${value || "null"};\n`;
 });
 
-TypeScript.register("variable", (block, ts) => {
+BlocksToCode.register("variable", (block, ts) => {
 	const VAR = ts.valueToCode(block, "VAR", Order.NONE);
 	const VALUE = ts.valueToCode(block, "VALUE", Order.NONE);
 	return `${block.getFieldValue("kind")} ${VAR} = ${VALUE || "null"};\n`;
 });
 
-TypeScript.register("showVariable", block => {
+BlocksToCode.register("showVariable", block => {
 	return `self.showVariable(${JSON.stringify(block.getFieldValue("VAR"))});\n`;
 });
 
-TypeScript.register("hideVariable", block => {
+BlocksToCode.register("hideVariable", block => {
 	return `self.hideVariable(${JSON.stringify(block.getFieldValue("VAR"))});\n`;
 });
 
-TypeScript.register("iterables_string", block => {
+BlocksToCode.register("iterables_string", block => {
 	return [JSON.stringify(block.getFieldValue("TEXT")), Order.ATOMIC];
 });
 
-TypeScript.register("rotationStyle", block => {
+BlocksToCode.register("rotationStyle", block => {
 	return [JSON.stringify(block.getFieldValue("STYLE")), Order.ATOMIC];
 });
 
-TypeScript.register("key", block => {
+BlocksToCode.register("key", block => {
 	return [JSON.stringify(block.getFieldValue("KEY")), Order.ATOMIC];
 });
 
-TypeScript.register("effect", block => {
+BlocksToCode.register("effect", block => {
 	return [`self.effects.${block.getFieldValue("EFFECT")}`, Order.MEMBER];
 });
 
-TypeScript.register("sound", "costume_menu", "backdrop_menu", block => {
+BlocksToCode.register("sound", "costume_menu", "backdrop_menu", block => {
 	return [JSON.stringify(block.getFieldValue("NAME")), Order.ATOMIC];
 });
 
-TypeScript.register("backdrop", "costume", block => {
+BlocksToCode.register("backdrop", "costume", block => {
 	return [`self.${block.type}.${block.getFieldValue("VALUE")}`, Order.MEMBER];
 });
 
-TypeScript.register("for", (block, ts) => {
+BlocksToCode.register("for", (block, ts) => {
 	const variable = block.getField("VAR")!.getText();
 	const from = ts.valueToCode(block, "FROM", Order.NONE) || "0";
 	const to = ts.valueToCode(block, "TO", Order.NONE) || "0";
@@ -268,21 +267,21 @@ TypeScript.register("for", (block, ts) => {
 	)}}\n`;
 });
 
-TypeScript.register("while", (block, ts) => {
+BlocksToCode.register("while", (block, ts) => {
 	const condition = ts.valueToCode(block, "CONDITION", Order.NONE) || "false";
 	return `while (${condition}) {\n${ts.statementToCode(block, "STACK")}}\n`;
 });
 
-TypeScript.register("doWhile", (block, ts) => {
+BlocksToCode.register("doWhile", (block, ts) => {
 	const condition = ts.valueToCode(block, "CONDITION", Order.NONE) || "false";
 	return `do {\n${ts.statementToCode(block, "STACK")}} while (${condition});\n`;
 });
 
-TypeScript.register("break", "continue", block => {
+BlocksToCode.register("break", "continue", block => {
 	return `${block.type};\n`;
 });
 
-TypeScript.register("sprite", block => {
+BlocksToCode.register("sprite", block => {
 	const name = block.getFieldValue("SPRITE");
 	if (name === "self") {
 		return [name, Order.ATOMIC];
@@ -290,22 +289,22 @@ TypeScript.register("sprite", block => {
 	return [`$[${JSON.stringify(name)}]`, Order.MEMBER];
 });
 
-TypeScript.register("clone", (block, ts) => {
+BlocksToCode.register("clone", (block, ts) => {
 	return `${ts.valueToCode(block, "SPRITE", Order.MEMBER)}.clone();\n`;
 });
 
-TypeScript.register<ParameterBlock>("parameter", block => {
+BlocksToCode.register<ParameterBlock>("parameter", block => {
 	if (block.isVariable_) {
 		return [`self.variables[${JSON.stringify(block.getFieldValue("VAR"))}]`, Order.MEMBER];
 	}
 	return [block.getFieldValue("VAR"), Order.ATOMIC];
 });
 
-TypeScript.register("event", block => {
+BlocksToCode.register("event", block => {
 	return [JSON.stringify(block.getFieldValue("EVENT")), Order.ATOMIC];
 });
 
-TypeScript.register<TryBlock>("tryCatch", (block, ts) => {
+BlocksToCode.register<TryBlock>("tryCatch", (block, ts) => {
 	let code = "try {\n";
 	code += ts.statementToCode(block, "TRY");
 
@@ -326,16 +325,16 @@ TypeScript.register<TryBlock>("tryCatch", (block, ts) => {
 	return `${code}}\n`;
 });
 
-TypeScript.register("throw", (block, ts) => {
+BlocksToCode.register("throw", (block, ts) => {
 	const error = ts.valueToCode(block, "ERROR", Order.NONE) || "null";
 	return `throw ${error};\n`;
 });
 
-TypeScript.blocks.stop = function () {
+BlocksToCode.blocks.stop = function () {
 	return "Scrap.stop();\n";
 };
 
-TypeScript.register("controls_if", (block, ts) => {
+BlocksToCode.register("controls_if", (block, ts) => {
 	// If/elseif/else condition.
 	let code = "";
 
@@ -351,21 +350,21 @@ TypeScript.register("controls_if", (block, ts) => {
 	return `${code}\n`;
 });
 
-TypeScript.register("foreach", (block, ts) => {
+BlocksToCode.register("foreach", (block, ts) => {
 	const item = block.getFieldValue("VAR");
 	const iterable = ts.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
 	return `for (const ${item} of ${iterable}) {\n${ts.statementToCode(block, "DO")}}\n`;
 });
 
-TypeScript.register("property", block => {
+BlocksToCode.register("property", block => {
 	return [`$[${JSON.stringify(block.getFieldValue("SPRITE"))}].${block.getFieldValue("PROPERTY")}`, Order.MEMBER];
 });
 
-TypeScript.blocks.isTurbo = function () {
+BlocksToCode.blocks.isTurbo = function () {
 	return ["Scrap.isTurbo", Order.MEMBER];
 };
 
-TypeScript.register("array", (block: ArrayBlock, ts) => {
+BlocksToCode.register("array", (block: ArrayBlock, ts) => {
 	const type = ts.valueToCode(block, "TYPE", Order.NONE) || "any";
 	const items: string[] = [];
 
@@ -380,50 +379,50 @@ TypeScript.register("array", (block: ArrayBlock, ts) => {
 	return [`new Array${type === "any" ? "" : `<${type}>`}(${items.join(", ")})`, Order.FUNCTION_CALL];
 });
 
-TypeScript.register("length", (block, ts) => {
+BlocksToCode.register("length", (block, ts) => {
 	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	return [`${array}.length`, Order.MEMBER];
 });
 
-TypeScript.register("reverse", (block, ts) => {
+BlocksToCode.register("reverse", (block, ts) => {
 	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	return [`${array}.reverse()`, Order.MEMBER];
 });
 
-TypeScript.register("join", (block, ts) => {
+BlocksToCode.register("join", (block, ts) => {
 	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	const separator = ts.valueToCode(block, "SEPARATOR", Order.NONE) || '""';
 	return [`${array}.join(${separator})`, Order.MEMBER];
 });
 
-TypeScript.register("includes", (block, ts) => {
+BlocksToCode.register("includes", (block, ts) => {
 	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	const item = ts.valueToCode(block, "ITEM", Order.NONE) || "null";
 	return [`${array}.includes(${item})`, Order.MEMBER];
 });
 
-TypeScript.register("slice", (block, ts) => {
+BlocksToCode.register("slice", (block, ts) => {
 	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	const start = ts.valueToCode(block, "START", Order.NONE) || "0";
 	const end = ts.valueToCode(block, "TO", Order.NONE) || "0";
 	return [`${array}.slice(${start}, ${end})`, Order.MEMBER];
 });
 
-TypeScript.register("indexOf", (block, ts) => {
+BlocksToCode.register("indexOf", (block, ts) => {
 	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	const item = ts.valueToCode(block, "ITEM", Order.NONE) || "null";
 	return [`${array}.indexOf(${item})`, Order.MEMBER];
 });
 
-TypeScript.register("string", (block, ts) => {
+BlocksToCode.register("string", (block, ts) => {
 	return [`String(${ts.valueToCode(block, "VALUE", Order.NONE) || "null"})`, Order.FUNCTION_CALL];
 });
 
-TypeScript.register("number", (block, ts) => {
+BlocksToCode.register("number", (block, ts) => {
 	return [`Number(${ts.valueToCode(block, "VALUE", Order.NONE) || "null"})`, Order.FUNCTION_CALL];
 });
 
-TypeScript.register("function", (block: FunctionBlock, ts) => {
+BlocksToCode.register("function", (block: FunctionBlock, ts) => {
 	const params = new Array<string>(block.params.length);
 	const nextBlock = block.getNextBlock();
 	const name = block.getFieldValue("NAME");
@@ -442,11 +441,11 @@ TypeScript.register("function", (block: FunctionBlock, ts) => {
 	return null;
 });
 
-TypeScript.register("generic", (block, ts) => {
+BlocksToCode.register("generic", (block, ts) => {
 	return [`${block.getFieldValue("ITERABLE")}<${ts.valueToCode(block, "TYPE", Order.NONE) || "any"}>`, 0];
 });
 
-TypeScript.register<UnionBlock>("union", (block, ts) => {
+BlocksToCode.register<UnionBlock>("union", (block, ts) => {
 	const count = block.count;
 	const types = [] as string[];
 
@@ -457,22 +456,22 @@ TypeScript.register<UnionBlock>("union", (block, ts) => {
 	return [types.join(" | "), Order.ATOMIC];
 });
 
-TypeScript.register("type", block => {
+BlocksToCode.register("type", block => {
 	return [block.getFieldValue("TYPE"), Order.ATOMIC];
 });
 
-TypeScript.register("typed", (block, ts) => {
+BlocksToCode.register("typed", (block, ts) => {
 	return [
 		`${block.getField("PARAM")!.getText()}: ${ts.valueToCode(block, "TYPE", Order.ATOMIC) || "any"}`,
 		Order.NONE,
 	];
 });
 
-TypeScript.register("motion_angle", block => {
+BlocksToCode.register("motion_angle", block => {
 	return [block.getFieldValue("VALUE"), Order.ATOMIC];
 });
 
-TypeScript.register("text_or_number", block => {
+BlocksToCode.register("text_or_number", block => {
 	const value = block.getFieldValue("VALUE");
 
 	if (value === "") {
@@ -486,7 +485,7 @@ TypeScript.register("text_or_number", block => {
 	return [JSON.stringify(value), Order.ATOMIC];
 });
 
-TypeScript.register("call", (block: CallBlock, ts) => {
+BlocksToCode.register("call", (block: CallBlock, ts) => {
 	const args = block.params_.map((_, i) => ts.valueToCode(block, `PARAM_${i}`, Order.NONE) || "null");
 	const code = `${block.getFieldValue("NAME")}(${args.join(", ")})`;
 
@@ -497,7 +496,7 @@ TypeScript.register("call", (block: CallBlock, ts) => {
 	}
 });
 
-TypeScript.register("return", (block, ts) => {
+BlocksToCode.register("return", (block, ts) => {
 	const hasInput = !!block.getInput("VALUE");
 
 	if (hasInput) {
@@ -507,7 +506,7 @@ TypeScript.register("return", (block, ts) => {
 	}
 });
 
-TypeScript.register("arithmetics", (block, ts) => {
+BlocksToCode.register("arithmetics", (block, ts) => {
 	const operator = block.getFieldValue("OP");
 
 	let order: Order;
@@ -536,7 +535,7 @@ TypeScript.register("arithmetics", (block, ts) => {
 	return [`${left} ${operator} ${right}`, order];
 });
 
-TypeScript.register("compare", (block, ts) => {
+BlocksToCode.register("compare", (block, ts) => {
 	const operator = block.getFieldValue("OP");
 
 	let order: Order;
@@ -563,28 +562,28 @@ TypeScript.register("compare", (block, ts) => {
 	return [`${left} ${operator} ${right}`, order];
 });
 
-TypeScript.register("not", (block, ts) => {
+BlocksToCode.register("not", (block, ts) => {
 	return [`!${ts.valueToCode(block, "BOOL", Order.LOGICAL_NOT) || "false"}`, Order.LOGICAL_NOT];
 });
 
-TypeScript.register("boolean", block => {
+BlocksToCode.register("boolean", block => {
 	return [block.getFieldValue("BOOL"), Order.ATOMIC];
 });
 
-TypeScript.register("math_number", block => {
+BlocksToCode.register("math_number", block => {
 	return [block.getFieldValue("NUM"), Order.ATOMIC];
 });
 
-TypeScript.register("math", (block, ts) => {
+BlocksToCode.register("math", (block, ts) => {
 	const number = ts.valueToCode(block, "NUM", Order.NONE) || "0";
 	return [`Math.${block.getFieldValue("OP")}(${number})`, Order.FUNCTION_CALL];
 });
 
-TypeScript.register("constant", block => {
+BlocksToCode.register("constant", block => {
 	return [block.getFieldValue("CONSTANT"), Order.ATOMIC];
 });
 
-TypeScript.register("operation", (block, ts) => {
+BlocksToCode.register("operation", (block, ts) => {
 	const operator = block.getFieldValue("OP");
 
 	let order: Order;
@@ -607,21 +606,21 @@ TypeScript.register("operation", (block, ts) => {
 	return [`${left} ${operator} ${right}`, order];
 });
 
-TypeScript.register("logic_negate", (block, ts) => {
+BlocksToCode.register("logic_negate", (block, ts) => {
 	return [ts.valueToCode(block, "BOOL", Order.LOGICAL_NOT) || "false", Order.LOGICAL_NOT];
 });
 
-TypeScript.blocks.random = function () {
+BlocksToCode.blocks.random = function () {
 	return ["Math.random()", Order.FUNCTION_CALL];
 };
 
-TypeScript.register("item", (block, ts) => {
+BlocksToCode.register("item", (block, ts) => {
 	const index = ts.valueToCode(block, "INDEX", Order.NONE) || "0";
 	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
 	return [`${array}[${index}]`, Order.MEMBER];
 });
 
-TypeScript.register("rgb", (block, ts) => {
+BlocksToCode.register("rgb", (block, ts) => {
 	const r = ts.valueToCode(block, "RED", Order.NONE) || "0";
 	const g = ts.valueToCode(block, "GREEN", Order.NONE) || "0";
 	const b = ts.valueToCode(block, "BLUE", Order.NONE) || "0";
@@ -629,74 +628,36 @@ TypeScript.register("rgb", (block, ts) => {
 	return [`Color.fromRGB(${r}, ${g}, ${b})`, Order.FUNCTION_CALL];
 });
 
-TypeScript.register("color", block => {
+BlocksToCode.register("color", block => {
 	return [`Color.fromHex("${block.getFieldValue("COLOR")}")`, Order.ATOMIC];
 });
 
-TypeScript.blocks.color_random = function () {
+BlocksToCode.blocks.color_random = function () {
 	return ["Color.random()", Order.FUNCTION_CALL];
 };
 
-TypeScript.register("date", block => {
+BlocksToCode.register("date", block => {
 	return [`new Date("${block.getFieldValue("DATE")}")`, Order.FUNCTION_CALL];
 });
 
-TypeScript.blocks.today = function () {
+BlocksToCode.blocks.today = function () {
 	return ["new Date()", Order.FUNCTION_CALL];
 };
 
-TypeScript.register("dateProperty", (block, ts) => {
+BlocksToCode.register("dateProperty", (block, ts) => {
 	return [`${ts.valueToCode(block, "DATE", Order.MEMBER)}.${block.getFieldValue("PROPERTY")}()`, Order.FUNCTION_CALL];
 });
 
-TypeScript.register("alert", (block, ts) => {
+BlocksToCode.register("alert", (block, ts) => {
 	return `window.alert(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'});\n`;
 });
 
-TypeScript.register("prompt", (block, ts) => {
+BlocksToCode.register("prompt", (block, ts) => {
 	return [`window.prompt(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'})`, Order.FUNCTION_CALL];
 });
 
-TypeScript.register("confirm", (block, ts) => {
+BlocksToCode.register("confirm", (block, ts) => {
 	return [`window.confirm(${ts.valueToCode(block, "TEXT", Order.NONE) || '""'})`, Order.FUNCTION_CALL];
 });
 
-enum Order {
-	ATOMIC = 0, // 0 "" ...
-	NEW = 1.1, // new
-	MEMBER = 1.2, // . []
-	FUNCTION_CALL = 2, // ()
-	INCREMENT = 3, // ++
-	DECREMENT = 3, // --
-	BITWISE_NOT = 4.1, // ~
-	UNARY_PLUS = 4.2, // +
-	UNARY_NEGATION = 4.3, // -
-	LOGICAL_NOT = 4.4, // !
-	TYPEOF = 4.5, // typeof
-	VOID = 4.6, // void
-	DELETE = 4.7, // delete
-	AWAIT = 4.8, // await
-	EXPONENTIATION = 5.0, // **
-	MULTIPLICATION = 5.1, // *
-	DIVISION = 5.2, // /
-	MODULUS = 5.3, // %
-	SUBTRACTION = 6.1, // -
-	ADDITION = 6.2, // +
-	BITWISE_SHIFT = 7, // << >> >>>
-	RELATIONAL = 8, // < <= > >=
-	IN = 8, // in
-	INSTANCEOF = 8, // instanceof
-	EQUALITY = 9, // == != === !==
-	BITWISE_AND = 10, // &
-	BITWISE_XOR = 11, // ^
-	BITWISE_OR = 12, // |
-	LOGICAL_AND = 13, // &&
-	LOGICAL_OR = 14, // ||
-	CONDITIONAL = 15, // ?:
-	ASSIGNMENT = 16, //: += -= **= *= /= %= <<= >>= ...
-	YIELD = 17, // yield
-	COMMA = 18, // ,
-	NONE = 99, // (...)
-}
-
-export {Order, TypeScript};
+export {BlocksToCode as TypeScript};

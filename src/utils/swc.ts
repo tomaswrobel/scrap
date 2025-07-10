@@ -12,7 +12,7 @@
  */
 import {invoke} from "@tauri-apps/api/core";
 import type * as Types from "@swc/types";
-import {Types as types} from "@scrap/blockly";
+import {ScrapTypes as types} from "@scrap/blockly";
 import type SWCNodeNameMap from "./swc_nodes";
 
 export function parse(code: string) {

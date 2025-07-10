@@ -20,16 +20,13 @@ import type * as Blockly from "blockly";
  *
  * Use it as follows:
  * ```ts
- * const types = Types.map(type => type || "any") // or "void"
+ * const types = ScrapTypes.map(type => type || "any") // or "void"
  * ```
  */
-export const Types = ["", "number", "string", "boolean", "Color", "Array", "Sprite", "Date"];
-
-/** Error message for invalid type. */
-export const Error = `Type must be one of void${Types.join(", ")}`;
+export const ScrapTypes = ["", "number", "string", "boolean", "Color", "Array", "Sprite", "Date"];
 
 /** Converts a type to a shadow type. */
-export const TypeToShadow: Record<string, string> = {
+export const TypeToShadowMap: Record<string, string> = {
 	number: "math_number",
 	string: "iterables_string",
 	Color: "color",
@@ -44,7 +41,7 @@ export const TypeToShadow: Record<string, string> = {
  * @param block The block to convert. Supports blocks of type `type`, `union`, `typed`, and `generic`.
  * @returns The JSON representation of the type. This either a string or an array of strings for unions.
  */
-export function toCheck(block?: Blockly.Block | null): Check {
+export function blockToCheck(block?: Blockly.Block | null): Check {
 	if (!block) {
 		return "any";
 	}
@@ -54,7 +51,7 @@ export function toCheck(block?: Blockly.Block | null): Check {
 	if (block.type === "union") {
 		const set = new Set(
 			block.inputList.reduce(
-				(previous, current) => previous.concat(toCheck(current.connection!.targetBlock())),
+				(previous, current) => previous.concat(blockToCheck(current.connection!.targetBlock())),
 				[] as string[]
 			)
 		);
@@ -66,7 +63,7 @@ export function toCheck(block?: Blockly.Block | null): Check {
 		return [...set];
 	}
 	if (block.type === "typed" || block.type === "array") {
-		return toCheck(block.getInput("TYPE")?.connection?.targetBlock());
+		return blockToCheck(block.getInput("TYPE")?.connection?.targetBlock());
 	}
 	if (block.type === "generic") {
 		return block.getFieldValue("ITERABLE");

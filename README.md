@@ -1,10 +1,10 @@
 # Scrap Native
 
 ![Scrap Engine Version][engine-badge] ![Built on blocky][blockly-badge]
-<img src="src/svgs/scrap.svg" alt="Logo" title="Scrap" height="20px">
+<img src="src/assets/scrap.svg" alt="Logo" title="Scrap" height="20px">
 
-Welcome to the repository of **Scrap Native** &ndash; the next version of
-[Scrap](https://github.com/tomaswrobel/scrap), now as a desktop application.
+Welcome to the repository of **Scrap Native** &ndash; the next version of [Scrap](https://github.com/tomaswrobel/scrap),
+now as a desktop application.
 
 ## Table of Contents
 
@@ -19,129 +19,75 @@ Welcome to the repository of **Scrap Native** &ndash; the next version of
 
 ## Introduction
 
-As I firstly launched Scrap, the idea was to keep it as a progressive web app. However,
-despite being here so long, PWA are still **not** user-familiar. So I chose
-[Tauri](https://tauri.app) to <q>convert</q> Scrap into desktop app.
+As I firstly launched Scrap, the idea was to keep it as a progressive web app. However, despite being here so long, PWA
+are still **not** user-familiar. So I chose [Tauri](https://tauri.app) to <q>convert</q> Scrap into desktop app.
 
-Scrap's been using bundled Babel.js to understand TypeScript code, which was not
-performant at all. I was thinking to include WebAssembly, but the fact not many browser
-support it discouraged me.
+Scrap's been using bundled Babel.js to understand TypeScript code, which was not performant at all. I was thinking to
+include WebAssembly, but the fact not many browser support it discouraged me.
 
-As Tauri provides with Rust back-end, and [SWC](https://swc.rs) is written in Rust, I just
-moved the parsing logic to Rust. I believe that **native** app deserves **native**
-performance.
+As Tauri provides with Rust back-end, and [SWC](https://swc.rs) is written in Rust, I just moved the parsing logic to
+Rust. I believe that **native** app deserves **native** performance.
 
 So now I can code in Rust!
 
 ## Getting Started
 
 ### File structure
-
-```bash
-├── .github/                    # GitHub Actions configuration
-│  ├── dependabot.yaml              # Dependabot configuration
-│  └── workflows/release.yaml       # Release workflow
-├── src/                        # Source code for front-end
-│  ├── app.ts                   # App class (main class)
-│  ├── blockly/                 # Blockly-related files
-│  │  ├── blocks/                   # Dynamic blocks
-│  │  ├── data/                     # Static JSON data
-│  │  ├── extensions/               # Custom extensions
-│  │  ├── fields/                   # Custom fields
-│  │  ├── index.ts                  # Blockly initialization
-│  │  ├── lib/                      # Glob re-export:
-│  │  │  ├── blocks.ts                  # from ../blocks/*.ts
-│  │  │  ├── extensions.ts              # from ../extensions/*.ts
-│  │  │  ├── fields.ts                  # from ../fields/*.ts
-│  │  │  └── plugins.ts                 # from ../plugins/*.ts
-│  │  ├── plugins/                  # Custom plugins
-│  │  └── types.ts                  # Blockly types (Number, String, etc.)
-│  ├── code/                        # Code-related files
-│  │  ├── editor.ts                     # Code editor component
-│  │  ├── lib/                          # Runtime DTS for Monaco
-│  │  │  ├── runtime.ts                     # TypeScript runtime, using templates (e.g. `__SPRITE__`)
-│  │  │  ├── templates.d.ts                 # Declaration file for templates, to successfully compile
-│  │  │  └── tsconfig.json                  # TypeScript configuration for runtime, to successfully compile
-│  │  └── transformers/                 # Code transformers:
-│  │    ├── blocks.ts                       # Code => Blocks
-│  │    ├── sb3.ts                          # SB3 => Blocks
-│  │    ├── typescript.ts                   # Blocks => Code
-│  │    └── utils.ts                        # Reserved words and identifier utilities
-│  ├── components/                  # Components
-│  │  ├── assets/                       # Assets
-│  │  ├── entity.ts                     # Entity class
-│  │  ├── hidden.scss                   # Hidden component – styles
-│  │  ├── icons/                        # Icons (SVG)
-│  │  ├── media-list.ts                 # Media list component
-│  │  ├── media-list.scss				# Media list component – styles
-│  │  ├── output.html                   # Output iframe content
-│  │  ├── output.scss                   # Output iframe content – styles
-│  │  ├── paint.scss					# Paint component – styles
-│  │  ├── paint.ts						# Paint component
-│  │  ├── slider.scss					# Slider styles
-│  │  ├── sounds.scss					# Sounds component – styles
-│  │  ├── sounds.ts						# Sounds component
-│  │  ├── tab.d.ts						# Interface that components should implement
-│  │  ├── tabs.scss						# Tabs component – styles
-│  │  ├── tabs.ts						# Tabs component
-│  │  ├── tools.ts						# Tools for Paint component
-│  │  ├── visibility.ts					# Hidden component
-│  │  ├── workspace.scss				# Workspace component – styles
-│  │  └── workspace.ts					# Workspace component
-│  ├── main.ts						# Bootstrap file
-│  ├── scrap.d.ts					# Global declarations
-│  ├── monaco-editor				# Monaco Editor files
-│  │  ├── languageFeatures.ts			# Language features
-│  │  ├── lib							# Monaco Editor library
-│  │  │  ├── example.ts						# Example of IntelliSense
-│  │  │  ├── runtime.d.ts					# Runtime-dependent variables (e.g. `self`)
-│  │  │  ├── static.d.ts					# Scrap library (subset of ECMAScript API, Scrap Engine API)
-│  │  │  └── tsconfig.json					# TypeScript configuration for Scrap library
-│  │  ├── platform.ts				# Platform-detection code
-│  │  ├── tokenizer.ts				# Tokenizer
-│  │  ├── ts.worker.ts				# TypeScript worker
-│  │  ├── tsMode.ts					# TypeScript mode
-│  │  ├── tsWorker.ts				# TypeScript worker
-│  │  ├── typescript.ts				# TypeScript
-│  │  └── workerManager.ts			# Worker manager
-│  ├── scss						# SCSS files
-│  │  ├── _vars.scss				# Variables (colors, sizes, etc.)
-│  │  ├── app.scss					# App styles
-│  │  ├── base.scss					# Base styles (html, body, etc.)
-│  │  └── dialog.scss				# Dialog styles
-│  ├── svgs						# SVG files
-│  │  ├── flag.svg					# Green flag (start)
-│  │  ├── fullscreen.svg			# Fullscreen icon
-│  │  ├── icon.svg					# Scrap "S" icon
-│  │  ├── scrap.svg					# Scrap logo
-│  │  └── stop.svg					# Red hexagon (stop)
-│  └── utils					# Utilities
-│    ├── decorators.ts				# Decorators
-│    ├── dialog.ts					# Dialogs
-│    ├── nodes.d.ts					# SWCNodeNameMap
-│    └── swc.ts						# SWC utilities
-├── src-tauri					# Source code for native app
-│  ├── build.rs						# Build script
-│  ├── src							# Rust source code
-│  │  ├── lib.rs						# Main file
-│  │  ├── main.rs						# Re-export of lib.rs
-│  │  ├── swc_utils.rs					# SWC utilities
-│  │  └── visitor.rs					# Code transformer: TypeScript => runnable JavaScript
-│  └── tauri.conf.json				# Tauri configuration
-└── tsconfig.json				# TypeScript configuration
+```
+├── CHANGELOG.md
+├── LICENSE
+├── README.md
+├── eslint.config.js
+├── index.html
+├── jsconfig.json
+├── package.json
+├── src
+│   ├── app.ts
+│   ├── assets/
+│   ├── blockly
+│   │   ├── blocks/
+│   │   ├── data/
+│   │   ├── extensions/
+│   │   ├── fields/
+│   │   ├── plugins/
+│   │   └── index.ts
+│   ├── changelog.js
+│   ├── code-transformers/
+│   ├── components/
+│   ├── dts
+│   │   ├── runtime/
+│   │   └── static/
+│   ├── entity.ts
+│   ├── main.ts
+│   ├── monaco-editor/
+│   ├── scrap.d.ts
+│   ├── scss/
+│   └── utils/
+├── src-tauri
+│   ├── capabilities
+│   │   ├── main.json
+│   │   └── project.json
+│   ├── gen
+│   │   └── schemas/
+│   ├── icons
+│   ├── src
+│   │   ├── lib.rs
+│   │   ├── main.rs
+│   │   ├── swc_utils.rs
+│   │   └── visitor.rs
+│   └── tauri.conf.json
+└── tsconfig.json
 ```
 
 ### Installation
 
-You can download the latest version of Scrap from the
-[Releases](https://github.com/tomaswrobel/scrap/releases) page. Note that the bundles
-aren't signed, but as you may check, they are virus-free.
+You can download the latest version of Scrap from the [Releases](https://github.com/tomaswrobel/scrap/releases) page.
+Note that the bundles aren't signed, but as you may check, they are virus-free.
 
 ### Building
 
-You need to have [Rust](https://www.rust-lang.org/) and [Node.js](https://nodejs.org)
-installed. Also, make sure you have [corepack](https://nodejs.org/api/corepack.html)
-enabled.
+You need to have [Rust](https://www.rust-lang.org/) and [Node.js](https://nodejs.org) installed. Also, make sure you
+have [corepack](https://nodejs.org/api/corepack.html) enabled.
 
 1.  Clone the repository:
 
@@ -158,7 +104,7 @@ enabled.
 3.  Generate icons:
 
     ```bash
-    yarn tauri icon src/svgs/icon.svg --ios-color "#2fbf71"
+    yarn tauri icon src/assets/icon.svg --ios-color "#2fbf71"
     ```
 
 4.  Build:
@@ -174,37 +120,34 @@ enabled.
 
 ## Introduction
 
-Scratch is an excellent platform for beginners to get started with programming, thanks to
-its visual drag-and-drop interface. However, transitioning from Scratch to text-based
-languages like JavaScript can be intimidating. Scrap aims to ease this transition by
-providing a set of tools, resources, and utilities that help Scratch users grasp the
-concepts of JavaScript more easily.
+Scratch is an excellent platform for beginners to get started with programming, thanks to its visual drag-and-drop
+interface. However, transitioning from Scratch to text-based languages like JavaScript can be intimidating. Scrap aims
+to ease this transition by providing a set of tools, resources, and utilities that help Scratch users grasp the concepts
+of JavaScript more easily.
 
 ## Features
 
--   **No VM or Interpreter** - Scrap is a pure JavaScript application that runs in your
-    web browser. Unlike Scratch, it doesn't require any VM or interpreter to run your
-    code. The engine is powered by [BlockLike.js](https://blocklike.org), a JavaScript
-    library that allows you to write Scratch-like code in JavaScript.
+-   **No VM or Interpreter** - Scrap is a pure JavaScript application that runs in your web browser. Unlike Scratch, it
+    doesn't require any VM or interpreter to run your code. The engine is powered by
+    [BlockLike.js](https://blocklike.org), a JavaScript library that allows you to write Scratch-like code in
+    JavaScript.
 
--   **Block-Based Interface** - Scrap's interface is block-based, just like Scratch. This
-    makes it easier for Scratch users to get started with Scrap. The block-based interface
-    is powered by [Blockly](https://developers.google.com/blockly).
+-   **Block-Based Interface** - Scrap's interface is block-based, just like Scratch. This makes it easier for Scratch
+    users to get started with Scrap. The block-based interface is powered by
+    [Blockly](https://developers.google.com/blockly).
 
--   **Text-Based Code Editor** - Scrap features a text-based code editor that allows you
-    to write JavaScript code. The code editor is powered by
-    [Monaco Editor](https://microsoft.github.io/monaco-editor/).
+-   **Text-Based Code Editor** - Scrap features a text-based code editor that allows you to write JavaScript code. The
+    code editor is powered by [Monaco Editor](https://microsoft.github.io/monaco-editor/).
 
--   **SB3 Support** \[_incomplete_\] - Scrap supports the SB3 file format, which is the
-    default file format used by Scratch 3.0. This allows you to import your Scratch
-    projects into Scrap and continue working on them.
+-   **SB3 Support** \[_incomplete_\] - Scrap supports the SB3 file format, which is the default file format used by
+    Scratch 3.0. This allows you to import your Scratch projects into Scrap and continue working on them.
 
--   **No Scratch's code in use** - Although Scrap shares a visual resemblance with
-    Scratch, it doesn't use any of Scratch's code. I know Scratch's code is open-source,
-    but I didn't want to use it because I wanted to make Scrap a bit more unique.
+-   **No Scratch's code in use** - Although Scrap shares a visual resemblance with Scratch, it doesn't use any of
+    Scratch's code. I know Scratch's code is open-source, but I didn't want to use it because I wanted to make Scrap a
+    bit more unique.
 
--   **Any platform** - Scrap is a native application for Linux, Android, iOS, and Windows.
-    Scrap has an [web-app version](https://github.com/tomaswrobel) too.
+-   **Any platform** - Scrap is a native application for Linux, Android, iOS, and Windows. Scrap has an
+    [web-app version](https://github.com/tomaswrobel) too.
 
 ## Roadmap
 
@@ -212,58 +155,53 @@ Scrap Native is still in its early stages of development.
 
 ### Planned
 
--   [ ] **More Blocks** - Scrap currently supports only a limited number of blocks. More
-        blocks will be added in the future to make Scrap more useful.
+-   [ ] **More Blocks** - Scrap currently supports only a limited number of blocks. More blocks will be added in the
+        future to make Scrap more useful.
 
--   [ ] **More Features** - Scrap will be getting more features in the future, such as a
-        better paint editor, and more.
+-   [ ] **More Features** - Scrap will be getting more features in the future, such as a better paint editor, and more.
 
--   [ ] **More Resources** - Scrap will be getting more resources in the future, such as
-        tutorials, guides, and more.
+-   [ ] **More Resources** - Scrap will be getting more resources in the future, such as tutorials, guides, and more.
 
--   [ ] **Available on stores** - Scrap will be available on the Microsoft Store, Google
-        Play Store, and Apple App Store in the future.
+-   [ ] **Available on stores** - Scrap will be available on the Microsoft Store, Google Play Store, and Apple App Store
+        in the future.
 
 ### Finished
 
--   [x] **Native App** - Scrap no longer runs in the browser. It is now a native
-        application for Linux, Android, iOS, and Windows. (Scrap Native v1)
+-   [x] **Native App** - Scrap no longer runs in the browser. It is now a native application for Linux, Android, iOS,
+        and Windows. (Scrap Native v1)
 
--   [x] **Builtin code editor** - Scrap now has a built-in code editor powered by Monaco
-        Editor. It highlights syntax to be the same as blocks, provides autocompletion,
-        checks for errors, and more. (Scrap 4)
+-   [x] **Builtin code editor** - Scrap now has a built-in code editor powered by Monaco Editor. It highlights syntax to
+        be the same as blocks, provides autocompletion, checks for errors, and more. (Scrap 4)
 
--   [x] **Scratch Support** - Scrap now supports SB3 files. You can import your Scratch
-        projects into Scrap and continue working on them. (Scrap 3)
+-   [x] **Scratch Support** - Scrap now supports SB3 files. You can import your Scratch projects into Scrap and continue
+        working on them. (Scrap 3)
 
 ## Scrap Logo Explanation
 
-The logo for Scrap shares a visual resemblance with the Scratch logo as a deliberate
-homage. Here's what you need to know:
+The logo for Scrap shares a visual resemblance with the Scratch logo as a deliberate homage. Here's what you need to
+know:
 
--   **Font Choice**: Scrap uses the "Black Boys on Mopeds" font, the same as Scratch's
-    logo, which is freeware and freely usable &ndash; for non-commercial purposes.
+-   **Font Choice**: Scrap uses the "Black Boys on Mopeds" font, the same as Scratch's logo, which is freeware and
+    freely usable &ndash; for non-commercial purposes.
 
--   **No Copyright Infringement**: Scrap respects copyright laws and does not infringe on
-    Scratch's intellectual property. The similarity is a tribute, not a copy.
+-   **No Copyright Infringement**: Scrap respects copyright laws and does not infringe on Scratch's intellectual
+    property. The similarity is a tribute, not a copy.
 
--   **Non-Commercial**: Scrap is a non-commercial project, and its logo is used to
-    recognize Scratch's influence on its mission to help beginners transition from Scratch
-    to JavaScript.
+-   **Non-Commercial**: Scrap is a non-commercial project, and its logo is used to recognize Scratch's influence on its
+    mission to help beginners transition from Scratch to JavaScript.
 
-In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and
-ethical standards.
+In essence, Scrap's logo is a respectful tribute to Scratch, complying with legal and ethical standards.
 
 ## License
 
-Scrap is released under the [MIT License](LICENSE), which means you're free to use,
-modify, and distribute the project as long as you retain the original license terms.
+Scrap is released under the [MIT License](LICENSE), which means you're free to use, modify, and distribute the project
+as long as you retain the original license terms.
 
 ---
 
-Ready to make your transition from Scratch to JavaScript smoother? Scrap is here to assist
-you. Start exploring, experimenting, and learning with Scrap today! If you have any
-questions or need help, feel free to reach out to me in the Issues section.
+Ready to make your transition from Scratch to JavaScript smoother? Scrap is here to assist you. Start exploring,
+experimenting, and learning with Scrap today! If you have any questions or need help, feel free to reach out to me in
+the Issues section.
 
 [engine-badge]: https://img.shields.io/badge/scrap--engine-2.5.3-red?logo=npm
 [blockly-badge]:

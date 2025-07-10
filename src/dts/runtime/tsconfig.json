@@ -13,12 +13,7 @@
 	"compilerOptions": {
 		"composite": true,
 		"noLib": true, // ECMAScript API is defined below:
-		"types": [
-			"../../monaco-editor/lib/static.d.ts"
-		]
+		"types": ["../static/index"]
 	},
-	"files": [
-		"runtime.ts",
-		"templates.d.ts"
-	]
+	"files": ["index.ts", "templates.d.ts"]
 }

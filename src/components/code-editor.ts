@@ -13,12 +13,12 @@
 import fs from "fs";
 import {editor, Uri} from "monaco-editor";
 import path from "path";
-import type {Entity} from "../components/entity";
-import type TabComponent from "../components/tab";
+import type {Entity} from "../entity";
+import type TabComponent from "./tab";
 import "../monaco-editor/typescript";
-import {TypeScript} from "./transformers/typescript";
+import {TypeScript} from "../code-transformers/blocksToCode";
 
-const lib = fs.readFileSync(path.join(__dirname, "lib", "runtime.ts"), "utf-8");
+const lib = fs.readFileSync(path.join(__dirname, "..", "dts", "runtime", "index.ts"), "utf-8");
 
 class CodeEditor implements TabComponent {
 	public name = "Code";

@@ -11,19 +11,19 @@
  * @copyright Tomáš Wróbel 2025
  */
 import * as Blockly from "blockly";
-import * as SWC from "../utils/swc";
+import * as SWC from "./utils/swc";
 import type JSZip from "jszip";
 import fs from "fs";
 import path from "path";
-import {reserved} from "../code/transformers/utils";
-import {TypeScript} from "../code/transformers/typescript";
+import {reservedWords} from "./code-transformers/utils";
+import {TypeScript} from "./code-transformers/blocksToCode";
 import {Menu, MenuItem} from "@tauri-apps/api/menu";
 import {LogicalPosition} from "@tauri-apps/api/dpi";
 
 const stage =
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
-const scrappy = fs.readFileSync(path.join(__dirname, "assets", "scrappy.svg"), "utf-8");
-const click = fs.readFileSync(path.join(__dirname, "assets", "click.mp3"));
+const scrappy = fs.readFileSync(path.join(__dirname, "assets", "svgs", "scrappy.svg"), "utf-8");
+const click = fs.readFileSync(path.join(__dirname, "assets", "sounds", "click.mp3"));
 
 /**
  * I represent both a sprite and the stage.
@@ -300,7 +300,7 @@ export class Sprite extends Entity {
 		};
 
 		input.onblur = () => {
-			if (reserved.indexOf(input.value) === -1) {
+			if (reservedWords.indexOf(input.value) === -1) {
 				span.textContent = input.value;
 				this.name = input.value;
 			}

@@ -10,7 +10,7 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview @scrap/blockly entry point.
  */
-import {Order, TypeScript} from "@scrap/code/transformers/typescript";
+import { TypeScript} from "@scrap/code-transformers/blocksToCode.ts";
 import * as Blockly from "blockly";
 
 import data from "./data/blocks.json";
@@ -24,6 +24,7 @@ import * as plugins from "./lib/plugins";
 
 import "@blockly/field-color";
 import "@blockly/field-date";
+import {Order} from "blockly/javascript";
 
 /**
  * Blocks that are ignored by the TypeScript generator.

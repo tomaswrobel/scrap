@@ -36,7 +36,7 @@
  * * Corresponding shadow blocks are used inside the parameters.
  */
 import type * as Blockly from "blockly";
-import {TypeToShadow} from "../types";
+import {TypeToShadowMap} from "../types";
 
 export type CallExtraState = {
 	params?: Check[];
@@ -90,9 +90,9 @@ export const MIXIN = {
 				input.connection!.setShadowState({
 					type: "text_or_number",
 				});
-			} else if (type in TypeToShadow) {
+			} else if (type in TypeToShadowMap) {
 				input.connection!.setShadowState({
-					type: TypeToShadow[type],
+					type: TypeToShadowMap[type],
 				});
 			}
 		}

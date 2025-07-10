@@ -76,6 +76,6 @@ export default tseslint.config({
 		"@typescript-eslint/no-empty-object-type": "off",
 		"@typescript-eslint/no-unnecessary-type-assertion": "error"
 	},
-	ignores: ["**/lib/*.ts", "*.js"],
+	ignores: ["./src/dts/**/*.ts", "*.js"],
 	files: ["**/*.ts"]
 });

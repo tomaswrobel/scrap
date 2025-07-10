@@ -14,7 +14,7 @@
  * in the `for` block.
  */
 import type * as Blockly from "blockly";
-import {reserved} from "@scrap/code/transformers/utils";
+import {reservedWords} from "@scrap/code-transformers/utils";
 import Dialog from "@scrap/utils/dialog";
 
 export default function (this: Blockly.BlockSvg) {
@@ -38,7 +38,7 @@ export default function (this: Blockly.BlockSvg) {
 							return;
 						}
 
-						if (reserved.includes(name)) {
+						if (reservedWords.includes(name)) {
 							void Dialog.scrap.fire({
 								title: "Invalid Name",
 								body: "This name is reserved by JavaScript.",

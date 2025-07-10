@@ -16,7 +16,7 @@ import * as Blockly from "blockly";
 import type {Flyout} from "./flyout";
 import type {Category} from "./category";
 import type {FunctionBlock} from "../blocks/function";
-import {toCheck} from "../types";
+import {blockToCheck} from "../types";
 
 export default class Toolbox extends Blockly.Toolbox {
 	public override init() {
@@ -61,7 +61,7 @@ export default class Toolbox extends Blockly.Toolbox {
 			const params = new Array(block.params.length);
 
 			for (let i = 0; i < params.length; i++) {
-				params[i] = toCheck(block.getInput(`PARAM_${i}`)!.connection!.targetBlock());
+				params[i] = blockToCheck(block.getInput(`PARAM_${i}`)!.connection!.targetBlock());
 			}
 
 			contents.push({
@@ -70,7 +70,7 @@ export default class Toolbox extends Blockly.Toolbox {
 				extraState: {
 					name: block.getFieldValue("NAME"),
 					params,
-					returnType: block.returns && toCheck(block.getInput("RETURNS")?.connection?.targetBlock()),
+					returnType: block.returns && blockToCheck(block.getInput("RETURNS")?.connection?.targetBlock()),
 				},
 			});
 		}

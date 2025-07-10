@@ -21,7 +21,7 @@
 import * as Blockly from "blockly";
 import FieldParam from "../fields/field_param";
 import FieldIdentifier from "../fields/field_identifier";
-import {toCheck} from "../types";
+import {blockToCheck} from "../types";
 
 export type TypedBlock = Blockly.BlockSvg & TypedBlockMixin;
 export interface TypedBlockMixin extends TypedBlockMixinType {}
@@ -83,7 +83,7 @@ export const MIXIN = {
 						const type = this.getInput("TYPE")?.connection?.targetBlock();
 						const input = block.getInput("VALUE")!;
 						input.connection!.targetBlock()?.dispose(false);
-						input.setCheck(toCheck(type));
+						input.setCheck(blockToCheck(type));
 
 						if (type?.type === "type") {
 							const field = type.getField("TYPE")!;
@@ -97,7 +97,7 @@ export const MIXIN = {
 						const type = this.getInput("TYPE")?.connection?.targetBlock();
 						const input = block.getInput("VALUE")!;
 						input.connection!.targetBlock()?.dispose(false);
-						input.setCheck(toCheck(type));
+						input.setCheck(blockToCheck(type));
 						observed = e.blockId;
 						if (type?.type === "type") {
 							const field = type.getField("TYPE")!;

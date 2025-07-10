@@ -18,7 +18,7 @@
 
 body {
 	margin: 0;
-	font-family: sans-serif;
+	font-family: 'Noto Sans', sans-serif;
 
 	&[data-loading]::after {
 		content: attr(data-loading)"...";

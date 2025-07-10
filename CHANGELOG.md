@@ -9,7 +9,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Better Paint editor
+-   Better Paint editor
+
+## [6.3.0] - 2025-07-11
+
+### Changed
+
+-   dependencies update
+-   file structure, better naming
+
+### Fix
+
+-   Paint editor
 
 ## [6.2.2] - 2025-05-14
 
@@ -20,7 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 
--	Rust toolchain has fixed version so it can be used with Tauri
+-   Rust toolchain has fixed version so it can be used with Tauri
 
 ## [6.2.1] - 2025-01-30
 
@@ -49,7 +60,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 -   HTML Projects are now saved with the correct extension (`zip` instead of `html`)
--	Header comment inside `src/scss/blockly.scss` is now correctly formatted (JSdoc @)
+-   Header comment inside `src/scss/blockly.scss` is now correctly formatted (JSdoc @)
 
 ### Changed
 
@@ -956,7 +967,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 -   Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.2.1...HEAD
+[unreleased]: https://github.com/tomas-wrobel/scrap/compare/v6.3.0...HEAD
+[6.3.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.3.0
 [6.2.1]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.2.1
 [6.2.0]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.2.0
 [6.1.2]: https://github.com/tomas-wrobel/scrap/releases/tag/v6.1.2

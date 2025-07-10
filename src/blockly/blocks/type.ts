@@ -23,7 +23,7 @@
  * the return type of the function.
  */
 import * as Blockly from "blockly";
-import {TypeToShadow, Types} from "../types";
+import {TypeToShadowMap, ScrapTypes} from "../types";
 import type {ArrayBlock} from "./array";
 
 export const MIXIN = {
@@ -33,7 +33,7 @@ export const MIXIN = {
 
 		this.appendDummyInput().appendField<string>(
 			new Blockly.FieldDropdown(
-				Types.map(s => [s || "any", s || "any"]),
+				ScrapTypes.map(s => [s || "any", s || "any"]),
 				type => {
 					if (this.parentBlock_?.type === "typed") {
 						const param = this.parentBlock_.getField("PARAM")!;
@@ -46,9 +46,9 @@ export const MIXIN = {
 							input.connection?.targetBlock()?.dispose(false);
 							input.setCheck(type);
 
-							if (type in TypeToShadow) {
+							if (type in TypeToShadowMap) {
 								input.connection!.setShadowState({
-									type: TypeToShadow[type],
+									type: TypeToShadowMap[type],
 								});
 							}
 						}

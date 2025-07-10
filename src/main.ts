@@ -10,6 +10,7 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Booting the Scrap app.
  */
+import "@fontsource/noto-sans";
 import "./scss/*.scss";
 import App from "./app";
 

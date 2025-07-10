@@ -91,7 +91,7 @@ pub fn get_property(node: &MemberExpr) -> Option<Atom> {
 
 pub fn parse(code: String) -> Result<Module, ()> {
     let cm = Lrc::new(SourceMap::new(FilePathMapping::empty()));
-    let fm = cm.new_source_file(FileName::Custom("main.ts".into()).into(), code.into());
+    let fm = cm.new_source_file(FileName::Custom("main.ts".into()).into(), code);
 
     let lexer = Lexer::new(
         Syntax::Typescript(TsSyntax {

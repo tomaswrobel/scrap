@@ -19,7 +19,8 @@ import * as Blockly from "blockly";
 import Dialog from "@scrap/utils/dialog";
 import {writeFile} from "@tauri-apps/plugin-fs";
 import {load} from "@scrap/utils/decorators";
-import savedAt from "@scrap/utils/saved-at";
+import createSavedAtLabel from "@scrap/utils/create-saved-at-label";
+import type {ScrapConstantProvider} from "./renderer";
 
 /**
  * The padding around the block in the exported image.
@@ -43,22 +44,17 @@ const encoder = new TextEncoder();
 /**
  * The class for saving the block image.
  */
-class BlockSaver {
+class BlockImageSaver {
 	private constructor(private readonly block: Blockly.BlockSvg) {}
 
 	public static save(block: Blockly.BlockSvg) {
-		new BlockSaver(block).toFile();
+		new BlockImageSaver(block).toFile();
 	}
 
 	@load("Saving block image", true)
 	public async toFile() {
-		const renderer = this.block.workspace.getRenderer();
-		const theme = this.block.workspace.getTheme();
-		const root = this.block.getSvgRoot();
-
-		// @ts-expect-error - cssNode is private.
-		const css = renderer.getConstants().cssNode.innerText;
-		const svg = root.cloneNode(true) as SVGSVGElement;
+		const constants = this.block.workspace.getRenderer().getConstants() as ScrapConstantProvider;
+		const svg = this.block.getSvgRoot().cloneNode(true) as SVGSVGElement;
 
 		// Remove all the unwanted attributes.
 		svg.removeAttribute("transform"); // Block is translated in workspace.
@@ -75,7 +71,6 @@ class BlockSaver {
 			    xmlns:xlink="http://www.w3.org/1999/xlink"
 			    width="${width}" height="${height}"
 			    viewBox="0 0 ${size.width} ${size.height}"
-			    class="${renderer.getClassName()} ${theme.getClassName()}" 
 			>
 				<style>
 					${/*This is lost, because it's located in <head>.*/ ""}
@@ -88,7 +83,7 @@ class BlockSaver {
 					    fill: #fff;
 					}
 
-					${css}
+					${constants.cssText}
 				</style>		
 				${Blockly.utils.xml.domToText(svg)}
 			</svg>
@@ -138,7 +133,7 @@ class BlockSaver {
 			const uint8 = new Uint8Array(buffer);
 			await writeFile(path, uint8);
 		}
-		return savedAt(path);
+		return createSavedAtLabel(path);
 	}
 }
 
@@ -162,7 +157,7 @@ Blockly.ContextMenuRegistry.registry.register({
 
 	callback: ({block}) => {
 		if (block) {
-			BlockSaver.save(block);
+			BlockImageSaver.save(block);
 		}
 	},
 });

@@ -24,7 +24,7 @@ import type {Uri, languages, worker} from "monaco-editor";
 import path from "path";
 import fs from "fs";
 
-const DEFAULT_LIB = fs.readFileSync(path.join(__dirname, "lib", "static.d.ts"), "utf-8");
+const DEFAULT_LIB = fs.readFileSync(path.join(__dirname, "..", "dts", "static", "index.d.ts"), "utf-8");
 
 /**
  * Loading a default lib as a source file will mess up TS completely.

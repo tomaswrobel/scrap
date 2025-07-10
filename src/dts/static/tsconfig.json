@@ -4,7 +4,7 @@
         "composite": true
     },
     "files": [
-        "static.d.ts",
+        "index.d.ts",
         "runtime.d.ts",
         "example.ts",
     ]

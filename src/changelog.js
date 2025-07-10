@@ -1,6 +1,6 @@
 import tauri from "../src-tauri/tauri.conf.json" with {type: "json"};
 import {parser} from "keep-a-changelog";
-import fs from "node:fs";
+import fs from "fs";
 
 if (!process.env.GITHUB_OUTPUT) {
 	throw new Error("This script doesn't seem to be running in a GitHub Action environment.");

@@ -13,7 +13,7 @@
 import type {FunctionBlock} from "@scrap/blockly/blocks/function";
 import * as Blockly from "blockly";
 import type JSZip from "jszip";
-import {Sprite, Stage} from "../../components/entity";
+import {Sprite, Stage} from "../entity";
 import {escape} from "./utils";
 
 const illegalRe = /[/?<>\\:*|":#]+/g;

@@ -10,11 +10,11 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Tools for drawing on the canvas in the paint editor.
  */
-import line from "./icons/line.svg";
-import brush from "./icons/brush.svg";
-import fill from "./icons/fill.svg";
-import eraser from "./icons/eraser.svg";
-import marquee from "./icons/marquee.svg";
+import line from "url:../assets/icons/paint-editor/line.svg";
+import brush from "url:../assets/icons/paint-editor/brush.svg";
+import fill from "url:../assets/icons/paint-editor/fill.svg";
+import eraser from "url:../assets/icons/paint-editor/eraser.svg";
+import marquee from "url:../assets/icons/paint-editor/marquee.svg";
 import {invoke} from "@tauri-apps/api/core";
 
 /**

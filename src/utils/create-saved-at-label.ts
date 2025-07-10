@@ -13,7 +13,7 @@
  * @param path The path of the saved file.
  * @returns The element with the path of the saved file.
  */
-export default function savedAt(path: string) {
+export default function createSavedAtLabel(path: string) {
 	const span = document.createElement("span");
 	const italic = document.createElement("i");
 	italic.innerText = path;

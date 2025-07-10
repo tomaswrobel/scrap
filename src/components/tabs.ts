@@ -10,11 +10,11 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Tabs manager
  */
-import {Visibility} from "./visibility";
 import type TabComponent from "./tab";
 import "./tabs.scss";
 
 import Dialog from "@scrap/utils/dialog";
+import Hidden from "./hidden";
 
 export default class Tabs {
 	public active: TabComponent;
@@ -82,10 +82,22 @@ export default class Tabs {
 	}
 
 	/**
-	 * Effects currently do this:
-	 *
-	 * - Hide the active tab, show {@link Hidden placeholder}
-	 * - Restore the active tab
+	 * Hide the active tab, show {@link Hidden placeholder}
+	 * Do not forget to call {@link show}.
 	 */
-	public readonly effects = new Visibility(this);
+	public hide() {
+		if (this.active) {
+			this.set(new Hidden(this.active));
+		}
+	}
+
+	/**
+	 * Show the active tab, hide {@link Hidden placeholder}
+	 * This must be done after {@link hide} is called.
+	 */
+	public show() {
+		if (this.active instanceof Hidden) {
+			this.set(this.active.previous);
+		}
+	}
 }

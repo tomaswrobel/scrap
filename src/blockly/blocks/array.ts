@@ -17,7 +17,7 @@
  * into multiple items (via JavaScript's spread operator).
  */
 import * as Blockly from "blockly";
-import {TypeToShadow, toCheck} from "../types";
+import {TypeToShadowMap, blockToCheck} from "../types";
 
 export type ArrayBlock = Blockly.BlockSvg & ArrayBlockMixin;
 export interface ArrayBlockMixin extends ArrayBlockMixinType {}
@@ -44,7 +44,7 @@ export const MIXIN = {
 		if (state.items) {
 			this.items = state.items;
 		}
-		this.updateShape(toCheck(this));
+		this.updateShape(blockToCheck(this));
 	},
 	/**
 	 * Populate the mutator's dialog with this block's components.
@@ -82,7 +82,7 @@ export const MIXIN = {
 			this.items.push(itemBlock.type.slice("array_item_".length));
 			itemBlock = itemBlock.getNextBlock();
 		}
-		this.updateShape(toCheck(this));
+		this.updateShape(blockToCheck(this));
 	},
 	/**
 	 * Modify this block to have the correct number of inputs.
@@ -101,9 +101,9 @@ export const MIXIN = {
 				input.setCheck(check);
 				const type = typeof check === "string" ? check : check.length === 1 ? check[0] : "any";
 
-				if (type in TypeToShadow) {
+				if (type in TypeToShadowMap) {
 					input.connection!.setShadowState({
-						type: TypeToShadow[type],
+						type: TypeToShadowMap[type],
 					});
 				}
 			}
@@ -115,7 +115,7 @@ export const MIXIN = {
 			const block = this.workspace.getBlockById(e.blockId)!;
 			if (block.type === "type") {
 				block.setShadow(true);
-				this.updateShape(toCheck(block));
+				this.updateShape(blockToCheck(block));
 			}
 		}
 	},

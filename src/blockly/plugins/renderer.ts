@@ -22,26 +22,31 @@
  */
 import * as Blockly from "blockly";
 
-class ScrapRenderer extends Blockly.zelos.Renderer {
+export class ScrapConstantProvider extends Blockly.zelos.ConstantProvider {
+	// Make checkboxes a bit wider
+	public override FIELD_CHECKBOX_X_OFFSET = 9;
+
+	// Boolean is hexagonal
+	// Type is hexagonal
+	public override shapeFor(connection: Blockly.RenderedConnection) {
+		const check = connection.getCheck();
+
+		if (check?.some(a => a === "boolean" || a === "type")) {
+			return this.HEXAGONAL!;
+		}
+
+		return super.shapeFor(connection);
+	}
+
+	public get cssText() {
+		return this.getCSS_("").join("");
+	}
+}
+
+export class ScrapRenderer extends Blockly.zelos.Renderer {
 	protected override makeConstants_() {
 		// I am proud to say that... My coding style is disgusting!
-
-		return new (class extends Blockly.zelos.ConstantProvider {
-			// Make checkboxes a bit wider
-			public override FIELD_CHECKBOX_X_OFFSET = 9;
-
-			// Boolean is hexagonal
-			// Type is hexagonal
-			public override shapeFor(connection: Blockly.RenderedConnection) {
-				const check = connection.getCheck();
-
-				if (check?.some(a => a === "boolean" || a === "type")) {
-					return this.HEXAGONAL!;
-				}
-
-				return super.shapeFor(connection);
-			}
-		})();
+		return new ScrapConstantProvider();
 	}
 }
 

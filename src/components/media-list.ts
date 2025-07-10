@@ -76,7 +76,7 @@ export class MediaList extends EventTarget {
 		}
 	}
 
-	private addFiles(files: Iterable<File>) {
+	private addFiles(files: FileList) {
 		for (const file of files) {
 			if (this.type.accept.indexOf(file.type) !== -1) {
 				this.files.push(file);
@@ -219,7 +219,7 @@ export class MediaList extends EventTarget {
 
 	public static readonly SOUND: MediaType = {
 		getURLFor() {
-			return require("./assets/note.svg");
+			return require("../assets/svgs/note.svg");
 		},
 		accept: ["audio/mpeg", "audio/ogg", "audio/wav"],
 		gridArea: "sound",

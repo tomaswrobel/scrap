@@ -10,11 +10,11 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Main application entry point.
  */
-import {Entity, Sprite, Stage} from "@scrap/components/entity";
+import {Entity, Sprite, Stage} from "@scrap/entity";
 import {readFile, writeFile} from "@tauri-apps/plugin-fs";
 import Workspace from "@scrap/components/workspace";
 import Paint from "@scrap/components/paint";
-import CodeEditor from "@scrap/code/editor";
+import CodeEditor from "@scrap/components/code-editor";
 import Dialog from "@scrap/utils/dialog";
 
 import {downloadDir, join} from "@tauri-apps/api/path";
@@ -24,12 +24,12 @@ import fs from "fs";
 import JSZip from "jszip";
 import Sound from "./components/sounds";
 
-import SB3 from "./code/transformers/sb3";
+import SB3 from "./code-transformers/sb3";
 import Tabs from "./components/tabs";
 
 import * as Blockly from "blockly";
 import {load} from "./utils/decorators";
-import savedAt from "./utils/saved-at";
+import createSavedAtLabel from "./utils/create-saved-at-label";
 
 const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
 const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
@@ -64,7 +64,7 @@ export default class App {
 			for (const s of this.spritePanel.getElementsByClassName("selected")) {
 				s.classList.remove("selected");
 			}
-			this.select(this.entities[0]);
+			this.selectEntity(this.entities[0]);
 		});
 
 		this.current.render(this.stagePanel);
@@ -144,7 +144,7 @@ export default class App {
 			collapse: false,
 			scrollbars: false,
 			oneBasedIndex: false,
-			disable: false,			
+			disable: false,
 		});
 		workspace.showContextMenu = () => {};
 
@@ -159,7 +159,7 @@ export default class App {
 		document.title = `${productName} v${version}`;
 	}
 
-	public async select(entity: Entity) {
+	public async selectEntity(entity: Entity) {
 		if (this.current === entity) {
 			return;
 		}
@@ -323,7 +323,7 @@ export default class App {
 			}
 			element.classList.add("selected");
 
-			this.select(sprite);
+			this.selectEntity(sprite);
 		};
 
 		this.entities.push(sprite);
@@ -363,7 +363,7 @@ export default class App {
 	 * Select the stage and update the tabs
 	 * Used only when the project is loaded
 	 * by {@link open} and {@link import}
-	 * For other cases, use {@link select}
+	 * For other cases, use {@link selectEntity}
 	 */
 	private selectStage() {
 		this.stagePanel.classList.add("selected");
@@ -413,7 +413,7 @@ export default class App {
 		}
 
 		this.selectStage();
-		return savedAt(path);
+		return createSavedAtLabel(path);
 	}
 
 	/**
@@ -438,7 +438,7 @@ export default class App {
 		}
 
 		this.current = this.entities[0];
-		return savedAt(path);
+		return createSavedAtLabel(path);
 	}
 
 	/**
@@ -503,7 +503,7 @@ export default class App {
 		zip.file(`${width}x${height}.html`, sized.replace(indent, ""));
 
 		await writeFile(path, await zip.generateAsync({type: "uint8array"}));
-		return savedAt(path);
+		return createSavedAtLabel(path);
 	}
 
 	/**
@@ -548,7 +548,7 @@ export default class App {
 			document.addEventListener("mousemove", this);
 			document.addEventListener("mouseup", this);
 		} else if (e.type === "mousemove") {
-			this.tabs.effects.hide();
+			this.tabs.hide();
 
 			let output = +this.container.style.getPropertyValue("--output");
 
@@ -569,7 +569,7 @@ export default class App {
 			this.container.style.setProperty("--output", `${output}`);
 			this.workspace.workspace.resize();
 		} else if (e.type === "mouseup") {
-			this.tabs.effects.show();
+			this.tabs.show();
 			this.output.style.removeProperty("pointer-events");
 			document.removeEventListener("mousemove", this);
 			document.removeEventListener("mouseup", this);
