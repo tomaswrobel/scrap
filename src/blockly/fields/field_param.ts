@@ -19,7 +19,7 @@
  * Values are stored in the format "name:type".
  * Text is stored in the format "name".
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export default class FieldParam extends Blockly.Field<string> {
 	constructor(defaultVarName = "i", type?: Check) {
@@ -50,7 +50,7 @@ export default class FieldParam extends Blockly.Field<string> {
 		this.setValue(`${this.value_?.split(":")[0] ?? ""}:${newType}`);
 	}
 
-	public override CURSOR = "COPY";
+	public CURSOR = "COPY";
 	public override SERIALIZABLE = true;
 
 	public override updateEditable() {

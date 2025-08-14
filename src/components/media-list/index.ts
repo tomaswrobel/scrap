@@ -12,8 +12,9 @@
  */
 import {Menu, MenuItem} from "@tauri-apps/api/menu";
 import {LogicalPosition} from "@tauri-apps/api/dpi";
-import "./media-list.scss";
-import path from "path";
+import Note from "@scrap/assets/svgs/note.svg";
+import * as path from "path";
+import "./style.scss";
 
 /**
  * A common component for managing costume and
@@ -131,7 +132,7 @@ export class MediaList extends EventTarget {
 				name = name.trim().replace(invalid, "");
 			}
 
-			name = name || span.textContent!;
+			name = name || span.textContent;
 
 			if (name !== span.textContent) {
 				this.dispatchEvent(
@@ -219,7 +220,7 @@ export class MediaList extends EventTarget {
 
 	public static readonly SOUND: MediaType = {
 		getURLFor() {
-			return require("../assets/svgs/note.svg");
+			return Note;
 		},
 		accept: ["audio/mpeg", "audio/ogg", "audio/wav"],
 		gridArea: "sound",

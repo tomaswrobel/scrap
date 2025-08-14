@@ -16,7 +16,7 @@
  * - a block created by FieldParam, see fields/field_param.ts
  */
 import Dialog from "@scrap/utils/dialog";
-import type {ContextMenuRegistry, BlockSvg} from "blockly";
+import type {ContextMenuRegistry, BlockSvg} from "blockly/core";
 export type ParameterBlock = BlockSvg & ParameterBlockMixin;
 export interface ParameterBlockMixin extends ParameterBlockMixinType {}
 export type ParameterBlockMixinType = typeof MIXIN;

@@ -14,8 +14,8 @@
  * should be always a shadow block, as it's used in
  * the play-sound block.
  */
-import * as Blockly from "blockly";
-import path from "path";
+import * as Blockly from "blockly/core";
+import * as path from "path";
 
 export const MIXIN = {
 	init(this: Blockly.Block) {

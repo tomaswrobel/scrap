@@ -11,7 +11,7 @@
  * @license MIT
  * @copyright Tomáš Wróbel 2025
  */
-@use "../scss/vars" as *;
+@use "@scrap/scss/vars" as *;
 @use "sass:color";
 
 $default: linear-gradient(#{$primary}, #{$primary});
@@ -21,9 +21,10 @@ $darken: color.adjust(
 );
 $hover: linear-gradient(#{$darken}, #{$darken});
 
-.paint input[type="range"] {
+input.slider {
 	height: 24px;
 	appearance: none;
+	background: none;
 
 	// --min, --max & --value must be set via script
 	$range: calc(var(--max) - var(--min));
@@ -52,18 +53,18 @@ $hover: linear-gradient(#{$darken}, #{$darken});
 
 	&::-webkit-slider-runnable-track {
 		height: 0.75em;
-		border: 1px solid #b2b2b2;
+		border: 1px solid #343434;
 		border-radius: 0.5em;
-		background: #efefef;
+		background: #212121;
 		box-shadow: none;
 	}
 
 	&::-webkit-slider-runnable-track {
-		background: #{$default} 0 /#{$sx} 100% no-repeat, #efefef;
+		background: #{$default} 0 /#{$sx} 100% no-repeat, #343434;
 	}
 
 	&:hover::-webkit-slider-runnable-track {
-		background: #{$hover} 0 /#{$sx} 100% no-repeat, #e5e5e5;
+		background: #{$hover} 0 /#{$sx} 100% no-repeat, #353535;
 	}
 
 	// Firefox

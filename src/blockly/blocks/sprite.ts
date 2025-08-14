@@ -17,7 +17,7 @@
  * Also, it has an option to select "self" which is
  * a reference to the sprite that the script is running
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export const MIXIN = {
 	init(this: Blockly.Block) {

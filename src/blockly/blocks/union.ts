@@ -13,7 +13,7 @@
  * Union block groups types together. It's a
  * dynamic block with a mutator.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export type UnionBlock = Blockly.BlockSvg & UnionBlockMixin;
 export interface UnionBlockMixin extends UnionBlockMixinType {}

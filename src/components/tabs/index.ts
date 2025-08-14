@@ -10,11 +10,11 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Tabs manager
  */
-import type TabComponent from "./tab";
-import "./tabs.scss";
+import type TabComponent from "../tab";
+import "./style.scss";
 
 import Dialog from "@scrap/utils/dialog";
-import Hidden from "./hidden";
+import Hidden from "../hidden";
 
 export default class Tabs {
 	public active: TabComponent;

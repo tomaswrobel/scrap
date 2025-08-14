@@ -14,7 +14,7 @@
  * Where noted, some parts are directly copied
  * from Blockly's JavaScript generator.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import type {Entity} from "../entity";
 
 import type JSZip from "jszip";

@@ -10,62 +10,59 @@
  * @copyright Tomáš Wróbel 2024
  * @fileoverview ESLint configuration file.
  */
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
 
 export default tseslint.config({
 	languageOptions: {
 		parser: tseslint.parser,
 		parserOptions: {
 			projectService: true,
-			tsconfigRootDir: "."
-		}
+			tsconfigRootDir: ".",
+		},
 	},
 	plugins: {
 		"@typescript-eslint": tseslint.plugin,
 	},
-	extends: [
-		eslint.configs.recommended,
-		...tseslint.configs.recommended,
-	],
+	extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
 	rules: {
 		"@typescript-eslint/no-namespace": [
 			"error",
 			{
-				"allowDeclarations": true,
-				"allowDefinitionFiles": true
-			}
+				allowDeclarations: true,
+				allowDefinitionFiles: true,
+			},
 		],
 		"@typescript-eslint/explicit-member-accessibility": [
 			"error",
 			{
-				"accessibility": "explicit",
-				"overrides": {
-					"constructors": "no-public"
-				}
-			}
+				accessibility: "explicit",
+				overrides: {
+					constructors: "no-public",
+				},
+			},
 		],
 		"@typescript-eslint/consistent-type-assertions": [
 			"error",
 			{
-				"assertionStyle": "as"
-			}
+				assertionStyle: "as",
+			},
 		],
 		"@typescript-eslint/no-explicit-any": [
 			"error",
 			{
-				"ignoreRestArgs": true,
-				"fixToUnknown": true
-			}
+				ignoreRestArgs: true,
+				fixToUnknown: true,
+			},
 		],
 		"@typescript-eslint/consistent-type-imports": [
 			"error",
 			{
-				"disallowTypeAnnotations": false
-			}
+				disallowTypeAnnotations: false,
+			},
 		],
 		"@typescript-eslint/dot-notation": "error",
-		"@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
+		"@typescript-eslint/no-unused-vars": ["error", {args: "none"}],
 
 		// These rules are for people
 		// who don't know JavaScript well.
@@ -74,8 +71,8 @@ export default tseslint.config({
 		"prefer-template": "error",
 		"@typescript-eslint/no-require-imports": "off",
 		"@typescript-eslint/no-empty-object-type": "off",
-		"@typescript-eslint/no-unnecessary-type-assertion": "error"
+		"@typescript-eslint/no-unnecessary-type-assertion": "error",
 	},
-	ignores: ["./src/dts/**/*.ts", "*.js"],
-	files: ["**/*.ts"]
+	ignores: ["./src/typings/**/*.ts", "*.js"],
+	files: ["**/*.ts"],
 });

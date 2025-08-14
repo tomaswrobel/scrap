@@ -23,7 +23,7 @@
  * will remove its value input (return;) and serve like
  * the Scratch's "stop this script" block.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import {TypeToShadowMap, blockToCheck} from "../types";
 
 export type ReturnBlock = Blockly.BlockSvg & ReturnBlockMixin;

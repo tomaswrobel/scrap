@@ -13,7 +13,7 @@
  * This extension adds a context menu item to rename the variable
  * in the `for` block.
  */
-import type * as Blockly from "blockly";
+import type * as Blockly from "blockly/core";
 import {reservedWords} from "@scrap/code-transformers/utils";
 import Dialog from "@scrap/utils/dialog";
 

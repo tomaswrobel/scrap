@@ -10,13 +10,6 @@
  * @fileoverview Typings for the glob import
  * @copyright Tomáš Wróbel 2025
  */
-import type * as Blockly from "blockly";
+import type * as Blockly from "blockly/core";
 
-/** The extensions modules. */
-type extensions = {
-	[name: string]: {
-		default: (this: Blockly.Block) => void;
-	};
-};
-
-export default require("../extensions/*.ts") as extensions;
+export default import.meta.glob<(this: Blockly.Block) => void>("../extensions/*.ts", {eager: true, import: "default"});

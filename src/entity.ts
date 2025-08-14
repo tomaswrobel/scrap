@@ -10,20 +10,18 @@
  * @fileoverview Sprite and stage entities
  * @copyright Tomáš Wróbel 2025
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import * as SWC from "./utils/swc";
 import type JSZip from "jszip";
-import fs from "fs";
-import path from "path";
+import * as path from "path";
 import {reservedWords} from "./code-transformers/utils";
 import {TypeScript} from "./code-transformers/blocksToCode";
 import {Menu, MenuItem} from "@tauri-apps/api/menu";
 import {LogicalPosition} from "@tauri-apps/api/dpi";
-
-const stage =
-	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360"><rect x="0" y="0" width="480" height="360" fill="#ffffff"/></svg>';
-const scrappy = fs.readFileSync(path.join(__dirname, "assets", "svgs", "scrappy.svg"), "utf-8");
-const click = fs.readFileSync(path.join(__dirname, "assets", "sounds", "click.mp3"));
+import click from "./assets/sounds/click.mp3?url&inline";
+import scrappy from "./assets/svgs/scrappy.svg?raw";
+import stage from "./assets/svgs/stage.svg?raw";
+import {dataURLToFile} from "./utils/dataURLToFile";
 
 /**
  * I represent both a sprite and the stage.
@@ -39,7 +37,7 @@ export class Entity {
 	 * `[name, type]` tuples.
 	 */
 	public variables: Variable[] = [];
-	public sounds = [new File([click], "click.mp3", {type: "audio/mpeg"})];
+	public sounds = [dataURLToFile(click, "click.mp3")];
 
 	/** Thumbnail of the entity */
 	private readonly thumbnail = new Image();

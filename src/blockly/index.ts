@@ -10,21 +10,22 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview @scrap/blockly entry point.
  */
-import { TypeScript} from "@scrap/code-transformers/blocksToCode.ts";
-import * as Blockly from "blockly";
+import {TypeScript} from "@scrap/code-transformers/blocksToCode";
+import * as Blockly from "blockly/core";
 
 import data from "./data/blocks.json";
 import sprite from "./data/sprite.json";
 import stage from "./data/stage.json";
 import theme from "./data/theme.json";
-import blocks from "./lib/blocks";
+import allBlocks from "./lib/blocks";
 import extensions from "./lib/extensions";
 import fields from "./lib/fields";
 import * as plugins from "./lib/plugins";
+import * as En from "blockly/msg/en";
 
-import "@blockly/field-color";
 import "@blockly/field-date";
 import {Order} from "blockly/javascript";
+import * as path from "path";
 
 /**
  * Blocks that are ignored by the TypeScript generator.
@@ -34,40 +35,27 @@ import {Order} from "blockly/javascript";
  * (except for the spritePanel block, which is a special case)
  */
 const mutatorBlocks = ["spritePanel"];
-{
-	for (const name in blocks) {
-		const data = blocks[name];
+for (const filename in allBlocks) {
+	const {name} = path.parse(filename);
+	const {blocks = [], MIXIN} = allBlocks[filename];
 
-		if (name === "*.d") {
-			continue;
-		}
+	mutatorBlocks.push(...blocks);
 
-		if (data.blocks) {
-			mutatorBlocks.push(...data.blocks);
-		}
-
-		if ("init" in data.MIXIN) {
-			Blockly.Blocks[name] = data.MIXIN;
-		} else {
-			Blockly.Extensions.registerMutator(name, data.MIXIN, undefined, data.blocks);
-		}
+	if ("init" in MIXIN) {
+		Blockly.Blocks[name] = MIXIN;
+	} else {
+		Blockly.Extensions.registerMutator(name, MIXIN, undefined, blocks);
 	}
 }
 
-for (const name in fields) {
-	if (name === "*.d") {
-		continue;
-	}
-
-	Blockly.fieldRegistry.register(name, fields[name].default);
+for (const filename in fields) {
+	const {name} = path.parse(filename);
+	Blockly.fieldRegistry.register(name, fields[filename]);
 }
 
-for (const name in extensions) {
-	if (name === "*.d") {
-		continue;
-	}
-
-	Blockly.Extensions.register(name, extensions[name].default);
+for (const filename in extensions) {
+	const {name} = path.parse(filename);
+	Blockly.Extensions.register(name, extensions[filename]);
 }
 
 /**
@@ -115,10 +103,10 @@ export const properties = data.map(d => {
 	}
 });
 
-Blockly.setLocale(require("blockly/msg/en"));
+Blockly.setLocale(En as unknown as Record<string, string>);
 Blockly.FlyoutButton.TEXT_MARGIN_X = 20;
 Blockly.FlyoutButton.TEXT_MARGIN_Y = 10;
 Blockly.defineBlocksWithJsonArray(data);
 
-export * from "./types.ts";
+export * from "./types";
 export {plugins, sprite, stage, theme};

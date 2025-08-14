@@ -28,7 +28,7 @@
  * the TypeScript, but the Monaco editor is of course
  * aware of the incorrect syntax.
  */
-import type * as Blockly from "blockly";
+import type * as Blockly from "blockly/core";
 import FieldParam from "../fields/field_param";
 
 export type TryBlock = Blockly.BlockSvg & TryBlockMixin;

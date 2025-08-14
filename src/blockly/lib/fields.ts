@@ -10,12 +10,10 @@
  * @fileoverview Typings for the glob import
  * @copyright Tomáš Wróbel 2025
  */
-import type * as Blockly from "blockly";
+import type * as Blockly from "blockly/core";
+import "@blockly/field-colour-hsv-sliders";
 
-type fields = {
-	[name: string]: {
-		default: Blockly.fieldRegistry.RegistrableField;
-	};
-};
-
-export default require("../fields/*.ts") as fields;
+export default import.meta.glob<Blockly.fieldRegistry.RegistrableField>("../fields/*.ts", {
+	eager: true,
+	import: "default",
+});

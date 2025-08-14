@@ -33,49 +33,41 @@ So now I can code in Rust!
 ## Getting Started
 
 ### File structure
+
 ```
-├── CHANGELOG.md
-├── LICENSE
-├── README.md
-├── eslint.config.js
-├── index.html
-├── jsconfig.json
-├── package.json
 ├── src
 │   ├── app.ts
-│   ├── assets/
-│   ├── blockly
-│   │   ├── blocks/
-│   │   ├── data/
-│   │   ├── extensions/
-│   │   ├── fields/
-│   │   ├── plugins/
-│   │   └── index.ts
-│   ├── changelog.js
-│   ├── code-transformers/
-│   ├── components/
-│   ├── dts
-│   │   ├── runtime/
-│   │   └── static/
-│   ├── entity.ts
 │   ├── main.ts
-│   ├── monaco-editor/
-│   ├── scrap.d.ts
+│   ├── utils
+│   │   ├── types.ts
+│   │   ├── data/
+│   │   ├── plugins/
+│   │   ├── fields/
+│   │   ├── extensions/
+│   │   └── blocks/
+│   ├── typings
+│   │   ├── static/
+│   │   └── runtime/
+│   ├── entity.ts
+│   ├── code-transformers
+│   │   ├── sb3.ts
+│   │   ├── utils.ts
+│   │   ├── codeToBlocks.ts
+│   │   └── blocksToCode.ts
+│   ├── assets/
 │   ├── scss/
-│   └── utils/
+│   ├── scrap.d.ts
+│   ├── monaco-editor/
+│   └── components/
 ├── src-tauri
-│   ├── capabilities
-│   │   ├── main.json
-│   │   └── project.json
-│   ├── gen
-│   │   └── schemas/
-│   ├── icons
 │   ├── src
 │   │   ├── lib.rs
-│   │   ├── main.rs
-│   │   ├── swc_utils.rs
-│   │   └── visitor.rs
-│   └── tauri.conf.json
+│   │   ├── visitor.rs
+│   │   └── swc_utils.rs
+│   ├── tauri.conf.json
+│   └── capabilities/
+├── eslint.config.js
+├── index.html
 └── tsconfig.json
 ```
 

@@ -10,8 +10,11 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Booting the Scrap app.
  */
-import "@fontsource/noto-sans";
-import "./scss/*.scss";
+import "@fontsource/geist";
+import "./scss/app.scss";
+import "./scss/base.scss";
+import "./scss/dialog.scss";
+import "./scss/slider.scss";
 import App from "./app";
 
 window.MonacoEnvironment = {

@@ -13,21 +13,20 @@
  * @copyright Tomáš Wróbel 2025
  */
 .blockly {
-	&TreeLabel {
-		margin: auto;
-		color: #575e75 !important;
-		font-size: 10px !important;
+	&ToolboxCategoryLabel {
+		font-size: 0.75rem !important;
 	}
 
 	&TreeRowContentContainer {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 	}
 
-	&TreeRow {
-		line-height: 22px;
+	&ToolboxCategory {
+		line-height: 1.375rem;
 		white-space: nowrap;
-		padding: 6px 0;
+		padding: 0.375rem 0;
 		height: unset;
 	}
 
@@ -46,12 +45,15 @@
 		}
 	}
 
-	&ToolboxDiv {
+	&Toolbox {
 		padding-top: 0;
+		scrollbar-gutter: stable;
+		position: static;
+		width: fit-content;
 	}
 
 	&Flyout,
-	&ToolboxDiv {
+	&Toolbox {
 		border-right: 1px solid rgba(0, 0, 0, 0.1);
 	}
 
@@ -60,7 +62,7 @@
 	}
 
 	&FlyoutLabelText {
-		font-size: 20px !important;
+		font-size: 1.25rem !important;
 	}
 
 	&IconGroup {
@@ -82,11 +84,24 @@
 	}
 
 	&Menu {
+		color: #000;
 		padding: 0 !important;
 
 		&::-webkit-scrollbar {
 			display: none;
 		}
+	}
+
+	&MenuItemDisabled {
+		color: #0005;
+	}
+
+	&MainBackground {
+		stroke-width: 0;
+	}
+
+	&HtmlInput {
+		background: white;
 	}
 }
 
@@ -94,9 +109,9 @@
 	margin: 0 auto 0.125rem;
 	border-radius: 100%;
 	position: relative;
-	margin-bottom: 4px;
-	width: 20px;
-	height: 20px;
+	margin-bottom: 0.25rem;
+	width: 1.25rem;
+	height: 1.25rem;
 
 	&::after {
 		all: inherit;
@@ -109,4 +124,13 @@
 		transform-origin: center;
 		z-index: -1;
 	}
+}
+
+.fieldColourSliderLabel {
+	font-size: 1rem;
+	color: black;
+}
+
+.injectionDiv {
+	display: flex;
 }

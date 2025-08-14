@@ -256,9 +256,9 @@ languages.registerTokensProviderFactory("typescript", {
 								"@sensing": "sensing",
 								"@iterables": "iterables",
 								"@math": "operators",
-								costume: "costume",
-								backdrop: "costume",
-								effects: "costume",
+								"costume": "costume",
+								"backdrop": "costume",
+								"effects": "costume",
 								"@variables": "variables",
 								"@default": "identifier",
 							},
@@ -272,11 +272,11 @@ languages.registerTokensProviderFactory("typescript", {
 							"@flow": "controls",
 							"@types": "operators",
 							"@functions": "functions",
-							Variables: "interface",
-							Scrap: "constructor",
+							"Variables": "interface",
+							"Scrap": "constructor",
 							"@sprites": "sprites",
-							Array: "array",
-							Math: "math",
+							"Array": "array",
+							"Math": "math",
 							"@banned": "error",
 							"@default": "variables",
 						},
@@ -562,8 +562,8 @@ languages.onLanguageEncountered("typescript", () => {
 });
 
 editor.defineTheme("scrap", {
-	base: "vs",
-	inherit: false,
+	base: "vs-dark",
+	inherit: true,
 	rules: [
 		{token: "motion", foreground: "4C97FF"},
 		{token: "looks", foreground: "9966FF"},
@@ -588,14 +588,7 @@ editor.defineTheme("scrap", {
 		{token: "costume", foreground: "9966FF", fontStyle: "bold"},
 		{token: "error", fontStyle: "strikethrough", foreground: "AA0000"},
 	],
-	colors: {
-		"editor.background": "#FFFFFF",
-		"editor.foreground": "#000000",
-		"editor.inactiveSelectionBackground": "#E5EBF1",
-		"editorIndentGuide.background1": "#D3D3D3",
-		"editorIndentGuide.activeBackground1": "#939393",
-		"editor.selectionHighlightBackground": "#ADD6FF4D",
-	},
+	colors: {},
 });
 
 editor.setTheme("scrap");

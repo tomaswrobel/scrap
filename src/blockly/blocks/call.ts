@@ -35,7 +35,7 @@
  * * Parameters are of a specific type.
  * * Corresponding shadow blocks are used inside the parameters.
  */
-import type * as Blockly from "blockly";
+import type * as Blockly from "blockly/core";
 import {TypeToShadowMap} from "../types";
 
 export type CallExtraState = {

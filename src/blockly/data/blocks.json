@@ -1,39 +1,3 @@
-/**
- * This file is a part of Scrap Native, an app for helping to migrate
- * from block-based programming into text-based programming languages.
- *
- * You should have received a copy of the MIT License, if not, please
- * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomaswrobel/scrap.
- *
- * @license MIT
- * @fileoverview Blockly's JSON definition of blocks.
- * @copyright Tomáš Wróbel 2025
- *
- * Blockly's JSON definition of blocks
- *
- * These are static blocks that do not require any dynamicity,
- * such as mutators or updating fields. They follow official
- * Blockly's JSON definition format, since Scrap v3.
- *
- * Although they are static, most of them have code generations
- * dynamically generated from the block's definition. This is
- * for Sprite / Stage properties and methods defined in the
- * engine. See them at src/monaco-editor/lib/static.d.ts.
- * For the generator to work, ensure this format is followed:
- *
- * - Properties do not have "args0" property.
- * - Methods have "args0" property, even if they have no arguments.  In that case, use an empty array.
- * - Without "previousStatement", a method is considered to accept callback:
- *    - Callback will be filled with all the statements connected to the block.
- *    - Do not use statement inputs in that case. This is Blockly's, not Scrap's specific.
- * - If the block is used in any mutator, it will be ignored.
- * - When neither "output", "previousStatement" or "nextStatement" is present, the block is ignored.
- *
- * Dynamic blocks and mutators are defined in `src/blockly/blocks/` directory.
- * Their filename is used as the block's type / mutator's name.
- * When a definition has an extension or a mutator, you can find the definition in `src/blockly/extensions/` or `src/blockly/blocks/` respectively.
- */
 [
 	{
 		"type": "set",
@@ -54,9 +18,7 @@
 		"previousStatement": "any",
 		"nextStatement": "any",
 		"style": "Functions",
-		"extensions": [
-			"set"
-		]
+		"extensions": ["set"]
 	},
 	{
 		"type": "variable",
@@ -113,9 +75,7 @@
 		"previousStatement": "any",
 		"nextStatement": "any",
 		"style": "Variables",
-		"extensions": [
-			"variable"
-		],
+		"extensions": ["variable"],
 		"inputsInline": true
 	},
 	{
@@ -130,9 +90,7 @@
 		"previousStatement": "any",
 		"nextStatement": "any",
 		"style": "Variables",
-		"extensions": [
-			"variable"
-		],
+		"extensions": ["variable"],
 		"inputsInline": true
 	},
 	{
@@ -273,322 +231,85 @@
 				"type": "field_dropdown",
 				"name": "KEY",
 				"options": [
-					[
-						"any",
-						"any"
-					],
-					[
-						"Enter",
-						"Enter"
-					],
-					[
-						"Escape",
-						"Escape"
-					],
-					[
-						"Space",
-						"Space"
-					],
-					[
-						"ArrowUp",
-						"ArrowUp"
-					],
-					[
-						"ArrowDown",
-						"ArrowDown"
-					],
-					[
-						"ArrowLeft",
-						"ArrowLeft"
-					],
-					[
-						"ArrowRight",
-						"ArrowRight"
-					],
-					[
-						"Shift",
-						"Shift"
-					],
-					[
-						"Ctrl",
-						"Ctrl"
-					],
-					[
-						"Alt",
-						"Alt"
-					],
-					[
-						"Backspace",
-						"Backspace"
-					],
-					[
-						"Tab",
-						"Tab"
-					],
-					[
-						"Delete",
-						"Delete"
-					],
-					[
-						"CapsLock",
-						"CapsLock"
-					],
-					[
-						"F1",
-						"F1"
-					],
-					[
-						"F2",
-						"F2"
-					],
-					[
-						"F3",
-						"F3"
-					],
-					[
-						"F4",
-						"F4"
-					],
-					[
-						"F5",
-						"F5"
-					],
-					[
-						"F6",
-						"F6"
-					],
-					[
-						"F7",
-						"F7"
-					],
-					[
-						"F8",
-						"F8"
-					],
-					[
-						"F9",
-						"F9"
-					],
-					[
-						"F10",
-						"F10"
-					],
-					[
-						"F11",
-						"F11"
-					],
-					[
-						"F12",
-						"F12"
-					],
-					[
-						"A",
-						"A"
-					],
-					[
-						"B",
-						"B"
-					],
-					[
-						"C",
-						"C"
-					],
-					[
-						"D",
-						"D"
-					],
-					[
-						"E",
-						"E"
-					],
-					[
-						"F",
-						"F"
-					],
-					[
-						"G",
-						"G"
-					],
-					[
-						"H",
-						"H"
-					],
-					[
-						"I",
-						"I"
-					],
-					[
-						"J",
-						"J"
-					],
-					[
-						"K",
-						"K"
-					],
-					[
-						"L",
-						"L"
-					],
-					[
-						"M",
-						"M"
-					],
-					[
-						"N",
-						"N"
-					],
-					[
-						"O",
-						"O"
-					],
-					[
-						"P",
-						"P"
-					],
-					[
-						"Q",
-						"Q"
-					],
-					[
-						"R",
-						"R"
-					],
-					[
-						"S",
-						"S"
-					],
-					[
-						"T",
-						"T"
-					],
-					[
-						"U",
-						"U"
-					],
-					[
-						"V",
-						"V"
-					],
-					[
-						"W",
-						"W"
-					],
-					[
-						"X",
-						"X"
-					],
-					[
-						"Y",
-						"Y"
-					],
-					[
-						"Z",
-						"Z"
-					],
-					[
-						"a",
-						"a"
-					],
-					[
-						"b",
-						"b"
-					],
-					[
-						"c",
-						"c"
-					],
-					[
-						"d",
-						"d"
-					],
-					[
-						"e",
-						"e"
-					],
-					[
-						"f",
-						"f"
-					],
-					[
-						"g",
-						"g"
-					],
-					[
-						"h",
-						"h"
-					],
-					[
-						"i",
-						"i"
-					],
-					[
-						"j",
-						"j"
-					],
-					[
-						"k",
-						"k"
-					],
-					[
-						"l",
-						"l"
-					],
-					[
-						"m",
-						"m"
-					],
-					[
-						"n",
-						"n"
-					],
-					[
-						"o",
-						"o"
-					],
-					[
-						"p",
-						"p"
-					],
-					[
-						"q",
-						"q"
-					],
-					[
-						"r",
-						"r"
-					],
-					[
-						"s",
-						"s"
-					],
-					[
-						"t",
-						"t"
-					],
-					[
-						"u",
-						"u"
-					],
-					[
-						"v",
-						"v"
-					],
-					[
-						"w",
-						"w"
-					],
-					[
-						"x",
-						"x"
-					],
-					[
-						"y",
-						"y"
-					],
-					[
-						"z",
-						"z"
-					]
+					["any", "any"],
+					["Enter", "Enter"],
+					["Escape", "Escape"],
+					["Space", "Space"],
+					["ArrowUp", "ArrowUp"],
+					["ArrowDown", "ArrowDown"],
+					["ArrowLeft", "ArrowLeft"],
+					["ArrowRight", "ArrowRight"],
+					["Shift", "Shift"],
+					["Ctrl", "Ctrl"],
+					["Alt", "Alt"],
+					["Backspace", "Backspace"],
+					["Tab", "Tab"],
+					["Delete", "Delete"],
+					["CapsLock", "CapsLock"],
+					["F1", "F1"],
+					["F2", "F2"],
+					["F3", "F3"],
+					["F4", "F4"],
+					["F5", "F5"],
+					["F6", "F6"],
+					["F7", "F7"],
+					["F8", "F8"],
+					["F9", "F9"],
+					["F10", "F10"],
+					["F11", "F11"],
+					["F12", "F12"],
+					["A", "A"],
+					["B", "B"],
+					["C", "C"],
+					["D", "D"],
+					["E", "E"],
+					["F", "F"],
+					["G", "G"],
+					["H", "H"],
+					["I", "I"],
+					["J", "J"],
+					["K", "K"],
+					["L", "L"],
+					["M", "M"],
+					["N", "N"],
+					["O", "O"],
+					["P", "P"],
+					["Q", "Q"],
+					["R", "R"],
+					["S", "S"],
+					["T", "T"],
+					["U", "U"],
+					["V", "V"],
+					["W", "W"],
+					["X", "X"],
+					["Y", "Y"],
+					["Z", "Z"],
+					["a", "a"],
+					["b", "b"],
+					["c", "c"],
+					["d", "d"],
+					["e", "e"],
+					["f", "f"],
+					["g", "g"],
+					["h", "h"],
+					["i", "i"],
+					["j", "j"],
+					["k", "k"],
+					["l", "l"],
+					["m", "m"],
+					["n", "n"],
+					["o", "o"],
+					["p", "p"],
+					["q", "q"],
+					["r", "r"],
+					["s", "s"],
+					["t", "t"],
+					["u", "u"],
+					["v", "v"],
+					["w", "w"],
+					["x", "x"],
+					["y", "y"],
+					["z", "z"]
 				]
 			}
 		],
@@ -596,7 +317,7 @@
 		"style": "Sensing"
 	},
 	{
-		"type": "color",
+		"type": "color_sliders",
 		"message0": "%1",
 		"args0": [
 			{
@@ -805,20 +526,14 @@
 		"type": "x",
 		"inputsInline": true,
 		"message0": "x position",
-		"output": [
-			"number",
-			"Variable"
-		],
+		"output": ["number", "Variable"],
 		"style": "Motion"
 	},
 	{
 		"type": "y",
 		"inputsInline": true,
 		"message0": "y position",
-		"output": [
-			"number",
-			"Variable"
-		],
+		"output": ["number", "Variable"],
 		"style": "Motion"
 	},
 	{
@@ -837,18 +552,9 @@
 				"type": "field_dropdown",
 				"name": "STYLE",
 				"options": [
-					[
-						"all around",
-						"all around"
-					],
-					[
-						"left-right",
-						"left-right"
-					],
-					[
-						"don't rotate",
-						"don't rotate"
-					]
+					["all around", "all around"],
+					["left-right", "left-right"],
+					["don't rotate", "don't rotate"]
 				]
 			}
 		],
@@ -863,10 +569,7 @@
 			{
 				"type": "input_value",
 				"name": "STYLE",
-				"check": [
-					"string",
-					"number"
-				]
+				"check": ["string", "number"]
 			}
 		],
 		"nextStatement": "any",
@@ -959,29 +662,14 @@
 				"type": "field_dropdown",
 				"name": "EFFECT",
 				"options": [
-					[
-						"color effect",
-						"color"
-					],
-					[
-						"ghost effect",
-						"ghost"
-					],
-					[
-						"grayscale effect",
-						"grayscale"
-					],
-					[
-						"brightness effect",
-						"brightness"
-					]
+					["color effect", "color"],
+					["ghost effect", "ghost"],
+					["grayscale effect", "grayscale"],
+					["brightness effect", "brightness"]
 				]
 			}
 		],
-		"output": [
-			"string",
-			"Variable"
-		],
+		"output": ["number", "Variable"],
 		"style": "Looks"
 	},
 	{
@@ -992,10 +680,7 @@
 			{
 				"type": "input_value",
 				"name": "COSTUME",
-				"check": [
-					"string",
-					"number"
-				]
+				"check": ["string", "number"]
 			}
 		],
 		"previousStatement": "any",
@@ -1018,10 +703,7 @@
 			{
 				"type": "input_value",
 				"name": "BACKDROP",
-				"check": [
-					"string",
-					"number"
-				]
+				"check": ["string", "number"]
 			}
 		],
 		"previousStatement": "any",
@@ -1036,10 +718,7 @@
 			{
 				"type": "input_value",
 				"name": "COSTUME",
-				"check": [
-					"string",
-					"number"
-				]
+				"check": ["string", "number"]
 			}
 		],
 		"previousStatement": "any",
@@ -1115,34 +794,21 @@
 		"type": "size",
 		"inputsInline": true,
 		"message0": "size",
-		"output": [
-			"number",
-			"Variable"
-		],
+		"output": ["number", "Variable"],
 		"style": "Looks"
 	},
 	{
 		"type": "costume",
 		"message0": "costume %1",
-		"output": [
-			"string",
-			"number",
-			"Variable"
-		],
+		"output": ["string", "number", "Variable"],
 		"style": "Looks",
 		"args0": [
 			{
 				"type": "field_dropdown",
 				"name": "VALUE",
 				"options": [
-					[
-						"name",
-						"name"
-					],
-					[
-						"index",
-						"index"
-					]
+					["name", "name"],
+					["index", "index"]
 				]
 			}
 		]
@@ -1150,25 +816,15 @@
 	{
 		"type": "backdrop",
 		"message0": "backdrop %1",
-		"output": [
-			"string",
-			"number",
-			"Variable"
-		],
+		"output": ["string", "number", "Variable"],
 		"style": "Looks",
 		"args0": [
 			{
 				"type": "field_dropdown",
 				"name": "VALUE",
 				"options": [
-					[
-						"name",
-						"name"
-					],
-					[
-						"index",
-						"index"
-					]
+					["name", "name"],
+					["index", "index"]
 				]
 			}
 		]
@@ -1225,10 +881,7 @@
 	{
 		"type": "volume",
 		"message0": "volume",
-		"output": [
-			"number",
-			"Variable"
-		],
+		"output": ["number", "Variable"],
 		"style": "Sounds"
 	},
 	{
@@ -1307,28 +960,19 @@
 	{
 		"type": "penSize",
 		"message0": "pen size",
-		"output": [
-			"number",
-			"Variable"
-		],
+		"output": ["number", "Variable"],
 		"style": "Pen"
 	},
 	{
 		"type": "penColor",
 		"message0": "pen color",
-		"output": [
-			"Color",
-			"Variable"
-		],
+		"output": ["Color", "Variable"],
 		"style": "Pen"
 	},
 	{
 		"type": "isPenDown",
 		"message0": "is pen down?",
-		"output": [
-			"boolean",
-			"Variable"
-		],
+		"output": ["boolean", "Variable"],
 		"style": "Pen"
 	},
 	{
@@ -1400,34 +1044,13 @@
 				"type": "field_dropdown",
 				"name": "EVENT",
 				"options": [
-					[
-						"clicked",
-						"clicked"
-					],
-					[
-						"double-clicked",
-						"double-clicked"
-					],
-					[
-						"pressed",
-						"pressed"
-					],
-					[
-						"released",
-						"released"
-					],
-					[
-						"left",
-						"left"
-					],
-					[
-						"entered",
-						"entered"
-					],
-					[
-						"moved",
-						"moved"
-					]
+					["clicked", "clicked"],
+					["double-clicked", "double-clicked"],
+					["pressed", "pressed"],
+					["released", "released"],
+					["left", "left"],
+					["entered", "entered"],
+					["moved", "moved"]
 				]
 			}
 		],
@@ -1538,9 +1161,7 @@
 		"previousStatement": "any",
 		"nextStatement": "any",
 		"style": "Controls",
-		"extensions": [
-			"for"
-		]
+		"extensions": ["for"]
 	},
 	{
 		"type": "while",
@@ -1654,10 +1275,7 @@
 		"type": "try",
 		"message0": "try",
 		"style": "Controls",
-		"nextStatement": [
-			"catch",
-			"finally"
-		]
+		"nextStatement": ["catch", "finally"]
 	},
 	{
 		"type": "catch",
@@ -1883,10 +1501,7 @@
 		"type": "draggable",
 		"inputsInline": true,
 		"message0": "draggable",
-		"output": [
-			"boolean",
-			"Variable"
-		],
+		"output": ["boolean", "Variable"],
 		"style": "Sensing"
 	},
 	{
@@ -1933,34 +1548,13 @@
 				"type": "field_dropdown",
 				"name": "PROPERTY",
 				"options": [
-					[
-						"year",
-						"getFullYear"
-					],
-					[
-						"month",
-						"getMonth"
-					],
-					[
-						"date",
-						"getDate"
-					],
-					[
-						"day of week",
-						"getDay"
-					],
-					[
-						"hour",
-						"getHours"
-					],
-					[
-						"minute",
-						"getMinutes"
-					],
-					[
-						"second",
-						"getSeconds"
-					]
+					["year", "getFullYear"],
+					["month", "getMonth"],
+					["date", "getDate"],
+					["day of week", "getDay"],
+					["hour", "getHours"],
+					["minute", "getMinutes"],
+					["second", "getSeconds"]
 				]
 			},
 			{
@@ -2029,48 +1623,24 @@
 			{
 				"type": "input_value",
 				"name": "A",
-				"check": [
-					"number",
-					"string"
-				]
+				"check": ["number", "string"]
 			},
 			{
 				"type": "field_dropdown",
 				"name": "OP",
 				"options": [
-					[
-						"+",
-						"+"
-					],
-					[
-						"-",
-						"-"
-					],
-					[
-						"*",
-						"*"
-					],
-					[
-						"/",
-						"/"
-					],
-					[
-						"**",
-						"**"
-					],
-					[
-						"mod",
-						"%"
-					]
+					["+", "+"],
+					["-", "-"],
+					["*", "*"],
+					["/", "/"],
+					["**", "**"],
+					["mod", "%"]
 				]
 			},
 			{
 				"type": "input_value",
 				"name": "B",
-				"check": [
-					"number",
-					"string"
-				]
+				"check": ["number", "string"]
 			}
 		],
 		"output": "number",
@@ -2084,48 +1654,24 @@
 			{
 				"type": "input_value",
 				"name": "A",
-				"check": [
-					"number",
-					"string"
-				]
+				"check": ["number", "string"]
 			},
 			{
 				"type": "field_dropdown",
 				"name": "OP",
 				"options": [
-					[
-						"=",
-						"=="
-					],
-					[
-						"≠",
-						"!="
-					],
-					[
-						"<",
-						"<"
-					],
-					[
-						"≤",
-						"<="
-					],
-					[
-						">",
-						">"
-					],
-					[
-						"≥",
-						">="
-					]
+					["=", "=="],
+					["≠", "!="],
+					["<", "<"],
+					["≤", "<="],
+					[">", ">"],
+					["≥", ">="]
 				]
 			},
 			{
 				"type": "input_value",
 				"name": "B",
-				"check": [
-					"number",
-					"string"
-				]
+				"check": ["number", "string"]
 			}
 		],
 		"output": "boolean",
@@ -2145,14 +1691,8 @@
 				"type": "field_dropdown",
 				"name": "OP",
 				"options": [
-					[
-						"and",
-						"&&"
-					],
-					[
-						"or",
-						"||"
-					]
+					["and", "&&"],
+					["or", "||"]
 				]
 			},
 			{
@@ -2187,14 +1727,8 @@
 				"type": "field_dropdown",
 				"name": "BOOL",
 				"options": [
-					[
-						"true",
-						"true"
-					],
-					[
-						"false",
-						"false"
-					]
+					["true", "true"],
+					["false", "false"]
 				]
 			}
 		],
@@ -2216,62 +1750,20 @@
 				"type": "field_dropdown",
 				"name": "OP",
 				"options": [
-					[
-						"abs",
-						"abs"
-					],
-					[
-						"round",
-						"round"
-					],
-					[
-						"floor",
-						"floor"
-					],
-					[
-						"ceiling",
-						"ceil"
-					],
-					[
-						"sqrt",
-						"sqrt"
-					],
-					[
-						"sin",
-						"sin"
-					],
-					[
-						"cos",
-						"cos"
-					],
-					[
-						"tan",
-						"tan"
-					],
-					[
-						"asin",
-						"asin"
-					],
-					[
-						"acos",
-						"acos"
-					],
-					[
-						"atan",
-						"atan"
-					],
-					[
-						"ln",
-						"log"
-					],
-					[
-						"log",
-						"log10"
-					],
-					[
-						"e ^",
-						"exp"
-					]
+					["abs", "abs"],
+					["round", "round"],
+					["floor", "floor"],
+					["ceiling", "ceil"],
+					["sqrt", "sqrt"],
+					["sin", "sin"],
+					["cos", "cos"],
+					["tan", "tan"],
+					["asin", "asin"],
+					["acos", "acos"],
+					["atan", "atan"],
+					["ln", "log"],
+					["log", "log10"],
+					["e ^", "exp"]
 				]
 			},
 			{
@@ -2292,22 +1784,10 @@
 				"type": "field_dropdown",
 				"name": "CONSTANT",
 				"options": [
-					[
-						"π",
-						"Math.PI"
-					],
-					[
-						"e",
-						"Math.E"
-					],
-					[
-						"∞",
-						"Infinity"
-					],
-					[
-						"NaN",
-						"NaN"
-					]
+					["π", "Math.PI"],
+					["e", "Math.E"],
+					["∞", "Infinity"],
+					["NaN", "NaN"]
 				]
 			}
 		],
@@ -2371,11 +1851,7 @@
 		"mutator": "array",
 		"output": "Array",
 		"extraState": {
-			"items": [
-				"single",
-				"single",
-				"single"
-			]
+			"items": ["single", "single", "single"]
 		},
 		"style": "Iterables"
 	},
@@ -2423,9 +1899,7 @@
 				"check": "string"
 			}
 		],
-		"output": [
-			"string"
-		],
+		"output": ["string"],
 		"style": "Iterables"
 	},
 	{
@@ -2487,10 +1961,7 @@
 				"check": "Iterable"
 			}
 		],
-		"output": [
-			"any",
-			"Variable"
-		],
+		"output": ["any", "Variable"],
 		"style": "Iterables"
 	},
 	{
@@ -2538,9 +2009,7 @@
 		"previousStatement": "any",
 		"nextStatement": "any",
 		"style": "Iterables",
-		"extensions": [
-			"for"
-		]
+		"extensions": ["for"]
 	},
 	{
 		"type": "generic",
@@ -2551,14 +2020,8 @@
 				"type": "field_dropdown",
 				"name": "ITERABLE",
 				"options": [
-					[
-						"array",
-						"Array"
-					],
-					[
-						"iterable",
-						"Iterable"
-					]
+					["array", "Array"],
+					["iterable", "Iterable"]
 				]
 			},
 			{
@@ -2611,7 +2074,6 @@
 				"check": "number"
 			}
 		],
-		"colour": "#199950",
 		"inputsInline": true
 	}
 ]

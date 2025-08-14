@@ -11,6 +11,8 @@
  * @fileoverview Global types for Scrap.
  */
 
+/// <reference types="vite/client" />
+
 /**
  * Variable type.
  * Either a string or an array of strings (union type).
@@ -37,24 +39,6 @@ type Rectangular = Record<"x" | "y" | "width" | "height", number>;
  * - it should be available in devtools
  */
 declare var app: import("./app").default;
-
-declare module "*.svg" {
-	const url: string;
-	export default url;
-}
-
-declare module "*.png" {
-	const url: string;
-	export default url;
-}
-
-declare module "*.cur" {
-	const url: string;
-	export default url;
-}
-
-declare module "*.scss";
-declare module "*.css";
 
 /*
  * I don't understand why Microsoft doesn't

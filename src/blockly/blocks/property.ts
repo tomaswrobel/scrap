@@ -13,7 +13,7 @@
  * Property block is a block that returns a property of a sprite.
  * It's a dropdown with all the properties (and variables) of a sprite.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export const MIXIN = {
 	init(this: Blockly.Block) {

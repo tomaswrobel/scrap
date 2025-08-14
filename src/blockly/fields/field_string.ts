@@ -20,7 +20,7 @@
  * 	- Using Modern DOM API
  *
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export default class FieldString extends Blockly.FieldTextInput {
 	private quoteSize = 16;

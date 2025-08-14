@@ -13,7 +13,7 @@
  * This mutator is taken from Blockly's built-in controls_if block.
  * The original isn't used only because of bundle size.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export type IfExtraState = {
 	elseIfCount?: number;

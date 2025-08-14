@@ -10,7 +10,7 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Custom Blockly field for valid JS identifier.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import {reservedWords} from "../../code-transformers/utils";
 
 export default class FieldIdentifier extends Blockly.FieldTextInput {

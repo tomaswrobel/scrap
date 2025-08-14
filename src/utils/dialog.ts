@@ -163,7 +163,7 @@ class Dialog {
 		const buttonContainer = document.createElement("div");
 		buttonContainer.appendChild(this.confirmButton);
 		buttonContainer.appendChild(this.cancelButton);
-		buttonContainer.className = "button-container";
+		buttonContainer.classList.add("button-container");
 
 		this.element.showModal();
 

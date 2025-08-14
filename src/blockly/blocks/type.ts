@@ -22,7 +22,7 @@
  * If inside the function block, it will change
  * the return type of the function.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import {TypeToShadowMap, ScrapTypes} from "../types";
 import type {ArrayBlock} from "./array";
 

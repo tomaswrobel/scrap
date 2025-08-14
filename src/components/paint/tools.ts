@@ -10,11 +10,11 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Tools for drawing on the canvas in the paint editor.
  */
-import line from "url:../assets/icons/paint-editor/line.svg";
-import brush from "url:../assets/icons/paint-editor/brush.svg";
-import fill from "url:../assets/icons/paint-editor/fill.svg";
-import eraser from "url:../assets/icons/paint-editor/eraser.svg";
-import marquee from "url:../assets/icons/paint-editor/marquee.svg";
+import line from "@scrap/assets/icons/paint-editor/line.svg?raw";
+import brush from "@scrap/assets/icons/paint-editor/brush.svg?raw";
+import fill from "@scrap/assets/icons/paint-editor/fill.svg?raw";
+import eraser from "@scrap/assets/icons/paint-editor/eraser.svg?raw";
+import marquee from "@scrap/assets/icons/paint-editor/marquee.svg?raw";
 import {invoke} from "@tauri-apps/api/core";
 
 /**
@@ -53,6 +53,7 @@ export abstract class Tool {
 
 		const input = document.createElement("input");
 
+		input.classList.add("slider");
 		input.type = "range";
 		input.min = "1";
 		input.max = "20";
@@ -118,18 +119,17 @@ export abstract class Tool {
 		this.ctx = ctx;
 	}
 
-	constructor(title: string, img?: Pick<HTMLImageElement, "alt" | "src">) {
+	constructor(title: string, svg?: Pick<HTMLImageElement, "alt" | "src">) {
 		this.button.type = "button";
 		this.button.title = title;
 
-		if (img) {
-			const image = new Image(this.ICON_WIDTH, this.ICON_HEIGHT);
-			image.src = img.src;
-			image.alt = img.alt;
-
-			this.button.appendChild(image);
+		if (svg) {
+			const dom = Tool.parser.parseFromString(svg.src, "image/svg+xml");
+			this.button.append(dom.documentElement);
 		}
 	}
+
+	private static parser = new DOMParser();
 }
 
 export abstract class DrawingTool extends Tool {
@@ -173,7 +173,7 @@ export abstract class ShapeTool extends Tool {
 	constructor(title: string) {
 		super(title);
 		const shape = this.shape();
-		shape.style.fill = "#575E75";
+		shape.style.fill = "currentColor";
 		this.button.appendChild(this.wrap(shape));
 	}
 

@@ -20,7 +20,7 @@
  * is that the `typed` block is just a container for the `type` block
  * and `parameter` field, so it should not be
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export class ScrapConstantProvider extends Blockly.zelos.ConstantProvider {
 	// Make checkboxes a bit wider
@@ -41,6 +41,8 @@ export class ScrapConstantProvider extends Blockly.zelos.ConstantProvider {
 	public get cssText() {
 		return this.getCSS_("").join("");
 	}
+
+	public override FIELD_TEXT_FONTFAMILY = "Geist";
 }
 
 export class ScrapRenderer extends Blockly.zelos.Renderer {

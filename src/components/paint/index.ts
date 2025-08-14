@@ -10,11 +10,11 @@
  * @fileoverview Paint editor
  * @copyright Tomáš Wróbel 2025
  */
+import "./style.scss";
 import {invoke} from "@tauri-apps/api/core";
-import {bind, load} from "../utils/decorators";
-import {MediaList} from "./media-list";
-import "./paint.scss";
-import type Component from "./tab";
+import {bind, load} from "../../utils/decorators";
+import {MediaList} from "../media-list";
+import type Component from "../tab";
 import {Brush, Ellipse, Eraser, Fill, Line, Rectangle, Select, type Tool, Triangle} from "./tools";
 
 export default class Paint implements Component {

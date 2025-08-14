@@ -10,7 +10,7 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Type utilities for Scrap.
  */
-import type * as Blockly from "blockly";
+import type * as Blockly from "blockly/core";
 
 /**
  * Supported types in Scrap.
@@ -29,7 +29,7 @@ export const ScrapTypes = ["", "number", "string", "boolean", "Color", "Array", 
 export const TypeToShadowMap: Record<string, string> = {
 	number: "math_number",
 	string: "iterables_string",
-	Color: "color",
+	Color: "block_color",
 	Sprite: "sprite",
 	Date: "date",
 	any: "text_or_number",

@@ -13,7 +13,7 @@
  * This extension adds corresponding shadow block to the `value` input
  * when the variable is moved to the `set` block.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import {TypeToShadowMap} from "../types";
 
 export default function (this: Blockly.BlockSvg) {

@@ -1,5 +1,5 @@
 /**
- * This file is a part of Scrap Native, an app for helping to migrate
+ * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
  *
  * You should have received a copy of the MIT License, if not, please
@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @copyright Tomáš Wróbel 2024
- * @fileoverview Visual Studio Code settings for Scrap Native.
+ * @fileoverview Visual Studio Code settings for Scrap.
  */
 {
 	// Set TypeScript SDK to the one in node_modules
@@ -20,9 +20,10 @@
 	"eslint.onIgnoredFiles": "off",
 	"eslint.runtime": "node",
 	"eslint.useFlatConfig": true,
-	// Set Prettier settings to match Scrap Native's style
+	// Set Prettier settings to match Scrap's style
 	"prettier.arrowParens": "avoid",
 	"prettier.bracketSpacing": false,
+	"prettier.quoteProps": "consistent",
 	// Tab configuration
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
@@ -57,15 +58,11 @@
 	// JSON Schemas for LiTScript
 	"json.schemas": [
 		{
-			"fileMatch": [
-				"/litconfig.json"
-			],
+			"fileMatch": ["/litconfig.json"],
 			"url": "../node_modules/litscript/schemas/litsconfig-schema.json"
 		},
 		{
-			"fileMatch": [
-				"/src-trauri/capabilities/*.json"
-			],
+			"fileMatch": ["/src-trauri/capabilities/*.json"],
 			"url": "../src-trauri/gen/schemas/desktop-schema.json"
 		}
 	],

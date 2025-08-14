@@ -15,7 +15,7 @@
  * Snap! is a canvas application, so it can easily export the canvas,
  * but Blockly is SVG-based, so it's a bit more complicated.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import Dialog from "@scrap/utils/dialog";
 import {writeFile} from "@tauri-apps/plugin-fs";
 import {load} from "@scrap/utils/decorators";

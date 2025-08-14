@@ -11,7 +11,7 @@
  * @copyright Tomáš Wróbel 2025
  */
 import type {FunctionBlock} from "@scrap/blockly/blocks/function";
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import type JSZip from "jszip";
 import {Sprite, Stage} from "../entity";
 import {escape} from "./utils";

@@ -19,20 +19,19 @@ import Dialog from "@scrap/utils/dialog";
 
 import {downloadDir, join} from "@tauri-apps/api/path";
 import {version, productName} from "../src-tauri/tauri.conf.json";
-import fs from "fs";
 
 import JSZip from "jszip";
-import Sound from "./components/sounds";
+import Sound from "./components/sound-viewer";
 
 import SB3 from "./code-transformers/sb3";
 import Tabs from "./components/tabs";
 
-import * as Blockly from "blockly";
-import {load} from "./utils/decorators";
+import * as Blockly from "blockly/core";
+import {bind, load} from "./utils/decorators";
 import createSavedAtLabel from "./utils/create-saved-at-label";
 
-const engineStyle = fs.readFileSync("node_modules/scrap-engine/dist/style.css", "utf-8");
-const engineScript = fs.readFileSync("node_modules/scrap-engine/dist/engine.js", "utf-8");
+import engineStyle from "scrap-engine/dist/style.css?raw";
+import engineScript from "scrap-engine/dist/engine.js?raw";
 
 export default class App {
 	public readonly container = document.getElementById("app")!;
@@ -69,62 +68,11 @@ export default class App {
 
 		this.current.render(this.stagePanel);
 
-		this.output.addEventListener("load", async () => {
-			const document = this.output.contentDocument!;
+		this.output.addEventListener("load", this.setUpOutput);
 
-			const engine = document.createElement("script");
-			engine.textContent = engineScript;
-
-			const script = document.createElement("script");
-			let code = "var $ = {};\n\n";
-
-			try {
-				for (const entity of this.entities) {
-					code += await entity.preview();
-					code += "\n\n";
-				}
-
-				script.textContent = code;
-
-				Object.assign(this.output.contentWindow || {}, {
-					alert: (message: string) =>
-						Dialog.scrap.fire({
-							title: "Project Alert",
-							body: message,
-							input: "none",
-							cancelButtonHTML: "",
-							confirmButtonHTML: "OK",
-						}),
-					prompt: (message: string) =>
-						Dialog.scrap.fire({
-							title: "Project prompts you...",
-							body: message,
-							input: "text",
-							inputOptions: {
-								placeholder: "Your answer here",
-							},
-							cancelButtonHTML: "Cancel",
-							confirmButtonHTML: "OK",
-						}),
-					confirm: (message: string) =>
-						Dialog.scrap.fire({
-							title: "Project needs to confirm...",
-							body: message,
-							input: "none",
-							cancelButtonHTML: "No",
-							confirmButtonHTML: "Yes",
-						}),
-				});
-
-				document.body.append(engine, script);
-			} catch (e) {
-				await Dialog.scrap.fire({
-					title: "Runtime Error",
-					body: String(e),
-					input: "none",
-				});
-			}
-		});
+		if (this.output.contentDocument) {
+			this.setUpOutput();
+		}
 
 		document.getElementById("add")!.addEventListener("click", () => {
 			for (var n = 1, name = "Scrappy"; this.entities.some(e => e.name === name); name = `Scrappy ${n++}`);
@@ -139,7 +87,7 @@ export default class App {
 			zoom: {
 				startScale: 0.65,
 			},
-			media: "blockly-media/",
+			media: "/",
 			trashcan: false,
 			collapse: false,
 			scrollbars: false,
@@ -149,6 +97,7 @@ export default class App {
 		workspace.showContextMenu = () => {};
 
 		this.spritePanelBlock = workspace.newBlock("spritePanel", "root");
+		this.spritePanelBlock.initSvg();
 		this.setUpSpritePanelBlock();
 
 		const scrappy = new Sprite("Scrappy");
@@ -157,6 +106,65 @@ export default class App {
 
 		// Finalize
 		document.title = `${productName} v${version}`;
+		this.container.style.removeProperty("opacity");
+	}
+
+	@bind
+	public async setUpOutput() {
+		const document = this.output.contentDocument!;
+
+		const engine = document.createElement("script");
+		engine.textContent = engineScript;
+
+		const script = document.createElement("script");
+		let code = "var $ = {};\n\n";
+
+		try {
+			for (const entity of this.entities) {
+				code += await entity.preview();
+				code += "\n\n";
+			}
+
+			script.textContent = code;
+
+			Object.assign(this.output.contentWindow || {}, {
+				alert: (message: string) =>
+					Dialog.scrap.fire({
+						title: "Project Alert",
+						body: message,
+						input: "none",
+						cancelButtonHTML: "",
+						confirmButtonHTML: "OK",
+					}),
+				prompt: (message: string) =>
+					Dialog.scrap.fire({
+						title: "Project prompts you...",
+						body: message,
+						input: "text",
+						inputOptions: {
+							placeholder: "Your answer here",
+						},
+						cancelButtonHTML: "Cancel",
+						confirmButtonHTML: "OK",
+					}),
+				confirm: (message: string) =>
+					Dialog.scrap.fire({
+						title: "Project needs to confirm...",
+						body: message,
+						input: "none",
+						cancelButtonHTML: "No",
+						confirmButtonHTML: "Yes",
+					}),
+			});
+
+			document.body.append(engine, script);
+		} catch (e) {
+			await Dialog.scrap.fire({
+				title: "Runtime Error",
+				body: String(e),
+				input: "none",
+			});
+		}
 	}
 
 	public async selectEntity(entity: Entity) {

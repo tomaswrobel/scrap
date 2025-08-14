@@ -22,7 +22,7 @@
  * So instead, Scrap uses its own function blocks, which
  * works similarly to legacy Blockly's procedure system.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export type FunctionBlock = Blockly.BlockSvg & FunctionBlockMixin;
 export interface FunctionBlockMixin extends FunctionBlockMixinType {}

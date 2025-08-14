@@ -26,7 +26,7 @@
  * as they are **not** values, but rather instructions
  * for the connection checker.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export class ConnectionChecker extends Blockly.ConnectionChecker {
 	public override doTypeChecks(a: Blockly.Connection, b: Blockly.Connection): boolean {

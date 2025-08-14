@@ -10,8 +10,8 @@
  * @fileoverview Hidden tab component
  * @copyright Tomáš Wróbel 2025
  */
-import type TabComponent from "./tab";
-import "./hidden.scss";
+import type TabComponent from "../tab";
+import "./style.scss";
 
 /**
  * Hidden tab component is displayed when the

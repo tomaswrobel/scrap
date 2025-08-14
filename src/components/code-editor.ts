@@ -10,15 +10,13 @@
  * @fileoverview Code editor
  * @copyright Tomáš Wróbel 2025
  */
-import fs from "fs";
 import {editor, Uri} from "monaco-editor";
-import path from "path";
+import * as path from "path";
 import type {Entity} from "../entity";
 import type TabComponent from "./tab";
 import "../monaco-editor/typescript";
 import {TypeScript} from "../code-transformers/blocksToCode";
-
-const lib = fs.readFileSync(path.join(__dirname, "..", "dts", "runtime", "index.ts"), "utf-8");
+import lib from "@scrap/typings/runtime/index.ts?raw";
 
 class CodeEditor implements TabComponent {
 	public name = "Code";

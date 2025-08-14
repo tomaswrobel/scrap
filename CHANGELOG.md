@@ -11,6 +11,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 -   Better Paint editor
 
+## [7.0.0] - 2025-08-14
+
+### Changed
+
+-   dependencies update
+.	retheme
+-	Blockly 12
+-   file structure, better naming
+
+### Fixed
+
+- Array constructor TS bug
+- TS Errors
+- FAB wasn't centered
+- Better compatibility with WebKit
+
 ## [6.3.0] - 2025-07-11
 
 ### Changed

@@ -16,9 +16,17 @@
 	box-sizing: border-box;
 }
 
+:root {
+	--titlebar-area-height: 2.5rem;
+	--sb-track-color: transparent;
+	--sb-thumb-color: #575e75;
+	--sb-size: 10px;
+}
+
 body {
 	margin: 0;
-	font-family: 'Noto Sans', sans-serif;
+	color-scheme: dark;
+	font-family: "Geist", sans-serif;
 
 	&[data-loading]::after {
 		content: attr(data-loading)"...";
@@ -49,10 +57,11 @@ body {
 	height: 37.5px;
 	color: #fff;
 	font-size: 30px;
-	line-height: 37.5px;
-	text-align: center;
 	cursor: pointer;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 table {
@@ -62,5 +71,25 @@ table {
 	td {
 		padding: 0.5em;
 		border: 1px solid #ddd;
+	}
+}
+
+::-webkit-scrollbar {
+	width: var(--sb-size);
+}
+
+::-webkit-scrollbar-track {
+	background: var(--sb-track-color);
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--sb-thumb-color);
+	border-radius: 5px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+	body {
+		scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 	}
 }

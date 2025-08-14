@@ -20,11 +20,7 @@
 import ts from "typescript";
 import type {Diagnostic, IExtraLibs, ITypeScriptWorker} from "./typescript";
 import type {Uri, languages, worker} from "monaco-editor";
-
-import path from "path";
-import fs from "fs";
-
-const DEFAULT_LIB = fs.readFileSync(path.join(__dirname, "..", "dts", "static", "index.d.ts"), "utf-8");
+import defaultLib from "@scrap/typings/static/index.d.ts?raw";
 
 /**
  * Loading a default lib as a source file will mess up TS completely.
@@ -97,7 +93,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 			return model.getValue();
 		} else if (fileName === "lib.d.ts") {
 			// default lib
-			return DEFAULT_LIB;
+			return defaultLib;
 		} else {
 			return;
 		}
@@ -154,7 +150,7 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 	}
 
 	public async getLibFiles(): Promise<Record<string, string>> {
-		return {"lib.d.ts": DEFAULT_LIB};
+		return {"lib.d.ts": defaultLib};
 	}
 
 	// --- language features
@@ -233,6 +229,21 @@ export class TypeScriptWorker implements ts.LanguageServiceHost, ITypeScriptWork
 								file: {fileName},
 							});
 							break;
+						case ts.SyntaxKind.FunctionDeclaration:
+						case ts.SyntaxKind.FunctionExpression: {
+							const fn = node as ts.FunctionDeclaration | ts.FunctionExpression;
+							if (fn.asteriskToken) {
+								diagnostics.push({
+									messageText: "Generators not allowed.",
+									category: ts.DiagnosticCategory.Error,
+									code: 9999,
+									start: node.getStart(),
+									length: node.getWidth(),
+									file: {fileName},
+								});
+							}
+							break;
+						}
 						case ts.SyntaxKind.ExportDeclaration:
 						case ts.SyntaxKind.ExportAssignment:
 						case ts.SyntaxKind.ImportDeclaration:

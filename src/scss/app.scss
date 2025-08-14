@@ -15,7 +15,7 @@
 @mixin region($area) {
 	grid-area: $area;
 	border-radius: 5px;
-	background-color: white;
+	background-color: #222;
 }
 
 #app {
@@ -30,6 +30,7 @@
 	grid-template-columns: 1fr $gap calc(var(--output) * 1px + $gap) 100px;
 	background: $background;
 	padding-top: var(--titlebar-area-height, 45px);
+	color: #fdfdfd;
 
 	#handler {
 		cursor: ew-resize;
@@ -126,7 +127,7 @@
 				}
 
 				&:empty {
-					background-image: url("../assets/svgs/scrap.svg");
+					background-image: url("@scrap/assets/svgs/scrap.svg");
 					background-size: 80%;
 					background-repeat: no-repeat;
 					background-position: center;
@@ -257,8 +258,7 @@
 	}
 
 	g[data-id="root"] > .blocklyPath {
-		stroke-width: 0 !important;
-		stroke: none !important;
+		opacity: 0;
 	}
 }
 

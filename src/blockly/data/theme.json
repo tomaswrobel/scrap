@@ -1,24 +1,7 @@
-/**
- * This file is a part of Scrap Native, an app for helping to migrate
- * from block-based programming into text-based programming languages.
- *
- * You should have received a copy of the MIT License, if not, please
- * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomaswrobel/scrap.
- *
- * @license MIT
- * @fileoverview Blockly's JSON definition of scrap theme.
- * @copyright Tomáš Wróbel 2025
- *
- * Colors are taken from Blockly's zelos theme, matched to
- * Scrap's categories, which mirror Scratch's a lot.
- */
 {
 	"name": "scrap",
 	"startHats": true,
 	"blockStyles": {
-		// Block styles are capitalised
-		// They are written to match the category labels
 		"Motion": {
 			"colourPrimary": "#4C97FF",
 			"colourSecondary": "#4280D7",
@@ -76,8 +59,6 @@
 		}
 	},
 	"categoryStyles": {
-		// Category styles are lowercase
-		// They are written to match the category labels
 		"motion": {
 			"colour": "#4C97FF"
 		},
@@ -114,9 +95,12 @@
 	},
 	"componentStyles": {
 		"flyoutOpacity": 1,
-		"toolboxBackgroundColour": "#FFFFFF",
-		"workspaceBackgroundColour": "#FDFDFD",
-		"flyoutBackgroundColour": "#FFFFFF"
+		"toolboxBackgroundColour": "#222",
+		"workspaceBackgroundColour": "#333",
+		"flyoutBackgroundColour": "#444",
+		"toolboxForegroundColour": "#FDFDFD",
+		"scrollbarColour": "#575e75",
+		"scrollbarOpacity": 1
 	},
 	"fontStyle": {}
 }

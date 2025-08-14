@@ -11,12 +11,12 @@
  * @copyright Tomáš Wróbel 2025
  */
 import Dialog from "@scrap/utils/dialog";
-import * as Blockly from "blockly";
-import {plugins, sprite, stage, theme, ScrapTypes, TypeToShadowMap} from "../blockly";
-import Blocks from "../code-transformers/codeToBlocks";
-import {bind, load} from "../utils/decorators";
-import {Sprite, Stage} from "../entity";
-import type TabComponent from "./tab";
+import * as Blockly from "blockly/core";
+import {plugins, sprite, stage, theme, ScrapTypes, TypeToShadowMap} from "../../blockly";
+import Blocks from "../../code-transformers/codeToBlocks";
+import {bind, load} from "../../utils/decorators";
+import {Sprite, Stage} from "../../entity";
+import type TabComponent from "../tab";
 import "./workspace.scss";
 
 /**
@@ -59,14 +59,14 @@ export default class Workspace implements TabComponent {
 				kind: "categoryToolbox",
 				contents: app.current instanceof Stage ? stage : sprite,
 			},
-			media: "blockly-media/",
+			media: "/",
 			zoom: {
 				startScale: 0.65,
 			},
 			grid: {
 				spacing: 20,
 				length: 1,
-				colour: "#ddd",
+				colour: "#222",
 			},
 			move: {
 				drag: false,

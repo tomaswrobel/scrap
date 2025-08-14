@@ -6,7 +6,7 @@
  * visit https://opensource.org/licenses/MIT. To verify the code, visit
  * the official repository at https://github.com/tomas-wrobel/scrap. 
  */
-@use "../scss/vars" as *;
+@use "@scrap/scss/vars" as *;
 
 #tabs {
 	grid-area: tabs;
@@ -17,7 +17,7 @@
 		all: unset;
 		display: inline-block;
 		cursor: pointer;
-		border-radius: 16px 16px 0 0;
+		border-radius: 1rem 1rem 0 0;
 		padding: 1px 16px;
 		border: 1px solid rgba(0, 0, 0, 0.1);
 		position: relative;
@@ -25,13 +25,13 @@
 	}
 
 	button:not(.selected) {
-		background-color: #d9e3f2;
-		color: hsla(225, 15%, 40%, 0.75);
+		background-color: #575e75;
+		color: #d9e3f2;
 		height: 70%;
 		z-index: 1;
 
 		&:hover {
-			background-color: #e5f0ff;
+			background-color: #333;
 		}
 	}
 
@@ -39,7 +39,7 @@
 		height: 80%;
 		z-index: 2;
 		color: $primary;
-		background-color: #fff;
+		background-color: #222;
 	}
 }
 

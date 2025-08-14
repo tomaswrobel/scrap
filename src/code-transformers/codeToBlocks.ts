@@ -16,7 +16,7 @@
  * generated in the same order as the code is written. This is done by
  * traversing the AST and creating blocks for each node.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import * as SWC from "@scrap/utils/swc";
 import type {Entity} from "@scrap/entity";
 import {properties, blockToCheck, ScrapTypes} from "@scrap/blockly";
@@ -199,7 +199,7 @@ class CodeToBlocks {
 
 						this.connection = block.getInput("TYPE")!.connection;
 						this.connection!.setShadowState({type: "type"});
-						this.parse(node.typeArguments!.params[0]);
+						this.parse(node.typeArguments?.params[0]);
 
 						node.arguments?.forEach((arg, i) => {
 							this.connection = block.getInput(`ADD${i}`)!.connection;
@@ -577,6 +577,9 @@ class CodeToBlocks {
 				}
 				case "ArrayExpression": {
 					const block = this.block("array");
+
+					this.connection = block.getInput("TYPE")!.connection;
+					this.connection!.setShadowState({type: "type"});
 
 					block.loadExtraState!({
 						items: node.elements.map(element => {

@@ -11,7 +11,7 @@
     <path
         stroke-width="2"
         fill="none" 
-        stroke="#575E75"
+        stroke="currentColor"
         d="M5,15 L15,5"
         stroke-linecap="round"
     />

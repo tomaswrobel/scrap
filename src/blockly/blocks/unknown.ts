@@ -18,7 +18,7 @@
  * blocks, each with a different shape, but those would need
  * different names. This way, we can reuse the same block.
  */
-import type * as Blockly from "blockly";
+import type * as Blockly from "blockly/core";
 
 export type UnknownBlock = Blockly.BlockSvg & UnknownBlockMixin;
 export interface UnknownBlockMixin extends UnknownBlockMixinType {}

@@ -16,7 +16,7 @@
  * are either strings or arrays - they are expanded
  * into multiple items (via JavaScript's spread operator).
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import {TypeToShadowMap, blockToCheck} from "../types";
 
 export type ArrayBlock = Blockly.BlockSvg & ArrayBlockMixin;

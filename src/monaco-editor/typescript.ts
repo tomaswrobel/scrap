@@ -283,7 +283,7 @@ const modeConfigurationDefault: Required<ModeConfiguration> = {
 };
 
 export const typescriptDefaults: LanguageServiceDefaults = new LanguageServiceDefaultsImplementation(
-	{allowNonTsExtensions: true, target: ScriptTarget.Latest},
+	{allowNonTsExtensions: true, target: ScriptTarget.ES2015, isolatedModules: true},
 	{noSemanticValidation: false, noSyntaxValidation: false, onlyVisible: false},
 	{},
 	{},

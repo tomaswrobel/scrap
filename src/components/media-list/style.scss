@@ -10,43 +10,43 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview Media list component.
  */
-@use "../scss/vars" as *;
+@use "@scrap/scss/vars" as *;
 
 .media-list {
 	display: flex;
 	flex-direction: column;
 	align-content: center;
 	overflow-y: auto;
-	gap: 15px;
-	padding: 7.5px;
+	gap: 1rem;
+	padding: 0.5rem;
 	background: $background;
 
 	+ .fab {
-		margin-bottom: 15px;
+		margin-bottom: 1rem;
 	}
 }
 
 .media-element {
-	width: 67.5px;
-	height: 67.5px;
+	width: 4.25rem;
+	height: 4.25rem;
 	display: flex;
 	flex-direction: column;
-	border-radius: 7.5px;
+	border-radius: 0.25rem;
 	border: 2px solid hsla(0, 0%, 0%, 0.15);
 
 	> img {
 		display: block;
 		margin: auto;
-		height: 45px;
+		height: 2.8125rem;
 		aspect-ratio: 1;
 		object-fit: contain;
 	}
 
 	.name {
-		padding: 3.75px;
+		padding: 0.2344rem;
 		text-align: center;
-		font-size: 9px;
-		border-radius: 0 0 3px 3px;
+		font-size: 0.5625rem;
+		border-radius: 0 0 0.1875rem 0.1875rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -68,7 +68,7 @@
 		user-select: none;
 		cursor: pointer;
 
-		padding: 0 4px;
+		padding: 0 0.25rem;
 		aspect-ratio: 1;
 
 		display: flex;
@@ -77,7 +77,7 @@
 
 		&::before {
 			content: "×";
-			font-size: 12px;
+			font-size: 0.75rem;
 			color: white;
 		}
 	}

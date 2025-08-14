@@ -18,7 +18,7 @@
  * and the immovability of the block help to blend it in with the
  * parent block.
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 import FieldParam from "../fields/field_param";
 import FieldIdentifier from "../fields/field_identifier";
 import {blockToCheck} from "../types";

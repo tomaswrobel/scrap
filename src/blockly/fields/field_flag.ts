@@ -10,14 +10,12 @@
  * @fileoverview Scratch-like flag icon.
  * @copyright Tomáš Wróbel 2025
  */
-import * as Blockly from "blockly";
-import fs from "fs";
-
-const data = fs.readFileSync("src/assets/icons/stage/flag.svg", "base64");
+import * as Blockly from "blockly/core";
+import data from "@scrap/assets/icons/stage/flag.svg";
 
 export default class extends Blockly.FieldImage {
 	constructor() {
-		super(`data:image/svg+xml;base64,${data}`, 24, 24, "flag");
+		super(data, 24, 24, "flag");
 	}
 
 	public static override fromJson() {

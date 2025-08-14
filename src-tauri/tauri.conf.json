@@ -4,9 +4,9 @@
 	"version": "6.3.0",
 	"identifier": "dev.tomaswrobel.scrap",
 	"build": {
-		"beforeBuildCommand": "pnpm build",
-		"beforeDevCommand": "pnpm dev",
-		"devUrl": "http://localhost:1234",
+		"beforeBuildCommand": "pnpm vite build",
+		"beforeDevCommand": "pnpm vite",
+		"devUrl": "http://localhost:1420",
 		"frontendDist": "../dist"
 	},
 	"app": {
