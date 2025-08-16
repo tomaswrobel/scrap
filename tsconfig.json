@@ -7,17 +7,16 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview TypeScript configuration file.
  */
 {
 	"compilerOptions": {
 		"target": "ES2017",
-		"lib": ["ES2017", "DOM", "DOM.Iterable"],
+		"lib": ["ES2017"],
 		"experimentalDecorators": true,
 		"useDefineForClassFields": true,
 		"types": [],
-		"typeRoots": ["./node_modules/@types"],
 
 		// Bundler mode
 		"moduleResolution": "bundler",
@@ -38,7 +37,7 @@
 			"@scrap/*": ["./src/*"]
 		}
 	},
-	"include": ["src", "pwa", "vite.config.ts"],
+	"include": ["src", "*.config.js"],
 	"exclude": ["src/typings"],
 	"references": [{"path": "./src/typings/static/tsconfig.json"}, {"path": "./src/typings/runtime/tsconfig.json"}]
 }

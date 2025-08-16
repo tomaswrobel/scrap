@@ -6,7 +6,7 @@
  *
  * @license MIT
  * @fileoverview SWC visitor for transforming Scrap's TypeScript code.
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  */
 use swc_core::{
     atoms::Atom,
@@ -374,56 +374,51 @@ impl VisitMut for JavaScript {
                                 || atom == "penColor"
                                 || atom == "penSize"
                             {
-                                *node =
-                                    Expr::Await(AwaitExpr {
+                                *node = Expr::Await(AwaitExpr {
+                                    span: DUMMY_SP,
+                                    arg: Box::new(Expr::Call(CallExpr {
                                         span: DUMMY_SP,
-                                        arg: Box::new(Expr::Call(CallExpr {
+                                        callee: Callee::Expr(Box::new(Expr::Member(MemberExpr {
                                             span: DUMMY_SP,
-                                            callee: Callee::Expr(Box::new(Expr::Member(
-                                                MemberExpr {
+                                            obj: left.obj.clone(),
+                                            prop: MemberProp::Ident(IdentName {
+                                                sym: format!(
+                                                    "set{}",
+                                                    self.capitalize_first(atom.clone())
+                                                )
+                                                .into(),
+                                                ..Default::default()
+                                            }),
+                                        }))),
+                                        args: vec![match operator {
+                                            Some(op) => ExprOrSpread {
+                                                expr: Box::new(Expr::Bin(BinExpr {
                                                     span: DUMMY_SP,
-                                                    obj: left.obj.clone(),
-                                                    prop: MemberProp::Ident(IdentName {
-                                                        sym: format!(
-                                                            "set{}",
-                                                            self.capitalize_first(atom.clone())
-                                                        )
-                                                        .into(),
-                                                        ..Default::default()
-                                                    }),
-                                                },
-                                            ))),
-                                            args: vec![
-												match operator {
-													Some(op) => ExprOrSpread {
-														expr: Box::new(Expr::Bin(BinExpr {
-															span: DUMMY_SP,
-															op,
-															left: Box::new(Expr::Await(AwaitExpr {
-																span: DUMMY_SP,
-																arg: Box::new(Expr::Member(MemberExpr {
-																	span: DUMMY_SP,
-																	obj: left.obj.clone(),
-																	prop: MemberProp::Ident(IdentName {
-																		sym: atom.clone().into(),
-																		..Default::default()
-																	}),
-																})),
-															})),
-															right: assign.right.clone(),
-														})),
-														spread: None,
-													},
-													None => ExprOrSpread {
-														expr: assign.right.clone(),
-														spread: None,
-													}
-												}
-											],
-                                            type_args: None,
-                                            ..Default::default()
-                                        })),
-                                    });
+                                                    op,
+                                                    left: Box::new(Expr::Await(AwaitExpr {
+                                                        span: DUMMY_SP,
+                                                        arg: Box::new(Expr::Member(MemberExpr {
+                                                            span: DUMMY_SP,
+                                                            obj: left.obj.clone(),
+                                                            prop: MemberProp::Ident(IdentName {
+                                                                sym: atom.clone().into(),
+                                                                ..Default::default()
+                                                            }),
+                                                        })),
+                                                    })),
+                                                    right: assign.right.clone(),
+                                                })),
+                                                spread: None,
+                                            },
+                                            None => ExprOrSpread {
+                                                expr: assign.right.clone(),
+                                                spread: None,
+                                            },
+                                        }],
+                                        type_args: None,
+                                        ..Default::default()
+                                    })),
+                                });
                             } else if atom == "direction" {
                                 *node = Expr::Await(AwaitExpr {
                                     span: DUMMY_SP,

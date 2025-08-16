@@ -16,7 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 -   dependencies update
-.	retheme
+-	a complete rertheme
+-	Using Vite instead of Parcel
 -	Blockly 12
 -   file structure, better naming
 

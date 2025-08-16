@@ -7,7 +7,7 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @copyright Tomáš Wróbel 2024
+ * @copyright Tomáš Wróbel 2025
  * @fileoverview ESLint configuration file.
  */
 import eslint from "@eslint/js";
@@ -64,12 +64,9 @@ export default tseslint.config({
 		"@typescript-eslint/dot-notation": "error",
 		"@typescript-eslint/no-unused-vars": ["error", {args: "none"}],
 
-		// These rules are for people
-		// who don't know JavaScript well.
 		"no-var": "off",
 		"require-yield": "off",
 		"prefer-template": "error",
-		"@typescript-eslint/no-require-imports": "off",
 		"@typescript-eslint/no-empty-object-type": "off",
 		"@typescript-eslint/no-unnecessary-type-assertion": "error",
 	},
