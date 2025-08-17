@@ -13,7 +13,7 @@
 {
 	"compilerOptions": {
 		"target": "ES2017",
-		"lib": ["ES2017"],
+		"lib": ["ES2017", "DOM", "DOM.Iterable"],
 		"experimentalDecorators": true,
 		"useDefineForClassFields": true,
 		"types": [],

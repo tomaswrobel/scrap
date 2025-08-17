@@ -1,0 +1,173 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Logo from "../assets/scrap.svg";
+import Windows from "@fortawesome/fontawesome-free/svgs/brands/windows.svg";
+import MacOS from "@fortawesome/fontawesome-free/svgs/brands/apple.svg";
+import Linux from "@fortawesome/fontawesome-free/svgs/brands/linux.svg";
+import GitHub from "@fortawesome/fontawesome-free/svgs/brands/github.svg";
+import Bars from "@fortawesome/fontawesome-free/svgs/solid/bars.svg";
+import Debian from "@fortawesome/fontawesome-free/svgs/brands/debian.svg";
+import Fedora from "@fortawesome/fontawesome-free/svgs/brands/fedora.svg";
+import TypeScript from "../assets/code.txt?raw";
+import Blocks from "../assets/code.svg";
+import {Code} from "astro:components";
+import "../css/base.css";
+import "../css/compare.css";
+import "../css/footer.css";
+import "../css/hero.css";
+import "../css/nav.css";
+import "../css/sections.css";
+---
+
+<Layout
+	title="Scrap – Visual Programming Editor for All Creators"
+	description="Scrap is a revolutionary visual programming editor that combines intuitive block-based coding with the full power of TypeScript. Perfect for creators of all levels."
+>
+	<label class="navbar-toggle" aria-label="Open navigation" tabindex="0">
+		<Bars fill="white" height={24} width={24} />
+		<input type="checkbox" class="sr-only" />
+	</label>
+	<nav aria-label="Main navigation">
+		<ul>
+			<li><a href="#hero">Home</a></li>
+			<li><a href="#about">About</a></li>
+			<li><a href="#features">Features</a></li>
+			<li><a href="#compare">Compare</a></li>
+		</ul>
+	</nav>
+	<section id="hero">
+		<div class="container">
+			<h1><Logo height={100} aria-label="Scrap" /></h1>
+			<p class="subtitle">A revolutionary visual programming editor for all creators</p>
+			<p class="description">
+				Scrap is an intuitive editor for building interactive projects using block-based programming, inspired
+				by Scratch but with the full power of TypeScript. Start creating, learning, and prototyping faster than
+				ever before!
+			</p>
+			<div class="cta-buttons">
+				<a
+					href="https://github.com/tomaswrobel/scrap"
+					class="primary"
+					target="_blank"
+					title="Source code on GitHub"
+				>
+					<GitHub height={28} style="vertical-align: middle;" />
+					<span class="hide-on-mobile">Source code</span>
+				</a>
+				<a href="/download?platform=windows" download title="Download for Windows">
+					<Windows height={28} style="vertical-align: middle;" />
+					<span class="sr-only">Download for Windows</span>
+				</a>
+				<a href="/download?platform=macos" download title="Download for macOS">
+					<MacOS height={28} style="vertical-align: middle;" />
+					<span class="sr-only">Download for macOS</span>
+				</a>
+				<a href="/download?platform=linux" download title="Download for Linux">
+					<Linux height={28} style="vertical-align: middle;" />
+					<span class="sr-only">Download for Linux</span>
+				</a>
+				<a href="/download?platform=debian" download title="Download for Linux (DEB)" class="hide-on-mobile">
+					<Debian height={28} style="vertical-align: middle;" />
+					<span class="sr-only">Download for Linux (DEB)</span>
+				</a>
+				<a href="/download?platform=fedora" download title="Download for Linux (RPM)" class="hide-on-mobile">
+					<Fedora height={28} style="vertical-align: middle;" />
+					<span class="sr-only">Download for Linux (RPM)</span>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section id="features">
+		<div class="container">
+			<h2>Main Features</h2>
+			<ul>
+				<li class="with-asterisk">⚡ Block-based programming with TypeScript switch</li>
+				<li>🎨 Built-in image editor</li>
+				<li class="with-asterisk">🔌 Compatible with Scratch 3</li>
+				<li>🌐 Open source</li>
+				<li>🚀 Export and use outside of Scrap</li>
+			</ul>
+			<small>* partial incompatibility</small>
+		</div>
+	</section>
+
+	<section id="about">
+		<div class="container">
+			<h2>What Makes Scrap Unique?</h2>
+			<p>
+				Scrap is a unique visual programming environment that helps users transition from block-based to
+				text-based coding. It offers a
+				<strong>seamless switch between a block editor and a TypeScript code editor</strong>, ensuring a smooth
+				learning curve for anyone interested in programming.
+			</p>
+			<h3>Type Safety:</h3>
+			<p>
+				Scrap enforces type safety in both the block and code editors, preventing incompatible connections and
+				invalid code.
+			</p>
+			<h3>Seamless Conversion:</h3>
+			<p>
+				You can convert code to blocks and vice versa, which is a great way to learn JavaScript and TypeScript
+				syntax.
+			</p>
+			<h3>Native Code:</h3>
+			<p>
+				Unlike other platforms, Scrap compiles your code directly to JavaScript, so your projects can run on any
+				device. You can even export them as standalone HTML files to share with others.
+			</p>
+			<h3>Powered by the VSCode's core:</h3>
+			<p>
+				The code editor is built on an extended version of the Monaco Editor, providing features like
+				<strong> TypeScript IntelliSense</strong>, syntax highlighting that mirrors block colors, and warnings
+				for block-incompatible code.
+			</p>
+		</div>
+	</section>
+
+	<section id="compare">
+		<div class="container compare-flex">
+			<h2>Learn by Comparing</h2>
+			<p class="compare-lead">
+				Scrap lets you seamlessly switch between block-based programming and TypeScript code. This unique
+				approach helps you understand how visual blocks translate to real code, making programming more
+				accessible and educational for everyone.
+			</p>
+			<div class="compare-cards">
+				<div class="compare-card">
+					<h3>Blocks</h3>
+					<Blocks class="compare-img" />
+				</div>
+				<div class="compare-card">
+					<h3>TypeScript</h3>
+					<Code class="compare-code" lang="typescript" code={TypeScript} />
+				</div>
+			</div>
+			<p class="compare-note">
+				<strong>Educational Value:</strong> By seeing the direct connection between blocks and code, learners quickly
+				grasp programming concepts and syntax. Scrap is perfect for schools, workshops, and self-learners alike!
+			</p>
+		</div>
+	</section>
+
+	<footer>
+		<div class="container">
+			<p>
+				&copy; 2025
+				<a href="https://tomaswrobel.dev" target="_blank" rel="noopener">Tomáš Wróbel</a>. Under the
+				<a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT License</a>.
+			</p>
+		</div>
+	</footer>
+
+	<script>
+		const nav = document.querySelector("nav");
+		const toggle = document.getElementById("navbar-toggle");
+
+		if (nav && toggle) {
+			toggle.addEventListener("click", () => {
+				nav.classList.toggle("open");
+			});
+		}
+	</script>
+</Layout>
