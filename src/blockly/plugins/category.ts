@@ -12,7 +12,7 @@
  * From: @blockly/continuous-toolbox@1.0.5
  * To: TypeScript, Scrap modifications
  */
-import * as Blockly from "blockly";
+import * as Blockly from "blockly/core";
 
 export class Category extends Blockly.ToolboxCategory {
 	constructor(categoryDef: Blockly.utils.toolbox.CategoryInfo, toolbox: Blockly.IToolbox) {

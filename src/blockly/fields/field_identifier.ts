@@ -11,7 +11,7 @@
  * @fileoverview Custom Blockly field for valid JS identifier.
  */
 import * as Blockly from "blockly/core";
-import {reservedWords} from "../../code-transformers/utils";
+import {reservedWords} from "@scrap/code-transformers/utils";
 
 export default class FieldIdentifier extends Blockly.FieldTextInput {
 	public onFinish?: (result: string) => void;

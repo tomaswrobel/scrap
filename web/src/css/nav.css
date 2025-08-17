@@ -34,7 +34,6 @@ nav {
 	display: flex;
 	flex-direction: column;
 	padding-top: 6rem;
-	background-image: url("scrap.svg");
 	background-size: auto 48px;
 	background-repeat: no-repeat;
 	background-position: 1.5rem 1.5rem;

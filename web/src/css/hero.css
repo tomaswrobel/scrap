@@ -8,12 +8,13 @@
 		width: 120px;
 		margin-bottom: 1.5rem;
 	}
-	
+
 	h1 {
 		font-size: 3rem;
-		margin-bottom: 0.5rem;
+		height: 6rem;
+		margin: 0 auto 0.5rem auto;
 	}
-	
+
 	.subtitle {
 		font-size: 1.5rem;
 		margin-bottom: 1.5rem;
@@ -23,7 +24,7 @@
 		font-size: 1.1rem;
 		margin-bottom: 2rem;
 	}
-	
+
 	.cta-buttons {
 		display: flex;
 		justify-content: center;

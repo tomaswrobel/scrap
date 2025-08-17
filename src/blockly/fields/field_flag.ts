@@ -11,7 +11,7 @@
  * @copyright Tomáš Wróbel 2025
  */
 import * as Blockly from "blockly/core";
-import data from "@scrap/assets/icons/stage/flag.svg";
+import data from "@scrap/assets/icons/stage/flag.svg?url&inline";
 
 export default class extends Blockly.FieldImage {
 	constructor() {

@@ -16,7 +16,8 @@
 		"lib": ["ES2017", "DOM", "DOM.Iterable"],
 		"experimentalDecorators": true,
 		"useDefineForClassFields": true,
-		"types": [],
+		"types": ["astro/client"],
+		"skipLibCheck": true,
 
 		// Bundler mode
 		"moduleResolution": "bundler",
@@ -37,7 +38,7 @@
 			"@scrap/*": ["./src/*"]
 		}
 	},
-	"include": ["src", "*.config.js"],
+	"include": ["src", "*.config.js", "web"],
 	"exclude": ["src/typings"],
 	"references": [{"path": "./src/typings/static/tsconfig.json"}, {"path": "./src/typings/runtime/tsconfig.json"}]
 }

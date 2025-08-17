@@ -26,6 +26,7 @@
 	width: 100%;
 }
 .compare-card {
+	flex: 1;
 	background: #fff;
 	border-radius: 1rem;
 	box-shadow: 0 2px 12px rgba(30, 41, 59, 0.08);
@@ -54,7 +55,7 @@
 	padding: 1rem;
 	width: 100%;
 	margin-bottom: 0.5rem;
-	tab-size: 2;
+	tab-size: 4;
 	height: 100%;
 }
 
@@ -63,12 +64,6 @@
 	color: #334155;
 	text-align: center;
 	max-width: 700px;
-}
-
-@media (min-width: 500px) {
-	.compare-code {
-		tab-size: 4;
-	}
 }
 
 section h2 {

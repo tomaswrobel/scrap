@@ -49,6 +49,12 @@
 		height: 100%;
 	}
 
+	&.loading,
+	&.loading + ul[role="navigation"] {
+		opacity: 0;
+		pointer-events: none;
+	}
+
 	+ ul[role="navigation"] {
 		list-style-type: none;
 		margin: 0;

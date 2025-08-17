@@ -1,6 +1,7 @@
 ---
+/// <reference types="astro/client" />
 import Layout from "../layouts/Layout.astro";
-import Logo from "../assets/scrap.svg";
+import LogoURL from "@scrap/assets/svgs/scrap.svg?url";
 import Windows from "@fortawesome/fontawesome-free/svgs/brands/windows.svg";
 import MacOS from "@fortawesome/fontawesome-free/svgs/brands/apple.svg";
 import Linux from "@fortawesome/fontawesome-free/svgs/brands/linux.svg";
@@ -27,7 +28,7 @@ import "../css/sections.css";
 		<Bars fill="white" height={24} width={24} />
 		<input type="checkbox" class="sr-only" />
 	</label>
-	<nav aria-label="Main navigation">
+	<nav aria-label="Main navigation" style={`background-image: url('${LogoURL}');`}>
 		<ul>
 			<li><a href="#hero">Home</a></li>
 			<li><a href="#about">About</a></li>
@@ -37,7 +38,7 @@ import "../css/sections.css";
 	</nav>
 	<section id="hero">
 		<div class="container">
-			<h1><Logo height={100} aria-label="Scrap" /></h1>
+			<h1 style={`content: url('${LogoURL}');`}>Scrap</h1>
 			<p class="subtitle">A revolutionary visual programming editor for all creators</p>
 			<p class="description">
 				Scrap is an intuitive editor for building interactive projects using block-based programming, inspired
@@ -104,13 +105,18 @@ import "../css/sections.css";
 			<h3>Type Safety:</h3>
 			<p>
 				Scrap enforces type safety in both the block and code editors, preventing incompatible connections and
-				invalid code.
+				invalid code. Most platforms do not teach about types &ndash; which is crucial for real-world
+				programming &ndash; but Scrap does it right from the start.
 			</p>
-			<h3>Seamless Conversion:</h3>
+			<h3>Scratch-like blocks:</h3>
 			<p>
-				You can convert code to blocks and vice versa, which is a great way to learn JavaScript and TypeScript
-				syntax.
+				Many <a href="https://developers.google.com/blockly" target="_blank" rel="noopener">Blockly</a> applications
+				offer block-based programming, but do not use Scratch-like blocks. Scrap uses a
+				<a href="https://scratch.mit.edu/" target="_blank" rel="noopener">Scratch</a>-like block design, making
+				it familiar to millions of users. Scrap still manages to make the blocks more powerful, though. Take a
+				look at this <code>if</code> block, for example:
 			</p>
+			<div id="blockly" style="width: 100%; aspect-ratio: 16 / 9; margin: 1rem 0;"></div>
 			<h3>Native Code:</h3>
 			<p>
 				Unlike other platforms, Scrap compiles your code directly to JavaScript, so your projects can run on any
@@ -140,7 +146,7 @@ import "../css/sections.css";
 				</div>
 				<div class="compare-card">
 					<h3>TypeScript</h3>
-					<Code class="compare-code" lang="typescript" code={TypeScript} />
+					<Code wrap class="compare-code" lang="typescript" code={TypeScript} />
 				</div>
 			</div>
 			<p class="compare-note">
@@ -161,13 +167,23 @@ import "../css/sections.css";
 	</footer>
 
 	<script>
-		const nav = document.querySelector("nav");
-		const toggle = document.getElementById("navbar-toggle");
+		async function main(this: any) {
+			const {Stage} = await import("@scrap/entity");
+			const {default: Workspace} = await import("@scrap/components/workspace");
+			const appstage = new Stage();
 
-		if (nav && toggle) {
-			toggle.addEventListener("click", () => {
-				nav.classList.toggle("open");
-			});
+			appstage.workspace.newBlock("controls_if").initModel();
+
+			this.app = {
+				current: appstage,
+				entities: [appstage],
+				container: document.getElementById("blockly")!,
+			};
+
+			const workspace = new Workspace();
+			workspace.render();
 		}
+
+		window?.addEventListener("load", main);
 	</script>
 </Layout>

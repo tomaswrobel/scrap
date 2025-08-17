@@ -12,12 +12,12 @@
  */
 import Dialog from "@scrap/utils/dialog";
 import * as Blockly from "blockly/core";
-import {plugins, sprite, stage, theme, ScrapTypes, TypeToShadowMap} from "../../blockly";
-import Blocks from "../../code-transformers/codeToBlocks";
-import {bind, load} from "../../utils/decorators";
-import {Sprite, Stage} from "../../entity";
+import {plugins, sprite, stage, theme, ScrapTypes, TypeToShadowMap} from "@scrap/blockly";
+import Blocks from "@scrap/code-transformers/codeToBlocks";
+import {bind, load} from "@scrap/utils/decorators";
+import {Sprite, Stage} from "@scrap/entity";
 import type TabComponent from "../tab";
-import "./workspace.scss";
+import "./style.scss";
 
 /**
  * Workspace component is a tab that displays the Blockly workspace.
@@ -27,7 +27,7 @@ export default class Workspace implements TabComponent {
 	public workspace!: Blockly.WorkspaceSvg;
 	public name = "Blocks";
 
-	constructor() {
+	constructor(private mediaPath?: string) {
 		this.container.classList.add("blockly", "tab-content");
 		Blockly.setParentContainer(this.container);
 	}
@@ -59,7 +59,7 @@ export default class Workspace implements TabComponent {
 				kind: "categoryToolbox",
 				contents: app.current instanceof Stage ? stage : sprite,
 			},
-			media: "/",
+			media: this.mediaPath,
 			zoom: {
 				startScale: 0.65,
 			},

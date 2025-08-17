@@ -41,7 +41,7 @@ export default class App {
 	private spritePanelBlock!: Blockly.BlockSvg;
 	private tabs!: Tabs;
 
-	private readonly workspace = new Workspace();
+	private readonly workspace = new Workspace("/");
 	public readonly code = new CodeEditor();
 
 	public entities = new Array<Entity>();
@@ -106,7 +106,7 @@ export default class App {
 
 		// Finalize
 		document.title = `${productName} v${version}`;
-		this.container.style.removeProperty("opacity");
+		document.body.style.removeProperty("opacity");
 	}
 
 	@bind
@@ -122,7 +122,6 @@ export default class App {
 		try {
 			for (const entity of this.entities) {
 				code += await entity.preview();
-				code += "\n\n";
 			}
 
 			script.textContent = code;

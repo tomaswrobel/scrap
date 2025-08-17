@@ -30,6 +30,10 @@
 		height: unset;
 	}
 
+	&ToolboxCategoryGroup {
+		margin: 0 auto;
+	}
+
 	&TreeSelected {
 		position: relative;
 
@@ -47,7 +51,6 @@
 
 	&Toolbox {
 		padding-top: 0;
-		scrollbar-gutter: stable;
 		position: static;
 		width: fit-content;
 	}

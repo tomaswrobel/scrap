@@ -11,8 +11,6 @@
  * @fileoverview Global types for Scrap.
  */
 
-/// <reference types="vite/client" />
-
 /**
  * Variable type.
  * Either a string or an array of strings (union type).

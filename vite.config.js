@@ -1,4 +1,4 @@
-import * as path from "path";
+import * as path from "node:path";
 import {defineConfig} from "vite";
 
 const host = process.env.TAURI_DEV_HOST;

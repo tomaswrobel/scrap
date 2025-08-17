@@ -12,7 +12,7 @@
  */
 import {Menu, MenuItem} from "@tauri-apps/api/menu";
 import {LogicalPosition} from "@tauri-apps/api/dpi";
-import Note from "@scrap/assets/svgs/note.svg";
+import Note from "@scrap/assets/svgs/note.svg?url";
 import * as path from "path";
 import "./style.scss";
 
