@@ -72,7 +72,7 @@ jobs:
           echo "" >> "$GITHUB_OUTPUT"
           echo "# Changelog" >> "$GITHUB_OUTPUT"
           echo "" >> "$GITHUB_OUTPUT"
-          node src/changelog.js
+          node --experimental-transform-types src/changelog.ts
           echo "" >> "$GITHUB_OUTPUT"
           echo "EOF" >> $GITHUB_OUTPUT
 
