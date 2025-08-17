@@ -1,5 +1,5 @@
 /**
- * This file is a part of Scrap Native, an app for helping to migrate
+ * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
  *
  * You should have received a copy of the MIT License, if not, please
@@ -27,7 +27,7 @@ export default class Workspace implements TabComponent {
 	public workspace!: Blockly.WorkspaceSvg;
 	public name = "Blocks";
 
-	constructor(private mediaPath?: string) {
+	constructor() {
 		this.container.classList.add("blockly", "tab-content");
 		Blockly.setParentContainer(this.container);
 	}
@@ -59,7 +59,7 @@ export default class Workspace implements TabComponent {
 				kind: "categoryToolbox",
 				contents: app.current instanceof Stage ? stage : sprite,
 			},
-			media: this.mediaPath,
+			media: "/",
 			zoom: {
 				startScale: 0.65,
 			},

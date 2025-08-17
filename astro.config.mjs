@@ -6,12 +6,15 @@ import path from "node:path";
 // https://astro.build/config
 export default defineConfig({
 	adapter: vercel(),
+	srcDir: "./web",
+	publicDir: "./node_modules/blockly/media",
+	outDir: "./web/dist",
 	vite: {
 		resolve: {
 			alias: [
 				{
 					find: "@scrap",
-					replacement: path.resolve(import.meta.dirname, "../src"),
+					replacement: path.resolve(import.meta.dirname, "./src"),
 				},
 			],
 		},

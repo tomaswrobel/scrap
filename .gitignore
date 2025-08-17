@@ -1,13 +1,18 @@
-# Parcel.js
-.parcel-cache/
+# Vite
 dist/
 
-# Yarn
+# Astro
+.astro
+web/dist/
+
+# PNPM
+.pnpm/
 node_modules/
-yarn-error.log*
-yarn-debug.log*
 
 # Tauri
 src-tauri/target/
 src-tauri/icons/
 src-tauri/gen/
+
+# Log files
+*.log

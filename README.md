@@ -1,10 +1,10 @@
-# Scrap Native
+# Scrap
 
 ![Scrap Engine Version][engine-badge] ![Built on blocky][blockly-badge]
 <img src="src/assets/scrap.svg" alt="Logo" title="Scrap" height="20px">
 
-Welcome to the repository of **Scrap Native** &ndash; the next version of [Scrap](https://github.com/tomaswrobel/scrap),
-now as a desktop application.
+Welcome to the repository of **Scrap** &ndash; the next version of [Scrap](https://github.com/tomaswrobel/scrap), now as
+a desktop application.
 
 ## Table of Contents
 
@@ -143,7 +143,7 @@ of JavaScript more easily.
 
 ## Roadmap
 
-Scrap Native is still in its early stages of development.
+Scrap is still in its early stages of development.
 
 ### Planned
 
@@ -160,7 +160,7 @@ Scrap Native is still in its early stages of development.
 ### Finished
 
 -   [x] **Native App** - Scrap no longer runs in the browser. It is now a native application for Linux, Android, iOS,
-        and Windows. (Scrap Native v1)
+        and Windows. (Scrap v1)
 
 -   [x] **Builtin code editor** - Scrap now has a built-in code editor powered by Monaco Editor. It highlights syntax to
         be the same as blocks, provides autocompletion, checks for errors, and more. (Scrap 4)

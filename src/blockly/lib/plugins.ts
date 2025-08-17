@@ -1,5 +1,5 @@
 /**
- * This file is a part of Scrap Native, an app for helping to migrate
+ * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
  *
  * You should have received a copy of the MIT License, if not, please
@@ -15,4 +15,3 @@ import "../plugins/block-image";
 import "../plugins/category";
 
 export {ConnectionChecker as connectionChecker} from "../plugins/connection-checker";
-

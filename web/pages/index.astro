@@ -9,7 +9,7 @@ import GitHub from "@fortawesome/fontawesome-free/svgs/brands/github.svg";
 import Bars from "@fortawesome/fontawesome-free/svgs/solid/bars.svg";
 import Debian from "@fortawesome/fontawesome-free/svgs/brands/debian.svg";
 import Fedora from "@fortawesome/fontawesome-free/svgs/brands/fedora.svg";
-import TypeScript from "../assets/code.txt?raw";
+import TypeScript from "../assets/code.ts?raw";
 import Blocks from "../assets/code.svg";
 import {Code} from "astro:components";
 import "../css/base.css";
@@ -18,6 +18,7 @@ import "../css/footer.css";
 import "../css/hero.css";
 import "../css/nav.css";
 import "../css/sections.css";
+import {author, repository} from "../../package.json";
 ---
 
 <Layout
@@ -47,7 +48,7 @@ import "../css/sections.css";
 			</p>
 			<div class="cta-buttons">
 				<a
-					href="https://github.com/tomaswrobel/scrap"
+					href={repository.url}
 					class="primary"
 					target="_blank"
 					title="Source code on GitHub"
@@ -160,7 +161,7 @@ import "../css/sections.css";
 		<div class="container">
 			<p>
 				&copy; 2025
-				<a href="https://tomaswrobel.dev" target="_blank" rel="noopener">Tomáš Wróbel</a>. Under the
+				<a href={author.url} target="_blank" rel="noopener">{author.name}</a>. Under the
 				<a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT License</a>.
 			</p>
 		</div>

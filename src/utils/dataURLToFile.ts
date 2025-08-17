@@ -1,5 +1,5 @@
 /**
- * This file is a part of Scrap Native, an app for helping to migrate
+ * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
  *
  * You should have received a copy of the MIT License, if not, please
@@ -11,10 +11,10 @@
  * @copyright Tomáš Wróbel 2025
  */
 /**
- * 
- * @param dataURL 
- * @param filename 
- * @returns 
+ *
+ * @param dataURL
+ * @param filename
+ * @returns
  */
 export function dataURLToFile(dataURL: string, filename: string) {
 	const parts = dataURL.split(";");

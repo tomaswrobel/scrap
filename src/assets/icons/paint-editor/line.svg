@@ -1,5 +1,5 @@
 <!--
-	This file is a part of Scrap Native, an app for helping to migrate
+	This file is a part of Scrap, an app for helping to migrate
 	from block-based programming into text-based programming languages.
 	You should have received a copy of the MIT License, if not, please
 	visit https://opensource.org/licenses/MIT. To verify the code, visit
@@ -8,11 +8,5 @@
 	Graphic design by Scratch, SVG code edited. 
  -->
 <svg width="20" height="20" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <path
-        stroke-width="2"
-        fill="none" 
-        stroke="currentColor"
-        d="M5,15 L15,5"
-        stroke-linecap="round"
-    />
+	<path stroke-width="2" fill="none" stroke="currentColor" d="M5,15 L15,5" stroke-linecap="round" />
 </svg>

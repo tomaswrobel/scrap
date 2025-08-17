@@ -1,5 +1,5 @@
 <!--
-	This file is a part of Scrap Native, an app for helping to migrate
+	This file is a part of Scrap, an app for helping to migrate
 	from block-based programming into text-based programming languages.
 	You should have received a copy of the MIT License, if not, please
 	visit https://opensource.org/licenses/MIT. To verify the code, visit
@@ -8,5 +8,12 @@
 	Graphic design by Scratch, SVG code edited. 
  -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
-	<polygon fill="#EC5959" stroke="#B84848" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="4.3,0.5 9.7,0.5 13.5,4.3 13.5,9.7 9.7,13.5 4.3,13.5 0.5,9.7 0.5,4.3 "/>
+	<polygon
+		fill="#EC5959"
+		stroke="#B84848"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		stroke-miterlimit="10"
+		points="4.3,0.5 9.7,0.5 13.5,4.3 13.5,9.7 9.7,13.5 4.3,13.5 0.5,9.7 0.5,4.3 "
+	/>
 </svg>

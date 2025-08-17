@@ -1,12 +1,17 @@
 {
-	"name": "scrap-native",
+	"name": "scrap",
 	"private": true,
 	"type": "module",
 	"version": "0.0.0",
+	"license": "MIT",
 	"author": {
 		"name": "Tomáš Wróbel",
 		"email": "mail@tomaswrobel.dev",
 		"url": "https://tomaswrobel.dev"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tomaswrobel/scrap"
 	},
 	"dependencies": {
 		"@blockly/continuous-toolbox": "^7.0.2",
@@ -32,7 +37,7 @@
 		"wavesurfer.js": "7.10.1"
 	},
 	"devDependencies": {
-		"@astrojs/vercel": "^8.2.6",
+		"@astrojs/vercel": "8.2.6",
 		"@eslint/js": "9.33.0",
 		"@parcel/config-default": "2.15.4",
 		"@parcel/core": "2.15.4",
@@ -54,7 +59,7 @@
 		"sass": "1.90.0",
 		"svgo": "4.0.0",
 		"typescript-eslint": "8.39.1",
-		"vite": "^7.1.2"
+		"vite": "7.1.2"
 	},
 	"scripts": {
 		"icon": "tauri icon src/assets/icon.svg --ios-color '#199950'",

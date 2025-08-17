@@ -1,6 +1,6 @@
 [package]
 name = "scrap-native"
-description = "Scrap Native"
+description = "Scrap"
 authors = ["Tomáš Wróbel <mail@tomaswrobel.dev>"]
 edition = "2021"
 publish = false
