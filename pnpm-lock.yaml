@@ -73,7 +73,7 @@ importers:
         version: 7.10.1
     devDependencies:
       '@astrojs/vercel':
-        specifier: ^8.2.6
+        specifier: 8.2.6
         version: 8.2.6(astro@5.13.2(@types/node@24.3.0)(lightningcss@1.30.1)(rollup@4.46.2)(sass@1.90.0)(typescript@5.9.2))(rollup@4.46.2)
       '@eslint/js':
         specifier: 9.33.0
@@ -139,7 +139,7 @@ importers:
         specifier: 8.39.1
         version: 8.39.1(eslint@9.33.0)(typescript@5.9.2)
       vite:
-        specifier: ^7.1.2
+        specifier: 7.1.2
         version: 7.1.2(@types/node@24.3.0)(lightningcss@1.30.1)(sass@1.90.0)
 
 packages:
