@@ -52,7 +52,7 @@
 		"vite": "7.1.2"
 	},
 	"scripts": {
-		"icon": "tauri icon src/assets/icon.svg --ios-color '#199950'",
+		"icon": "tauri icon src/assets/svgs/icon.svg --ios-color '#199950'",
 		"lint": "tsc && eslint src/**/*.ts"
 	},
 	"alias": {
