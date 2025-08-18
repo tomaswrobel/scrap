@@ -51,10 +51,6 @@
 		"typescript-eslint": "8.39.1",
 		"vite": "7.1.2"
 	},
-	"scripts": {
-		"icon": "tauri icon src/assets/svgs/icon.svg --ios-color '#199950'",
-		"lint": "tsc && eslint src/**/*.ts"
-	},
 	"alias": {
 		"@scrap/*": "./src/$1",
 		"@blockly/field-angle": "@blockly/field-angle/src/field_angle.ts",

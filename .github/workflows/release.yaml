@@ -79,7 +79,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Generate icons
-        run: pnpm icon
+        run: pnpm tauri icon src/assets/svgs/icon.svg --ios-color "#009942"
 
       - uses: tauri-apps/tauri-action@v0
         env:
