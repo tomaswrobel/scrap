@@ -6,6 +6,7 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig({
 	clearScreen: false,
 	publicDir: "node_modules/blockly/media",
+	base: "./",
 	server: {
 		hmr: host
 			? {
