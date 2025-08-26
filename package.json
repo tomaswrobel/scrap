@@ -48,7 +48,7 @@
 		"keep-a-changelog": "2.6.2",
 		"path-browserify": "1.0.1",
 		"sass": "1.90.0",
-		"typescript-eslint": "8.39.1",
+		"typescript-eslint": "8.41.0",
 		"vite": "7.1.2"
 	},
 	"alias": {
