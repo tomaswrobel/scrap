@@ -33,5 +33,5 @@ swc_core = { version = "35.0.0", features = [
 ] }
 swc = "34.0.0"
 anyhow = "1.0.98"
-tauri-plugin-fs = "2.4.0"
+tauri-plugin-fs = "2.4.2"
 tauri-plugin-dialog = "2.3.0"
