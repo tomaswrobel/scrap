@@ -17,10 +17,11 @@
  * Also, it has an option to select "self" which is
  * a reference to the sprite that the script is running
  */
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
-export const MIXIN = {
-	init(this: Blockly.Block) {
+export default new CustomBlock({
+	init() {
 		this.setOutput(true, "Sprite");
 		this.setStyle("Variables");
 		if (this.workspace instanceof Blockly.WorkspaceSvg) {
@@ -46,4 +47,4 @@ export const MIXIN = {
 			this.appendDummyInput().appendField(new Blockly.FieldTextInput(), "SPRITE");
 		}
 	},
-};
+});

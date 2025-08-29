@@ -18,40 +18,36 @@
  * blocks, each with a different shape, but those would need
  * different names. This way, we can reuse the same block.
  */
-import type * as Blockly from "blockly/core";
-
-export type UnknownBlock = Blockly.BlockSvg & UnknownBlockMixin;
-export interface UnknownBlockMixin extends UnknownBlockMixinType {}
-export type UnknownBlockMixinType = typeof MIXIN;
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 
 const COMMENT = `This is a Scrap-incompatible 
 block imported from Scratch. 
 This block and any blocks 
 connected to will not be executed.`;
 
-export const MIXIN = {
+export default new CustomBlock({
 	shape: "command" as "command" | "reporter",
 	opcode: "unknown",
 
-	init(this: UnknownBlock) {
+	init() {
 		this.appendDummyInput().appendField("Unknown block:").appendField(this.opcode, "OPCODE");
 		this.setCommentText(COMMENT);
 	},
 
-	saveExtraState(this: UnknownBlock) {
+	saveExtraState() {
 		return {
 			shape: this.shape,
 			opcode: this.opcode,
 		};
 	},
 
-	loadExtraState(this: UnknownBlock, state: {shape: "command" | "reporter"; opcode: string}) {
+	loadExtraState(state: {shape: "command" | "reporter"; opcode: string}) {
 		this.shape = state.shape;
 		this.opcode = state.opcode;
 		this.updateShape();
 	},
 
-	updateShape(this: UnknownBlock) {
+	updateShape() {
 		if (this.shape === "command") {
 			this.setPreviousStatement(true, "any");
 			this.setNextStatement(true, "any");
@@ -60,4 +56,4 @@ export const MIXIN = {
 		}
 		this.setFieldValue(this.opcode, "OPCODE");
 	},
-};
+});

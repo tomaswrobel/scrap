@@ -13,16 +13,13 @@
  * Union block groups types together. It's a
  * dynamic block with a mutator.
  */
+import { CustomBlock } from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
-export type UnionBlock = Blockly.BlockSvg & UnionBlockMixin;
-export interface UnionBlockMixin extends UnionBlockMixinType {}
-export type UnionBlockMixinType = typeof MIXIN;
-
-export const MIXIN = {
+export default new CustomBlock({
 	count: 2,
 
-	init(this: UnionBlock) {
+	init() {
 		this.inputsInline = true;
 		this.setOutput(true, "type");
 		this.setStyle("Operators");
@@ -32,12 +29,12 @@ export const MIXIN = {
 	saveExtraState() {
 		return {count: this.count};
 	},
-	loadExtraState(this: UnionBlock, state: {count?: number}) {
+	loadExtraState(state: {count?: number}) {
 		const count = this.count;
 		this.count = state.count || 2;
 		this.updateShape(count);
 	},
-	compose(this: UnionBlock, block: Blockly.Block | null) {
+	compose(block: Blockly.Block | null) {
 		const count = this.count;
 		this.count = 0;
 
@@ -61,7 +58,7 @@ export const MIXIN = {
 
 		return top;
 	},
-	updateShape(this: UnionBlock, previous = 0) {
+	updateShape(previous = 0) {
 		if (previous > this.count) {
 			while (previous > this.count) {
 				this.removeInput(`TYPE${--previous}`);
@@ -74,4 +71,4 @@ export const MIXIN = {
 			}
 		}
 	},
-};
+});

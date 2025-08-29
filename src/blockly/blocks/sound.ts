@@ -14,11 +14,12 @@
  * should be always a shadow block, as it's used in
  * the play-sound block.
  */
+import { CustomBlock } from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 import * as path from "path";
 
-export const MIXIN = {
-	init(this: Blockly.Block) {
+export default new CustomBlock({
+	init() {
 		this.setOutput(true, "string");
 		this.setStyle("Sounds");
 
@@ -38,4 +39,4 @@ export const MIXIN = {
 			"NAME"
 		);
 	},
-};
+});

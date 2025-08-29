@@ -15,19 +15,6 @@
  * @copyright Tomáš Wróbel 2025
  */
 
-export default import.meta.glob<{
-	/**
-	 * The block definition
-	 *
-	 * If there is an `init` function,
-	 * it's a dynamic block,
-	 * mutator otherwise.
-	 */
-	MIXIN: {};
+import type {CustomBlock} from "@scrap/utils/CustomBlock";
 
-	/** The mutator's blocks. */
-	blocks?: string[];
-
-	/** There shouldn't be a default export. */
-	default: never;
-}>("../blocks/*.ts", {eager: true});
+export default import.meta.glob<CustomBlock<never>>("../blocks/*.ts", {eager: true, import: "default"});

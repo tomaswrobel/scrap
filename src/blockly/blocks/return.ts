@@ -25,27 +25,25 @@
  */
 import * as Blockly from "blockly/core";
 import {TypeToShadowMap, blockToCheck} from "../types";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 
-export type ReturnBlock = Blockly.BlockSvg & ReturnBlockMixin;
-export interface ReturnBlockMixin extends ReturnBlockMixinType {}
-export type ReturnBlockMixinType = typeof MIXIN;
 export type ReturnBlockOutput = Check | false;
 
-export const MIXIN = {
-	init(this: ReturnBlock) {
+export default new CustomBlock({
+	init() {
 		this.inputsInline = true;
 		this.setStyle("Functions");
 		this.appendDummyInput().appendField("return");
 		this.setPreviousStatement(true, "any");
 	},
 
-	saveExtraState(this: ReturnBlock) {
+	saveExtraState() {
 		return {
 			output: this.getInput("VALUE")?.connection?.getCheck() || false,
 		};
 	},
 
-	loadExtraState(this: ReturnBlock, state: Record<"output", ReturnBlockOutput>) {
+	loadExtraState(state: Record<"output", ReturnBlockOutput>) {
 		const {output} = this.saveExtraState();
 
 		if (!this.isEqual(output, state.output)) {
@@ -66,7 +64,7 @@ export const MIXIN = {
 		}
 	},
 
-	onchange(this: ReturnBlock, e: Blockly.Events.Abstract) {
+	onchange(e: Blockly.Events.Abstract) {
 		if (e instanceof Blockly.Events.BlockMove && e.blockId === this.id && e.recordUndo) {
 			const parent = this.getRootBlock();
 
@@ -79,7 +77,7 @@ export const MIXIN = {
 		}
 	},
 
-	addValue(this: ReturnBlock, check: ReturnBlockOutput, block: Blockly.Block | null) {
+	addValue(check: ReturnBlockOutput, block: Blockly.Block | null) {
 		if (!check) {
 			return;
 		}
@@ -126,4 +124,4 @@ export const MIXIN = {
 
 		return false;
 	},
-};
+});

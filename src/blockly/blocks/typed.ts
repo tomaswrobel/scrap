@@ -22,13 +22,10 @@ import * as Blockly from "blockly/core";
 import FieldParam from "../fields/field_param";
 import FieldIdentifier from "../fields/field_identifier";
 import {blockToCheck} from "../types";
+import { CustomBlock } from "@scrap/utils/CustomBlock";
 
-export type TypedBlock = Blockly.BlockSvg & TypedBlockMixin;
-export interface TypedBlockMixin extends TypedBlockMixinType {}
-export type TypedBlockMixinType = typeof MIXIN;
-
-export const MIXIN = {
-	init(this: TypedBlock) {
+export default new CustomBlock({
+	init() {
 		this.setStyle("Functions");
 		this.setOutput(true);
 		this.setMovable(false);
@@ -108,4 +105,4 @@ export const MIXIN = {
 			}
 		};
 	},
-};
+});

@@ -24,10 +24,11 @@
  */
 import * as Blockly from "blockly/core";
 import {TypeToShadowMap, ScrapTypes} from "../types";
-import type {ArrayBlock} from "./array";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
+import type ArrayBlock from "./array";
 
-export const MIXIN = {
-	init(this: Blockly.Block) {
+export default new CustomBlock({
+	init() {
 		this.setOutput(true, "type");
 		this.setStyle("Operators");
 
@@ -35,14 +36,22 @@ export const MIXIN = {
 			new Blockly.FieldDropdown(
 				ScrapTypes.map(s => [s || "any", s || "any"]),
 				type => {
-					if (this.parentBlock_?.type === "typed") {
-						const param = this.parentBlock_.getField("PARAM")!;
+					const parent = this.getParent();
+
+					if (!parent) {
+						return type;
+					}
+
+					const parentOfParent = parent.getParent();
+
+					if (parent.type === "typed") {
+						const param = parent.getField("PARAM")!;
 
 						param.setValue(`${param.getText()}:${type}`);
 						param.markDirty();
 
-						if (this.parentBlock_.parentBlock_?.type === "variable") {
-							const input = this.parentBlock_.parentBlock_.getInput("VALUE")!;
+						if (parentOfParent?.type === "variable") {
+							const input = parentOfParent.getInput("VALUE")!;
 							input.connection?.targetBlock()?.dispose(false);
 							input.setCheck(type);
 
@@ -54,21 +63,18 @@ export const MIXIN = {
 						}
 					}
 
-					if (this.parentBlock_?.type === "array") {
-						(this.parentBlock_ as ArrayBlock).updateShape(type);
+					if (parent.type === "array") {
+						(parent as CustomBlock.Infer<typeof ArrayBlock>).updateShape(type);
 					}
 
-					if (
-						this.parentBlock_?.type === "function" ||
-						this.parentBlock_?.parentBlock_?.type === "function"
-					) {
+					if (parent.type === "function" || parentOfParent?.type === "function") {
 						if (this.workspace instanceof Blockly.WorkspaceSvg) {
 							this.workspace.refreshToolboxSelection();
 						}
 					}
 
-					if (this.parentBlock_?.type === "function") {
-						for (const block of this.parentBlock_.getDescendants(false)) {
+					if (parent.type === "function") {
+						for (const block of parent.getDescendants(false)) {
 							if (block.type === "return") {
 								block.loadExtraState!({
 									output: type,
@@ -83,4 +89,4 @@ export const MIXIN = {
 			"TYPE"
 		);
 	},
-};
+});

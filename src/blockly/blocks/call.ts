@@ -35,8 +35,8 @@
  * * Parameters are of a specific type.
  * * Corresponding shadow blocks are used inside the parameters.
  */
-import type * as Blockly from "blockly/core";
 import {TypeToShadowMap} from "../types";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 
 export type CallExtraState = {
 	params?: Check[];
@@ -44,16 +44,12 @@ export type CallExtraState = {
 	name?: string;
 };
 
-export type CallBlock = Blockly.Block & CallBlockMixin;
-export interface CallBlockMixin extends CallBlockMixinType {}
-export type CallBlockMixinType = typeof MIXIN;
-
-export const MIXIN = {
+export default new CustomBlock({
 	params_: [] as Check[],
 	returnType_: "any" as Check | false,
 	name_: "unnamed",
 
-	updateShape(this: CallBlock) {
+	updateShape() {
 		this.setFieldValue(this.name_, "NAME");
 		const returnType = this.returnType_;
 
@@ -98,7 +94,7 @@ export const MIXIN = {
 		}
 	},
 
-	saveExtraState(this: CallBlock) {
+	saveExtraState() {
 		return {
 			params: this.params_,
 			returnType: this.returnType_,
@@ -106,11 +102,11 @@ export const MIXIN = {
 		};
 	},
 
-	loadExtraState(this: CallBlock, state: CallExtraState) {
+	loadExtraState(state: CallExtraState) {
 		this.params_ = state.params ?? [];
 		this.returnType_ = state.returnType ?? "any";
 		this.name_ = state.name ?? "unnamed";
 
 		this.updateShape();
 	},
-};
+});

@@ -13,10 +13,11 @@
  * Property block is a block that returns a property of a sprite.
  * It's a dropdown with all the properties (and variables) of a sprite.
  */
+import { CustomBlock } from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
-export const MIXIN = {
-	init(this: Blockly.Block) {
+export default new CustomBlock({
+	init() {
 		this.setOutput(true, ["number", "Variable"]);
 		this.setStyle("Sensing");
 		if (this.workspace instanceof Blockly.WorkspaceSvg) {
@@ -93,4 +94,4 @@ export const MIXIN = {
 				.appendField(new Blockly.FieldTextInput(), "SPRITE");
 		}
 	},
-};
+});

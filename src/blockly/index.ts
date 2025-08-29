@@ -37,15 +37,10 @@ import * as path from "path";
 const mutatorBlocks = ["spritePanel"];
 for (const filename in allBlocks) {
 	const {name} = path.parse(filename);
-	const {blocks = [], MIXIN} = allBlocks[filename];
+	const customBlock = allBlocks[filename];
 
-	mutatorBlocks.push(...blocks);
-
-	if ("init" in MIXIN) {
-		Blockly.Blocks[name] = MIXIN;
-	} else {
-		Blockly.Extensions.registerMutator(name, MIXIN, undefined, blocks);
-	}
+	mutatorBlocks.push(...(customBlock.mutatorBlocks ?? []));
+	customBlock.register(name);
 }
 
 for (const filename in fields) {

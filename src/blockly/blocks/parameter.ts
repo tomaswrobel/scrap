@@ -15,13 +15,12 @@
  * - a variable getter
  * - a block created by FieldParam, see fields/field_param.ts
  */
+import { CustomBlock } from "@scrap/utils/CustomBlock";
 import Dialog from "@scrap/utils/dialog";
-import type {ContextMenuRegistry, BlockSvg} from "blockly/core";
-export type ParameterBlock = BlockSvg & ParameterBlockMixin;
-export interface ParameterBlockMixin extends ParameterBlockMixinType {}
-export type ParameterBlockMixinType = typeof MIXIN;
+import type {ContextMenuRegistry} from "blockly/core";
 
-export const MIXIN = {
+
+export default new CustomBlock({
 	type_: "any" as Check | null,
 	isVariable_: false,
 	isConstant_: false,
@@ -34,7 +33,7 @@ export const MIXIN = {
 		};
 	},
 
-	loadExtraState(this: ParameterBlock, state: {type?: Check; isVariable?: boolean; isConstant?: boolean}) {
+	loadExtraState(state: {type?: Check; isVariable?: boolean; isConstant?: boolean}) {
 		this.type_ = state.type || "any";
 		this.isVariable_ = state.isVariable || false;
 		this.isConstant_ = state.isConstant || false;
@@ -54,7 +53,7 @@ export const MIXIN = {
 		}
 	},
 
-	customContextMenu(this: ParameterBlock, options: ContextMenuRegistry.LegacyContextMenuOption[]) {
+	customContextMenu(options: ContextMenuRegistry.LegacyContextMenuOption[]) {
 		if (this.isInFlyout && this.isVariable_) {
 			options.push(
 				{
@@ -109,4 +108,4 @@ export const MIXIN = {
 			);
 		}
 	},
-};
+});
