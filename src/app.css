@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+:root {
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	scrollbar-gutter: stable;
+	color-scheme: light dark;
+}
+
+* {
+	box-sizing: border-box;
+}

@@ -1,0 +1,1 @@
+export type EntityMode = "code" | "blocks";
