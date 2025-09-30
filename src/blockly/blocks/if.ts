@@ -13,7 +13,7 @@
  * This mutator is taken from Blockly's built-in controls_if block.
  * The original isn't used only because of bundle size.
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export interface IfExtraState {
@@ -125,7 +125,7 @@ export default new CustomBlock(
 			this.reconnectChildBlocks(
 				valueConnections,
 				statementConnections,
-				elseStatementConnection
+				elseStatementConnection,
 			);
 		},
 		/**
@@ -186,7 +186,7 @@ export default new CustomBlock(
 			this.reconnectChildBlocks(
 				valueConnections,
 				statementConnections,
-				elseStatementConnection
+				elseStatementConnection,
 			);
 		},
 		/**
@@ -228,7 +228,7 @@ export default new CustomBlock(
 		reconnectChildBlocks(
 			valueConnections: (Blockly.Connection | null)[],
 			statementConnections: (Blockly.Connection | null)[],
-			elseStatementConnection: Blockly.Connection | null
+			elseStatementConnection: Blockly.Connection | null,
 		) {
 			for (let i = 1; i <= this.elseifCount; i++) {
 				valueConnections[i]?.reconnect(this, `IF${i}`);
@@ -237,5 +237,5 @@ export default new CustomBlock(
 			elseStatementConnection?.reconnect(this, "ELSE");
 		},
 	},
-	["controls_if_elseif", "controls_if_else"]
+	["controls_if_elseif", "controls_if_else"],
 );

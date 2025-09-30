@@ -1,4 +1,4 @@
-import { bind } from "@scrap/utils/bind.ts";
+import {bind} from "@scrap/utils/bind.ts";
 import {
 	editor,
 	MarkerSeverity,
@@ -7,10 +7,10 @@ import {
 	type IDisposable,
 	type languages,
 } from "monaco-editor";
-import { DiagnosticCategory, flattenDiagnosticMessageText } from "typescript";
-import type { TypeScriptMode } from "../tsMode.ts";
-import { Adapter } from "./Adapter.ts";
-import type { LibFiles } from "./LibFiles.ts";
+import {DiagnosticCategory, flattenDiagnosticMessageText} from "typescript";
+import type {TypeScriptMode} from "../tsMode.ts";
+import {Adapter} from "./Adapter.ts";
+import type {LibFiles} from "./LibFiles.ts";
 
 export class DiagnosticsAdapter extends Adapter implements IDisposable {
 	private disposables: IDisposable[] = [];
@@ -19,7 +19,11 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 	private readonly defaults: languages.typescript.LanguageServiceDefaults;
 	private selector = "";
 
-	constructor(libFiles: LibFiles, defaults: languages.typescript.LanguageServiceDefaults, worker: TypeScriptMode) {
+	constructor(
+		libFiles: LibFiles,
+		defaults: languages.typescript.LanguageServiceDefaults,
+		worker: TypeScriptMode,
+	) {
 		super(worker);
 		this.libFiles = libFiles;
 		this.defaults = defaults;
@@ -34,7 +38,7 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 			editor.onDidChangeModelLanguage(event => {
 				this.onModelRemoved(event.model);
 				this.onModelAdd(event.model);
-			})
+			}),
 		);
 
 		this.disposables.push({
@@ -68,7 +72,7 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 		}
 
 		const maybeValidate = () => {
-			const { onlyVisible } = this.defaults.getDiagnosticsOptions();
+			const {onlyVisible} = this.defaults.getDiagnosticsOptions();
 			if (onlyVisible) {
 				if (model.isAttachedToEditor()) {
 					void this.doValidate(model);
@@ -85,7 +89,7 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 		});
 
 		const visibleSubscription = model.onDidChangeAttached(() => {
-			const { onlyVisible } = this.defaults.getDiagnosticsOptions();
+			const {onlyVisible} = this.defaults.getDiagnosticsOptions();
 			if (onlyVisible) {
 				if (model.isAttachedToEditor()) {
 					// this model is now attached to an editor
@@ -135,7 +139,7 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 		}
 
 		const promises: Promise<languages.typescript.Diagnostic[]>[] = [];
-		const { noSyntaxValidation, noSemanticValidation, noSuggestionDiagnostics } =
+		const {noSyntaxValidation, noSemanticValidation, noSuggestionDiagnostics} =
 			this.defaults.getDiagnosticsOptions();
 		if (!noSyntaxValidation) {
 			promises.push(worker.getSyntacticDiagnostics(model.uri.toString()));
@@ -160,7 +164,7 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 				d =>
 					!(
 						this.defaults.getDiagnosticsOptions().diagnosticCodesToIgnore ?? []
-					).includes(d.code)
+					).includes(d.code),
 			);
 
 		// Fetch lib files if necessary
@@ -168,7 +172,7 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 			.map(d => d.relatedInformation ?? [])
 			.reduce((p, c) => c.concat(p), [])
 			.map(relatedInformation =>
-				relatedInformation.file ? Uri.parse(relatedInformation.file.fileName) : null
+				relatedInformation.file ? Uri.parse(relatedInformation.file.fileName) : null,
 			);
 
 		await this.libFiles.fetchLibFilesIfNecessary(relatedUris);
@@ -181,20 +185,20 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 		editor.setModelMarkers(
 			model,
 			this.selector,
-			diagnostics.map(d => this.convertDiagnostics(model, d))
+			diagnostics.map(d => this.convertDiagnostics(model, d)),
 		);
 	}
 
 	private convertDiagnostics(
 		model: editor.ITextModel,
-		diag: languages.typescript.Diagnostic
+		diag: languages.typescript.Diagnostic,
 	): editor.IMarkerData {
 		const diagStart = diag.start ?? 0;
 		const diagLength = diag.length ?? 1;
-		const { lineNumber: startLineNumber, column: startColumn } =
+		const {lineNumber: startLineNumber, column: startColumn} =
 			model.getPositionAt(diagStart);
-		const { lineNumber: endLineNumber, column: endColumn } = model.getPositionAt(
-			diagStart + diagLength
+		const {lineNumber: endLineNumber, column: endColumn} = model.getPositionAt(
+			diagStart + diagLength,
 		);
 
 		const tags: MarkerTag[] = [];
@@ -220,7 +224,7 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 
 	private convertRelatedInformation(
 		model: editor.ITextModel,
-		relatedInformation?: languages.typescript.DiagnosticRelatedInformation[]
+		relatedInformation?: languages.typescript.DiagnosticRelatedInformation[],
 	): editor.IRelatedInformation[] {
 		if (!relatedInformation) {
 			return [];
@@ -238,9 +242,9 @@ export class DiagnosticsAdapter extends Adapter implements IDisposable {
 			}
 			const infoStart = info.start ?? 0;
 			const infoLength = info.length ?? 1;
-			const { lineNumber: startLineNumber, column: startColumn } =
+			const {lineNumber: startLineNumber, column: startColumn} =
 				relatedResource.getPositionAt(infoStart);
-			const { lineNumber: endLineNumber, column: endColumn } =
+			const {lineNumber: endLineNumber, column: endColumn} =
 				relatedResource.getPositionAt(infoStart + infoLength);
 
 			result.push({

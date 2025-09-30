@@ -30,7 +30,9 @@ export default new CustomBlock({
 	opcode: "unknown",
 
 	init() {
-		this.appendDummyInput().appendField("Unknown block:").appendField(this.opcode, "OPCODE");
+		this.appendDummyInput()
+			.appendField("Unknown block:")
+			.appendField(this.opcode, "OPCODE");
 		this.setCommentText(COMMENT);
 	},
 

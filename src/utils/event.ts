@@ -1,5 +1,5 @@
-import type { EventHandler } from "svelte/elements";
-import { on } from "svelte/events";
+import type {EventHandler} from "svelte/elements";
+import {on} from "svelte/events";
 
 export function event(event: string, action?: EventHandler) {
 	return function (element: Element) {

@@ -1,5 +1,5 @@
-import type { ClassArray } from "clsx";
-import type { ClassValue } from "svelte/elements";
+import type {ClassArray} from "clsx";
+import type {ClassValue} from "svelte/elements";
 
 /** Provides autocompletion for tailwindcss */
 export function tw(...classes: ClassArray): ClassValue {

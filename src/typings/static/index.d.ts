@@ -755,7 +755,14 @@ declare type Key =
 	| "x"
 	| "y"
 	| "z";
-declare type MouseEvent = "clicked" | "pressed" | "released" | "left" | "entered" | "moved" | "double-clicked";
+declare type MouseEvent =
+	| "clicked"
+	| "pressed"
+	| "released"
+	| "left"
+	| "entered"
+	| "moved"
+	| "double-clicked";
 
 // For TypeScript to work
 declare interface RegExp {}
@@ -821,7 +828,9 @@ declare interface String extends Iterable<string> {
  * Converts the value to a string
  * @param value any value
  */
-declare function String<const T>(value: T): T extends number | boolean | string ? `${T}` : string;
+declare function String<const T>(
+	value: T,
+): T extends number | boolean | string ? `${T}` : string;
 
 // Scrap's iterables
 declare interface Symbol {}

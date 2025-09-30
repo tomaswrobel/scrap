@@ -1,5 +1,5 @@
-import { editor, Uri } from "monaco-editor";
-import type { TypeScriptMode } from "../tsMode";
+import {editor, Uri} from "monaco-editor";
+import type {TypeScriptMode} from "../tsMode";
 
 export class LibFiles {
 	private libFiles: Record<string, string> = {};

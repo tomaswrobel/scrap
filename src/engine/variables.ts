@@ -30,7 +30,7 @@ export interface Variable {
 
 export function isVariableType<T extends VariableType>(
 	type: T,
-	value: unknown
+	value: unknown,
 ): value is (typeof DefaultVariableValues)[T] {
 	switch (type) {
 		case VariableType.Any:

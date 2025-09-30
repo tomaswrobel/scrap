@@ -69,4 +69,9 @@ export class ConnectionChecker extends Blockly.ConnectionChecker {
 	}
 }
 
-Blockly.registry.register(Blockly.registry.Type.CONNECTION_CHECKER, Blockly.registry.DEFAULT, ConnectionChecker, true);
+Blockly.registry.register(
+	Blockly.registry.Type.CONNECTION_CHECKER,
+	Blockly.registry.DEFAULT,
+	ConnectionChecker,
+	true,
+);

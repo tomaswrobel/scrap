@@ -16,10 +16,10 @@
  * are either strings or arrays - they are expanded
  * into multiple items (via JavaScript's spread operator).
  */
-import { blockToCheck } from "@scrap/utils/blockToCheck";
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {blockToCheck} from "@scrap/utils/blockToCheck";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
-import { TypeToShadowMap } from "../types";
+import {TypeToShadowMap} from "../types";
 
 export default new CustomBlock(
 	{
@@ -39,7 +39,7 @@ export default new CustomBlock(
 		 *
 		 * @param state The state to apply to this block, ie the item count.
 		 */
-		loadExtraState(state: { items?: string[] }) {
+		loadExtraState(state: {items?: string[]}) {
 			if (state.items) {
 				this.items = state.items;
 			}
@@ -93,7 +93,7 @@ export default new CustomBlock(
 			// Add new inputs.
 			for (let i = 0; i < this.items.length; i++) {
 				const input = this.appendValueInput(`ADD${i}`).setAlign(
-					Blockly.inputs.Align.RIGHT
+					Blockly.inputs.Align.RIGHT,
 				);
 				if (this.items[i] === "iterable") {
 					input.setCheck("Iterable");
@@ -104,8 +104,8 @@ export default new CustomBlock(
 						typeof check === "string"
 							? check
 							: check.length === 1
-							? check[0]
-							: "any";
+								? check[0]
+								: "any";
 
 					if (type in TypeToShadowMap) {
 						input.connection!.setShadowState({
@@ -130,5 +130,5 @@ export default new CustomBlock(
 			}
 		},
 	},
-	["array_item_single", "array_item_iterable"]
+	["array_item_single", "array_item_iterable"],
 );

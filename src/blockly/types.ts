@@ -22,7 +22,16 @@
  * const types = ScrapTypes.map(type => type || "any") // or "void"
  * ```
  */
-export const ScrapTypes = ["", "number", "string", "boolean", "Color", "Array", "Sprite", "Date"];
+export const ScrapTypes = [
+	"",
+	"number",
+	"string",
+	"boolean",
+	"Color",
+	"Array",
+	"Sprite",
+	"Date",
+];
 
 /** Converts a type to a shadow type. */
 export const TypeToShadowMap: Record<string, string> = {
@@ -33,4 +42,3 @@ export const TypeToShadowMap: Record<string, string> = {
 	Date: "date",
 	any: "text_or_number",
 };
-

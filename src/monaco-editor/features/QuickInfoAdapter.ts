@@ -1,13 +1,13 @@
-import { languages, type editor, type Position } from "monaco-editor";
+import {languages, type editor, type Position} from "monaco-editor";
 import ts from "typescript";
-import { Adapter } from "./Adapter.ts";
-import { tagToString } from "./tagToString.ts";
+import {Adapter} from "./Adapter.ts";
+import {tagToString} from "./tagToString.ts";
 
 @Adapter.providedBy(languages.registerHoverProvider)
 export class QuickInfoAdapter extends Adapter implements languages.HoverProvider {
 	public async provideHover(
 		model: editor.ITextModel,
-		position: Position
+		position: Position,
 	): Promise<languages.Hover | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);

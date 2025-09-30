@@ -1,0 +1,11 @@
+# Node
+node_modules
+
+# Build
+dist
+
+# Ignored .env files
+*.local
+
+# Taskfile
+.task

@@ -13,12 +13,12 @@
  * - Transforming TypeScriptWorker.clearFiles to decorator.
  * - Remapping imports, importing tsMode more efficiently.
  */
-import { languages } from "monaco-editor";
-import { version as typescriptVersion } from "typescript/package.json";
-import { LanguageServiceDefaultsImplementation } from "./LanguageServiceDefaultsImplementation.ts";
-import type { MonacoEditorLanguage } from "./MonacoEditorLanguage.ts";
+import {languages} from "monaco-editor";
+import {version as typescriptVersion} from "typescript/package.json";
+import {LanguageServiceDefaultsImplementation} from "./LanguageServiceDefaultsImplementation.ts";
+import type {MonacoEditorLanguage} from "./MonacoEditorLanguage.ts";
 import "./scrap-theme.ts";
-import { setupTokenizer } from "./setupTokenizer.ts";
+import {setupTokenizer} from "./setupTokenizer.ts";
 
 const modeConfigurationDefault: Required<languages.typescript.ModeConfiguration> = {
 	completionItems: true,
@@ -44,10 +44,10 @@ const defaults: Record<MonacoEditorLanguage, languages.typescript.LanguageServic
 			allowJs: true,
 			target: 2,
 		},
-		{ noSemanticValidation: false, noSyntaxValidation: false, onlyVisible: false },
+		{noSemanticValidation: false, noSyntaxValidation: false, onlyVisible: false},
 		{},
 		{},
-		modeConfigurationDefault
+		modeConfigurationDefault,
 	),
 	javascript: new LanguageServiceDefaultsImplementation(
 		{
@@ -56,10 +56,10 @@ const defaults: Record<MonacoEditorLanguage, languages.typescript.LanguageServic
 			allowJs: true,
 			target: 2,
 		},
-		{ noSemanticValidation: false, noSyntaxValidation: false, onlyVisible: false },
+		{noSemanticValidation: false, noSyntaxValidation: false, onlyVisible: false},
 		{},
 		{},
-		modeConfigurationDefault
+		modeConfigurationDefault,
 	),
 };
 
@@ -118,7 +118,7 @@ languages.typescript = {
 };
 
 export function setupLanguage(language: MonacoEditorLanguage) {
-	languages.register({ id: language });
+	languages.register({id: language});
 	setupTokenizer(language);
 
 	languages.onLanguage(language, async function () {

@@ -1,12 +1,12 @@
-import { languages, type editor } from "monaco-editor";
+import {languages, type editor} from "monaco-editor";
 import type ts from "typescript";
-import { Adapter } from "./Adapter.ts";
-import { Kind } from "./Kind.ts";
+import {Adapter} from "./Adapter.ts";
+import {Kind} from "./Kind.ts";
 
 @Adapter.providedBy(languages.registerDocumentSymbolProvider)
 export class OutlineAdapter extends Adapter implements languages.DocumentSymbolProvider {
 	public async provideDocumentSymbols(
-		model: editor.ITextModel
+		model: editor.ITextModel,
 	): Promise<languages.DocumentSymbol[] | undefined> {
 		const resource = model.uri;
 		const worker = await this.worker(resource);
@@ -23,7 +23,7 @@ export class OutlineAdapter extends Adapter implements languages.DocumentSymbolP
 
 		const convert = (
 			item: ts.NavigationTree,
-			containerLabel?: string
+			containerLabel?: string,
 		): languages.DocumentSymbol => {
 			const result: languages.DocumentSymbol = {
 				name: item.text,

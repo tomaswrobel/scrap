@@ -10,11 +10,11 @@
  * @copyright Microsoft Corporation 2025
  * @fileoverview Just remapped imports.
  */
-import { bind } from "@scrap/utils/bind";
-import type { IDisposable, languages, Uri } from "monaco-editor";
-import { editor } from "monaco-editor";
-import type { Adapter } from "./features/Adapter";
-import type { TypeScriptWorker } from "./TypeScriptWorker";
+import {bind} from "@scrap/utils/bind";
+import type {IDisposable, languages, Uri} from "monaco-editor";
+import {editor} from "monaco-editor";
+import type {Adapter} from "./features/Adapter";
+import type {TypeScriptWorker} from "./TypeScriptWorker";
 
 export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 	private disposables: IDisposable[] = [];
@@ -47,7 +47,7 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 
 	*[Symbol.iterator](): Generator<IDisposable> {
 		yield* this.disposables;
-		yield { dispose: this.stopWorker };
+		yield {dispose: this.stopWorker};
 	}
 
 	private getClient() {
@@ -71,7 +71,7 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 					editor
 						.getModels()
 						.filter(model => model.getLanguageId() === this.modeId)
-						.map(model => model.uri)
+						.map(model => model.uri),
 				);
 			}
 

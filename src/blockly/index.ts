@@ -14,7 +14,7 @@ import "@blockly/field-date";
 import BlocksToCode from "@scrap/code-transformers/blocksToCode";
 import type CustomBlock from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
-import { Order } from "blockly/javascript";
+import {Order} from "blockly/javascript";
 import * as En from "blockly/msg/en";
 import * as path from "path";
 import jsonBlocks from "./data/blocks.json";
@@ -38,10 +38,10 @@ const allData = import.meta.glob("./data/*.json", {
 	eager: true,
 });
 
-import.meta.glob<void>("./plugins/*.ts", { eager: true });
+import.meta.glob<void>("./plugins/*.ts", {eager: true});
 
 export function importJSON<T = object>(_path: string) {
-	return allData[`./${  path.join("data", _path)}`] as T;
+	return allData[`./${path.join("data", _path)}`] as T;
 }
 
 /**
@@ -53,7 +53,7 @@ export function importJSON<T = object>(_path: string) {
  */
 const mutatorBlocks = ["spritePanel"];
 for (const filename in allBlocks) {
-	const { name } = path.parse(filename);
+	const {name} = path.parse(filename);
 	const customBlock = allBlocks[filename];
 
 	mutatorBlocks.push(...(customBlock.mutatorBlocks ?? []));
@@ -61,12 +61,12 @@ for (const filename in allBlocks) {
 }
 
 for (const filename in allFields) {
-	const { name } = path.parse(filename);
+	const {name} = path.parse(filename);
 	Blockly.fieldRegistry.register(name, allFields[filename]);
 }
 
 for (const filename in allExtensions) {
-	const { name } = path.parse(filename);
+	const {name} = path.parse(filename);
 	Blockly.Extensions.register(name, allExtensions[filename]);
 }
 

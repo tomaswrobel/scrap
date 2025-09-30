@@ -76,7 +76,9 @@ export default class FieldParam extends Blockly.Field<string> {
 				const transform = this.fieldGroup_!.getAttribute("transform");
 				const transformX = transform?.match(/translate\((\d+)/)?.[1] ?? 0;
 				const transformY = transform?.match(/translate\(\d+,(\d+)/)?.[1] ?? 0;
-				const {x, y} = this.sourceBlock_.getRelativeToSurfaceXY().translate(+transformX, +transformY);
+				const {x, y} = this.sourceBlock_
+					.getRelativeToSurfaceXY()
+					.translate(+transformX, +transformY);
 
 				block.loadExtraState!({
 					type: this.getType(), // Set the type of the parameter.

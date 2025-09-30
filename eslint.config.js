@@ -1,7 +1,7 @@
 import sveltePlugin from "eslint-plugin-svelte";
-import { defineConfig, globalIgnores } from "eslint/config";
+import {defineConfig, globalIgnores} from "eslint/config";
 import tseslint from "typescript-eslint";
-import { createBaseConfig } from "./config/eslint/createBaseConfig";
+import {createBaseConfig} from "./config/eslint/createBaseConfig.ts";
 
 export const tsConfigs = defineConfig([
 	tseslint.configs.eslintRecommended,
@@ -16,7 +16,4 @@ export const svelteConfigs = defineConfig([
 	...sveltePlugin.configs.recommended,
 ]);
 
-export default defineConfig([
-	globalIgnores(["./src/typings"]),
-	...createBaseConfig(".")
-]);
+export default defineConfig([globalIgnores(["./src/typings"]), ...createBaseConfig(".")]);

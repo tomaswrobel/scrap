@@ -44,7 +44,11 @@ export class Category extends Blockly.ToolboxCategory {
 		} else {
 			Blockly.utils.dom.removeClass(this.rowDiv_, this.cssConfig_.selected);
 		}
-		Blockly.utils.aria.setState(this.htmlDiv_, Blockly.utils.aria.State.SELECTED, isSelected);
+		Blockly.utils.aria.setState(
+			this.htmlDiv_,
+			Blockly.utils.aria.State.SELECTED,
+			isSelected,
+		);
 	}
 
 	public override getName() {
@@ -63,9 +67,9 @@ export class Category extends Blockly.ToolboxCategory {
 		return name;
 	}
 
-	protected declare rowDiv_: HTMLDivElement;
-	protected declare htmlDiv_: HTMLDivElement;
-	protected declare cssConfig_: Required<Blockly.ToolboxCategory.CssConfig>;
+	declare protected rowDiv_: HTMLDivElement;
+	declare protected htmlDiv_: HTMLDivElement;
+	declare protected cssConfig_: Required<Blockly.ToolboxCategory.CssConfig>;
 }
 
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM, "category", Category, true);

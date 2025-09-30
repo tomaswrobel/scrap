@@ -52,7 +52,7 @@ export default class FieldString extends Blockly.FieldTextInput {
 				"font-size": `${this.quoteSize}px`,
 				"font-family": "monospace",
 			},
-			this.fieldGroup_
+			this.fieldGroup_,
 		);
 
 		super.initView();
@@ -64,7 +64,7 @@ export default class FieldString extends Blockly.FieldTextInput {
 				"font-size": `${this.quoteSize}px`,
 				"font-family": "monospace",
 			},
-			this.fieldGroup_
+			this.fieldGroup_,
 		);
 
 		this.quoteLeft.style.setProperty("fill", "#A31515");
@@ -98,7 +98,10 @@ export default class FieldString extends Blockly.FieldTextInput {
 		} else {
 			this.quoteLeftX = 0;
 		}
-		this.quoteLeft.setAttribute("transform", `translate(${this.quoteLeftX},${this.quoteY})`);
+		this.quoteLeft.setAttribute(
+			"transform",
+			`translate(${this.quoteLeftX},${this.quoteY})`,
+		);
 		return this.quoteWidth;
 	}
 
@@ -112,7 +115,10 @@ export default class FieldString extends Blockly.FieldTextInput {
 		} else {
 			this.quoteRightX = x;
 		}
-		this.quoteRight.setAttribute("transform", `translate(${this.quoteRightX},${this.quoteY})`);
+		this.quoteRight.setAttribute(
+			"transform",
+			`translate(${this.quoteRightX},${this.quoteY})`,
+		);
 		return x + this.quoteWidth;
 	}
 }

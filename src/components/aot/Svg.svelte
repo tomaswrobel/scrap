@@ -1,7 +1,7 @@
 <script lang="ts" module>
-	import { onDestroy } from "svelte";
-	import type { SVGAttributes } from "svelte/elements";
-	import { SvelteMap } from "svelte/reactivity";
+	import {onDestroy} from "svelte";
+	import type {SVGAttributes} from "svelte/elements";
+	import {SvelteMap} from "svelte/reactivity";
 
 	const sources = new SvelteMap<string, string>();
 
@@ -15,7 +15,7 @@
 </script>
 
 <script lang="ts">
-	const { vars, ...props }: Props = $props();
+	const {vars, ...props}: Props = $props();
 	const instanceId = $props.id();
 
 	$effect(() => {

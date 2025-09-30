@@ -1,6 +1,6 @@
-import { languages, type editor, type Position } from "monaco-editor";
+import {languages, type editor, type Position} from "monaco-editor";
 import ts from "typescript";
-import { Adapter } from "./Adapter.ts";
+import {Adapter} from "./Adapter.ts";
 
 @Adapter.providedBy(languages.registerDocumentHighlightProvider)
 export class DocumentHighlightAdapter
@@ -9,7 +9,7 @@ export class DocumentHighlightAdapter
 {
 	public async provideDocumentHighlights(
 		model: editor.ITextModel,
-		position: Position
+		position: Position,
 	): Promise<languages.DocumentHighlight[] | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
@@ -34,7 +34,7 @@ export class DocumentHighlightAdapter
 					highlightSpans.kind === ts.HighlightSpanKind.writtenReference
 						? languages.DocumentHighlightKind.Write
 						: languages.DocumentHighlightKind.Text,
-			}))
+			})),
 		);
 	}
 }

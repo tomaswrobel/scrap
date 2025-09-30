@@ -1,6 +1,6 @@
-import type { editor, languages } from "monaco-editor";
+import type {editor, languages} from "monaco-editor";
 import type ts from "typescript";
-import { Adapter } from "./Adapter.ts";
+import {Adapter} from "./Adapter.ts";
 
 export abstract class FormatBaseAdapter extends Adapter {
 	protected convertOptions(options: languages.FormattingOptions): ts.FormatCodeSettings {
@@ -25,7 +25,7 @@ export abstract class FormatBaseAdapter extends Adapter {
 
 	protected convertTextChanges(
 		model: editor.ITextModel,
-		change: ts.TextChange
+		change: ts.TextChange,
 	): languages.TextEdit {
 		return {
 			text: change.newText,

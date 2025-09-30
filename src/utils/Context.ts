@@ -1,1 +1,1 @@
-export { getContext as get, setContext as set } from "svelte";
+export {getContext as get, setContext as set} from "svelte";

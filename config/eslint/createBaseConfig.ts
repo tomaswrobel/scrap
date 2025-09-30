@@ -1,6 +1,6 @@
-import type { Linter } from "eslint";
+import type {Linter} from "eslint";
 import sveltePlugin from "eslint-plugin-svelte";
-import { defineConfig } from "eslint/config";
+import {defineConfig} from "eslint/config";
 import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
 import {
@@ -78,7 +78,7 @@ export function createBaseConfig(dir: string, glob: "" | "**/" = "**/"): Linter.
 			files: svelteFiles,
 			plugins: {
 				"@typescript-eslint": tseslint.plugin,
-				svelte: sveltePlugin,
+				"svelte": sveltePlugin,
 			},
 			languageOptions: {
 				parser: svelteParser,
@@ -113,7 +113,7 @@ export function createBaseConfig(dir: string, glob: "" | "**/" = "**/"): Linter.
 				},
 			},
 		},
-		{ ignores: [`${dir}/.*/**/*`] },
+		{ignores: [`${dir}/.*/**/*`]},
 	]);
 	return configs;
 }

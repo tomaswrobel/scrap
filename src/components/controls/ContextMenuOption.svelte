@@ -1,10 +1,10 @@
 <script lang="ts" module>
-	import { event } from "../../lib/event";
+	import {event} from "../../lib/event";
 	import Chevron from "../../assets/chevron-right.svg?icon";
-	import type { Snippet } from "svelte";
-	import type { HTMLButtonAttributes } from "svelte/elements";
+	import type {Snippet} from "svelte";
+	import type {HTMLButtonAttributes} from "svelte/elements";
 	import * as Context from "$context";
-	import { assert } from "../../lib/assert";
+	import {assert} from "../../lib/assert";
 
 	export interface BaseProps extends HTMLButtonAttributes {
 		onclick?: undefined;
@@ -29,7 +29,7 @@
 </script>
 
 <script lang="ts">
-	const { children, content, submenu, onuse, ...props }: Props = $props();
+	const {children, content, submenu, onuse, ...props}: Props = $props();
 	const submenuItems = Context.get("menu:submenu");
 	const instanceId = crypto.randomUUID();
 </script>

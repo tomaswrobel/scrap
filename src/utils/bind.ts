@@ -1,6 +1,6 @@
 export function bind<A extends any[], R, T>(
 	value: Method<T, A, R>,
-	context: ClassMethodDecoratorContext<T, Method<T, A, R>>
+	context: ClassMethodDecoratorContext<T, Method<T, A, R>>,
 ) {
 	context.addInitializer(function () {
 		Object.defineProperty(this, context.name, {

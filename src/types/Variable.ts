@@ -1,4 +1,4 @@
-import type { Check } from "./Check";
+import type {Check} from "./Check";
 
 /**
  * Variable tuple.

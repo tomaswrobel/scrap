@@ -1,9 +1,9 @@
 import assert from "node:assert";
-import type { LoadResult, PluginContext } from "rollup";
-import type { Plugin } from "vite";
-import { compile } from "svelte/compiler";
-import { basename } from "node:path";
-import { stripIndent } from "common-tags";
+import type {LoadResult, PluginContext} from "rollup";
+import type {Plugin} from "vite";
+import {compile} from "svelte/compiler";
+import {basename} from "node:path";
+import {stripIndent} from "common-tags";
 
 export interface AOTPluginContext {
 	/**
@@ -86,12 +86,12 @@ export function createAOTComponentPlugin<T>({
 						await hooks.getVariables.call(this, {
 							id: resolvedFilePath,
 							parameters,
-						})
+						}),
 					)}}
 				/>
 			`;
 
-			const { js, warnings } = compile(code, {
+			const {js, warnings} = compile(code, {
 				generate: opts?.ssr ? "server" : "client",
 				dev,
 				filename,

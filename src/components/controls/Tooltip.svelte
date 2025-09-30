@@ -1,6 +1,6 @@
 <script lang="ts" module>
-	import type { Snippet } from "svelte";
-	import type { HTMLAttributes } from "svelte/elements";
+	import type {Snippet} from "svelte";
+	import type {HTMLAttributes} from "svelte/elements";
 
 	export interface Props extends HTMLAttributes<HTMLDivElement> {
 		placement: "top" | "left" | "right" | "bottom";
@@ -12,7 +12,7 @@
 </script>
 
 <script lang="ts">
-	const { placement, class: customClass, content, children, ...rest }: Props = $props();
+	const {placement, class: customClass, content, children, ...rest}: Props = $props();
 </script>
 
 {#if typeof content === "string"}

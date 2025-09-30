@@ -110,7 +110,11 @@ export default new CustomBlock(
 			this.catch = false;
 			this.finally = false;
 
-			for (let block = containerBlock.getNextBlock(); block; block = block.getNextBlock()) {
+			for (
+				let block = containerBlock.getNextBlock();
+				block;
+				block = block.getNextBlock()
+			) {
 				if (block.type === "catch") {
 					this.catch = true;
 				} else if (block.type === "catchVar") {
@@ -123,5 +127,5 @@ export default new CustomBlock(
 			this.updateShape_();
 		},
 	},
-	["catch", "catchVar", "finally"]
+	["catch", "catchVar", "finally"],
 );

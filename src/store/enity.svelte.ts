@@ -1,4 +1,4 @@
-import type { Check } from "@scrap/types/Check";
+import type {Check} from "@scrap/types/Check";
 import type * as Blockly from "blockly";
 
 export interface Entity {

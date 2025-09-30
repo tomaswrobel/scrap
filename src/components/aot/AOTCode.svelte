@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import type { HTMLAttributes, MouseEventHandler } from "svelte/elements";
+	import type {HTMLAttributes, MouseEventHandler} from "svelte/elements";
 
 	export interface Props extends HTMLAttributes<HTMLDivElement> {
 		vars: {
@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-	const { vars }: Props = $props();
+	const {vars}: Props = $props();
 	let copied = $state(false);
 
 	$effect(() => {
@@ -23,7 +23,7 @@
 	});
 
 	const copy: MouseEventHandler<HTMLButtonElement> = async ({
-		currentTarget: { nextElementSibling: pre },
+		currentTarget: {nextElementSibling: pre},
 	}) => {
 		if (pre instanceof HTMLPreElement) {
 			await navigator.clipboard.writeText(pre.textContent);

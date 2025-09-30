@@ -1,7 +1,7 @@
-import { languages, type editor, type Range } from "monaco-editor";
+import {languages, type editor, type Range} from "monaco-editor";
 import type ts from "typescript";
-import { Adapter } from "./Adapter.ts";
-import { FormatBaseAdapter } from "./FormatBaseAdapter.ts";
+import {Adapter} from "./Adapter.ts";
+import {FormatBaseAdapter} from "./FormatBaseAdapter.ts";
 
 @Adapter.providedBy(languages.registerCodeActionProvider)
 export class CodeActionAdaptor
@@ -11,7 +11,7 @@ export class CodeActionAdaptor
 	public async provideCodeActions(
 		model: editor.ITextModel,
 		range: Range,
-		context: languages.CodeActionContext
+		context: languages.CodeActionContext,
 	): Promise<languages.CodeActionList | undefined> {
 		const resource = model.uri;
 		const start = model.getOffsetAt({
@@ -38,7 +38,7 @@ export class CodeActionAdaptor
 			start,
 			end,
 			errorCodes,
-			formatOptions
+			formatOptions,
 		);
 
 		if (model.isDisposed()) {
@@ -70,7 +70,7 @@ export class CodeActionAdaptor
 	private tsCodeFixActionToMonacoCodeAction(
 		model: editor.ITextModel,
 		context: languages.CodeActionContext,
-		codeFix: ts.CodeFixAction
+		codeFix: ts.CodeFixAction,
 	): languages.CodeAction {
 		const edits: languages.IWorkspaceTextEdit[] = [];
 		for (const change of codeFix.changes) {
@@ -88,7 +88,7 @@ export class CodeActionAdaptor
 
 		const action: languages.CodeAction = {
 			title: codeFix.description,
-			edit: { edits },
+			edit: {edits},
 			diagnostics: context.markers,
 			kind: "quickfix",
 		};

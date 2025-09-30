@@ -14,7 +14,7 @@
  * should be always a shadow block, as it's used in
  * the play-sound block.
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 import * as path from "path";
 
@@ -29,14 +29,14 @@ export default new CustomBlock({
 					return [["", ""]];
 				}
 				return app.current.sounds.map<[string, string]>(e => {
-					const { name } = path.parse(e.name);
+					const {name} = path.parse(e.name);
 					if (name.length > 12) {
 						return [`${name.slice(0, 12)}...`, name];
 					}
 					return [name, name];
 				});
 			}),
-			"NAME"
+			"NAME",
 		);
 	},
 });

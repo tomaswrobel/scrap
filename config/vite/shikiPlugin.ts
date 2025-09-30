@@ -1,10 +1,10 @@
-import { readFile } from "fs/promises";
-import { basename } from "path";
-import { codeToHtml } from "shiki";
-import type { Plugin } from "vite";
-import type { Props } from "../../src/components/AOTCode.svelte";
-import { createAOTComponentPlugin } from "./createAOTComponentPlugin";
-import { resolveShikiLanguage } from "./resolveShikiLanguage";
+import {readFile} from "fs/promises";
+import {basename} from "path";
+import {codeToHtml} from "shiki";
+import type {Plugin} from "vite";
+import type {Props} from "../../src/components/AOTCode.svelte";
+import {createAOTComponentPlugin} from "./createAOTComponentPlugin";
+import {resolveShikiLanguage} from "./resolveShikiLanguage";
 
 export function shikiPlugin(): Plugin {
 	return createAOTComponentPlugin({

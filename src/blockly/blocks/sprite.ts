@@ -31,7 +31,7 @@ export default new CustomBlock({
 					result[0] = ["self", "self"]; // Replace Stage with self
 					return result;
 				}),
-				"SPRITE"
+				"SPRITE",
 			);
 			// Dynamically set the style to the parent's style
 			this.onchange = () => {

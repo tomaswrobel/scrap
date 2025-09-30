@@ -1,8 +1,8 @@
-import { languages, Range, type editor, type Position, type Uri } from "monaco-editor";
+import {languages, Range, type editor, type Position, type Uri} from "monaco-editor";
 import ts from "typescript";
-import { Adapter } from "./Adapter.ts";
-import { Kind } from "./Kind.ts";
-import { tagToString } from "./tagToString.ts";
+import {Adapter} from "./Adapter.ts";
+import {Kind} from "./Kind.ts";
+import {tagToString} from "./tagToString.ts";
 
 @Adapter.providedBy(languages.registerCompletionItemProvider)
 export class SuggestAdapter extends Adapter implements languages.CompletionItemProvider {
@@ -13,14 +13,14 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 	public async provideCompletionItems(
 		model: editor.ITextModel,
 		position: Position,
-		_context: languages.CompletionContext
+		_context: languages.CompletionContext,
 	): Promise<languages.CompletionList | undefined> {
 		const wordInfo = model.getWordUntilPosition(position);
 		const wordRange = new Range(
 			position.lineNumber,
 			wordInfo.startColumn,
 			position.lineNumber,
-			wordInfo.endColumn
+			wordInfo.endColumn,
 		);
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
@@ -42,7 +42,7 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 			if (entry.replacementSpan) {
 				const p1 = model.getPositionAt(entry.replacementSpan.start);
 				const p2 = model.getPositionAt(
-					entry.replacementSpan.start + entry.replacementSpan.length
+					entry.replacementSpan.start + entry.replacementSpan.length,
 				);
 				range = new Range(p1.lineNumber, p1.column, p2.lineNumber, p2.column);
 			}
@@ -75,7 +75,7 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 		const details = await worker.getCompletionEntryDetails(
 			item.uri.toString(),
 			item.offset,
-			item.label
+			item.label,
 		);
 
 		if (!details) {

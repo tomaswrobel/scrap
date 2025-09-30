@@ -19,7 +19,7 @@
  * - Remapping imports.
  */
 import defaultLib from "@scrap/typings/static/index.d.ts?raw";
-import type { Uri, languages, worker } from "monaco-editor";
+import type {Uri, languages, worker} from "monaco-editor";
 import ts from "typescript";
 
 /**
@@ -45,7 +45,7 @@ function fileNameIsLib(resource: Uri | string): boolean {
 function withScrapDiagnostics<T extends TypeScriptWorker>(
 	this: void,
 	value: (this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>,
-	_context: ClassMethodDecoratorContext<T, typeof value>
+	_context: ClassMethodDecoratorContext<T, typeof value>,
 ): typeof value {
 	return async function (fileName: string) {
 		const diagnostics = await value.call(this, fileName);
@@ -71,7 +71,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				case ts.SyntaxKind.FunctionDeclaration:
@@ -84,7 +84,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 							code: 9999,
 							start: node.getStart(),
 							length: node.getWidth(),
-							file: { fileName },
+							file: {fileName},
 						});
 					}
 					break;
@@ -99,7 +99,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				case ts.SyntaxKind.TypeAliasDeclaration:
@@ -110,7 +110,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 							code: 9999,
 							start: node.getStart(),
 							length: node.getWidth(),
-							file: { fileName },
+							file: {fileName},
 						},
 						{
 							messageText:
@@ -119,8 +119,8 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 							code: 9999,
 							start: node.getStart(),
 							length: node.getWidth(),
-							file: { fileName },
-						}
+							file: {fileName},
+						},
 					);
 					break;
 				case ts.SyntaxKind.InterfaceDeclaration: {
@@ -134,7 +134,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 								code: 9999,
 								start: node.getStart(),
 								length: node.getWidth(),
-								file: { fileName },
+								file: {fileName},
 							});
 						}
 						break;
@@ -145,7 +145,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				}
@@ -156,7 +156,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				case ts.SyntaxKind.ModuleDeclaration:
@@ -166,7 +166,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				case ts.SyntaxKind.LiteralType:
@@ -177,7 +177,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				case ts.SyntaxKind.AsExpression:
@@ -189,7 +189,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 							code: 9999,
 							start: node.getStart(),
 							length: node.getWidth(),
-							file: { fileName },
+							file: {fileName},
 						},
 						{
 							messageText:
@@ -198,8 +198,8 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 							code: 9999,
 							start: node.getStart(),
 							length: node.getWidth(),
-							file: { fileName },
-						}
+							file: {fileName},
+						},
 					);
 					break;
 				case ts.SyntaxKind.NullKeyword:
@@ -210,7 +210,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				case ts.SyntaxKind.ThisKeyword:
@@ -220,7 +220,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 						code: 9999,
 						start: node.getStart(),
 						length: node.getWidth(),
-						file: { fileName },
+						file: {fileName},
 					});
 					break;
 				case ts.SyntaxKind.AwaitExpression:
@@ -232,7 +232,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 							code: 9999,
 							start: node.getStart(),
 							length: node.getWidth(),
-							file: { fileName },
+							file: {fileName},
 						},
 						{
 							messageText:
@@ -241,8 +241,8 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 							code: 9999,
 							start: node.getStart(),
 							length: node.getWidth(),
-							file: { fileName },
-						}
+							file: {fileName},
+						},
 					);
 					break;
 				default:
@@ -259,7 +259,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 function clearFiles<T extends TypeScriptWorker>(
 	this: void,
 	value: (this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>,
-	_context: ClassMethodDecoratorContext<T, typeof value>
+	_context: ClassMethodDecoratorContext<T, typeof value>,
 ): typeof value {
 	return async function (fileName) {
 		const diagnostics = await value.call(this, fileName);
@@ -273,10 +273,10 @@ function clearFiles<T extends TypeScriptWorker>(
 				...acc,
 				{
 					...diag,
-					file: diag.file && { fileName: diag.file.fileName },
+					file: diag.file && {fileName: diag.file.fileName},
 					relatedInformation: diag.relatedInformation?.map(ri => ({
 						...ri,
-						file: ri.file && { fileName: ri.file.fileName },
+						file: ri.file && {fileName: ri.file.fileName},
 					})),
 				},
 			];
@@ -406,14 +406,14 @@ export class TypeScriptWorker
 	}
 
 	public async getLibFiles(): Promise<Record<string, string>> {
-		return { "lib.d.ts": defaultLib };
+		return {"lib.d.ts": defaultLib};
 	}
 
 	// --- language features
 
 	@clearFiles
 	public async getSyntacticDiagnostics(
-		fileName: string
+		fileName: string,
 	): Promise<languages.typescript.Diagnostic[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -424,7 +424,7 @@ export class TypeScriptWorker
 	@withScrapDiagnostics
 	@clearFiles
 	public async getSemanticDiagnostics(
-		fileName: string
+		fileName: string,
 	): Promise<languages.typescript.Diagnostic[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -434,7 +434,7 @@ export class TypeScriptWorker
 
 	@clearFiles
 	public async getSuggestionDiagnostics(
-		fileName: string
+		fileName: string,
 	): Promise<languages.typescript.Diagnostic[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -444,7 +444,7 @@ export class TypeScriptWorker
 
 	@clearFiles
 	public async getCompilerOptionsDiagnostics(
-		fileName: string
+		fileName: string,
 	): Promise<languages.typescript.Diagnostic[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -454,7 +454,7 @@ export class TypeScriptWorker
 
 	public async getCompletionsAtPosition(
 		fileName: string,
-		position: number
+		position: number,
 	): Promise<ts.CompletionInfo | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
@@ -465,7 +465,7 @@ export class TypeScriptWorker
 	public async getCompletionEntryDetails(
 		fileName: string,
 		position: number,
-		entry: string
+		entry: string,
 	): Promise<ts.CompletionEntryDetails | undefined> {
 		return this.languageService.getCompletionEntryDetails(
 			fileName,
@@ -474,14 +474,14 @@ export class TypeScriptWorker
 			undefined,
 			undefined,
 			undefined,
-			undefined
+			undefined,
 		);
 	}
 
 	public async getSignatureHelpItems(
 		fileName: string,
 		position: number,
-		options: ts.SignatureHelpItemsOptions | undefined
+		options: ts.SignatureHelpItemsOptions | undefined,
 	): Promise<ts.SignatureHelpItems | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
@@ -491,7 +491,7 @@ export class TypeScriptWorker
 
 	public async getQuickInfoAtPosition(
 		fileName: string,
-		position: number
+		position: number,
 	): Promise<ts.QuickInfo | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
@@ -502,7 +502,7 @@ export class TypeScriptWorker
 	public async getDocumentHighlights(
 		fileName: string,
 		position: number,
-		filesToSearch: string[]
+		filesToSearch: string[],
 	): Promise<readonly ts.DocumentHighlights[] | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
@@ -512,7 +512,7 @@ export class TypeScriptWorker
 
 	public async getDefinitionAtPosition(
 		fileName: string,
-		position: number
+		position: number,
 	): Promise<readonly ts.DefinitionInfo[] | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
@@ -522,7 +522,7 @@ export class TypeScriptWorker
 
 	public async getReferencesAtPosition(
 		fileName: string,
-		position: number
+		position: number,
 	): Promise<ts.ReferenceEntry[] | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
@@ -539,7 +539,7 @@ export class TypeScriptWorker
 
 	public async getFormattingEditsForDocument(
 		fileName: string,
-		options: ts.FormatCodeSettings
+		options: ts.FormatCodeSettings,
 	): Promise<ts.TextChange[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -551,7 +551,7 @@ export class TypeScriptWorker
 		fileName: string,
 		start: number,
 		end: number,
-		options: ts.FormatCodeSettings
+		options: ts.FormatCodeSettings,
 	): Promise<ts.TextChange[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -563,7 +563,7 @@ export class TypeScriptWorker
 		fileName: string,
 		postion: number,
 		ch: string,
-		options: ts.FormatCodeSettings
+		options: ts.FormatCodeSettings,
 	): Promise<ts.TextChange[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -572,7 +572,7 @@ export class TypeScriptWorker
 			fileName,
 			postion,
 			ch,
-			options
+			options,
 		);
 	}
 
@@ -581,7 +581,7 @@ export class TypeScriptWorker
 		position: number,
 		findInStrings: boolean,
 		findInComments: boolean,
-		providePrefixAndSuffixTextForRename: boolean
+		providePrefixAndSuffixTextForRename: boolean,
 	): Promise<readonly ts.RenameLocation[] | undefined> {
 		if (fileNameIsLib(fileName)) {
 			return undefined;
@@ -591,14 +591,14 @@ export class TypeScriptWorker
 			position,
 			findInStrings,
 			findInComments,
-			{ providePrefixAndSuffixTextForRename, excludeLibrarySymbolsInNavTo: true }
+			{providePrefixAndSuffixTextForRename, excludeLibrarySymbolsInNavTo: true},
 		);
 	}
 
 	public async getRenameInfo(
 		fileName: string,
 		position: number,
-		options: ts.UserPreferences
+		options: ts.UserPreferences,
 	): Promise<ts.RenameInfo> {
 		if (fileNameIsLib(fileName)) {
 			return {
@@ -626,7 +626,7 @@ export class TypeScriptWorker
 		start: number,
 		end: number,
 		errorCodes: number[],
-		formatOptions: ts.FormatCodeSettings
+		formatOptions: ts.FormatCodeSettings,
 	): Promise<readonly ts.CodeFixAction[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -639,7 +639,7 @@ export class TypeScriptWorker
 				end,
 				errorCodes,
 				formatOptions,
-				preferences
+				preferences,
 			);
 		} catch {
 			return [];
@@ -653,7 +653,7 @@ export class TypeScriptWorker
 	public async provideInlayHints(
 		fileName: string,
 		start: number,
-		end: number
+		end: number,
 	): Promise<readonly ts.InlayHint[]> {
 		if (fileNameIsLib(fileName)) {
 			return [];
@@ -666,7 +666,7 @@ export class TypeScriptWorker
 					start,
 					length: end - start,
 				},
-				this.createData.inlayHintsOptions ?? {}
+				this.createData.inlayHintsOptions ?? {},
 			);
 		} catch {
 			return [];

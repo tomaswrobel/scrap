@@ -1,7 +1,7 @@
-import { event, method } from "./decorators";
+import {event, method} from "./decorators";
 import Messages from "./messages";
 import Timer from "./timer";
-import { abort, isTurbo } from "./utils";
+import {abort, isTurbo} from "./utils";
 import {
 	DefaultVariableValues,
 	isVariableType,
@@ -10,12 +10,12 @@ import {
 } from "./variables";
 
 const toEvent = {
-	clicked: "click",
-	pressed: "mousedown",
-	released: "mouseup",
-	left: "mouseleave",
-	entered: "mouseenter",
-	moved: "mousemove",
+	"clicked": "click",
+	"pressed": "mousedown",
+	"released": "mouseup",
+	"left": "mouseleave",
+	"entered": "mouseenter",
+	"moved": "mousemove",
 	"double-clicked": "dblclick",
 };
 
@@ -137,7 +137,7 @@ abstract class Entity {
 					fn(this);
 				}
 			},
-			{ signal: this.abort.signal }
+			{signal: this.abort.signal},
 		);
 	}
 
@@ -153,7 +153,7 @@ abstract class Entity {
 				fn(this);
 				e.stopPropagation();
 			},
-			{ signal: this.abort.signal }
+			{signal: this.abort.signal},
 		);
 	}
 
@@ -165,11 +165,11 @@ abstract class Entity {
 	async whenReceiveMessage(msg: string, fn: Entity.Callback) {
 		const listenerId = this.generateID();
 
-		messages.listeners.push({ msg, listenerId });
+		messages.listeners.push({msg, listenerId});
 		messages.addEventListener(
 			msg,
 			e => {
-				const { detail } = e as Messages.Event;
+				const {detail} = e as Messages.Event;
 
 				fn(this).then(() =>
 					document.dispatchEvent(
@@ -178,11 +178,11 @@ abstract class Entity {
 								listenerId,
 								msgId: detail,
 							},
-						})
-					)
+						}),
+					),
 				);
 			},
-			{ signal: this.abort.signal }
+			{signal: this.abort.signal},
 		);
 	}
 
@@ -192,7 +192,7 @@ abstract class Entity {
 	 */
 	@method
 	async broadcastMessage(msg: string) {
-		messages.dispatchEvent(new CustomEvent(msg, { detail: this.generateID() }));
+		messages.dispatchEvent(new CustomEvent(msg, {detail: this.generateID()}));
 	}
 
 	/**
@@ -206,7 +206,7 @@ abstract class Entity {
 
 		let listeners = messages.listeners.filter(listener => listener.msg === msg);
 
-		messages.dispatchEvent(new CustomEvent(msg, { detail: msgId }));
+		messages.dispatchEvent(new CustomEvent(msg, {detail: msgId}));
 
 		return new Promise<void>(resolve => {
 			document.addEventListener(
@@ -214,7 +214,7 @@ abstract class Entity {
 				function done(e) {
 					if (e.detail.msgId === msgId) {
 						listeners = listeners.filter(
-							listener => listener.listenerId !== e.detail.listenerId
+							listener => listener.listenerId !== e.detail.listenerId,
 						);
 
 						if (!listeners.length) {
@@ -223,7 +223,7 @@ abstract class Entity {
 						}
 					}
 				},
-				{ signal: this.abort.signal }
+				{signal: this.abort.signal},
 			);
 		});
 	}
@@ -251,11 +251,11 @@ abstract class Entity {
 	async whenBackdropChangesTo(name: string, fn: Entity.Callback) {
 		const listenerId = this.generateID();
 
-		backdrops.listeners.push({ msg: name, listenerId });
+		backdrops.listeners.push({msg: name, listenerId});
 		backdrops.addEventListener(
 			name,
 			e => {
-				const { detail } = e as Messages.Event;
+				const {detail} = e as Messages.Event;
 
 				fn(this).then(() =>
 					document.dispatchEvent(
@@ -264,11 +264,11 @@ abstract class Entity {
 								listenerId,
 								msgId: detail,
 							},
-						})
-					)
+						}),
+					),
 				);
 			},
-			{ signal: this.abort.signal }
+			{signal: this.abort.signal},
 		);
 	}
 
@@ -289,7 +289,7 @@ abstract class Entity {
 				function done(e) {
 					if (e.detail.msgId === msgId) {
 						listeners = listeners.filter(
-							listener => listener.listenerId !== e.detail.listenerId
+							listener => listener.listenerId !== e.detail.listenerId,
 						);
 
 						if (!listeners.length) {
@@ -298,7 +298,7 @@ abstract class Entity {
 						}
 					}
 				},
-				{ signal: this.abort.signal }
+				{signal: this.abort.signal},
 			);
 		});
 	}
@@ -479,7 +479,7 @@ abstract class Entity {
 	}
 
 	public stopOtherScripts() {
-		this.stopController.dispatchEvent(new CustomEvent("stop", { detail: this }));
+		this.stopController.dispatchEvent(new CustomEvent("stop", {detail: this}));
 	}
 }
 

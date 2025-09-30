@@ -1,12 +1,12 @@
-import { languages, type editor, type Range } from "monaco-editor";
+import {languages, type editor, type Range} from "monaco-editor";
 import ts from "typescript";
-import { Adapter } from "./Adapter";
+import {Adapter} from "./Adapter";
 
 @Adapter.providedBy(languages.registerInlayHintsProvider)
 export class InlayHintsAdapter extends Adapter implements languages.InlayHintsProvider {
 	public async provideInlayHints(
 		model: editor.ITextModel,
-		range: Range
+		range: Range,
 	): Promise<languages.InlayHintList | null> {
 		const resource = model.uri;
 		const fileName = resource.toString();

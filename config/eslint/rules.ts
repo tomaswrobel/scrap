@@ -1,6 +1,6 @@
-import type { Linter } from "eslint";
+import type {Linter} from "eslint";
 import * as sveltePlugin from "eslint-plugin-svelte";
-import { defineConfig } from "eslint/config";
+import {defineConfig} from "eslint/config";
 import * as tseslint from "typescript-eslint";
 
 export const possibleProblemRules: Linter.RulesRecord = {
@@ -56,7 +56,7 @@ export const suggestionRules: Linter.RulesRecord = {
 	"no-var": "error",
 	"no-warning-comments": "warn",
 	"object-shorthand": "error",
-	"prefer-const": ["error", { destructuring: "all" }],
+	"prefer-const": ["error", {destructuring: "all"}],
 	"prefer-destructuring": "error",
 	"prefer-exponentiation-operator": "error",
 	"prefer-named-capture-group": "off",
@@ -69,7 +69,7 @@ export const suggestionRules: Linter.RulesRecord = {
 	"prefer-spread": "error",
 	"prefer-template": "error",
 	"symbol-description": "error",
-	"spaced-comment": ["error", "always", { markers: ["/"] }],
+	"spaced-comment": ["error", "always", {markers: ["/"]}],
 };
 
 export const tsRules: Linter.RulesRecord = {
@@ -98,16 +98,8 @@ export const tsRules: Linter.RulesRecord = {
 	"@typescript-eslint/require-array-sort-compare": "error",
 	"@typescript-eslint/require-await": "warn",
 	"@typescript-eslint/switch-exhaustiveness-check": "error",
-	"@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
-	"@typescript-eslint/no-misused-promises": [
-		"error",
-		{
-			/** Disables checking an asynchronous function passed as argument where the parameter type expects a function that returns `void`. */
-			arguments: true,
-			attributes: true,
-			properties: true,
-		},
-	],
+	"@typescript-eslint/no-namespace": ["error", {allowDeclarations: true}],
+	"@typescript-eslint/no-misused-promises": "error",
 };
 
 export const tsExtensionRules: Linter.RulesRecord = {
@@ -137,7 +129,7 @@ export const tsExtensionRules: Linter.RulesRecord = {
 };
 
 export function restrictedExports(
-	defaultExport: "allowDefaultExport" | "forbidDefaultExport"
+	defaultExport: "allowDefaultExport" | "forbidDefaultExport",
 ): Linter.RulesRecord {
 	const forbidDefaultExport = defaultExport === "forbidDefaultExport";
 	return {

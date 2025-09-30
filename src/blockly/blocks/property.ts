@@ -13,7 +13,7 @@
  * Property block is a block that returns a property of a sprite.
  * It's a dropdown with all the properties (and variables) of a sprite.
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({
@@ -36,7 +36,7 @@ export default new CustomBlock({
 							];
 
 							const sprite = app.entities.find(
-								e => e.name === this.getFieldValue("SPRITE")
+								e => e.name === this.getFieldValue("SPRITE"),
 							);
 
 							if (!sprite) {
@@ -54,7 +54,7 @@ export default new CustomBlock({
 									["visible", "visible"],
 									["draggable", "draggable"],
 									["costume name", "costume.name"],
-									["costume index", "costume.index"]
+									["costume index", "costume.index"],
 								);
 							}
 
@@ -69,10 +69,10 @@ export default new CustomBlock({
 								this.setOutput(true, ["boolean", "Variable"]);
 							} else if (value.startsWith("variables")) {
 								const sprite = app.entities.find(
-									e => e.name === this.getFieldValue("SPRITE")
+									e => e.name === this.getFieldValue("SPRITE"),
 								)!;
 								const [, type] = sprite.variables.find(
-									v => JSON.stringify(v[0]) === value.slice(10, -1)
+									v => JSON.stringify(v[0]) === value.slice(10, -1),
 								)!;
 								this.setOutput(true, ["Variable"].concat(type));
 							} else {
@@ -80,17 +80,17 @@ export default new CustomBlock({
 							}
 
 							return undefined;
-						}
+						},
 					),
-					"PROPERTY"
+					"PROPERTY",
 				)
 				.appendField("of")
 				.appendField<string>(
 					new Blockly.FieldDropdown(
 						() => app.entities.map<[string, string]>(e => [e.name, e.name]),
-						() => this.setFieldValue("volume", "PROPERTY")
+						() => this.setFieldValue("volume", "PROPERTY"),
 					),
-					"SPRITE"
+					"SPRITE",
 				);
 		} else {
 			this.appendDummyInput()

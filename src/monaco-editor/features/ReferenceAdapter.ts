@@ -1,7 +1,7 @@
-import { type editor, languages, type Position, Uri } from "monaco-editor";
-import type { TypeScriptMode } from "../tsMode";
-import { Adapter } from "./Adapter.ts";
-import type { LibFiles } from "./LibFiles.ts";
+import {type editor, languages, type Position, Uri} from "monaco-editor";
+import type {TypeScriptMode} from "../tsMode";
+import {Adapter} from "./Adapter.ts";
+import type {LibFiles} from "./LibFiles.ts";
 
 @Adapter.providedBy(languages.registerReferenceProvider)
 export class ReferenceAdapter extends Adapter implements languages.ReferenceProvider {
@@ -13,7 +13,7 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 
 	public async provideReferences(
 		model: editor.ITextModel,
-		position: Position
+		position: Position,
 	): Promise<languages.Location[] | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
@@ -31,7 +31,7 @@ export class ReferenceAdapter extends Adapter implements languages.ReferenceProv
 
 		// Fetch lib files if necessary
 		await this.libFiles.fetchLibFilesIfNecessary(
-			entries.map(entry => Uri.parse(entry.fileName))
+			entries.map(entry => Uri.parse(entry.fileName)),
 		);
 
 		if (model.isDisposed()) {

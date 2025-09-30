@@ -21,16 +21,16 @@ import type ParameterBlock from "@scrap/blockly/blocks/parameter.ts";
 import type TryBlock from "@scrap/blockly/blocks/try.ts";
 import type UnionBlock from "@scrap/blockly/blocks/union.ts";
 import type UnknownBlock from "@scrap/blockly/blocks/unknown.ts";
-import type { Entity } from "@scrap/types/Enity.svelte.ts";
-import type { CustomBlock } from "@scrap/utils/CustomBlock.ts";
+import type {Entity} from "@scrap/types/Enity.svelte.ts";
+import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as SWC from "@scrap/utils/swc.ts";
 import * as Blockly from "blockly/core";
 import type JSZip from "jszip";
-import { Order, reservedWords } from "./utils";
+import {Order, reservedWords} from "./utils";
 
 type BlockCallback<T extends Blockly.Block> = (
 	block: T,
-	ts: BlocksToCode
+	ts: BlocksToCode,
 ) => null | string | [string, Order];
 
 /**
@@ -103,7 +103,7 @@ class BlocksToCode extends Blockly.CodeGenerator {
 		if (this.entity.variables.length > 0) {
 			this.definitions_.variables = this.entity.variables.reduce(
 				(a, [b, ...c]) => `${a}\t${JSON.stringify(b)}: ${c.flat().join(" | ")};\n`,
-				"interface Variables {\n"
+				"interface Variables {\n",
 			);
 			this.definitions_.variables += "}";
 		}
@@ -121,7 +121,7 @@ class BlocksToCode extends Blockly.CodeGenerator {
 			if (comment) {
 				commentCode += this.prefixLines(
 					Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3),
-					"// "
+					"// ",
 				);
 				commentCode += "\n";
 			}
@@ -153,7 +153,7 @@ class BlocksToCode extends Blockly.CodeGenerator {
 	public override finish(result: string) {
 		const definitions = Object.values(this.definitions_).reduce(
 			(a, b) => `${a}${b}\n\n`,
-			""
+			"",
 		);
 
 		this.isInitialized = false;
@@ -167,11 +167,11 @@ class BlocksToCode extends Blockly.CodeGenerator {
 	}
 
 	public async ready(zip?: JSZip) {
-		const { code } = this.entity;
+		const {code} = this.entity;
 		const result = await SWC.transform(
-			typeof code === "string" ? code : this.workspaceToCode(this.entity.workspace)
+			typeof code === "string" ? code : this.workspaceToCode(this.entity.workspace),
 		);
-		const body = this.prefixLines(result.code, "\t");
+		const body = this.prefixLines(result, "\t");
 		const configuration = {
 			...this.entity.init,
 			current: this.entity.current,
@@ -367,7 +367,7 @@ BlocksToCode.register("foreach", function (block, ts) {
 BlocksToCode.register("property", function (block) {
 	return [
 		`$[${JSON.stringify(block.getFieldValue("SPRITE"))}].${block.getFieldValue(
-			"PROPERTY"
+			"PROPERTY",
 		)}`,
 		Order.MEMBER,
 	];
@@ -473,7 +473,7 @@ BlocksToCode.register("generic", function (block, ts) {
 });
 
 BlocksToCode.register<typeof UnionBlock>("union", function (block, ts) {
-	const { count } = block;
+	const {count} = block;
 	const types = [] as string[];
 
 	for (let i = 0; i < count; i++) {
@@ -516,7 +516,7 @@ BlocksToCode.register("text_or_number", function (block) {
 
 BlocksToCode.register<typeof CallBlock>("call", (block, ts) => {
 	const args = block.params_.map(
-		(_, i) => ts.valueToCode(block, `PARAM_${i}`, Order.NONE) || "null"
+		(_, i) => ts.valueToCode(block, `PARAM_${i}`, Order.NONE) || "null",
 	);
 	const code = `${block.getFieldValue("NAME")}(${args.join(", ")})`;
 

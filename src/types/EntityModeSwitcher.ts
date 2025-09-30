@@ -1,5 +1,5 @@
-import type { Entity } from "./Enity.svelte.ts";
-import type { EntityMode } from "./EntityMode";
+import type {Entity} from "./Enity.svelte.ts";
+import type {EntityMode} from "./EntityMode";
 
 function decorator() {}
 
@@ -10,7 +10,7 @@ export interface EntityModeSwitcher {
 export declare namespace EntityModeSwitcher {
 	type Decorator = (
 		from: EntityMode,
-		to: EntityMode
+		to: EntityMode,
 	) => (constructor: EntityModeSwitcher) => void;
 }
 

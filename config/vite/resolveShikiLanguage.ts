@@ -1,4 +1,4 @@
-import { basename, extname } from "path";
+import {basename, extname} from "path";
 
 export function resolveShikiLanguage(path: string): string {
 	const extension = extname(path);

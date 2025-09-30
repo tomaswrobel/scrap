@@ -1,19 +1,19 @@
 class Messages extends EventTarget {
-    listeners: Messages.Listener[] = [];
+	listeners: Messages.Listener[] = [];
 }
 
 declare namespace Messages {
-    interface Listener {
-        msg: string;
-        listenerId: string;
-    }
+	interface Listener {
+		msg: string;
+		listenerId: string;
+	}
 
-    type Event = CustomEvent<string>;
+	type Event = CustomEvent<string>;
 
-    type DoneEvent = CustomEvent<{
-        listenerId: string;
-        msgId: string;
-    }>;
+	type DoneEvent = CustomEvent<{
+		listenerId: string;
+		msgId: string;
+	}>;
 }
 
 export default Messages;

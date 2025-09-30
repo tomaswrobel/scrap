@@ -1,13 +1,13 @@
-import { languages, type CancellationToken, type editor, type Position } from "monaco-editor";
+import {languages, type CancellationToken, type editor, type Position} from "monaco-editor";
 import ts from "typescript";
-import { Adapter } from "./Adapter";
+import {Adapter} from "./Adapter";
 
 @Adapter.providedBy(languages.registerSignatureHelpProvider)
 export class SignatureHelpAdapter extends Adapter implements languages.SignatureHelpProvider {
 	public signatureHelpTriggerCharacters = ["(", ","];
 
 	private toSignatureHelpTriggerReason(
-		context: languages.SignatureHelpContext
+		context: languages.SignatureHelpContext,
 	): ts.SignatureHelpTriggerReason {
 		switch (context.triggerKind) {
 			case languages.SignatureHelpTriggerKind.TriggerCharacter:
@@ -26,15 +26,15 @@ export class SignatureHelpAdapter extends Adapter implements languages.Signature
 						};
 					}
 				} else {
-					return { kind: "invoked" };
+					return {kind: "invoked"};
 				}
 
 			case languages.SignatureHelpTriggerKind.ContentChange:
-				return context.isRetrigger ? { kind: "retrigger" } : { kind: "invoked" };
+				return context.isRetrigger ? {kind: "retrigger"} : {kind: "invoked"};
 
 			case languages.SignatureHelpTriggerKind.Invoke:
 			default:
-				return { kind: "invoked" };
+				return {kind: "invoked"};
 		}
 	}
 
@@ -42,7 +42,7 @@ export class SignatureHelpAdapter extends Adapter implements languages.Signature
 		model: editor.ITextModel,
 		position: Position,
 		_token: CancellationToken,
-		context: languages.SignatureHelpContext
+		context: languages.SignatureHelpContext,
 	): Promise<languages.SignatureHelpResult | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);

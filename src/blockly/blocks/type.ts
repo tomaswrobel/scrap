@@ -84,9 +84,9 @@ export default new CustomBlock({
 					}
 
 					return type;
-				}
+				},
 			),
-			"TYPE"
+			"TYPE",
 		);
 	},
 });

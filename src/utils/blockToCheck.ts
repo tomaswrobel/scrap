@@ -1,5 +1,5 @@
 import type * as Blockly from "blockly/core";
-import type { Check } from "../types/Check";
+import type {Check} from "../types/Check";
 
 /**
  * Accepts the type block and converts it to a Scrap type.
@@ -20,8 +20,8 @@ export function blockToCheck(block?: Blockly.Block | null): Check {
 		const set = new Set<string>(
 			block.inputList.reduce<string[]>(
 				(a, b) => a.concat(blockToCheck(b.connection?.targetBlock())),
-				[]
-			)
+				[],
+			),
 		);
 
 		if (set.size === 1) {

@@ -1,5 +1,5 @@
-import { languages, type editor, type Range } from "monaco-editor";
-import { FormatBaseAdapter } from "./FormatBaseAdapter.ts";
+import {languages, type editor, type Range} from "monaco-editor";
+import {FormatBaseAdapter} from "./FormatBaseAdapter.ts";
 
 @FormatBaseAdapter.providedBy(languages.registerDocumentRangeFormattingEditProvider)
 export class FormatAdapter
@@ -11,7 +11,7 @@ export class FormatAdapter
 	public async provideDocumentRangeFormattingEdits(
 		model: editor.ITextModel,
 		range: Range,
-		options: languages.FormattingOptions
+		options: languages.FormattingOptions,
 	): Promise<languages.TextEdit[] | undefined> {
 		const resource = model.uri;
 		const startOffset = model.getOffsetAt({
@@ -32,7 +32,7 @@ export class FormatAdapter
 			resource.toString(),
 			startOffset,
 			endOffset,
-			this.convertOptions(options)
+			this.convertOptions(options),
 		);
 
 		if (model.isDisposed()) {

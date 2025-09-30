@@ -13,7 +13,7 @@ export default class Costume {
 
 		if (!img.complete) {
 			await new Promise(resolve => {
-				img.addEventListener("load", resolve, { once: true });
+				img.addEventListener("load", resolve, {once: true});
 			});
 		}
 

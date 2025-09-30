@@ -27,5 +27,5 @@ export function dataURLToFile(dataURL: string, filename: string) {
 		bytes[i] = binaryString.charCodeAt(i);
 	}
 
-	return new File([bytes], filename, { type });
+	return new File([bytes], filename, {type});
 }

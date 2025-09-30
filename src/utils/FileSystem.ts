@@ -1,8 +1,12 @@
-import { assert } from "./assert";
-import { InvalidPathError, EntryAlreadyExists } from "./FileSystemErrors";
+import {assert} from "./assert";
+import {InvalidPathError, EntryAlreadyExists} from "./FileSystemErrors";
 
 export class FileSystem {
-	private constructor(private readonly root: FileSystemDirectoryHandle) {}
+	private readonly root: FileSystemDirectoryHandle;
+
+	private constructor(root: FileSystemDirectoryHandle) {
+		this.root = root;
+	}
 
 	public get name() {
 		return this.root.name;
@@ -17,30 +21,30 @@ export class FileSystem {
 		const filename = segments.pop();
 		assert(filename, new InvalidPathError(path));
 
-		return { segments, filename };
+		return {segments, filename};
 	}
 
-	private async getFileHandle(path: string, { create = false, silent = false }) {
-		const { segments, filename } = this.processFilePath(path);
+	private async getFileHandle(path: string, {create = false, silent = false}) {
+		const {segments, filename} = this.processFilePath(path);
 		const directory = await this.getDirectoryFromSegments(segments, create);
 
 		if (!silent && (await this.doesFileExist(filename, directory))) {
 			throw new EntryAlreadyExists(path);
 		}
 
-		return directory.getFileHandle(filename, { create });
+		return directory.getFileHandle(filename, {create});
 	}
 
 	private async getDirectoryFromSegments(
 		[first, ...segments]: string[],
 		create: boolean,
-		dir = this.root
+		dir = this.root,
 	): Promise<FileSystemDirectoryHandle> {
 		if (first) {
 			return this.getDirectoryFromSegments(
 				segments,
 				create,
-				await dir.getDirectoryHandle(first, { create })
+				await dir.getDirectoryHandle(first, {create}),
 			);
 		} else {
 			return dir;
@@ -59,21 +63,21 @@ export class FileSystem {
 		}
 	}
 
-	public async writeFile(path: string, data: BlobPart, { type = "", silent = false }) {
-		const file = await this.getFileHandle(path, { create: true, silent });
-		const blob = data instanceof Blob && !type ? data : new Blob([data], { type });
+	public async writeFile(path: string, data: BlobPart, {type = "", silent = false}) {
+		const file = await this.getFileHandle(path, {create: true, silent});
+		const blob = data instanceof Blob && !type ? data : new Blob([data], {type});
 		const writable = await file.createWritable();
 		await writable.write(blob);
 		await writable.close();
 	}
 
 	public async getFile(path: string) {
-		const file = await this.getFileHandle(path, { create: true });
+		const file = await this.getFileHandle(path, {create: true});
 		return file.getFile();
 	}
 
 	public async createFilePath(path: string) {
-		await this.getFileHandle(path, { create: true });
+		await this.getFileHandle(path, {create: true});
 	}
 
 	public async getDirectory(path: string, create = false) {
@@ -86,7 +90,7 @@ export class FileSystem {
 	}
 
 	public async fileExists(path: string) {
-		const { segments, filename } = this.processFilePath(path);
+		const {segments, filename} = this.processFilePath(path);
 		const directory = await this.getDirectoryFromSegments(segments, false);
 		return this.doesFileExist(filename, directory);
 	}

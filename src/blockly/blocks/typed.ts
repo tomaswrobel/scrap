@@ -18,8 +18,8 @@
  * and the immovability of the block help to blend it in with the
  * parent block.
  */
-import { blockToCheck } from "@scrap/utils/blockToCheck";
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {blockToCheck} from "@scrap/utils/blockToCheck";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 import FieldIdentifier from "../fields/field_identifier";
 import FieldParam from "../fields/field_param";

@@ -1,5 +1,5 @@
-import { languages, type editor, type Position } from "monaco-editor";
-import { FormatBaseAdapter } from "./FormatBaseAdapter.ts";
+import {languages, type editor, type Position} from "monaco-editor";
+import {FormatBaseAdapter} from "./FormatBaseAdapter.ts";
 
 @FormatBaseAdapter.providedBy(languages.registerOnTypeFormattingEditProvider)
 export class FormatOnTypeAdapter
@@ -14,7 +14,7 @@ export class FormatOnTypeAdapter
 		model: editor.ITextModel,
 		position: Position,
 		ch: string,
-		options: languages.FormattingOptions
+		options: languages.FormattingOptions,
 	): Promise<languages.TextEdit[] | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
@@ -28,7 +28,7 @@ export class FormatOnTypeAdapter
 			resource.toString(),
 			offset,
 			ch,
-			this.convertOptions(options)
+			this.convertOptions(options),
 		);
 
 		if (model.isDisposed()) {

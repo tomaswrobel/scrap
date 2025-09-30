@@ -1,6 +1,6 @@
 <script lang="ts" module>
-	import type { HTMLAttributes, MouseEventHandler } from "svelte/elements";
-	import { on } from "svelte/events";
+	import type {HTMLAttributes, MouseEventHandler} from "svelte/elements";
+	import {on} from "svelte/events";
 
 	/**
 	 * Map of input types to their options.
@@ -74,7 +74,7 @@
 </script>
 
 <script lang="ts">
-	let { element = $bindable(), class: customClass, ...attributes }: Props = $props();
+	let {element = $bindable(), class: customClass, ...attributes}: Props = $props();
 	let init = $state<InputOptions>();
 	let form = $state<HTMLFormElement>();
 
@@ -127,7 +127,7 @@
 					resolve(JSON.parse(this.returnValue || "false") as Inputs[I][0]);
 					this.returnValue = "";
 				},
-				{ once: true },
+				{once: true},
 			);
 		});
 	}
@@ -152,7 +152,7 @@
 					{/each}
 				</select>
 			{:else if isInputType(init, "textarea")}
-				{@const { title: _0, body: _1, ...rest } = init}
+				{@const {title: _0, body: _1, ...rest} = init}
 				<textarea class="textarea w-full" name="string" {...rest}></textarea>
 			{:else if isInputType(init, "checkbox", "radio", "toggle")}
 				<div class="flex flex-col gap-2">
@@ -172,15 +172,20 @@
 					{/each}
 				</div>
 			{:else if isInputType(init, "number", "range")}
-				{@const { title: _0, body: _1, ...rest } = init}
+				{@const {title: _0, body: _1, ...rest} = init}
 				<input
 					name="number "
 					class={[init.type === "number" ? "input" : "range", "w-full"]}
 					{...rest}
 				/>
 			{:else if isInputType(init, "tel", "email", "search", "text", "password")}
-				{@const { pattern, ...props } = init}
-				<input class="input w-full" pattern={pattern?.source} {...props} name="string" />
+				{@const {pattern, ...props} = init}
+				<input
+					class="input w-full"
+					pattern={pattern?.source}
+					{...props}
+					name="string"
+				/>
 			{/if}
 		{/if}
 		<form class="modal-action" action="javascript:postMessage('{uuid}')" bind:this={form}>

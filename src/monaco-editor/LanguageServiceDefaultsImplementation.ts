@@ -1,4 +1,4 @@
-import { Emitter, type IDisposable, type IEvent, type languages } from "monaco-editor";
+import {Emitter, type IDisposable, type IEvent, type languages} from "monaco-editor";
 
 export class LanguageServiceDefaultsImplementation
 	implements languages.typescript.LanguageServiceDefaults
@@ -21,7 +21,7 @@ export class LanguageServiceDefaultsImplementation
 		diagnosticsOptions: languages.typescript.DiagnosticsOptions,
 		workerOptions: languages.typescript.WorkerOptions,
 		inlayHintsOptions: languages.typescript.InlayHintsOptions,
-		modeConfiguration: languages.typescript.ModeConfiguration
+		modeConfiguration: languages.typescript.ModeConfiguration,
 	) {
 		this._extraLibs = Object.create(null);
 		this._removedExtraLibs = Object.create(null);
@@ -60,7 +60,7 @@ export class LanguageServiceDefaultsImplementation
 
 	public addExtraLib(
 		content: string,
-		filePath = `ts:extralib-${Math.random().toString(36).substring(2, 15)}`
+		filePath = `ts:extralib-${Math.random().toString(36).substring(2, 15)}`,
 	): IDisposable {
 		if (this._extraLibs[filePath]?.content === content) {
 			return {
@@ -102,7 +102,7 @@ export class LanguageServiceDefaultsImplementation
 		};
 	}
 
-	public setExtraLibs(libs?: { content: string; filePath?: string }[]): void {
+	public setExtraLibs(libs?: {content: string; filePath?: string}[]): void {
 		for (const filePath in this._extraLibs) {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			this._removedExtraLibs[filePath] = this._extraLibs[filePath]!.version;
@@ -116,7 +116,7 @@ export class LanguageServiceDefaultsImplementation
 				const filePath =
 					lib.filePath ??
 					`ts:extralib-${Math.random().toString(36).substring(2, 15)}`;
-				const { content } = lib;
+				const {content} = lib;
 				let myVersion = 1;
 				if (this._removedExtraLibs[filePath]) {
 					myVersion = this._removedExtraLibs[filePath] + 1;
@@ -147,7 +147,7 @@ export class LanguageServiceDefaultsImplementation
 	}
 
 	public setCompilerOptions(
-		options: languages.typescript.CompilerOptions = Object.create(null)
+		options: languages.typescript.CompilerOptions = Object.create(null),
 	): void {
 		this._compilerOptions = options;
 		this._onDidChange.fire(undefined);
@@ -158,21 +158,21 @@ export class LanguageServiceDefaultsImplementation
 	}
 
 	public setDiagnosticsOptions(
-		options: languages.typescript.DiagnosticsOptions = Object.create(null)
+		options: languages.typescript.DiagnosticsOptions = Object.create(null),
 	): void {
 		this._diagnosticsOptions = options;
 		this._onDidChange.fire(undefined);
 	}
 
 	public setWorkerOptions(
-		options: languages.typescript.WorkerOptions = Object.create(null)
+		options: languages.typescript.WorkerOptions = Object.create(null),
 	): void {
 		this._workerOptions = options;
 		this._onDidChange.fire(undefined);
 	}
 
 	public setInlayHintsOptions(
-		options: languages.typescript.InlayHintsOptions = Object.create(null)
+		options: languages.typescript.InlayHintsOptions = Object.create(null),
 	): void {
 		this._inlayHintsOptions = options;
 		this._onDidChange.fire(undefined);
@@ -193,7 +193,7 @@ export class LanguageServiceDefaultsImplementation
 	}
 
 	public setModeConfiguration(
-		modeConfiguration: languages.typescript.ModeConfiguration = Object.create(null)
+		modeConfiguration: languages.typescript.ModeConfiguration = Object.create(null),
 	): void {
 		this._modeConfiguration = modeConfiguration;
 		this._onDidChange.fire(undefined);

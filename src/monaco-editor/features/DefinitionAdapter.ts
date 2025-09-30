@@ -1,7 +1,7 @@
-import { languages, Uri, type editor, type Position } from "monaco-editor";
-import type { TypeScriptMode } from "../tsMode";
-import { Adapter } from "./Adapter.ts";
-import type { LibFiles } from "./LibFiles.ts";
+import {languages, Uri, type editor, type Position} from "monaco-editor";
+import type {TypeScriptMode} from "../tsMode";
+import {Adapter} from "./Adapter.ts";
+import type {LibFiles} from "./LibFiles.ts";
 
 @Adapter.providedBy(languages.registerDefinitionProvider)
 export class DefinitionAdapter extends Adapter {
@@ -14,7 +14,7 @@ export class DefinitionAdapter extends Adapter {
 
 	public async provideDefinition(
 		model: editor.ITextModel,
-		position: Position
+		position: Position,
 	): Promise<languages.Definition | undefined> {
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
@@ -32,7 +32,7 @@ export class DefinitionAdapter extends Adapter {
 
 		// Fetch lib files if necessary
 		await this.libFiles.fetchLibFilesIfNecessary(
-			entries.map(entry => Uri.parse(entry.fileName))
+			entries.map(entry => Uri.parse(entry.fileName)),
 		);
 
 		if (model.isDisposed()) {

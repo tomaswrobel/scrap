@@ -1,11 +1,8 @@
-import { readFile } from "node:fs/promises";
-import { XMLBuilder, XMLParser } from "fast-xml-parser";
-import type { Plugin } from "vite";
-import {
-	type AOTPluginContext,
-	createAOTComponentPlugin,
-} from "./createAOTComponentPlugin";
-import type { Props } from "../../src/components/Svg.svelte";
+import {readFile} from "node:fs/promises";
+import {XMLBuilder, XMLParser} from "fast-xml-parser";
+import type {Plugin} from "vite";
+import {type AOTPluginContext, createAOTComponentPlugin} from "./createAOTComponentPlugin";
+import type {Props} from "../../src/components/Svg.svelte";
 
 const parserOptions = Object.freeze({
 	attributesGroupName: "attributes",
@@ -41,7 +38,7 @@ export function svgPlugin(param: string): Plugin {
 		source: "/src/components/aot/Svg.svelte",
 		async getVariables(ctx: AOTPluginContext): Promise<Props["vars"]> {
 			const rawContent = await readFile(ctx.id, "utf-8");
-			const parsed = parser.parse(rawContent) as { svg?: Node };
+			const parsed = parser.parse(rawContent) as {svg?: Node};
 
 			if (!parsed.svg) {
 				throw new SyntaxError("Invalid SVG File: Missing root <svg> tag.");
@@ -50,9 +47,7 @@ export function svgPlugin(param: string): Plugin {
 			const attributes = parsed.svg[parserOptions.attributesGroupName];
 
 			if (typeof attributes === "string") {
-				throw new SyntaxError(
-					"Invalid SVG File: <attributes> is not a valid tag."
-				);
+				throw new SyntaxError("Invalid SVG File: <attributes> is not a valid tag.");
 			}
 
 			if (typeof attributes === "object") {

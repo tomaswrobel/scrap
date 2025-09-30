@@ -23,11 +23,11 @@
  * will remove its value input (return;) and serve like
  * the Scratch's "stop this script" block.
  */
-import type { Check } from "@scrap/types/Check";
-import { blockToCheck } from "@scrap/utils/blockToCheck";
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import type {Check} from "@scrap/types/Check";
+import {blockToCheck} from "@scrap/utils/blockToCheck";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
-import { TypeToShadowMap } from "../types";
+import {TypeToShadowMap} from "../types";
 
 export type ReturnBlockOutput = Check | false;
 
@@ -46,7 +46,7 @@ export default new CustomBlock({
 	},
 
 	loadExtraState(state: Record<"output", ReturnBlockOutput>) {
-		const { output } = this.saveExtraState();
+		const {output} = this.saveExtraState();
 
 		if (!this.isEqual(output, state.output)) {
 			const input = this.getInput("VALUE");
@@ -72,9 +72,9 @@ export default new CustomBlock({
 
 			if (parent.type === "function") {
 				const type = parent.getInput("RETURNS")?.connection?.targetBlock();
-				this.loadExtraState({ output: type ? blockToCheck(type) : false });
+				this.loadExtraState({output: type ? blockToCheck(type) : false});
 			} else {
-				this.loadExtraState({ output: false });
+				this.loadExtraState({output: false});
 			}
 		}
 	},

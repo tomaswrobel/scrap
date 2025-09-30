@@ -1,0 +1,88 @@
+# https://taskfile.dev
+
+version: "3"
+
+dotenv:
+  - .env
+  - .env.local
+
+tasks:
+  setup:
+    desc: Sets the repository for development for the first time
+    cmds:
+      - touch .env.local
+      - pnpm install
+
+  compiler:build:
+    desc: Builds the compiler
+    dir: src/compiler
+    env:
+      RUSTFLAGS: --cfg getrandom_backend="wasm_js"
+    cmds:
+      - wasm-pack build --out-name index
+    sources:
+      - compiler/src/*
+      - compiler/Cargo.*
+    generates:
+      - compiler/pkg
+
+  engine:build:
+    desc: Builds the Scrap Engine
+    cmds:
+      - rm -rf public/engine
+      - pnpm vite build --config=vite.engine.config.ts
+      - echo "*" > public/engine/.gitignore
+    sources:
+      - src/engine/*.{css,ts,js}
+    generates:
+      - public/engine/*
+
+  blockly:media-copy:
+    requires:
+      vars:
+        - VITE_BLOCKLY_MEDIA_PATH
+    desc: Copies the Blockly Media into /public
+    cmds:
+      - rm -rf public/$VITE_BLOCKLY_MEDIA_PATH
+      - cp -r node_modules/blockly/media public/$VITE_BLOCKLY_MEDIA_PATH
+      - echo "*" > public/$VITE_BLOCKLY_MEDIA_PATH/.gitignore
+    sources:
+      - node_modules/blockly/media/*
+    generates:
+      - public/{{.VITE_BLOCKLY_MEDIA_PATH}}/*
+
+  intro:
+    vars:
+      APP_VERSION:
+        sh: >
+          node -e '
+            const package = require("./package.json");
+            console.log(package.version);
+          '
+      APP_NAME:
+        sh: >
+          node -e '
+            const package = require("./package.json");
+            console.log(package.displayName || package.name);
+          '
+    cmds:
+      - echo "{{.APP_NAME}} v{{.APP_VERSION}} starting..."
+    silent: true
+
+  build:
+    desc: Builds the app to the production
+    cmds:
+      - task: engine:build
+      - task: blockly:media-copy
+
+  check:
+    desc: Checks the code
+    cmds:
+      - pnpm tsc
+      - pnpm eslint
+      - pnpm prettier . --check
+
+  test:
+    desc: Runs tests
+    cmds:
+      - pnpm tsx --test ./**/*.test.ts

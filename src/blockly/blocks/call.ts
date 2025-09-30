@@ -35,9 +35,9 @@
  * * Parameters are of a specific type.
  * * Corresponding shadow blocks are used inside the parameters.
  */
-import type { Check } from "@scrap/types/Check";
-import { CustomBlock } from "@scrap/utils/CustomBlock";
-import { TypeToShadowMap } from "../types";
+import type {Check} from "@scrap/types/Check";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {TypeToShadowMap} from "../types";
 
 export interface CallExtraState {
 	params?: Check[];

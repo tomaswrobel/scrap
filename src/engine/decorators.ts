@@ -1,5 +1,5 @@
 import Entity from "./entity";
-import { StopError } from "./utils";
+import {StopError} from "./utils";
 
 /**
  * This decorator is used to decorate methods of the Entity class,
@@ -11,7 +11,7 @@ import { StopError } from "./utils";
  */
 export function paced<A extends any[], T, E extends Entity>(
 	fn: (this: E, ...args: A) => Promise<T>,
-	_context: ClassMethodDecoratorContext<E, typeof fn>
+	_context: ClassMethodDecoratorContext<E, typeof fn>,
 ) {
 	return async function (this: E, ...args: A) {
 		return new Promise<T>((resolve, reject) => {
@@ -30,7 +30,7 @@ export function paced<A extends any[], T, E extends Entity>(
 						reject(new StopError());
 					}
 				},
-				{ signal: controller.signal }
+				{signal: controller.signal},
 			);
 		});
 	};
@@ -47,7 +47,7 @@ const STOP = Symbol("STOP");
  */
 export function method<A extends any[], T, E extends Entity>(
 	fn: (this: E, ...args: A) => Promise<T>,
-	_context: ClassMethodDecoratorContext<E, typeof fn>
+	_context: ClassMethodDecoratorContext<E, typeof fn>,
 ) {
 	return async function (this: E, ...args: A) {
 		const controller = new AbortController();
@@ -62,8 +62,8 @@ export function method<A extends any[], T, E extends Entity>(
 							resolve(STOP);
 						}
 					},
-					{ signal: controller.signal }
-				)
+					{signal: controller.signal},
+				),
 			),
 		]);
 
@@ -87,7 +87,7 @@ export function method<A extends any[], T, E extends Entity>(
  */
 export function event<A extends [...any[], Entity.Callback], E extends Entity>(
 	fn: (this: E, ...args: A) => Promise<void>,
-	_context: ClassMethodDecoratorContext<E, typeof fn>
+	_context: ClassMethodDecoratorContext<E, typeof fn>,
 ) {
 	return async function (this: E, ...args: A) {
 		const originalCallback = args.pop() as Entity.Callback;
@@ -105,7 +105,7 @@ export function event<A extends [...any[], Entity.Callback], E extends Entity>(
 								resolve();
 							}
 						},
-						{ signal: controller.signal }
+						{signal: controller.signal},
 					);
 				}),
 			]);

@@ -22,7 +22,7 @@
  * So instead, Scrap uses its own function blocks, which
  * works similarly to legacy Blockly's procedure system.
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 const dom = Blockly.utils.xml.createElement("shadow");
@@ -40,7 +40,7 @@ export default new CustomBlock(
 			};
 		},
 
-		loadExtraState(state: { params?: string[]; returns?: boolean }) {
+		loadExtraState(state: {params?: string[]; returns?: boolean}) {
 			this.params = state.params || [];
 			this.returns = state.returns || false;
 			this.updateShape();
@@ -102,7 +102,7 @@ export default new CustomBlock(
 					block.render?.();
 
 					this.appendValueInput(`PARAM_${i}`).connection!.connect(
-						block.outputConnection
+						block.outputConnection,
 					);
 				} else {
 					const block = typed.connection!.targetBlock()!;
@@ -110,7 +110,7 @@ export default new CustomBlock(
 
 					block.setFieldValue(
 						`${this.params[i]}:${value.split(":")[1] || "any"}`,
-						"PARAM"
+						"PARAM",
 					);
 				}
 
@@ -135,5 +135,5 @@ export default new CustomBlock(
 			}
 		},
 	},
-	["function_param", "function_returns"]
+	["function_param", "function_returns"],
 );

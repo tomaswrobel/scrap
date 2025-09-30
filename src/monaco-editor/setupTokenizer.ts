@@ -12,8 +12,8 @@
  * The tokenizer is created by Microsoft, I only mapped identifiers
  * to Scrap blocks. For that, I created a new theme on my own.
  */
-import { languages } from "monaco-editor";
-import type { MonacoEditorLanguage } from "./MonacoEditorLanguage";
+import {languages} from "monaco-editor";
+import type {MonacoEditorLanguage} from "./MonacoEditorLanguage";
 
 export function setupTokenizer(language: MonacoEditorLanguage) {
 	languages.registerTokensProviderFactory(language, {
@@ -254,7 +254,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				/\\(?:[bBdDfnrstvwWn0\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
 			// The main tokenizer for our languages
 			tokenizer: {
-				root: [[/[{}]/, "delimiter.bracket"], { include: "common" }],
+				root: [[/[{}]/, "delimiter.bracket"], {include: "common"}],
 				common: [
 					[
 						/(Color)([ \n\t\r]*\.[ \n\t\r]*)(fromHex|random|fromRGB|)/,
@@ -311,11 +311,11 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 						},
 					],
 					// whitespace
-					{ include: "@whitespace" },
+					{include: "@whitespace"},
 					// regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
 					[
 						/\/(?=([^\\/]|\\.)+\/([dgimsuy]*)(\s*)(\.|;|,|\)|\]|\}|$))/,
-						{ token: "regexp", bracket: "@open", next: "@regexp" },
+						{token: "regexp", bracket: "@open", next: "@regexp"},
 					],
 					// delimiters and operators
 					[/[()[\]]/, "@brackets"],
@@ -379,7 +379,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 						/(\[)(\^?)(?=(?:[^\]\\/]|\\.)+)/,
 						[
 							"regexp.escape.control",
-							{ token: "regexp.escape.control", next: "@regexrange" },
+							{token: "regexp.escape.control", next: "@regexrange"},
 						],
 					],
 					[/(\()(\?:|\?=|\?!)/, ["regexp.escape.control", "regexp.escape.control"]],
@@ -390,7 +390,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 					[/\\\./, "regexp.invalid"],
 					[
 						/(\/)([dgimsuy]*)/,
-						[{ token: "regexp", bracket: "@close", next: "@pop" }, "keyword.other"],
+						[{token: "regexp", bracket: "@close", next: "@pop"}, "keyword.other"],
 					],
 				],
 				regexrange: [
@@ -420,7 +420,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 					[/'/, "string", "@pop"],
 				],
 				string_backtick: [
-					[/\$\{/, { token: "delimiter.bracket", next: "@bracketCounting" }],
+					[/\$\{/, {token: "delimiter.bracket", next: "@bracketCounting"}],
 					[/[^\\`$]+/, "string"],
 					[/@escapes/, "string.escape"],
 					[/\\./, "string.escape.invalid"],
@@ -429,7 +429,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				bracketCounting: [
 					[/\{/, "delimiter.bracket", "@bracketCounting"],
 					[/\}/, "delimiter.bracket", "@pop"],
-					{ include: "common" },
+					{include: "common"},
 				],
 			},
 		}),
@@ -446,7 +446,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 					model.getOffsetAt({
 						lineNumber: info.range.endLineNumber,
 						column: info.range.endColumn,
-					})
+					}),
 				);
 				const rgb = [
 					Math.round(info.color.red * 255),
@@ -525,7 +525,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				return colors;
 			},
 		});
-		
+
 		languages.setLanguageConfiguration(language, {
 			wordPattern: /(-?\d*\.\d\w*)|([^`~!@#%^&*()\-=+[{\]}\\|;:'",.<>/?\s]+)/g,
 			comments: {
@@ -573,13 +573,13 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				},
 			],
 			autoClosingPairs: [
-				{ open: "{", close: "}" },
-				{ open: "[", close: "]" },
-				{ open: "(", close: ")" },
-				{ open: '"', close: '"', notIn: ["string"] },
-				{ open: "'", close: "'", notIn: ["string", "comment"] },
-				{ open: "`", close: "`", notIn: ["string", "comment"] },
-				{ open: "/**", close: " */", notIn: ["string"] },
+				{open: "{", close: "}"},
+				{open: "[", close: "]"},
+				{open: "(", close: ")"},
+				{open: '"', close: '"', notIn: ["string"]},
+				{open: "'", close: "'", notIn: ["string", "comment"]},
+				{open: "`", close: "`", notIn: ["string", "comment"]},
+				{open: "/**", close: " */", notIn: ["string"]},
 			],
 			folding: {
 				markers: {

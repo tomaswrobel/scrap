@@ -13,7 +13,7 @@
  * Union block groups types together. It's a
  * dynamic block with a mutator.
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({
@@ -27,15 +27,15 @@ export default new CustomBlock({
 		this.updateShape(); // That's why it is a dynamic block
 	},
 	saveExtraState() {
-		return { count: this.count };
+		return {count: this.count};
 	},
-	loadExtraState(state: { count?: number }) {
-		const { count } = this;
+	loadExtraState(state: {count?: number}) {
+		const {count} = this;
 		this.count = state.count || 2;
 		this.updateShape(count);
 	},
 	compose(block: Blockly.Block | null) {
-		const { count } = this;
+		const {count} = this;
 		this.count = 0;
 
 		while (block) {

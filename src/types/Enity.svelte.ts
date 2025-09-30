@@ -1,8 +1,8 @@
-import { dataURLToFile } from "@scrap/utils/dataURLToFile";
+import {dataURLToFile} from "@scrap/utils/dataURLToFile";
 import * as Blockly from "blockly/core";
 import type JSZip from "jszip";
 import * as path from "path";
-import type { Variable } from "./Variable";
+import type {Variable} from "./Variable";
 import click from "./assets/sounds/click.mp3?url&inline";
 import scrappy from "./assets/svgs/scrappy.svg?raw";
 import stage from "./assets/svgs/stage.svg?raw";
@@ -18,7 +18,7 @@ export class Entity {
 	public variables = $state<Variable[]>([]);
 
 	public mode = $state<"code" | "blocks">("code");
-	private typescript = $state<string>();
+	public typescript = $state<string>();
 
 	private constructor(name: string, isStage: boolean, costume: File, init = {}) {
 		this.costumes = $state([costume]);
@@ -31,7 +31,7 @@ export class Entity {
 		const sprite = new this(
 			name,
 			false,
-			new File([scrappy], "Scrappy.svg", { type: "image/svg+xml" }),
+			new File([scrappy], "Scrappy.svg", {type: "image/svg+xml"}),
 			{
 				x: 0,
 				y: 0,
@@ -40,17 +40,13 @@ export class Entity {
 				rotationStyle: 0,
 				visible: true,
 				draggable: false,
-			}
+			},
 		);
 		return sprite;
 	}
 
 	public static createStage() {
-		return new this(
-			"Stage",
-			true,
-			new File([stage], "Stage.svg", { type: "image/svg+xml" })
-		);
+		return new this("Stage", true, new File([stage], "Stage.svg", {type: "image/svg+xml"}));
 	}
 
 	/** Helper workspace for generating code. */
@@ -88,7 +84,7 @@ export class Entity {
 					...urls,
 					[path.parse(file.name).name]: URL.createObjectURL(file),
 				}),
-				{}
+				{},
 			);
 		}
 

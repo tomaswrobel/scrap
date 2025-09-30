@@ -1,7 +1,7 @@
-import { languages, type editor, type Position } from "monaco-editor";
-import type { TypeScriptMode } from "../tsMode.ts";
-import { Adapter } from "./Adapter.ts";
-import type { LibFiles } from "./LibFiles.ts";
+import {languages, type editor, type Position} from "monaco-editor";
+import type {TypeScriptMode} from "../tsMode.ts";
+import {Adapter} from "./Adapter.ts";
+import type {LibFiles} from "./LibFiles.ts";
 
 @Adapter.providedBy(languages.registerRenameProvider)
 export class RenameAdapter extends Adapter implements languages.RenameProvider {
@@ -13,7 +13,7 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
 	public async provideRenameEdits(
 		model: editor.ITextModel,
 		position: Position,
-		newName: string
+		newName: string,
 	): Promise<(languages.WorkspaceEdit & languages.Rejection) | undefined> {
 		const resource = model.uri;
 		const fileName = resource.toString();
@@ -43,7 +43,7 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
 			offset,
 			/* strings*/ false,
 			/* comments*/ false,
-			/* prefixAndSuffix*/ false
+			/* prefixAndSuffix*/ false,
 		);
 
 		if (!renameLocations || model.isDisposed()) {
@@ -67,6 +67,6 @@ export class RenameAdapter extends Adapter implements languages.RenameProvider {
 			}
 		}
 
-		return { edits };
+		return {edits};
 	}
 }

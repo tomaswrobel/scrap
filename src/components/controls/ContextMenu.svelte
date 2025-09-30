@@ -1,10 +1,10 @@
 <script lang="ts" module>
-	import type { SvelteHTMLElements } from "svelte/elements";
-	import { onclick } from "./Dialog.svelte";
-	import type { Tag } from "../../types/Tag";
-	import type { Snippet } from "svelte";
+	import type {SvelteHTMLElements} from "svelte/elements";
+	import {onclick} from "./Dialog.svelte";
+	import type {Tag} from "../../types/Tag";
+	import type {Snippet} from "svelte";
 	import * as Context from "$context";
-	import { SvelteMap } from "svelte/reactivity";
+	import {SvelteMap} from "svelte/reactivity";
 
 	export type Props<T extends Tag> = SvelteHTMLElements[T] & {
 		as: T;
@@ -27,7 +27,7 @@
 </script>
 
 <script lang="ts" generics="T extends Tag">
-	const { as, content, menu, ...props }: Props<T> = $props();
+	const {as, content, menu, ...props}: Props<T> = $props();
 
 	let left = $state<string>();
 	let top = $state<string>();

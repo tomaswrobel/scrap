@@ -10,10 +10,34 @@
  * @fileoverview SWC node name map
  * @copyright Tomáš Wróbel 2025
  */
-import { ScrapTypes } from "@scrap/blockly";
+import {ScrapTypes} from "@scrap/blockly/types";
+import type {Check} from "@scrap/types/Check";
 import type * as SWC from "@swc/types";
+import * as Compiler from "@scrap/compiler/pkg";
+import type {Variable} from "@scrap/types/Variable";
 
-export interface SWCNodeNameMap {
+function wrapWasmPromise<T>(fn: Promise<unknown>) {
+	return fn.then(value => {
+		if (value === null) {
+			return Promise.reject<T>();
+		}
+		return Promise.resolve(value as T);
+	});
+}
+
+export function parse(code: string) {
+	return wrapWasmPromise<SWC.Module>(Compiler.parse(code));
+}
+
+export function transform(code: string) {
+	return wrapWasmPromise<string>(Compiler.transform(code));
+}
+
+export function getVariables(code: string) {
+	return wrapWasmPromise<Variable[]>(Compiler.getVariables(code));
+}
+
+export interface NodeNameMap {
 	ClassProperty: SWC.ClassProperty;
 	PrivateProperty: SWC.PrivateProperty;
 	Param: SWC.Param;
@@ -180,12 +204,12 @@ export interface SWCNodeNameMap {
 	Invalid: SWC.Invalid;
 }
 
-export type Node = SWCNodeNameMap[keyof SWCNodeNameMap];
+export type Node = NodeNameMap[keyof NodeNameMap];
 
-export function is<K extends keyof SWCNodeNameMap>(
+export function is<K extends keyof NodeNameMap>(
 	node: unknown,
-	type: K
-): node is SWCNodeNameMap[K] {
+	type: K,
+): node is NodeNameMap[K] {
 	if (typeof node !== "object" || !node) {
 		return false;
 	}
@@ -193,16 +217,12 @@ export function is<K extends keyof SWCNodeNameMap>(
 	return "type" in node && node.type === type;
 }
 
-export interface WithTypeAnnotation {
-	typeAnnotation: SWC.TsTypeAnnotation;
+export function hasType<N extends SWC.Node>(node: N): node is N & WithTypeAnnotation {
+	return "typeAnnotation" in node && is(node.typeAnnotation, "TsTypeAnnotation");
 }
 
-export function hasType<N extends SWC.Node>(
-	node: N
-): node is N & WithTypeAnnotation {
-	return (
-		"typeAnnotation" in node && is(node.typeAnnotation, "TsTypeAnnotation")
-	);
+export interface WithTypeAnnotation {
+	typeAnnotation: SWC.TsTypeAnnotation;
 }
 
 export interface TypedIdentifier extends SWC.Identifier {
@@ -212,8 +232,7 @@ export interface TypedIdentifier extends SWC.Identifier {
 export function hasSimpleProperty(node: SWC.MemberExpression) {
 	return (
 		is(node.property, "Identifier") ||
-		(is(node.property, "Computed") &&
-			is(node.property.expression, "StringLiteral"))
+		(is(node.property, "Computed") && is(node.property.expression, "StringLiteral"))
 	);
 }
 
@@ -221,17 +240,15 @@ export function getPropertyContents(property: Node) {
 	if (is(property, "Identifier") || is(property, "StringLiteral")) {
 		return property.value;
 	} else if (is(property, "Computed")) {
-		return property.expression.type === "StringLiteral"
-			? property.expression.value
-			: "";
+		return property.expression.type === "StringLiteral" ? property.expression.value : "";
 	} else {
 		return "";
 	}
 }
 
 export function getType(type: SWC.TsType | null | undefined): Check {
-	if (type)
-		{switch (type.type) {
+	if (type) {
+		switch (type.type) {
 			case "TsArrayType":
 				return "Array";
 			case "TsKeywordType":
@@ -249,35 +266,26 @@ export function getType(type: SWC.TsType | null | undefined): Check {
 			case "TsUnionType": {
 				return type.types.reduce(
 					(previous, current) => previous.concat(getType(current)),
-					new Array<string>()
+					new Array<string>(),
 				);
 			}
-		}}
+		}
+	}
 	return "any";
 }
 
-export function isProperty(
-	node: SWC.MemberExpression,
-	...properties: unknown[]
-) {
+export function isProperty(node: SWC.MemberExpression, ...properties: unknown[]) {
 	if (isIdentifier(node.property, ...properties)) {
 		return true;
 	}
-	if (
-		is(node.property, "Computed") &&
-		is(node.property.expression, "StringLiteral")
-	) {
+	if (is(node.property, "Computed") && is(node.property.expression, "StringLiteral")) {
 		return properties.includes(node.property.expression.value);
 	}
 	return false;
 }
 
-export function isIdentifier(
-	node: Node,
-	...names: unknown[]
-): node is SWC.Identifier {
+export function isIdentifier(node: Node, ...names: unknown[]): node is SWC.Identifier {
 	return is(node, "Identifier") && names.includes(node.value);
 }
 
-export { parse, transform, print, minify } from "@swc/wasm";
 export type * from "@swc/types";
