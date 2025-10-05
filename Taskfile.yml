@@ -78,7 +78,7 @@ tasks:
   check:
     desc: Checks the code
     cmds:
-      - pnpm tsc
+      - pnpm svelte-check
       - pnpm eslint
       - pnpm prettier . --check
 

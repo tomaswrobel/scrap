@@ -9,5 +9,6 @@
 			"Taskfile.dist.{yml,yaml}",
 			"taskfile.dist.{yml,yaml}"
 		]
-	}
+	},
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false
 }

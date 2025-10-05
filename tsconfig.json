@@ -48,7 +48,8 @@
 		"*.config.ts"
 	],
 	"exclude": [
-		"src/typings"
+		"src/typings",
+		"src/compiler",
 	],
 	"references": [
 		{

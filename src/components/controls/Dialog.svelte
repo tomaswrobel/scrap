@@ -26,6 +26,8 @@
 		value?: Inputs[I][0];
 		title?: string;
 		body?: string;
+		cancelButton?: string | boolean;
+		confirmButton?: string | boolean;
 	};
 
 	export interface NumberOptions {
@@ -74,6 +76,8 @@
 </script>
 
 <script lang="ts">
+	import Button from "./Button.svelte";
+
 	let {element = $bindable(), class: customClass, ...attributes}: Props = $props();
 	let init = $state<InputOptions>();
 	let form = $state<HTMLFormElement>();
@@ -136,6 +140,8 @@
 	$effect(() => on(window, "message", e => e.data === uuid && close()));
 </script>
 
+<svelte:window onmessage={e => e.data === uuid && close()} />
+
 <dialog bind:this={element} {onclick} class={[customClass, "modal"]} {...attributes}>
 	<div class="modal-box">
 		<h3 class="text-lg font-bold empty:hidden">
@@ -189,7 +195,8 @@
 			{/if}
 		{/if}
 		<form class="modal-action" action="javascript:postMessage('{uuid}')" bind:this={form}>
-			<button class="btn btn-primary" formmethod="post">OK</button>
+			{@const confirmButton = }
+			<Button variant="" formmethod="post">OK</button>
 			<button class="btn" formmethod="dialog">Cancel</button>
 		</form>
 	</div>

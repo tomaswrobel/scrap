@@ -20,6 +20,7 @@ import {blockToCheck} from "@scrap/utils/blockToCheck";
 import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 import {TypeToShadowMap} from "../types";
+import type { Check } from "@scrap/types/Check";
 
 export default new CustomBlock(
 	{

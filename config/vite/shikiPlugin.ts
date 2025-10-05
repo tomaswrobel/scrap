@@ -2,7 +2,7 @@ import {readFile} from "fs/promises";
 import {basename} from "path";
 import {codeToHtml} from "shiki";
 import type {Plugin} from "vite";
-import type {Props} from "../../src/components/AOTCode.svelte";
+import type {Props} from "../../src/components/aot/AOTCode.svelte";
 import {createAOTComponentPlugin} from "./createAOTComponentPlugin";
 import {resolveShikiLanguage} from "./resolveShikiLanguage";
 

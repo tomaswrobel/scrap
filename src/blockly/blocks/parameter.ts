@@ -15,8 +15,9 @@
  * - a variable getter
  * - a block created by FieldParam, see fields/field_param.ts
  */
-import {CustomBlock} from "@scrap/utils/CustomBlock";
-import Dialog from "@scrap/utils/dialog";
+import { app } from "@scrap/App.svelte.ts";
+import type {Check} from "@scrap/types/Check.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import type {ContextMenuRegistry} from "blockly/core";
 
 export default new CustomBlock({
@@ -60,8 +61,8 @@ export default new CustomBlock({
 					enabled: true,
 					callback: async () => {
 						if (
-							await Dialog.scrap.fire({
-								input: "none",
+							await app.dialog.fire({
+								type: "none",
 								title: "Delete Variable",
 								body: "Are you sure you want to delete this variable?",
 								cancelButtonHTML: "No",
