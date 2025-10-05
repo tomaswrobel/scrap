@@ -1,6 +1,6 @@
 {
 	"tailwindCSS.classAttributes": ["class", "class:list"],
-	"tailwindCSS.classFunctions": ["tw"],
+	"tailwindCSS.classFunctions": ["tw", "tw.map"],
 	"typescript.tsdk": "./node_modules/typescript/lib",
 	"yaml.schemas": {
 		"https://taskfile.dev/schema.json": [
@@ -9,5 +9,5 @@
 			"Taskfile.dist.{yml,yaml}",
 			"taskfile.dist.{yml,yaml}"
 		]
-	},
+	}
 }

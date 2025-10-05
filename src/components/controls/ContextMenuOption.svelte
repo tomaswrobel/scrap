@@ -1,10 +1,10 @@
 <script lang="ts" module>
-	import {event} from "../../lib/event";
+	import {event} from "@scrap/utils/event.ts";
 	import Chevron from "../../assets/chevron-right.svg?icon";
 	import type {Snippet} from "svelte";
 	import type {HTMLButtonAttributes} from "svelte/elements";
 	import * as Context from "$context";
-	import {assert} from "../../lib/assert";
+	import {assert} from "@scrap/utils/assert";
 
 	export interface BaseProps extends HTMLButtonAttributes {
 		onclick?: undefined;

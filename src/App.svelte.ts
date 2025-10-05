@@ -1,7 +1,11 @@
 import type Dialog from "./components/controls/Dialog.svelte";
 
-export default class App {
-	public dialog = $state<Dialog>({
+export interface App {
+	dialog: Dialog;
+}
+
+export const app = $state<App>({
+	dialog: {
 		cancel() {
 			// Dialog is not initialized.
 		},
@@ -10,5 +14,5 @@ export default class App {
 		},
 		fire: () => Promise.resolve(false),
 		isOpen: () => false,
-	});
-}
+	},
+});

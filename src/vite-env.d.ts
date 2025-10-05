@@ -1,6 +1,9 @@
 /// <reference types="svelte" />
 /// <reference types="vite/client" />
 
+/**
+ * Strongly typed
+ */
 declare module "$context" {
 	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 	interface Map {}

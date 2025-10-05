@@ -45,8 +45,8 @@
 		"src/**/*.js",
 		"src/**/*.svelte",
 		"config",
-		"*.config.mts"
-, "vite.config.js", "svelte.config.js", "eslint.config.js"	],
+		"*.config.ts"
+	],
 	"exclude": [
 		"src/typings"
 	],
