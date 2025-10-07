@@ -2,11 +2,7 @@
 	"extends": "@tsconfig/svelte/tsconfig.json",
 	"compilerOptions": {
 		"target": "ESNext",
-		"lib": [
-			"ESNext",
-			"DOM",
-			"DOM.Iterable"
-		],
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipDefaultLibCheck": true,
 		/* Bundler mode */
@@ -32,25 +28,12 @@
 		"noUncheckedSideEffectImports": true,
 		/* Paths */
 		"paths": {
-			"@scrap/*": [
-				"./src/*"
-			],
-			"node:path": [
-				"./node_modules/path-browserify"
-			]
+			"@scrap/*": ["./src/*"],
+			"node:path": ["./node_modules/path-browserify"]
 		}
 	},
-	"include": [
-		"src/**/*.ts",
-		"src/**/*.js",
-		"src/**/*.svelte",
-		"config",
-		"*.config.ts"
-	],
-	"exclude": [
-		"src/typings",
-		"src/compiler",
-	],
+	"include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "config", "*.config.js"],
+	"exclude": ["src/typings", "src/compiler"],
 	"references": [
 		{
 			"path": "./src/typings/static/tsconfig.json"

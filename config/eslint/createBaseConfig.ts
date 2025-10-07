@@ -5,18 +5,17 @@ import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
 import {
 	possibleProblemRules,
-	restrictedExports,
 	suggestionRules,
 	svelteConfigs,
 	tsConfigs,
 	tsExtensionRules,
 	tsRules,
-} from "./rules.js";
+} from "./rules.ts";
 
 export function createBaseConfig(dir: string, glob: "" | "**/" = "**/"): Linter.Config[] {
 	const jsFiles = [`${dir}/${glob}*.js`, `${dir}/${glob}*.mjs`];
 	const tsFiles = [`${dir}/${glob}*.ts`, `${dir}/${glob}*.mts`];
-	const configFiles = [`${dir}/${glob}*.ts`, `${dir}/${glob}*.config.ts`];
+	const configFiles = [`${dir}/config/${glob}*.ts`, `${dir}/${glob}*.config.mjs`];
 	const svelteFiles = [`${dir}/${glob}*.svelte`, `${dir}/${glob}*.svelte.ts`];
 
 	const defaultTsParserOptions: Partial<Linter.ParserOptions> = {
@@ -46,7 +45,6 @@ export function createBaseConfig(dir: string, glob: "" | "**/" = "**/"): Linter.
 				...suggestionRules,
 				...tsExtensionRules,
 				...tsRules,
-				...restrictedExports("forbidDefaultExport"),
 			},
 		},
 		{
@@ -64,7 +62,6 @@ export function createBaseConfig(dir: string, glob: "" | "**/" = "**/"): Linter.
 				...suggestionRules,
 				...tsExtensionRules,
 				...tsRules,
-				...restrictedExports("allowDefaultExport"),
 			},
 		},
 		{
@@ -96,7 +93,6 @@ export function createBaseConfig(dir: string, glob: "" | "**/" = "**/"): Linter.
 				...suggestionRules,
 				...tsExtensionRules,
 				...tsRules,
-				...restrictedExports("forbidDefaultExport"),
 			},
 			settings: {
 				svelte: {

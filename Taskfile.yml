@@ -30,7 +30,7 @@ tasks:
     desc: Builds the Scrap Engine
     cmds:
       - rm -rf public/engine
-      - pnpm vite build --config=vite.engine.config.ts
+      - pnpm vite build --config=src/engine/vite.config.js
       - echo "*" > public/engine/.gitignore
     sources:
       - src/engine/*.{css,ts,js}

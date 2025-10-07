@@ -16,7 +16,7 @@ export default defineConfig({
 		lib: {
 			entry: [resolve(import.meta.dirname, "./src/engine/index.ts")],
 			fileName(_format, entryName) {
-				return entryName + ".js";
+				return `${entryName}.js`;
 			},
 			cssFileName: "index",
 			formats: ["iife"],

@@ -122,26 +122,6 @@ export const tsExtensionRules: Linter.RulesRecord = {
 	"@typescript-eslint/no-confusing-void-expression": "off",
 };
 
-export function restrictedExports(
-	defaultExport: "allowDefaultExport" | "forbidDefaultExport",
-): Linter.RulesRecord {
-	const forbidDefaultExport = defaultExport === "forbidDefaultExport";
-	return {
-		"no-restricted-exports": [
-			"error",
-			{
-				restrictDefaultExports: {
-					direct: forbidDefaultExport,
-					named: forbidDefaultExport,
-					defaultFrom: forbidDefaultExport,
-					namedFrom: forbidDefaultExport,
-					namespaceFrom: forbidDefaultExport,
-				},
-			},
-		],
-	};
-}
-
 export const tsConfigs = defineConfig([
 	tseslint.configs.eslintRecommended,
 	...tseslint.configs.recommendedTypeChecked,

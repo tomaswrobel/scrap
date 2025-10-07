@@ -10,5 +10,8 @@
 			"taskfile.dist.{yml,yaml}"
 		]
 	},
-	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+	"svelte.plugin.typescript.enable": true,
+	"svelte.enable-ts-plugin": true,
+	"eslint.useFlatConfig": true
 }

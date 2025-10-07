@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-parameters, @typescript-eslint/unified-signatures */
 import type {Attachment} from "svelte/attachments";
 import type {EventHandler} from "svelte/elements";
 import {on} from "svelte/events";

@@ -11,22 +11,22 @@ class Sprite extends Entity {
 	element = document.createElement("div");
 	costumes = new Map<string, Costume>();
 	img = new Image();
-	stage!: Stage;
+	public stage!: Stage;
 
-	onload?: Entity.Callback;
-	done = false;
+	public onload?: Entity.Callback;
+	public done = false;
 
-	id = this.generateID();
+	public id = this.generateID();
 
-	readonly costume = new Costumes(this);
+	public readonly costume = new Costumes(this);
 	get backdrop() {
 		return this.stage.backdrop;
 	}
 
 	// Pen
-	isPenDown = false;
-	penSize = 1;
-	penColor = "#222222";
+	public isPenDown = false;
+	public penSize = 1;
+	public penColor = "#222222";
 
 	textUi?: TextUI;
 

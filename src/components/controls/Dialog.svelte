@@ -1,6 +1,8 @@
 <script lang="ts" module>
 	import type {HTMLAttributes, MouseEventHandler} from "svelte/elements";
 	import {on} from "svelte/events";
+	import Button from "./Button.svelte";
+	import type {Snippet} from "svelte";
 
 	/**
 	 * Map of input types to their options.
@@ -26,8 +28,8 @@
 		value?: Inputs[I][0];
 		title?: string;
 		body?: string;
-		cancelButton?: string | boolean;
-		confirmButton?: string | boolean;
+		cancelButton?: string | boolean | Snippet;
+		confirmButton?: string | boolean | Snippet;
 	};
 
 	export interface NumberOptions {
@@ -76,8 +78,6 @@
 </script>
 
 <script lang="ts">
-	import Button from "./Button.svelte";
-
 	let {element = $bindable(), class: customClass, ...attributes}: Props = $props();
 	let init = $state<InputOptions>();
 	let form = $state<HTMLFormElement>();
@@ -142,6 +142,16 @@
 
 <svelte:window onmessage={e => e.data === uuid && close()} />
 
+{#snippet buttonInit(value: string | true | Snippet, defaultValue: string)}
+	{#if typeof value === "function"}
+		{@render value()}
+	{:else if typeof value === "string"}
+		{value}
+	{:else}
+		{defaultValue}
+	{/if}
+{/snippet}
+
 <dialog bind:this={element} {onclick} class={[customClass, "modal"]} {...attributes}>
 	<div class="modal-box">
 		<h3 class="text-lg font-bold empty:hidden">
@@ -195,9 +205,16 @@
 			{/if}
 		{/if}
 		<form class="modal-action" action="javascript:postMessage('{uuid}')" bind:this={form}>
-			{@const confirmButton = }
-			<Button variant="" formmethod="post">OK</button>
-			<button class="btn" formmethod="dialog">Cancel</button>
+			{#if init?.confirmButton !== false}
+				<Button variant="primary" formmethod="post">
+					{@render buttonInit(init?.confirmButton ?? true, "OK")}
+				</Button>
+			{/if}
+			{#if init?.cancelButton !== false}
+				<Button formmethod="dialog">
+					{@render buttonInit(init?.cancelButton ?? true, "Cancel")}
+				</Button>
+			{/if}
 		</form>
 	</div>
 </dialog>
