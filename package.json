@@ -23,7 +23,7 @@
 		"@fontsource/noto-sans": "5.2.7",
 		"@fortawesome/fontawesome-free": "^7.0.0",
 		"@parcel/service-worker": "2.15.4",
-		"@tauri-apps/api": "2.7.0",
+		"@tauri-apps/api": "2.9.0",
 		"@tauri-apps/plugin-dialog": "2.3.2",
 		"@tauri-apps/plugin-fs": "2.4.1",
 		"@types/path": "npm:@types/path-browserify@^1.0.3",
