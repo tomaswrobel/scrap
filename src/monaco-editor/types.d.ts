@@ -1,4 +1,4 @@
-declare module "monaco-editor/esm/vs/editor/editor.worker.js" {
+declare module "@monaco-editor/worker" {
 	export function initialize(
 		callback: (ctx: worker.IWorkerContext, createData: never) => void,
 	): void;

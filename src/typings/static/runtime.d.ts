@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 /**
  * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.

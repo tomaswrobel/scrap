@@ -1,5 +1,7 @@
 <script lang="ts" module>
-	export interface Props extends HTMLAttributes<HTMLDivElement> {}
+	export interface Props extends HTMLAttributes<HTMLDivElement> {
+		isDemo?: boolean;
+	}
 </script>
 
 <script lang="ts">
@@ -10,8 +12,9 @@
 	import Tabs from "@scrap/components/controls/Tabs.svelte";
 	import MonacoEditor from "@scrap/components/MonacoEditor.svelte";
 	import type {HTMLAttributes} from "svelte/elements";
+	import Dialog from "../controls/Dialog.svelte";
 
-	const {children, class: customClass, ...props}: Props = $props();
+	const {children, class: customClass, isDemo = false, ...props}: Props = $props();
 	let invalid = $state(false);
 
 	async function switchToBlocksTab() {
@@ -42,7 +45,7 @@
 <div {...props} class={["flex-col flex grow *:last:grow shrink", customClass]}>
 	<Tabs variant="lift" bind:tab={app.current.mode}>
 		<Tab label="Blocks" id="blocks" onclick={switchToBlocksTab}>
-			<BlocklyWorkspace entity={app.current} />
+			<BlocklyWorkspace {isDemo} entity={app.current} />
 		</Tab>
 		<Tab label="Code" id="code" onclick={switchToCodeTab}>
 			<MonacoEditor class="h-full" entity={app.current} bind:invalid />
@@ -50,3 +53,4 @@
 		{@render children?.()}
 	</Tabs>
 </div>
+<Dialog bind:this={app.dialog} />

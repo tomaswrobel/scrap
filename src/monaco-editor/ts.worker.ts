@@ -11,7 +11,7 @@
  * @fileoverview Just remapped imports.
  */
 import type {worker} from "monaco-editor";
-import {initialize} from "monaco-editor/esm/vs/editor/editor.worker.js";
+import {initialize} from "@monaco-editor/worker";
 import {TypeScriptWorker} from "./TypeScriptWorker";
 
 export function create(ctx: worker.IWorkerContext, createData: TypeScriptWorker.CreateData) {

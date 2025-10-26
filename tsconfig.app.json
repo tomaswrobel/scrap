@@ -29,6 +29,6 @@
 			"node:path": ["./node_modules/path-browserify"]
 		}
 	},
-	"include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte", "web", ".astro"],
+	"include": ["src"],
 	"exclude": ["src/typings", "src/compiler"]
 }

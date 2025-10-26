@@ -1,6 +1,4 @@
 <script lang="ts" module>
-	import "@scrap/css/app.css";
-	import Dialog from "@scrap/components/controls/Dialog.svelte";
 	import {app} from "@scrap/types/App.svelte.ts";
 	import CodePanel from "@scrap/components/parts/CodePanel.svelte";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";
@@ -11,7 +9,7 @@
 	import SoundTab from "@scrap/components/parts/SoundTab.svelte";
 	import CostumeTab from "@scrap/components/parts/CostumeTab.svelte";
 	import OutputPanel, {saveIntoZip} from "@scrap/components/parts/OutputPanel.svelte";
-	import packageJSON from "../package.json";
+	import packageJSON from "../../package.json";
 	import {saveAs} from "file-saver";
 	import JSZip from "jszip";
 	import * as SemVer from "semver-parser";
@@ -21,7 +19,7 @@
 	import SpeedDial from "@scrap/components/controls/SpeedDial.svelte";
 	import Dropdown from "@scrap/components/controls/Dropdown.svelte";
 	import Screw from "@material-symbols/svg-400/rounded/home_improvement_and_tools-fill.svg?icon";
-	import SB3 from "./code-transformers/sb3";
+	import SB3 from "@scrap/code-transformers/sb3.ts";
 
 	async function uploadNewEntity() {
 		const result = await app.dialog.fire({
@@ -178,17 +176,11 @@
 </script>
 
 {#snippet selectScrapFile()}
-	Select the <code
-		class="text-sm font-mono border border-current bg-base-100 py-0.5 px-1 rounded"
-		>.scrap</code
-	> file.
+	Select the <code class="inline-code">.scrap</code> file.
 {/snippet}
 
 {#snippet selectSB3File()}
-	Select the <code
-		class="text-sm font-mono border border-current bg-base-100 py-0.5 px-1 rounded"
-		>.sb3</code
-	> file.
+	Select the <code class="inline-code">.sb3</code> file.
 {/snippet}
 
 <main class="h-screen overflow-hidden bg-base-200 text-base-content flex flex-col">
@@ -261,4 +253,3 @@
 		</SpeedDial>
 	</div>
 </main>
-<Dialog bind:this={app.dialog} />

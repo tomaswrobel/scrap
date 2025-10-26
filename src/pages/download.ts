@@ -1,5 +1,5 @@
 import type {APIRoute} from "astro";
-import type {GitHubAPIRelease} from "../utils/GithubAPIRelease";
+import type {GitHubAPIRelease} from "../../web/utils/GithubAPIRelease";
 
 const PLATFORM_MAP: Record<string, RegExp> = {
 	windows: /Scrap.*\.msi$/i,

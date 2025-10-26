@@ -1,4 +1,3 @@
-import {assert} from "@scrap/utils/assert";
 import Costumes from "./costumes";
 import {event, method} from "./decorators";
 import Entity from "./entity";

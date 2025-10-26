@@ -11,7 +11,7 @@ tasks:
     desc: Sets the repository for development for the first time
     cmds:
       - touch .env.local
-      - pnpm install
+      - yarn install
 
   compiler:build:
     desc: Builds the compiler
@@ -29,11 +29,11 @@ tasks:
   app:build:
     desc: Builds the app
     cmds:
-      - pnpm vite build
+      - yarn vite build
     sources:
       - public/**/*
       - src/**/*
-      - pnpm-lock.yaml
+      - yarn-lock.yaml
       - config/**/*
     generates:
       - dist/
@@ -41,12 +41,12 @@ tasks:
   app:dev:
     desc: Serves the app
     cmds:
-      - pnpm astro dev
+      - yarn astro dev
     sources:
       - public/**/*
       - src/**/*
       - web/**/*
-      - pnpm-lock.yaml
+      - yarn-lock.yaml
       - config/**/*
     generates:
       - dist/
@@ -87,7 +87,7 @@ tasks:
     desc: Builds the Scrap Engine
     cmds:
       - rm -rf public/engine
-      - pnpm vite build --config=src/engine/vite.config.js
+      - yarn vite build --config=src/engine/vite.config.js
       - echo "*" > public/engine/.gitignore
     sources:
       - src/engine/*.{css,ts,js}
@@ -115,18 +115,18 @@ tasks:
   check:
     desc: Checks the code
     cmds:
-      - pnpm oxlint --type-aware
-      - pnpm svelte-check --tsconfig ./tsconfig.app.json
-      - pnpm svelte-check --tsconfig ./tsconfig.node.json
-      - pnpm prettier . --check
+      - yarn oxlint --type-aware
+      - yarn svelte-check --tsconfig ./tsconfig.app.json
+      - yarn svelte-check --tsconfig ./tsconfig.node.json
+      - yarn prettier . --check
 
   fix:
     desc: Tries to fix as much code as possible
     cmds:
-      - pnpm oxlint --fix
-      - pnpm prettier . --write
+      - yarn oxlint --fix
+      - yarn prettier . --write
 
   test:
     desc: Runs tests
     cmds:
-      - pnpm tsx --test ./**/*.test.ts
+      - yarn tsx --test ./**/*.test.ts

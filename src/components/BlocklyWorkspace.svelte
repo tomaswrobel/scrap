@@ -4,9 +4,11 @@
 	import type {HTMLAttributes} from "svelte/elements";
 	import {createVariableCategory} from "@scrap/blockly/utils/createVariableCategory";
 	import {app} from "@scrap/types/App.svelte.ts";
+	import {untrack} from "svelte";
 
 	export interface Props extends HTMLAttributes<HTMLDivElement> {
 		entity: Entity;
+		isDemo: boolean;
 	}
 
 	Blockly.dialog.setAlert((message: string, callback) => {
@@ -36,10 +38,12 @@
 				callback(result === false ? null : result);
 			});
 	});
+
+	let demoApplied = false;
 </script>
 
 <script lang="ts">
-	const {entity, ...props}: Props = $props();
+	const {entity, isDemo, ...props}: Props = $props();
 	const toolbox = $derived<Blockly.utils.toolbox.ToolboxDefinition>({
 		kind: "categoryToolbox",
 		contents: entity.isStage ? stageToolbox : spriteToolbox,
@@ -92,6 +96,11 @@
 			Blockly.serialization.workspaces.save(app.current.workspace),
 			workspace,
 		);
+
+		if (isDemo && !demoApplied) {
+			workspace.newBlock("controls_if").initSvg();
+			demoApplied = true;
+		}
 
 		return () => {
 			workspace?.dispose();

@@ -1,0 +1,192 @@
+---
+import Layout from "@scrap/components/Layout.astro";
+import TypeScript from "@scrap/assets/web/typescript.ts?shiki";
+import Blocks from "@scrap/assets/web/blocks.svg";
+import {author, repository} from "../../package.json";
+import MenuIcon from "@material-symbols/svg-400/rounded/menu.svg";
+import BoltIcon from "@material-symbols/svg-400/rounded/bolt-fill.svg";
+import SyncAltIcon from "@material-symbols/svg-400/rounded/sync_alt.svg";
+import PaletteIcon from "@material-symbols/svg-400/rounded/palette.svg";
+import HTMLIcon from "@material-symbols/svg-400/rounded/html.svg";
+import GlobeIcon from "@material-symbols/svg-400/rounded/globe.svg";
+import Demo from "@scrap/components/parts/CodePanel.svelte";
+import Button from "@scrap/components/controls/Button.svelte";
+import ScrapLogo from "@scrap/assets/svgs/scrap.svg";
+import Feature from "../components/Feature.astro";
+---
+
+<Layout
+	title="Scrap – Visual Programming Editor for All Creators"
+	description="Scrap is a revolutionary visual programming editor that combines intuitive block-based coding with the full power of TypeScript. Perfect for creators of all levels."
+>
+	<nav class="fixed top-0 navbar bg-base-100 z-120">
+		<div class="navbar-start">
+			<Button variant="ghost" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+				<ScrapLogo aria-label="Scrap" class="h-8" />
+			</Button>
+		</div>
+		<div class="navbar-end pr-2">
+			<a href="/app" class="btn btn-primary">Run</a>
+		</div>
+	</nav>
+	<header class="hero bg-base-200 min-h-screen">
+		<div class="hero-content text-center">
+			<div class="max-w-lg">
+				<h1 class="font-bold">
+					<ScrapLogo aria-label="Scrap" class="w-60 mx-auto" />
+				</h1>
+				<p class="py-6">
+					Scrap is an intuitive editor for building interactive projects using
+					block-based programming, inspired by Scratch but with the full power of
+					TypeScript. Start creating, learning, and prototyping faster than ever
+					before!
+				</p>
+				<a href="/app" class="btn btn-primary">Get Started</a>
+			</div>
+		</div>
+	</header>
+	<div class="h-px bg-base-300"></div>
+	<section class="bg-base-200">
+		<div class="mx-auto container p-4">
+			<h2 class="text-center text-4xl mt-8 mb-12">Main features</h2>
+			<ul class="list grid! grid-rows-4 mb-8 w-full">
+				<Feature title="Block-based programming" note="With TypeScript switch">
+					<SyncAltIcon class="size-8" slot="icon" />
+					<Fragment slot="description">
+						Blocks are easy to understand. Scrap makes TypeScript as close to blocks
+						as possible and shows that event code in text can be easy to understand.
+					</Fragment>
+				</Feature>
+				<Feature title="Paint editor built in" note="Now via Painterro">
+					<PaletteIcon class="size-8" slot="icon" />
+					<Fragment slot="description">
+						Don't leave Scrap to tweak your asset.
+						<a href="https://github.com/devforth/painterro" class="link"
+							>Painterro</a
+						> integration which came with Scrap 8 ensures the best user experience without
+						performance loss.
+					</Fragment>
+				</Feature>
+				<Feature title="Export to HTML" note="And run everywhere">
+					<HTMLIcon class="size-8" slot="icon" />
+					<Fragment slot="description">
+						Scrap isn't just a sandbox. You can export your project to HTML, and
+						only your browser will be gate to develop cross-platform creations!
+					</Fragment>
+				</Feature>
+				<Feature title="Compatible with Scratch 3" note="* Minor incompatibilities">
+					<BoltIcon class="size-8" slot="icon" />
+					<Fragment slot="description">
+						Not sure yet? Just bring your project to Scrap and get the benefits:
+						exportability, TypeScript and more!
+					</Fragment>
+				</Feature>
+				<Feature title="Open source" note="Code on GitHub">
+					<GlobeIcon class="size-8" slot="icon" />
+					<Fragment slot="description">
+						And forever free, no tracking, no cookies, just you building from
+						<del>scratch</del> screws. You can always submit bugs or (contribute) on
+						<a class="link" href={repository.url}>official GitHub</a>.
+					</Fragment>
+				</Feature>
+			</ul>
+		</div>
+	</section>
+	<div class="h-px bg-base-300"></div>
+	<section class="bg-base-200 flex flex-col gap-4 py-16 px-4">
+		<h2 class="text-center text-4xl mt-8">Learn by comparing</h2>
+		<p class="max-w-lg mx-auto text-center my-2">
+			Scrap lets you seamlessly switch between block-based programming and TypeScript
+			code. This unique approach helps you understand how visual blocks translate to real
+			code, making programming more accessible and educational for everyone.
+		</p>
+		<div class="container mx-auto">
+			<div class="w-fit mx-auto grid gap-x-4 grid-cols-2">
+				<div class="bg-[#0d1117] p-8">
+					<Blocks class="h-50" />
+				</div>
+				<div class="h-full [&_pre]:h-full rounded-box bg-[#0d1117] *:h-full">
+					<TypeScript />
+				</div>
+			</div>
+		</div>
+		<p class="max-w-lg mx-auto text-center mt-2 mb-8">
+			By seeing the direct connection between blocks and code, learners quickly grasp
+			programming concepts and syntax. Scrap is perfect for schools, workshops, and
+			self-learners alike!
+		</p>
+	</section>
+	<div class="h-px bg-base-300"></div>
+	<section class="bg-base-200 flex flex-col px-4">
+		<h2 class="text-center text-4xl my-8">What Makes Scrap Unique?</h2>
+		<div class="max-w-3xl mx-auto flex flex-col gap-2">
+			<p>
+				Scrap is a unique visual programming environment that helps users transition
+				from block-based to text-based coding. It offers a
+				<strong
+					>seamless switch between a block editor and a TypeScript code editor</strong
+				>, ensuring a smooth learning curve for anyone interested in programming.
+			</p>
+			<h3 class="mt-2 font-bold text-xl">Type safety</h3>
+			<p>
+				Scrap enforces type safety in both the block and code editors, preventing
+				incompatible connections and invalid code. Most platforms do not teach about
+				types – which is crucial for real-world programming – but Scrap does it right
+				from the start.
+			</p>
+			<h3 class="mt-2 font-bold text-xl">Scratch-like blocks</h3>
+			<p>
+				Many
+				<a href="https://developers.google.com/blockly" target="_blank" rel="noopener">
+					Blockly
+				</a>
+				applications offer block-based programming, but do not use Scratch-like blocks. Scrap
+				uses a
+				<a href="https://scratch.mit.edu/" target="_blank" rel="noopener">
+					Scratch
+				</a>-like block design, making it familiar to millions of users. Scrap still
+				manages to make the blocks more powerful, though. Take a look at this
+				<code class="inline-code">if</code> block, for example:
+			</p>
+		</div>
+		<section class="w-full max-w-4xl mx-auto my-8">
+			<Demo isDemo client:only="svelte" class="container aspect-video" />
+		</section>
+
+		<div class="max-w-3xl mx-auto flex flex-col gap-2">
+			<h3 class="mt-2 font-bold text-xl">Native code</h3>
+			<p>
+				Unlike other platforms, Scrap compiles your code directly to JavaScript, so your
+				projects can run on any device. You can even export them as standalone HTML
+				files to share with others.
+			</p>
+			<h3 class="mt-2 font-bold text-xl">
+				<h3 class="mt-2 font-bold text-xl">Powered by the VSCode‘s core</h3>
+			</h3>
+			<p class="mb-16">
+				The code editor is built on an extended version of the Monaco Editor, providing
+				features like
+				<strong> TypeScript IntelliSense</strong>, syntax highlighting that mirrors
+				block colors, and warnings for block-incompatible code.
+			</p>
+		</div>
+	</section>
+	<footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+		<div>
+			<p>
+				&copy; {new Date().getFullYear()}
+				<a class="link" href={author.url} target="_blank" rel="noopener"
+					>{author.name}</a
+				>. Under the
+				<a
+					class="link"
+					href="https://opensource.org/license/mit"
+					target="_blank"
+					rel="noopener"
+				>
+					MIT License
+				</a>.
+			</p>
+		</div>
+	</footer>
+</Layout>

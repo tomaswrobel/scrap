@@ -1,5 +1,6 @@
-@import "@fontsource/geist";
 @import "tailwindcss";
+@import "@fontsource/geist/400";
+@import "@fontsource/geist/600";
 
 @plugin "daisyui";
 @plugin "daisyui/theme" {
@@ -51,4 +52,8 @@
 
 svg[display="none"] {
 	display: none;
+}
+
+@utility inline-code {
+	@apply text-sm font-mono border border-current bg-base-100 py-0.5 px-1 rounded;
 }

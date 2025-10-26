@@ -79,7 +79,7 @@ export class Entity {
 		const reducer = this.getFileURLs.bind(this, zip?.folder(this.name));
 		const configuration = {
 			...this.init,
-			current: this.currentCostume.name,
+			current: this.costumes.indexOf(this.currentCostume),
 			images: this.costumes.reduce<Record<string, string>>(reducer, {}),
 			sounds: this.sounds.reduce<Record<string, string>>(reducer, {}),
 		};

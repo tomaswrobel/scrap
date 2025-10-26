@@ -82,5 +82,5 @@
 		"semver-parser": "^4.1.8",
 		"wavesurfer.js": "^7.11.0"
 	},
-	"packageManager": "pnpm@10.19.0"
+	"packageManager": "yarn@1.22.2"
 }
