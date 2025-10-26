@@ -96,6 +96,7 @@ tasks:
   build:
     desc: Builds the app to the production
     cmds:
+      - task: intro
       - task: compiler:build
       - task: engine:build
       - task: blockly:media-copy
@@ -104,6 +105,7 @@ tasks:
   dev:
     desc: Runs the app
     cmds:
+      - task: intro
       - task: compiler:build
       - task: engine:build
       - task: blockly:media-copy
