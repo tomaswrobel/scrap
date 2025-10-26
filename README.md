@@ -61,6 +61,7 @@ This is the Scrap's browser support matrix:
 Other modern browsers should work fine, but it will most likely miss some features, such as:
 
 - PWA support
+- WASM support
 - Service Worker support
 - Eye Dropper tool inside the color fields
 - HTML Input styling (range, color)
