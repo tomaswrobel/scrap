@@ -7,9 +7,8 @@ export interface EnumConstructor {
 }
 
 export declare namespace Enum {
-	type Object = Record<string, string> | Record<string, number>;
-	type Infer<T extends Enum.Object> = T[keyof T];
+	export type Object = Record<string, string> | Record<string, number>;
+	export type Infer<T extends Enum.Object> = T[keyof T];
 }
 
 export const Enum = Object as EnumConstructor;
-

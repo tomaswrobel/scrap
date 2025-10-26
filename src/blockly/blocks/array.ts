@@ -16,11 +16,11 @@
  * are either strings or arrays - they are expanded
  * into multiple items (via JavaScript's spread operator).
  */
-import {blockToCheck} from "@scrap/utils/blockToCheck";
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap} from "../types";
-import type { Check } from "@scrap/types/Check";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
+import type {Check} from "@scrap/types/Check.ts";
 
 export default new CustomBlock(
 	{
@@ -89,7 +89,9 @@ export default new CustomBlock(
 		 */
 		updateShape(check: Check) {
 			// Remove inputs
-			for (let i = 0; this.removeInput(`ADD${i}`, true); i++) {}
+			for (let i = 0; this.removeInput(`ADD${i}`, true); i++) {
+				// Execution done by the condition
+			}
 
 			// Add new inputs.
 			for (let i = 0; i < this.items.length; i++) {
@@ -109,7 +111,7 @@ export default new CustomBlock(
 								: "any";
 
 					if (type in TypeToShadowMap) {
-						input.connection!.setShadowState({
+						input.connection?.setShadowState({
 							type: TypeToShadowMap[type],
 						});
 					}
@@ -123,8 +125,8 @@ export default new CustomBlock(
 				e.blockId &&
 				e.newParentId === this.id
 			) {
-				const block = this.workspace.getBlockById(e.blockId)!;
-				if (block.type === "type") {
+				const block = this.workspace.getBlockById(e.blockId);
+				if (block?.type === "type") {
 					block.setShadow(true);
 					this.updateShape(blockToCheck(block));
 				}

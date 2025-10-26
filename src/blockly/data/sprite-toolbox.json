@@ -1031,6 +1031,10 @@
 			{
 				"kind": "block",
 				"type": "stop"
+			},
+			{
+				"kind": "block",
+				"type": "stopOtherScripts"
 			}
 		]
 	},
@@ -1762,5 +1766,29 @@
 	},
 	{
 		"kind": "sep"
+	},
+	{
+		"kind": "category",
+		"name": "Variables",
+		"categorystyle": "variables",
+		"custom": "VARIABLE"
+	},
+	{
+		"kind": "category",
+		"name": "Functions",
+		"categorystyle": "functions",
+		"contents": [
+			{
+				"kind": "block",
+				"type": "function",
+				"fields": {
+					"NAME": "foo"
+				}
+			},
+			{
+				"kind": "block",
+				"type": "return"
+			}
+		]
 	}
 ]

@@ -17,8 +17,8 @@ import {languages} from "monaco-editor";
 import {version as typescriptVersion} from "typescript/package.json";
 import {LanguageServiceDefaultsImplementation} from "./LanguageServiceDefaultsImplementation.ts";
 import type {MonacoEditorLanguage} from "./MonacoEditorLanguage.ts";
-import "./scrap-theme.ts";
 import {setupTokenizer} from "./setupTokenizer.ts";
+import "./scrapTheme.ts";
 
 const modeConfigurationDefault: Required<languages.typescript.ModeConfiguration> = {
 	completionItems: true,

@@ -61,8 +61,6 @@ export class OutlineAdapter extends Adapter implements languages.DocumentSymbolP
 				return languages.SymbolKind.Property;
 			case Kind.memberSetAccessor:
 				return languages.SymbolKind.Property;
-			case Kind.variable:
-				return languages.SymbolKind.Variable;
 			case Kind.const:
 				return languages.SymbolKind.Variable;
 			case Kind.localVariable:

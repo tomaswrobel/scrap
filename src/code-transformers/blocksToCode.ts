@@ -21,12 +21,11 @@ import type ParameterBlock from "@scrap/blockly/blocks/parameter.ts";
 import type TryBlock from "@scrap/blockly/blocks/try.ts";
 import type UnionBlock from "@scrap/blockly/blocks/union.ts";
 import type UnknownBlock from "@scrap/blockly/blocks/unknown.ts";
-import type {Entity} from "@scrap/types/Enity.svelte.ts";
+import {Order} from "@scrap/types/Order.ts";
+import type {Variable} from "@scrap/types/Variable";
 import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
-import * as SWC from "@scrap/utils/swc.ts";
+import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs.ts";
 import * as Blockly from "blockly/core";
-import type JSZip from "jszip";
-import {Order, reservedWords} from "./utils";
 
 type BlockCallback<T extends Blockly.Block> = (
 	block: T,
@@ -40,7 +39,7 @@ type BlockCallback<T extends Blockly.Block> = (
  * runnable JavaScript, but it is not.
  *
  * 1. ScrapScript must get rid of types.
- * 2. Must go through process in {@link SWC.transform}
+ * 2. Must go through process in SWC.transform
  * 3. The code gets warped in a code like:
  * ```js
  * var $ = {};
@@ -56,7 +55,7 @@ type BlockCallback<T extends Blockly.Block> = (
  */
 class BlocksToCode extends Blockly.CodeGenerator {
 	private static blocks: Record<string, BlockCallback<Blockly.Block>> = {};
-	public readonly entity: Entity;
+	public readonly variables: Variable[];
 
 	// Directly copied from Blockly's JavaScript generator.
 	public override ORDER_OVERRIDES = [
@@ -86,22 +85,21 @@ class BlocksToCode extends Blockly.CodeGenerator {
 		[Order.LOGICAL_OR, Order.LOGICAL_OR],
 	];
 
-	constructor(entity: Entity) {
+	constructor(variables: Variable[]) {
 		super("ScrapScript");
 
-		this.entity = entity;
+		this.variables = variables;
 		this.isInitialized = false;
-		this.addReservedWords(`${reservedWords}`);
+		this.addReservedWords(`${reservedWordsInJs}`);
 
 		this.forBlock = BlocksToCode.blocks;
-		this.INDENT = "\t";
 	}
 
 	public override init(workspace: Blockly.Workspace) {
 		super.init(workspace);
 
-		if (this.entity.variables.length > 0) {
-			this.definitions_.variables = this.entity.variables.reduce(
+		if (this.variables.length > 0) {
+			this.definitions_.variables = this.variables.reduce(
 				(a, [b, ...c]) => `${a}\t${JSON.stringify(b)}: ${c.flat().join(" | ")};\n`,
 				"interface Variables {\n",
 			);
@@ -112,42 +110,43 @@ class BlocksToCode extends Blockly.CodeGenerator {
 	}
 
 	public override scrub_(block: Blockly.Block, code: string, thisOnly?: boolean): string {
-		let commentCode = "";
-
+		let result = "";
 		// Only collect comments for blocks that aren't inline.
 		if (!block.outputConnection?.targetConnection) {
 			// Collect comment for this block.
 			const comment = block.getCommentText();
+
 			if (comment) {
-				commentCode += this.prefixLines(
+				result += this.prefixLines(
 					Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3),
 					"// ",
 				);
-				commentCode += "\n";
+				result += "\n";
 			}
+
 			// Collect comments for all value arguments.
 			// Don't collect comments for nested statements.
-			for (let i = 0; i < block.inputList.length; i++) {
-				if (block.inputList[i].type === Blockly.inputs.inputTypes.VALUE) {
-					const childBlock = block.inputList[i].connection?.targetBlock();
+			for (const input of block.inputList) {
+				if (input.type === Blockly.inputs.inputTypes.VALUE) {
+					const childBlock = input.connection?.targetBlock();
 					if (childBlock) {
 						const comment = this.allNestedComments(childBlock);
 						if (comment) {
-							commentCode += this.prefixLines(comment, "// ");
-							commentCode += "\n";
+							result += this.prefixLines(comment, "// ");
+							result += "\n";
 						}
 					}
 				}
 			}
 		}
 
-		return (
-			commentCode +
-			code +
-			(thisOnly || !block.previousConnection
-				? ""
-				: this.blockToCode(block.nextConnection && block.nextConnection.targetBlock()))
-		);
+		result += code;
+
+		if (!thisOnly && block.previousConnection) {
+			result += this.blockToCode(block.nextConnection?.targetBlock() ?? null) as string;
+		}
+
+		return result;
 	}
 
 	public override finish(result: string) {
@@ -166,27 +165,6 @@ class BlocksToCode extends Blockly.CodeGenerator {
 		return `${line};`;
 	}
 
-	public async ready(zip?: JSZip) {
-		const {code} = this.entity;
-		const result = await SWC.transform(
-			typeof code === "string" ? code : this.workspaceToCode(this.entity.workspace),
-		);
-		const body = this.prefixLines(result, "\t");
-		const configuration = {
-			...this.entity.init,
-			current: this.entity.current,
-			images: this.entity.getURLs("costumes", zip),
-			sounds: this.entity.getURLs("sounds", zip),
-		};
-		const entity = `$[${JSON.stringify(this.entity.name)}]`;
-		const init = `${entity} = new Scrap.${
-			this.entity.isStage ? "Stage" : "Sprite"
-		}(${JSON.stringify(configuration, null, "\t")});`;
-		return `${init}\n${entity}.init(async self => {\n${body}});\n${
-			this.entity.isStage ? "" : `${entity}.addTo($["Stage"])`
-		}\n`;
-	}
-
 	public static register<T>(...args: [...string[], BlockCallback<CustomBlock.Infer<T>>]) {
 		const callback = args.pop() as BlockCallback<Blockly.Block>;
 
@@ -199,7 +177,7 @@ class BlocksToCode extends Blockly.CodeGenerator {
 		return Object.hasOwn(this.blocks, name);
 	}
 
-	public set(name: string, value: string) {
+	public define(name: string, value: string) {
 		this.definitions_[`%${name}`] = value;
 	}
 }
@@ -269,7 +247,7 @@ BlocksToCode.register("backdrop", "costume", function (block) {
 });
 
 BlocksToCode.register("for", function (block, ts) {
-	const variable = block.getField("VAR")!.getText();
+	const variable = block.getField("VAR")?.getText();
 	const from = ts.valueToCode(block, "FROM", Order.NONE) || "0";
 	const to = ts.valueToCode(block, "TO", Order.NONE) || "0";
 	return `for (let ${variable} = ${from}; ${variable} <= ${to}; ${variable}++) {\n${ts.statementToCode(block, "STACK")}}\n`;
@@ -374,7 +352,7 @@ BlocksToCode.register("property", function (block) {
 });
 
 BlocksToCode.register("isTurbo", function () {
-	return ["Scrap.isTurbo", Order.MEMBER];
+	return ["Scrap.isTurbo()", Order.FUNCTION_CALL];
 });
 
 BlocksToCode.register<typeof ArrayBlock>("array", (block, ts) => {
@@ -445,21 +423,15 @@ BlocksToCode.register("number", function (block, ts) {
 });
 
 BlocksToCode.register<typeof FunctionBlock>("function", (block, ts) => {
-	const params = new Array<string>(block.params.length);
-	const nextBlock = block.getNextBlock();
-	const name = block.getFieldValue("NAME");
+	const params = block.params.map((_, i) => ts.valueToCode(block, `PARAM_${i}`, Order.NONE));
 	const returns = block.returns ? ts.valueToCode(block, "RETURNS", Order.NONE) : "void";
-	for (let i = 0; i < params.length; i++) {
-		params[i] = ts.valueToCode(block, `PARAM_${i}`, Order.NONE);
-	}
+	const name = String(block.getFieldValue("NAME"));
+	const nextBlock = block.getNextBlock();
+	const body = nextBlock
+		? ts.prefixLines(ts.blockToCode(nextBlock) as string, ts.INDENT)
+		: "\t\n";
 
-	if (nextBlock) {
-		var body = ts.prefixLines(ts.blockToCode(nextBlock) as string, ts.INDENT);
-	} else {
-		var body = "\t\n";
-	}
-
-	ts.set(name, `function ${name}(${params.join(", ")}): ${returns} {\n${body}}`);
+	ts.define(name, `function ${name}(${params.join(", ")}): ${returns} {\n${body}}`);
 	return null;
 });
 
@@ -489,7 +461,7 @@ BlocksToCode.register("type", function (block) {
 
 BlocksToCode.register("typed", function (block, ts) {
 	return [
-		`${block.getField("PARAM")!.getText()}: ${
+		`${block.getField("PARAM")?.getText()}: ${
 			ts.valueToCode(block, "TYPE", Order.ATOMIC) || "any"
 		}`,
 		Order.NONE,

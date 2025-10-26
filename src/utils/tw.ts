@@ -2,7 +2,7 @@ import type {ClassArray} from "clsx";
 import type {ClassValue} from "svelte/elements";
 
 /** Provides autocompletion for tailwindcss */
-export function tw(...classes: ClassArray): ClassValue {
+export function tw<T extends ClassArray>(...classes: T): T {
 	return classes;
 }
 

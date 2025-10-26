@@ -1,7 +1,6 @@
 [package]
 name = "scrap-compiler"
 version = "0.1.0"
-authors = ["Tomáš Wróbel"]
 edition = "2024"
 license = "MIT"
 

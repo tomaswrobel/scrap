@@ -10,32 +10,9 @@
  * @fileoverview SWC node name map
  * @copyright Tomáš Wróbel 2025
  */
-import {ScrapTypes} from "@scrap/blockly/types";
-import type {Check} from "@scrap/types/Check";
+import {ScrapTypes} from "@scrap/blockly/utils/ScrapTypes.ts";
+import type {Check} from "@scrap/types/Check.ts";
 import type * as SWC from "@swc/types";
-import * as Compiler from "@scrap/compiler/pkg";
-import type {Variable} from "@scrap/types/Variable";
-
-function wrapWasmPromise<T>(fn: Promise<unknown>) {
-	return fn.then(value => {
-		if (value === null) {
-			return Promise.reject<T>();
-		}
-		return Promise.resolve(value as T);
-	});
-}
-
-export function parse(code: string) {
-	return wrapWasmPromise<SWC.Module>(Compiler.parse(code));
-}
-
-export function transform(code: string) {
-	return wrapWasmPromise<string>(Compiler.transform(code));
-}
-
-export function getVariables(code: string) {
-	return wrapWasmPromise<Variable[]>(Compiler.getVariables(code));
-}
 
 export interface NodeNameMap {
 	ClassProperty: SWC.ClassProperty;
@@ -289,3 +266,4 @@ export function isIdentifier(node: Node, ...names: unknown[]): node is SWC.Ident
 }
 
 export type * from "@swc/types";
+export {parse, transform, getVariables} from "@scrap/compiler/pkg";

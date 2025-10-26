@@ -1,5 +1,4 @@
 <script lang="ts" module>
-	import {event} from "@scrap/utils/event";
 	import type {Snippet} from "svelte";
 	import type {HTMLButtonAttributes} from "svelte/elements";
 	import * as Context from "$context";
@@ -35,14 +34,15 @@
 </script>
 
 <button
+	onclick={() => {
+		tabs.current = id;
+	}}
 	{...props}
 	type="button"
 	role="tab"
 	class={[customClass, "tab"]}
+	style:--tab-bg="#1e1e1e"
 	aria-selected={isActive}
-	{@attach event("click", () => {
-		tabs.current = id;
-	})}
 >
 	{#if typeof label === "string"}
 		{label}

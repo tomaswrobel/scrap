@@ -1,4 +1,6 @@
+import {assert} from "@scrap/utils/assert";
 import type Sprite from "./sprite";
+import {bind} from "@scrap/utils/bind";
 
 class TextUI {
 	public element = document.createElement("div");
@@ -17,7 +19,6 @@ class TextUI {
 		const x = sprite.x - sprite.width / 2;
 		const y = -sprite.y - sprite.height / 2;
 
-		this.update = TextUI.update.bind(this);
 		window.addEventListener("resize", this.update);
 
 		this.element.style.position = "absolute";
@@ -31,6 +32,7 @@ class TextUI {
 		this.element.className = `blocklike-${type}`;
 
 		if (type === "ask") {
+			assert(askId, "Ask ID must be passed when using 'ask' type.");
 			const form = document.createElement("form");
 
 			const input = document.createElement("input");
@@ -38,7 +40,7 @@ class TextUI {
 
 			btn.type = "submit";
 			btn.innerHTML = "&#x2713;";
-			input.id = askId!;
+			input.id = askId;
 
 			form.action = `javascript:Scrap.answer("${askId}")`;
 
@@ -54,7 +56,8 @@ class TextUI {
 		this.sprite.stage.element.insertBefore(this.element, this.sprite.element);
 	}
 
-	private static update(this: TextUI) {
+	@bind
+	update() {
 		const x = this.sprite.x - this.sprite.width / 2;
 		const y = -this.sprite.y - this.sprite.height / 2;
 
@@ -78,10 +81,6 @@ class TextUI {
 		this.element.remove();
 		window.removeEventListener("resize", this.update);
 	}
-}
-
-interface TextUI {
-	update(): void;
 }
 
 export default TextUI;

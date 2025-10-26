@@ -138,7 +138,7 @@ export class LanguageServiceDefaultsImplementation
 		}
 		this._onDidExtraLibsChangeTimeout = window.setTimeout(() => {
 			this._onDidExtraLibsChangeTimeout = -1;
-			this._onDidExtraLibsChange.fire(undefined);
+			this._onDidExtraLibsChange.fire();
 		}, 0);
 	}
 
@@ -150,7 +150,7 @@ export class LanguageServiceDefaultsImplementation
 		options: languages.typescript.CompilerOptions = Object.create(null),
 	): void {
 		this._compilerOptions = options;
-		this._onDidChange.fire(undefined);
+		this._onDidChange.fire();
 	}
 
 	public getDiagnosticsOptions() {
@@ -161,21 +161,21 @@ export class LanguageServiceDefaultsImplementation
 		options: languages.typescript.DiagnosticsOptions = Object.create(null),
 	): void {
 		this._diagnosticsOptions = options;
-		this._onDidChange.fire(undefined);
+		this._onDidChange.fire();
 	}
 
 	public setWorkerOptions(
 		options: languages.typescript.WorkerOptions = Object.create(null),
 	): void {
 		this._workerOptions = options;
-		this._onDidChange.fire(undefined);
+		this._onDidChange.fire();
 	}
 
 	public setInlayHintsOptions(
 		options: languages.typescript.InlayHintsOptions = Object.create(null),
 	): void {
 		this._inlayHintsOptions = options;
-		this._onDidChange.fire(undefined);
+		this._onDidChange.fire();
 	}
 
 	public setMaximumWorkerIdleTime() {
@@ -196,6 +196,6 @@ export class LanguageServiceDefaultsImplementation
 		modeConfiguration: languages.typescript.ModeConfiguration = Object.create(null),
 	): void {
 		this._modeConfiguration = modeConfiguration;
-		this._onDidChange.fire(undefined);
+		this._onDidChange.fire();
 	}
 }

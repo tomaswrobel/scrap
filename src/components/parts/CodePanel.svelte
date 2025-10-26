@@ -1,0 +1,52 @@
+<script lang="ts" module>
+	export interface Props extends HTMLAttributes<HTMLDivElement> {}
+</script>
+
+<script lang="ts">
+	import {app} from "@scrap/types/App.svelte.ts";
+	import CodeToBlocks from "@scrap/code-transformers/codeToBlocks";
+	import BlocklyWorkspace from "@scrap/components/BlocklyWorkspace.svelte";
+	import Tab from "@scrap/components/controls/Tab.svelte";
+	import Tabs from "@scrap/components/controls/Tabs.svelte";
+	import MonacoEditor from "@scrap/components/MonacoEditor.svelte";
+	import type {HTMLAttributes} from "svelte/elements";
+
+	const {children, class: customClass, ...props}: Props = $props();
+	let invalid = $state(false);
+
+	async function switchToBlocksTab() {
+		if (app.current.mode === "blocks") {
+			return;
+		}
+		if (invalid) {
+			app.dialog.fire({
+				title: "Cannot switch to Code tab",
+				body: "Please fix the errors in your code before switching to the Code tab.",
+			});
+		} else {
+			await CodeToBlocks.switch(app.current);
+			app.current.typescript = undefined;
+			app.current.mode = "blocks";
+		}
+	}
+
+	async function switchToCodeTab() {
+		if (app.current.mode === "code") {
+			return;
+		}
+		app.current.typescript = await app.current.generatePreviewCode(true);
+		app.current.mode = "code";
+	}
+</script>
+
+<div {...props} class={["flex-col flex grow *:last:grow shrink", customClass]}>
+	<Tabs variant="lift" bind:tab={app.current.mode}>
+		<Tab label="Blocks" id="blocks" onclick={switchToBlocksTab}>
+			<BlocklyWorkspace entity={app.current} />
+		</Tab>
+		<Tab label="Code" id="code" onclick={switchToCodeTab}>
+			<MonacoEditor class="h-full" entity={app.current} bind:invalid />
+		</Tab>
+		{@render children?.()}
+	</Tabs>
+</div>

@@ -1160,8 +1160,7 @@
 		],
 		"previousStatement": "any",
 		"nextStatement": "any",
-		"style": "Controls",
-		"extensions": ["for"]
+		"style": "Controls"
 	},
 	{
 		"type": "while",
@@ -1268,7 +1267,7 @@
 		"nextStatement": "any",
 		"helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
 		"suppressPrefixSuffix": true,
-		"mutator": "if",
+		"mutator": "controls_if",
 		"style": "Controls"
 	},
 	{
@@ -1368,6 +1367,13 @@
 	{
 		"type": "stop",
 		"message0": "stop all scripts",
+		"previousStatement": "any",
+		"style": "Controls"
+	},
+	{
+		"type": "stopOtherScripts",
+		"message0": "stop my other scripts",
+		"args0": [],
 		"previousStatement": "any",
 		"style": "Controls"
 	},
@@ -2008,8 +2014,7 @@
 		],
 		"previousStatement": "any",
 		"nextStatement": "any",
-		"style": "Iterables",
-		"extensions": ["for"]
+		"style": "Iterables"
 	},
 	{
 		"type": "generic",

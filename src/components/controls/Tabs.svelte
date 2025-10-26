@@ -82,7 +82,8 @@
 
 <div {...props} role="tablist" {id} class={["tabs", variant && variants[variant], customClass]}>
 	{@render children()}
-	<div {...props} id={panelId} role="tabpanel" class="tab-content">
-		{@render content?.()}
-	</div>
+</div>
+
+<div {...props} id={panelId} role="tabpanel" aria-labelledby={id}>
+	{@render content?.()}
 </div>

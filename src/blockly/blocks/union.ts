@@ -1,3 +1,4 @@
+// oxlint-disable no-param-reassign
 /**
  * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
@@ -13,7 +14,7 @@
  * Union block groups types together. It's a
  * dynamic block with a mutator.
  */
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({

@@ -32,10 +32,15 @@
 		}
 	});
 
+	const aspectRatio = $derived.by(() => {
+		const [, , width, height] = vars.attributes.viewBox?.split(" ").map(Number) ?? [];
+		return width / height || undefined;
+	});
+
 	/* eslint-disable svelte/no-at-html-tags */
 </script>
 
-<svg {...props}>
+<svg {...props} style:aspect-ratio={aspectRatio}>
 	{#if isSource}
 		<symbol {...vars.attributes} id={vars.fileId}>
 			{@html vars.raw}

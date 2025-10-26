@@ -5,36 +5,33 @@
 	"version": "0.0.0",
 	"type": "module",
 	"license": "MIT",
-	"scripts": {
-		"dev": "vite",
-		"build": "vite build",
-		"preview": "vite preview",
-		"check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tomaswrobel/scrap"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.37.0",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@swc/types": "^0.1.25",
-		"@tailwindcss/vite": "^4.1.14",
+		"@tailwindcss/vite": "^4.1.16",
 		"@tsconfig/svelte": "^5.0.5",
 		"@types/common-tags": "^1.8.4",
-		"@types/node": "^24.7.0",
-		"eslint": "^9.37.0",
-		"eslint-plugin-svelte": "^3.12.4",
+		"@types/file-saver": "^2.0.7",
+		"@types/node": "^24.9.1",
 		"fast-xml-parser": "^5.3.0",
 		"jiti": "^2.6.1",
+		"oxlint": "^1.24.0",
+		"oxlint-tsgolint": "^0.3.0",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
-		"rollup": "^4.52.4",
+		"rollup": "^4.52.5",
 		"shiki": "^3.13.0",
-		"svelte": "^5.39.10",
-		"svelte-check": "^4.3.2",
-		"svelte-eslint-parser": "^1.3.3",
-		"tailwindcss": "^4.1.14",
+		"svelte": "^5.41.4",
+		"svelte-check": "^4.3.3",
+		"tailwindcss": "^4.1.16",
 		"tsx": "^4.20.6",
 		"typescript": "~5.9.3",
-		"typescript-eslint": "^8.46.0",
-		"vite": "^7.1.9"
+		"vite": "^7.1.12",
+		"vite-plugin-wasm": "^3.5.0"
 	},
 	"prettier": {
 		"arrowParens": "avoid",
@@ -60,14 +57,23 @@
 		]
 	},
 	"dependencies": {
+		"@blockly/field-angle": "^6.0.3",
+		"@blockly/field-colour-hsv-sliders": "^6.0.5",
 		"@blockly/field-date": "^10.0.3",
-		"@swc/wasm": "^1.13.20",
+		"@fontsource/geist": "^5.2.8",
+		"@material-symbols/svg-400": "^0.38.0",
+		"@swc/wasm": "^1.13.21",
 		"blockly": "^12.3.1",
 		"clsx": "^2.1.1",
 		"common-tags": "^1.8.2",
-		"daisyui": "^5.1.29",
+		"daisyui": "^5.3.9",
+		"file-saver": "^2.0.5",
 		"jszip": "^3.10.1",
-		"monaco-editor": "^0.54.0"
+		"monaco-editor": "^0.54.0",
+		"painterro": "^1.2.92",
+		"path-browserify": "^1.0.1",
+		"semver-parser": "^4.1.8",
+		"wavesurfer.js": "^7.11.0"
 	},
-	"packageManager": "pnpm@10.18.0"
+	"packageManager": "pnpm@10.19.0"
 }

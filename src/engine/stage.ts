@@ -1,3 +1,4 @@
+import {assert} from "@scrap/utils/assert";
 import Costumes from "./costumes";
 import {event, method} from "./decorators";
 import Entity from "./entity";
@@ -20,8 +21,10 @@ export default class Stage extends Entity {
 	mouseX = NaN;
 	mouseY = NaN;
 
+	// oxlint-disable no-non-null-assertion
 	ctx = document.createElement("canvas").getContext("2d")!;
 	pen = document.createElement("canvas").getContext("2d")!;
+	// oxlint-enable no-non-null-assertion
 
 	constructor(options: Entity.Options) {
 		super(options);
@@ -139,7 +142,9 @@ export default class Stage extends Entity {
 	}
 
 	toggleFlag(hasFlag: boolean) {
-		this.flag.parentElement!.style.display = hasFlag ? "block" : "none";
+		if (this.flag.parentElement) {
+			this.flag.parentElement.style.display = hasFlag ? "block" : "none";
+		}
 	}
 
 	@event
@@ -149,7 +154,7 @@ export default class Stage extends Entity {
 		this.flag.addEventListener(
 			"click",
 			() => {
-				fn(this);
+				void fn(this);
 				this.toggleFlag(false);
 			},
 			{once: true, signal: this.abort.signal},
@@ -295,7 +300,7 @@ export default class Stage extends Entity {
 						variable.value = Number(slider.value);
 						div.replaceChild(
 							this._value(this.makeWatchVariable(slider.value)),
-							div.querySelector(".scrap-value")!,
+							div.querySelector(".scrap-value") as HTMLDivElement,
 						);
 					};
 

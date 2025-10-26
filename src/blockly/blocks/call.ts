@@ -35,9 +35,10 @@
  * * Parameters are of a specific type.
  * * Corresponding shadow blocks are used inside the parameters.
  */
-import type {Check} from "@scrap/types/Check";
-import {CustomBlock} from "@scrap/utils/CustomBlock";
-import {TypeToShadowMap} from "../types";
+import type {Check} from "@scrap/types/Check.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
+import {assert} from "@scrap/utils/assert.ts";
 
 export interface CallExtraState {
 	params?: Check[];
@@ -75,20 +76,22 @@ export default new CustomBlock({
 			this.setPreviousStatement(true, "any");
 		}
 
-		for (let i = 0; this.removeInput(`PARAM_${i}`, true); i++) {}
+		for (let i = 0; this.removeInput(`PARAM_${i}`, true); i++) {
+			// Execution done by the condition
+		}
 
 		for (let i = 0; i < this.params_.length; i++) {
 			const type = this.params_[i];
 			const input = this.appendValueInput(`PARAM_${i}`);
 			input.setCheck(type);
-
+			assert(input.connection);
 			if (typeof type === "object") {
 				// Array
-				input.connection!.setShadowState({
+				input.connection.setShadowState({
 					type: "text_or_number",
 				});
 			} else if (type in TypeToShadowMap) {
-				input.connection!.setShadowState({
+				input.connection.setShadowState({
 					type: TypeToShadowMap[type],
 				});
 			}

@@ -1,6 +1,6 @@
 <script lang="ts" module>
 	import {event} from "@scrap/utils/event.ts";
-	import Chevron from "../../assets/chevron-right.svg?icon";
+	import Chevron from "@material-symbols/svg-400/rounded/chevron_right.svg?icon";
 	import type {Snippet} from "svelte";
 	import type {HTMLButtonAttributes} from "svelte/elements";
 	import * as Context from "$context";
@@ -34,7 +34,7 @@
 	const instanceId = crypto.randomUUID();
 </script>
 
-<li>
+<li class:menu-disabled={props.disabled}>
 	{#if children}
 		<button type="submit" {...props} {@attach event("contextmenu:action", onuse)}>
 			{@render children()}
@@ -43,7 +43,7 @@
 		<button
 			{...props}
 			type="button"
-			class="flex justify-between gap-2"
+			class={[props.class, "flex justify-between gap-2"]}
 			onclick={e => {
 				let isSubitem = false;
 				if (submenuItems.has(instanceId)) {

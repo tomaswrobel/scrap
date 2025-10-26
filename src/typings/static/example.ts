@@ -1,3 +1,4 @@
+// oxlint-disable no-unused-vars
 // Classic scenario
 self.whenFlag(() => {
 	self.effects.brightness = 0;
@@ -16,5 +17,5 @@ const fiveNumber = Number("5");
 const one = Number(true);
 
 // Arrays infer types
-const array = [5, "30", false];
-const numberArray = [5, 5, 40];
+const array = new Array(5, "30", false);
+const numberArray = new Array<number>(5, 5, 40);

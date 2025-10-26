@@ -4,13 +4,15 @@ import {resolve} from "node:path";
 import {defineConfig} from "vite";
 import {shikiPlugin} from "./config/vite/shikiPlugin";
 import {svgPlugin} from "./config/vite/svgPlugin";
+import wasm from "vite-plugin-wasm";
 
 export default defineConfig({
-	plugins: [tailwindcss(), svelte(), shikiPlugin(), svgPlugin("icon")],
+	plugins: [wasm(), tailwindcss(), svelte(), shikiPlugin(), svgPlugin("icon")],
 	resolve: {
 		alias: {
-			"$context": resolve(import.meta.dirname, "./src/lib/Context.ts"),
+			"$context": resolve(import.meta.dirname, "./src/utils/Context.ts"),
 			"@scrap": resolve(import.meta.dirname, "./src"),
+			"path": "path-browserify",
 		},
 	},
 	esbuild: {

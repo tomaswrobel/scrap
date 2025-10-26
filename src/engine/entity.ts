@@ -1,3 +1,4 @@
+import {assert} from "@scrap/utils/assert";
 import {event, method} from "./decorators";
 import Messages from "./messages";
 import Timer from "./timer";
@@ -36,7 +37,9 @@ abstract class Entity {
 	};
 	public volume = 100;
 
-	public pace = isTurbo ? 0 : 33;
+	public get pace() {
+		return isTurbo() ? 0 : 33;
+	}
 
 	public readonly images: Entity.Assets;
 	public readonly sounds: Entity.Assets;
@@ -116,7 +119,7 @@ abstract class Entity {
 	 * @returns a void promise.
 	 */
 	@method
-	wait(seconds: number) {
+	public wait(seconds: number) {
 		return new Promise(resolve => window.setTimeout(resolve, seconds * 1000));
 	}
 
@@ -134,7 +137,7 @@ abstract class Entity {
 			"keydown",
 			e => {
 				if (key === "any" || e.key === key) {
-					fn(this);
+					void fn(this);
 				}
 			},
 			{signal: this.abort.signal},
@@ -150,7 +153,7 @@ abstract class Entity {
 		this.element.addEventListener(
 			toEvent[event],
 			e => {
-				fn(this);
+				void fn(this);
 				e.stopPropagation();
 			},
 			{signal: this.abort.signal},
@@ -171,7 +174,7 @@ abstract class Entity {
 			e => {
 				const {detail} = e as Messages.Event;
 
-				fn(this).then(() =>
+				void fn(this).then(() =>
 					document.dispatchEvent(
 						new CustomEvent("ScrapMessageDone", {
 							detail: {
@@ -239,7 +242,7 @@ abstract class Entity {
 	async nextBackdrop() {
 		const backdrops = Object.keys(this.images);
 		const index = backdrops.indexOf(this.current);
-		this.switchBackdropTo((index + 1) % backdrops.length);
+		await this.switchBackdropTo((index + 1) % backdrops.length);
 	}
 
 	/**
@@ -257,7 +260,7 @@ abstract class Entity {
 			e => {
 				const {detail} = e as Messages.Event;
 
-				fn(this).then(() =>
+				void fn(this).then(() =>
 					document.dispatchEvent(
 						new CustomEvent("ScrapMessageDone", {
 							detail: {
@@ -375,7 +378,9 @@ abstract class Entity {
 	 */
 	@method
 	async getVariable(name: string) {
-		return this.variable(name)!.value;
+		const variable = this.variable(name);
+		assert(variable, new ReferenceError(`Variable called "${name}" wasn't declared.`));
+		return variable.value;
 	}
 
 	/**
@@ -386,13 +391,12 @@ abstract class Entity {
 	@method
 	async setVariable(name: string, value: any) {
 		const variable = this.variable(name);
-
-		if (!variable) {
-			throw "Variable not declared";
-		}
+		assert(variable, new ReferenceError(`Variable called "${name}" wasn't declared.`));
 
 		if (variable.types.some(type => !isVariableType(type, value))) {
-			throw "Invalid variable type";
+			throw new TypeError(
+				`Invalid value received. Variable called "${name}" requires values of type ${variable.types.join(" | ")}.`,
+			);
 		}
 
 		variable.value = value;
@@ -405,13 +409,12 @@ abstract class Entity {
 	@method
 	async changeVariable(name: string, value: number) {
 		const variable = this.variable(name);
-
-		if (!variable) {
-			throw "Variable not declared";
-		}
+		assert(variable, new ReferenceError(`Variable called "${name}" wasn't declared.`));
 
 		if (variable.types.some(type => !isVariableType(type, value))) {
-			throw "Invalid variable type";
+			throw new TypeError(
+				`Invalid value received. Variable called "${name}" requires values of type ${variable.types.join(" | ")}.`,
+			);
 		}
 
 		variable.value = value;
@@ -440,7 +443,8 @@ abstract class Entity {
 	 */
 	@method
 	async hideVariable(name: string) {
-		const variable = this.variable(name)!;
+		const variable = this.variable(name);
+		assert(variable, new ReferenceError(`Variable called "${name}" wasn't declared.`));
 		variable.visible = false;
 		this.updateVariables();
 	}
@@ -450,7 +454,8 @@ abstract class Entity {
 	 */
 	@method
 	async showVariable(name: string) {
-		const variable = this.variable(name)!;
+		const variable = this.variable(name);
+		assert(variable, new ReferenceError(`Variable called "${name}" wasn't declared.`));
 		variable.visible = true;
 		this.updateVariables();
 	}
@@ -484,11 +489,10 @@ abstract class Entity {
 }
 
 declare namespace Entity {
-	type Callback = (this: void, self: Entity) => Promise<void>;
+	export type Callback = (this: void, self: Entity) => Promise<void>;
+	export type Assets = Record<string, string>;
 
-	type Assets = Record<string, string>;
-
-	interface Options {
+	export interface Options {
 		images: Assets;
 		sounds: Assets;
 		current: number;

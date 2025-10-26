@@ -1,0 +1,16 @@
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview Just re-export
+ * @copyright Tomáš Wróbel 2025
+ */
+import {FieldAngle, registerFieldAngle} from "@blockly/field-angle";
+
+registerFieldAngle();
+export {FieldAngle};

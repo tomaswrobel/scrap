@@ -82,7 +82,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				"finally",
 				"throw",
 			],
-			controls: ["wait", "delete", "clone", "stop", "whenCloned"],
+			controls: ["wait", "delete", "clone", "stop", "whenCloned", "stopOtherScripts"],
 			sensing: [
 				"isTouching",
 				"isTouchingBackdropColor",

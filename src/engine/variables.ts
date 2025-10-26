@@ -1,4 +1,6 @@
-export const VariableType = Object.freeze({
+import {Enum} from "@scrap/utils/Enum";
+
+export const VariableType = new Enum({
 	Any: "any",
 	Number: "number",
 	String: "string",
@@ -9,7 +11,7 @@ export const VariableType = Object.freeze({
 	Iterable: "Iterable",
 });
 
-export type VariableType = (typeof VariableType)[keyof typeof VariableType];
+export type VariableType = Enum.Infer<typeof VariableType>;
 
 export const DefaultVariableValues = {
 	[VariableType.Any]: 0 as any,

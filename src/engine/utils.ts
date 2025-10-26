@@ -21,7 +21,9 @@ export class StopError extends Error {
 	}
 }
 
-export const isTurbo = frameElement?.getAttribute("data-mode") === "turbo";
+export function isTurbo() {
+	return frameElement?.getAttribute("data-turbo") !== "false";
+}
 
 /**
  * This is a loop guard function. It is injected
@@ -35,4 +37,4 @@ export function loop(resolve: VoidFunction, reject: (reason: Error) => void) {
 	} else {
 		window.setTimeout(resolve);
 	}
-}
+};

@@ -23,11 +23,11 @@
  * will remove its value input (return;) and serve like
  * the Scratch's "stop this script" block.
  */
-import type {Check} from "@scrap/types/Check";
-import {blockToCheck} from "@scrap/utils/blockToCheck";
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import type {Check} from "@scrap/types/Check.ts";
+import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap} from "../types";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
 
 export type ReturnBlockOutput = Check | false;
 
@@ -52,12 +52,12 @@ export default new CustomBlock({
 			const input = this.getInput("VALUE");
 
 			if (input) {
-				const block = input.connection!.targetBlock();
+				const block = input.connection?.targetBlock();
 				this.removeInput("VALUE");
 				if (block?.isShadow()) {
 					block.dispose(false);
 					this.addValue(state.output, null);
-				} else {
+				} else if (block) {
 					this.addValue(state.output, block);
 				}
 			} else {
@@ -85,23 +85,22 @@ export default new CustomBlock({
 		}
 
 		const input = this.appendValueInput("VALUE").setCheck(check);
+		let type = "any";
 
 		if (typeof check === "string") {
-			var type = check;
+			type = check;
 		} else if (check.length === 1) {
-			var type = check[0];
-		} else {
-			var type = "any";
+			[type] = check;
 		}
 
 		if (type in TypeToShadowMap) {
-			input.connection!.setShadowState({
+			input.connection?.setShadowState({
 				type: TypeToShadowMap[type],
 			});
 		}
 
-		if (block && input.connection) {
-			block.outputConnection!.connect(input.connection);
+		if (block?.outputConnection && input.connection) {
+			block.outputConnection.connect(input.connection);
 		}
 	},
 

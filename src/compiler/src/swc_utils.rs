@@ -12,6 +12,7 @@
 //! parsing, transforming and extracting variables from TypeScript code.
 //!
 //! Implementation of these used to live in code/transformers/*.ts files.
+use crate::visitor::javascript;
 use swc_core::{
     atoms::Atom,
     common::{errors::Handler, sync::Lrc, FileName, FilePathMapping, SourceMap, GLOBALS},
@@ -19,10 +20,9 @@ use swc_core::{
         ast::*,
         parser::{lexer::Lexer, Parser, StringInput, Syntax, TsSyntax},
         transforms::typescript::strip_type,
-		visit::VisitMutWith,
-    }
+        visit::VisitMutWith,
+    },
 };
-use crate::visitor::javascript;
 
 use swc::{config::IsModule, Compiler, PrintArgs};
 

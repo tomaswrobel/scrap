@@ -3,6 +3,8 @@ node_modules
 
 # Build
 dist
+src/compiler/target
+src/compiler/pkg
 
 # Ignored .env files
 *.local

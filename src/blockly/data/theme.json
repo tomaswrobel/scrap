@@ -94,10 +94,16 @@
 		}
 	},
 	"componentStyles": {
+		"workspaceBackgroundColour": "#1e1e1e",
+		"toolboxBackgroundColour": "#333",
+		"toolboxForegroundColour": "#fff",
+		"flyoutBackgroundColour": "#252526",
+		"flyoutForegroundColour": "#ccc",
 		"flyoutOpacity": 1,
-		"toolboxBackgroundColour": "#FFFFFF",
-		"workspaceBackgroundColour": "#FDFDFD",
-		"flyoutBackgroundColour": "#FFFFFF",
-		"scrollbarOpacity": 1
+		"scrollbarColour": "#797979",
+		"insertionMarkerColour": "#fff",
+		"insertionMarkerOpacity": 0.3,
+		"scrollbarOpacity": 0.4,
+		"cursorColour": "#d0d0d0"
 	}
 }

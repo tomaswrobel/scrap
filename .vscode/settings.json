@@ -10,8 +10,11 @@
 			"taskfile.dist.{yml,yaml}"
 		]
 	},
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
 	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
 	"svelte.plugin.typescript.enable": true,
 	"svelte.enable-ts-plugin": true,
-	"eslint.useFlatConfig": true
+	"oxc.typeAware": true
 }

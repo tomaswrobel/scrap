@@ -1,0 +1,127 @@
+@reference "./app.css";
+
+.ptro-icon-btn[class] {
+	@apply btn!;
+	position: relative;
+
+	&::after {
+		display: none;
+	}
+}
+
+.ptro-color-widget-wrapper[class] > .ptro-pallet.ptro-color-main[class] {
+	@apply modal-box w-auto! py-4! px-8!;
+	opacity: 1 !important;
+	translate: 0 0 !important;
+	scale: 1 !important;
+
+	.ptro-color-edit {
+		@apply grid grid-cols-[1fr_auto] gap-1;
+
+		.ptro-input.ptro-color {
+			@apply input order-first p-3! rounded-field! w-full!;
+			height: var(--size) !important;
+			border: var(--border) solid #0000 !important;
+			border-color: var(--input-color) !important;
+			box-shadow: none !important;
+		}
+	}
+
+	.ptro-close-color-picker {
+		@apply btn! col-span-2 btn-secondary mt-4;
+	}
+
+	&::before {
+		content: "Choose color…";
+		display: block;
+		@apply text-lg mb-4;
+	}
+
+	canvas,
+	.ptro-color-light-regulator,
+	.ptro-color-alpha-regulator,
+	.alpha-checkers {
+		zoom: 125%;
+		display: block;
+	}
+
+	.ptro-color-light-regulator,
+	.ptro-color-alpha-regulator {
+		@apply translate-x-4;
+	}
+}
+
+.ptro-color-active-control[class] {
+	@apply bg-base-200 btn-primary;
+}
+
+.ptro-color-active-control[class]::after {
+	box-shadow: inset -1px -1px 8px 1px rgba(255, 255, 255, 0.1);
+}
+
+select.ptro-input[class] {
+	@apply select! text-base-content!;
+}
+
+.ptro-color-main[class],
+.ptro-wrapper[class] {
+	@apply bg-base-100 text-base-content;
+}
+
+span.ptro-tool-controls {
+	@apply *:shrink-0 text-base-content ml-2 border-l pl-2 border-base-content gap-1;
+}
+
+.ptro-info {
+	@apply min-w-16;
+}
+
+button.ptro-input.ptro-check {
+	@apply toggle!;
+
+	&[data-value="true"] {
+		@apply bg-base-100!;
+		grid-template-columns: 1fr 1fr 0fr !important;
+		--input-color: var(--color-base-content) /* var(--color-base-content) */ !important;
+
+		&::after {
+			content: "";
+			@apply size-4;
+		}
+	}
+}
+
+:not(.ptro-color-edit) > input.ptro-input {
+	@apply input! text-base-content!;
+}
+
+.ptro-color-control[class]:not(.ptro-close-color-picker) {
+	@apply btn btn-square! btn-sm cursor-pointer;
+	box-shadow: none;
+
+	&:disabled {
+		@apply btn-disabled! opacity-25;
+	}
+}
+
+.ptro-btn-color-checkers-bar[class] {
+	@apply -ml-9 rounded-field;
+	scrollbar-width: thin;
+}
+
+[title="undefined"] {
+	display: none;
+}
+
+.ptro-wrapper:first-of-type {
+	background-color: #1e1e1e;
+}
+
+.ptro-wrapper .ptro-common-widget-wrapper[class] {
+	background-color: #0001;
+	backdrop-filter: blur(2px);
+}
+
+.ptro-color-active-control > .ptro-icon[class] {
+	@apply text-primary-content;
+}

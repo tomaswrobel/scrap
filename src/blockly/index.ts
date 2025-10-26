@@ -10,39 +10,26 @@
  * @copyright Tomáš Wróbel 2025
  * @fileoverview @scrap/blockly entry point.
  */
-import "@blockly/field-date";
 import BlocksToCode from "@scrap/code-transformers/blocksToCode";
-import type CustomBlock from "@scrap/utils/CustomBlock";
+import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
 import {Order} from "blockly/javascript";
 import * as En from "blockly/msg/en";
 import * as path from "path";
 import jsonBlocks from "./data/blocks.json";
 
-const allBlocks = import.meta.glob<CustomBlock<never>>("./blocks/*.ts", {
-	eager: true,
-	import: "default",
-});
-
-const allFields = import.meta.glob<Blockly.fieldRegistry.RegistrableField>("./fields/*.ts", {
-	eager: true,
-	import: "default",
-});
+import.meta.glob<void>("./fields/*.ts", {eager: true});
+import.meta.glob<void>("./plugins/*.ts", {eager: true});
 
 const allExtensions = import.meta.glob<(this: Blockly.Block) => void>("./extensions/*.ts", {
 	eager: true,
 	import: "default",
 });
 
-const allData = import.meta.glob("./data/*.json", {
+const allBlocks = import.meta.glob<CustomBlock<never>>("./blocks/*.ts", {
 	eager: true,
+	import: "default",
 });
-
-import.meta.glob<void>("./plugins/*.ts", {eager: true});
-
-export function importJSON<T = object>(_path: string) {
-	return allData[`./${path.join("data", _path)}`] as T;
-}
 
 /**
  * Blocks that are ignored by the TypeScript generator.
@@ -60,11 +47,6 @@ for (const filename in allBlocks) {
 	customBlock.register(name);
 }
 
-for (const filename in allFields) {
-	const {name} = path.parse(filename);
-	Blockly.fieldRegistry.register(name, allFields[filename]);
-}
-
 for (const filename in allExtensions) {
 	const {name} = path.parse(filename);
 	Blockly.Extensions.register(name, allExtensions[filename]);
@@ -73,10 +55,9 @@ for (const filename in allExtensions) {
 /**
  * All names of properties and methods that are available on the sprite and stage objects.
  */
-export const properties = jsonBlocks.map(data => {
+export const entityProperties = jsonBlocks.map(data => {
 	// Despite the name, this also handles the dynamic code generation.
 	// It's placed here to minimize the amount of iterations.
-
 	if (!BlocksToCode.isRegistered(data.type) && !mutatorBlocks.includes(data.type)) {
 		const isEvent = !("output" in data) && !("previousStatement" in data);
 
@@ -119,3 +100,8 @@ Blockly.setLocale(En as unknown as Record<string, string>);
 Blockly.FlyoutButton.TEXT_MARGIN_X = 20;
 Blockly.FlyoutButton.TEXT_MARGIN_Y = 10;
 Blockly.defineBlocksWithJsonArray(jsonBlocks);
+
+export {default as spriteToolbox} from "./data/sprite-toolbox.json";
+export {default as stageToolbox} from "./data/stage-toolbox.json";
+export {default as theme} from "./data/theme.json";
+export {Blockly};

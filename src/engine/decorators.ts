@@ -1,3 +1,4 @@
+import type {SpreadParameters} from "@scrap/types/SpreadParameters.ts";
 import Entity from "./entity";
 import {StopError} from "./utils";
 
@@ -9,7 +10,7 @@ import {StopError} from "./utils";
  * @param _context The context of the method.
  * @returns Decorated method.
  */
-export function paced<A extends any[], T, E extends Entity>(
+export function paced<A extends SpreadParameters, T, E extends Entity>(
 	fn: (this: E, ...args: A) => Promise<T>,
 	_context: ClassMethodDecoratorContext<E, typeof fn>,
 ) {
@@ -45,7 +46,7 @@ const STOP = Symbol("STOP");
  * @param _context The context of the method.
  * @returns Decorated method.
  */
-export function method<A extends any[], T, E extends Entity>(
+export function method<A extends SpreadParameters, T, E extends Entity>(
 	fn: (this: E, ...args: A) => Promise<T>,
 	_context: ClassMethodDecoratorContext<E, typeof fn>,
 ) {
@@ -85,7 +86,7 @@ export function method<A extends any[], T, E extends Entity>(
  * @param _context The context of the method.
  * @returns Decorated method.
  */
-export function event<A extends [...any[], Entity.Callback], E extends Entity>(
+export function event<A extends [...SpreadParameters, Entity.Callback], E extends Entity>(
 	fn: (this: E, ...args: A) => Promise<void>,
 	_context: ClassMethodDecoratorContext<E, typeof fn>,
 ) {

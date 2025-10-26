@@ -1,0 +1,50 @@
+{
+	"rules": {
+		// Make code pretty
+		"curly": "error",
+
+		// Do not confuse
+		"yoda": "error",
+		"no-bitwise": "error",
+		"no-div-regex": "error",
+		"no-param-reassign": "error",
+		"typescript/no-var-requires": "error",
+		"typescript/no-non-null-asserted-nullish-coalescing": "error",
+		"no-self-compare": "error", // Number.isNaN is preferred
+
+		// Be as readable as possible to Java or C# programmers
+		"typescript/only-throw-error": "error",
+		"typescript/no-mixed-enums": "error",
+
+		// Use modern approaches
+		"prefer-exponentiation-operator": "error",
+		"prefer-destructuring": "error",
+		"typescript/no-namespace": ["error", {"allowDeclarations": true}],
+		"unicorn/prefer-at": "error",
+
+		// Possible problems
+		"eqeqeq": ["error", "always", {"null": "ignore"}],
+		"typescript/no-non-null-assertion": "error",
+		"no-var": "error",
+		"typescript/restrict-template-expressions": "off",
+		"typescript/unbound-method": "off",
+
+		// Do it better
+		"typescript/no-extraneous-class": "error",
+		"no-useless-computed-key": "error",
+		"no-lonely-if": "error",
+		"no-empty": "error",
+
+		// Doesn't work as expected
+		"typescript/no-redundant-type-constituents": "off"
+	},
+	"overrides": [
+		{
+			"files": ["./src/typings/**/*.ts"],
+			"rules": {
+				"no-shadow-restricted-names": "off",
+				"no-unused-vars": "off"
+			}
+		}
+	]
+}

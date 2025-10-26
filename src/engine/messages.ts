@@ -3,14 +3,14 @@ class Messages extends EventTarget {
 }
 
 declare namespace Messages {
-	interface Listener {
+	export interface Listener {
 		msg: string;
 		listenerId: string;
 	}
 
-	type Event = CustomEvent<string>;
+	export type Event = CustomEvent<string>;
 
-	type DoneEvent = CustomEvent<{
+	export type DoneEvent = CustomEvent<{
 		listenerId: string;
 		msgId: string;
 	}>;

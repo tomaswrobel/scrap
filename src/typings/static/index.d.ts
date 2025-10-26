@@ -1,3 +1,4 @@
+// oxlint-disable no-shadow-restricted-names
 /**
  * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
@@ -22,13 +23,13 @@ declare const Scrap: {
 	/**
 	 * Stops the project
 	 */
-	stop(): void;
+	stop(): never;
 
 	/**
 	 * Detects if project
 	 * runs in turbo mode
 	 */
-	readonly isTurbo: boolean;
+	isTurbo(): boolean;
 };
 
 interface Stage<Variables = {}, Sound = string> {
@@ -125,6 +126,14 @@ interface Stage<Variables = {}, Sound = string> {
 	 * Pauses the current script
 	 */
 	wait(seconds: number): void;
+
+	/**
+	 * Stops the other scripts in the stage / Sprite.
+	 *
+	 * When called in a function, it'll work as written in the place
+	 * where the function is called.
+	 */
+	stopOtherScripts(): never;
 
 	/**
 	 * This event gets invoked when any key gets pressed

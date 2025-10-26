@@ -11,9 +11,7 @@ pub fn parse(code: String) -> JsValue {
 
 #[wasm_bindgen]
 pub fn transform(code: String) -> JsValue {
-    return swc_utils::transform(code).map_or(JsValue::null(), |parsed| {
-        serde_wasm_bindgen::to_value(&parsed).unwrap()
-    });
+    return swc_utils::transform(code).map_or(JsValue::null(), |parsed| JsValue::from_str(&parsed));
 }
 
 #[wasm_bindgen(js_name = getVariables)]

@@ -48,6 +48,7 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 	_context: ClassMethodDecoratorContext<T, typeof value>,
 ): typeof value {
 	return async function (fileName: string) {
+		await new Promise(resolve => setTimeout(resolve, 0));
 		const diagnostics = await value.call(this, fileName);
 		const program = this.languageService.getProgram();
 
@@ -349,7 +350,6 @@ export class TypeScriptWorker
 		} else if (fileName === "lib.d.ts") {
 			// default lib
 			return defaultLib;
-		} else {
 		}
 	}
 
@@ -655,6 +655,8 @@ export class TypeScriptWorker
 		start: number,
 		end: number,
 	): Promise<readonly ts.InlayHint[]> {
+		await new Promise(resolve => setTimeout(resolve, 0));
+
 		if (fileNameIsLib(fileName)) {
 			return [];
 		}

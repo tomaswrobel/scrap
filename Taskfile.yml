@@ -21,21 +21,34 @@ tasks:
     cmds:
       - wasm-pack build --out-name index
     sources:
-      - compiler/src/*
-      - compiler/Cargo.*
+      - src/compiler/src/*
+      - src/compiler/Cargo.*
     generates:
-      - compiler/pkg
+      - src/compiler/pkg
 
-  engine:build:
-    desc: Builds the Scrap Engine
+  app:build:
+    desc: Builds the app
     cmds:
-      - rm -rf public/engine
-      - pnpm vite build --config=src/engine/vite.config.js
-      - echo "*" > public/engine/.gitignore
+      - pnpm vite build
     sources:
-      - src/engine/*.{css,ts,js}
+      - public/**/*
+      - src/**/*
+      - pnpm-lock.yaml
+      - config/**/*
     generates:
-      - public/engine/*
+      - dist/
+
+  app:dev:
+    desc: Serves the app
+    cmds:
+      - pnpm vite
+    sources:
+      - public/**/*
+      - src/**/*
+      - pnpm-lock.yaml
+      - config/**/*
+    generates:
+      - dist/
 
   blockly:media-copy:
     requires:
@@ -69,18 +82,46 @@ tasks:
       - echo "{{.APP_NAME}} v{{.APP_VERSION}} starting..."
     silent: true
 
+  engine:build:
+    desc: Builds the Scrap Engine
+    cmds:
+      - rm -rf public/engine
+      - pnpm vite build --config=src/engine/vite.config.js
+      - echo "*" > public/engine/.gitignore
+    sources:
+      - src/engine/*.{css,ts,js}
+    generates:
+      - public/engine/*
+
   build:
     desc: Builds the app to the production
     cmds:
+      - task: compiler:build
       - task: engine:build
       - task: blockly:media-copy
+      - task: app:build
+
+  dev:
+    desc: Runs the app
+    cmds:
+      - task: compiler:build
+      - task: engine:build
+      - task: blockly:media-copy
+      - task: app:dev
 
   check:
     desc: Checks the code
     cmds:
-      - pnpm svelte-check
-      - pnpm eslint
+      - pnpm oxlint --type-aware
+      - pnpm svelte-check --tsconfig ./tsconfig.app.json
+      - pnpm svelte-check --tsconfig ./tsconfig.node.json
       - pnpm prettier . --check
+
+  fix:
+    desc: Tries to fix as much code as possible
+    cmds:
+      - pnpm oxlint --fix
+      - pnpm prettier . --write
 
   test:
     desc: Runs tests

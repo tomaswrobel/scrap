@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /**
  * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
@@ -12,14 +10,25 @@
  * @fileoverview Scratch converter
  * @copyright Tomáš Wróbel 2025
  */
-import type {FunctionBlock} from "@scrap/blockly/blocks/function";
+import FunctionBlock from "@scrap/blockly/blocks/function.ts";
+import IfBlock from "@scrap/blockly/blocks/controls_if.ts";
 import * as Blockly from "blockly/core";
 import type JSZip from "jszip";
-import {Sprite, Stage} from "../entity";
-import {escape} from "./utils";
+import {app} from "@scrap/types/App.svelte.ts";
+import {assert} from "@scrap/utils/assert.ts";
+import {Entity} from "@scrap/types/Enity.svelte";
+import {EntityAsset} from "@scrap/types/EntityAsset.svelte";
+import ParameterBlock from "@scrap/blockly/blocks/parameter.ts";
+import ReturnBlock from "@scrap/blockly/blocks/return.ts";
+import CallBlock from "@scrap/blockly/blocks/call.ts";
+import type {Check} from "@scrap/types/Check";
+import UnknownBlock from "@scrap/blockly/blocks/unknown.ts";
+import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs";
 
+const BLOCK_FAILED = "Block init failed.";
 const illegalRe = /[/?<>\\:*|":#]+/g;
 
+// oxlint-disable-next-line no-control-regex
 const controlRe = /[\x00-\x1f\x80-\x9f]/g;
 const reservedRe = /^\.+$/;
 
@@ -64,7 +73,9 @@ class SB3 {
 		this.transformers.motion_goto = async data => {
 			const block = app.current.workspace.newBlock("goTowards");
 			const to = await this.input(data.inputs.TO);
-			block.getInput("SPRITE")?.connection?.connect(to!.outputConnection);
+			const connection = to?.outputConnection;
+			assert(connection, BLOCK_FAILED);
+			block.getInput("SPRITE")?.connection?.connect(connection);
 			return block;
 		};
 		this.transformers.motion_changexby = this.setter("change", "x", "DX");
@@ -76,7 +87,7 @@ class SB3 {
 		});
 		this.transformers.motion_setrotationstyle = data => {
 			const block = app.current.workspace.newBlock("setRotationStyle");
-			block.getInput("STYLE")?.connection!.setShadowState({
+			block.getInput("STYLE")?.connection?.setShadowState({
 				type: "rotationStyle",
 				fields: {
 					STYLE: data.fields.STYLE[0],
@@ -122,13 +133,14 @@ class SB3 {
 				const block = app.current.workspace.newBlock(
 					data.opcode === "looks_seteffectto" ? "set" : "change",
 				);
-				block.getInput("VAR")?.connection!.setShadowState({
+				block.getInput("VAR")?.connection?.setShadowState({
 					type: "effect",
 					fields: {
 						EFFECT: data.fields.EFFECT[0],
 					},
 				});
-				block.getInput("VALUE")?.connection?.connect(value!.outputConnection);
+				assert(value?.outputConnection, BLOCK_FAILED);
+				block.getInput("VALUE")?.connection?.connect(value.outputConnection);
 
 				return block;
 			};
@@ -152,19 +164,21 @@ class SB3 {
 			const block = app.current.workspace.newBlock("switchCostumeTo");
 			const input = await this.input(data.inputs.COSTUME);
 
-			if (input!.outputConnection!.getCheck()![0] === "number") {
+			if (input?.outputConnection?.getCheck()?.[0] === "number") {
 				const one = app.current.workspace.newBlock("math_number");
 				one.setFieldValue("1", "NUM");
 
 				const subtract = app.current.workspace.newBlock("arithmetics");
 				subtract.setFieldValue("-", "OP");
 
-				subtract.getInput("A")?.connection?.connect(input!.outputConnection);
-				subtract.getInput("B")?.connection?.connect(one.outputConnection);
+				assert(one?.outputConnection && subtract.outputConnection, BLOCK_FAILED);
 
+				subtract.getInput("A")?.connection?.connect(input.outputConnection);
+				subtract.getInput("B")?.connection?.connect(one.outputConnection);
 				block.getInput("COSTUME")?.connection?.connect(subtract.outputConnection);
 			} else {
-				block.getInput("COSTUME")?.connection?.connect(input!.outputConnection);
+				assert(input?.outputConnection, BLOCK_FAILED);
+				block.getInput("COSTUME")?.connection?.connect(input.outputConnection);
 			}
 
 			return block;
@@ -176,19 +190,22 @@ class SB3 {
 			const block = app.current.workspace.newBlock("switchBackdropTo");
 			const input = await this.input(data.inputs.BACKDROP);
 
-			if (input!.outputConnection!.getCheck()![0] === "number") {
+			if (input?.outputConnection?.getCheck()?.[0] === "number") {
 				const one = app.current.workspace.newBlock("math_number");
 				one.setFieldValue("1", "NUM");
 
 				const subtract = app.current.workspace.newBlock("arithmetics");
 				subtract.setFieldValue("-", "OP");
 
-				subtract.getInput("A")?.connection?.connect(input!.outputConnection);
+				assert(one?.outputConnection && subtract.outputConnection, BLOCK_FAILED);
+
+				subtract.getInput("A")?.connection?.connect(input.outputConnection);
 				subtract.getInput("B")?.connection?.connect(one.outputConnection);
 
 				block.getInput("COSTUME")?.connection?.connect(subtract.outputConnection);
 			} else {
-				block.getInput("COSTUME")?.connection?.connect(input!.outputConnection);
+				assert(input?.outputConnection, BLOCK_FAILED);
+				block.getInput("COSTUME")?.connection?.connect(input.outputConnection);
 			}
 
 			return block;
@@ -262,7 +279,8 @@ class SB3 {
 			if (data.fields.WHENGREATERTHANMENU[0] === "TIMER") {
 				const block = app.current.workspace.newBlock("whenTimerElapsed");
 				const value = await this.input(data.inputs.VALUE);
-				block.getInput("TIMER")?.connection?.connect(value!.outputConnection);
+				assert(value?.outputConnection, BLOCK_FAILED);
+				block.getInput("TIMER")?.connection?.connect(value.outputConnection);
 				return block;
 			} else {
 				return this.unknown("event_whengreaterthan [volume]", "command");
@@ -270,14 +288,14 @@ class SB3 {
 		};
 		this.transformers.event_whenthisspriteclicked = () => {
 			const block = app.current.workspace.newBlock("whenMouse");
-			block.getInput("EVENT")?.connection!.setShadowState({type: "event"});
+			block.getInput("EVENT")?.connection?.setShadowState({type: "event"});
 			return block;
 		};
 		this.transformers.event_whenstageclicked =
 			this.transformers.event_whenthisspriteclicked;
 		this.transformers.event_whenbroadcastreceived = data => {
 			const block = app.current.workspace.newBlock("whenReceiveMessage");
-			block.getInput("MESSAGE")?.connection!.setShadowState({
+			block.getInput("MESSAGE")?.connection?.setShadowState({
 				type: "iterables_string",
 				fields: {
 					TEXT: data.fields.BROADCAST_OPTION[0],
@@ -299,7 +317,7 @@ class SB3 {
 		});
 		this.transformers.event_whenbackdropswitchesto = data => {
 			const block = app.current.workspace.newBlock("whenBackdropChangesTo");
-			block.getInput("BACKDROP")?.connection!.setShadowState({
+			block.getInput("BACKDROP")?.connection?.setShadowState({
 				type: "backdrop_menu",
 				fields: {
 					NAME: data.fields.BACKDROP[0],
@@ -332,6 +350,7 @@ class SB3 {
 			}
 
 			const block = app.current.workspace.newBlock("whenKeyPressed");
+			assert(key.outputConnection, BLOCK_FAILED);
 			block.getInput("KEY")?.connection?.connect(key.outputConnection);
 			return block;
 		};
@@ -348,27 +367,31 @@ class SB3 {
 			const not = app.current.workspace.newBlock("not");
 
 			const condition = await this.input(data.inputs.CONDITION);
-			if (condition) {
+			if (condition?.outputConnection) {
 				not.getInput("BOOL")?.connection?.connect(condition.outputConnection);
 			}
+			assert(not.outputConnection, BLOCK_FAILED);
 
 			block.getInput("CONDITION")?.connection?.connect(not.outputConnection);
 
 			if ("SUBSTACK" in data.inputs) {
 				const inner = await this.input(data.inputs.SUBSTACK, true);
-				block.getInput("STACK")?.connection?.connect(inner!.previousConnection);
+				assert(inner?.previousConnection, BLOCK_FAILED);
+				block.getInput("STACK")?.connection?.connect(inner.previousConnection);
 			}
 
 			return block;
 		};
 		this.transformers.control_wait_until = this.transformers.control_repeat_until;
 		this.transformers.control_stop = data => {
-			const options = data.fields.STOP_OPTION[0];
+			const [options] = data.fields.STOP_OPTION;
 
 			if (options === "all") {
 				return app.current.workspace.newBlock("stop");
 			} else if (options === "this script") {
 				return app.current.workspace.newBlock("return");
+			} else if (options === "other scripts in sprite") {
+				return app.current.workspace.newBlock("stopOtherScripts");
 			} else {
 				return this.unknown(`control_stop [${options}]`, "command");
 			}
@@ -377,16 +400,18 @@ class SB3 {
 			const block = app.current.workspace.newBlock("for");
 			const times = await this.input(data.inputs.TIMES);
 
-			block.getInput("FROM")?.connection!.setShadowState({
+			block.getInput("FROM")?.connection?.setShadowState({
 				type: "math_number",
 				fields: {NUM: "1"},
 			});
 
-			block.getInput("TO")?.connection?.connect(times!.outputConnection);
+			assert(times?.outputConnection, BLOCK_FAILED);
+			block.getInput("TO")?.connection?.connect(times.outputConnection);
 
 			if ("SUBSTACK" in data.inputs) {
 				const inner = await this.input(data.inputs.SUBSTACK, true);
-				block.getInput("STACK")?.connection?.connect(inner!.previousConnection);
+				assert(inner?.previousConnection, BLOCK_FAILED);
+				block.getInput("STACK")?.connection?.connect(inner.previousConnection);
 			}
 
 			return block;
@@ -395,11 +420,9 @@ class SB3 {
 			opcode: "whenCloned",
 		});
 		this.transformers.control_create_clone_of = data => {
-			const field =
-				this.target.blocks[data.inputs.CLONE_OPTION[1] as string].fields
-					.CLONE_OPTION[0];
+			const field = this.getBlockInputValue(data, "CLONE_OPTIONS");
 			const block = app.current.workspace.newBlock("clone");
-			block.getInput("SPRITE")?.connection!.setShadowState({
+			block.getInput("SPRITE")?.connection?.setShadowState({
 				type: "sprite",
 				fields: {
 					SPRITE: field === "_myself_" ? "self" : field,
@@ -414,12 +437,14 @@ class SB3 {
 
 			if ("SUBSTACK" in data.inputs) {
 				const inner = await this.input(data.inputs.SUBSTACK, true);
-				block.getInput("STACK")?.connection?.connect(inner!.previousConnection);
+				assert(inner?.previousConnection, BLOCK_FAILED);
+				block.getInput("STACK")?.connection?.connect(inner.previousConnection);
 			}
 
 			const trueBlock = app.current.workspace.newBlock("boolean");
 			trueBlock.setFieldValue("true", "BOOL");
 
+			assert(trueBlock?.outputConnection, BLOCK_FAILED);
 			block.getInput("CONDITION")?.connection?.connect(trueBlock.outputConnection);
 
 			return block;
@@ -445,8 +470,7 @@ class SB3 {
 
 		// Sensing
 		this.transformers.sensing_of = async data => {
-			const fieldValue =
-				this.target.blocks[data.inputs.OBJECT[1] as string].fields.OBJECT[0];
+			const fieldValue = this.getBlockInputValue(data, "OBJECT");
 
 			const block = app.current.workspace.newBlock("property");
 			block.setFieldValue(fieldValue === "_stage_" ? "Stage" : fieldValue, "SPRITE");
@@ -465,9 +489,7 @@ class SB3 {
 			return block;
 		};
 		this.transformers.sensing_touchingobject = data => {
-			const fieldValue =
-				this.target.blocks[data.inputs.TOUCHINGOBJECTMENU[1] as string].fields
-					.TOUCHINGOBJECTMENU[0];
+			const fieldValue = this.getBlockInputValue(data, "TOUCHINGOBJECTMENU");
 
 			if (fieldValue === "_edge_") {
 				return app.current.workspace.newBlock("isTouchingEdge");
@@ -475,7 +497,7 @@ class SB3 {
 				return app.current.workspace.newBlock("isTouchingMouse");
 			} else {
 				const block = app.current.workspace.newBlock("isTouching");
-				block.getInput("SPRITE")?.connection!.setShadowState({
+				block.getInput("SPRITE")?.connection?.setShadowState({
 					type: "sprite",
 					fields: {
 						SPRITE: fieldValue,
@@ -490,25 +512,18 @@ class SB3 {
 		this.transformers.sensing_distanceto = data => {
 			// Scrap does not have "distance to [object]" block,
 			// rather it has "distance to [x: number] [y: number]" block.
-			const fieldValue =
-				this.target.blocks[data.inputs.DISTANCETOMENU[1] as string].fields
-					.DISTANCETOMENU[0];
+			const fieldValue = this.getBlockInputValue(data, "DISTANCETOMENU");
 			const block = app.current.workspace.newBlock("distanceTo");
 			if (fieldValue === "_mouse_") {
-				block
-					.getInput("X")
-					?.connection?.connect(
-						app.current.workspace.newBlock("mouseX").outputConnection,
-					);
-				block
-					.getInput("Y")
-					?.connection?.connect(
-						app.current.workspace.newBlock("mouseY").outputConnection,
-					);
+				const mouseX = app.current.workspace.newBlock("mouseX");
+				const mouseY = app.current.workspace.newBlock("mouseY");
+				assert(mouseY.outputConnection && mouseX.outputConnection, BLOCK_FAILED);
+				block.getInput("X")?.connection?.connect(mouseX.outputConnection);
+				block.getInput("Y")?.connection?.connect(mouseY.outputConnection);
 			} else {
 				const x = app.current.workspace.newBlock("property");
 				x.setFieldValue("x", "PROPERTY");
-				x.getInput("SPRITE")?.connection!.setShadowState({
+				x.getInput("SPRITE")?.connection?.setShadowState({
 					type: "sprite",
 					fields: {
 						SPRITE: fieldValue,
@@ -517,13 +532,13 @@ class SB3 {
 
 				const y = app.current.workspace.newBlock("property");
 				y.setFieldValue("y", "PROPERTY");
-				y.getInput("SPRITE")?.connection!.setShadowState({
+				y.getInput("SPRITE")?.connection?.setShadowState({
 					type: "sprite",
 					fields: {
 						SPRITE: fieldValue,
 					},
 				});
-
+				assert(x.outputConnection && y.outputConnection, BLOCK_FAILED);
 				block.getInput("X")?.connection?.connect(x.outputConnection);
 				block.getInput("Y")?.connection?.connect(y.outputConnection);
 			}
@@ -533,8 +548,8 @@ class SB3 {
 			let name = "";
 
 			return () => {
-				const block = app.current.workspace.newBlock("parameter");
-				block.loadExtraState!({type: "string", isVariable: true});
+				const block = ParameterBlock.createIn(app.current.workspace);
+				block.loadExtraState({type: "string", isVariable: true});
 				block.setFieldValue(
 					name ||
 						(name = Blockly.Variables.generateUniqueNameFromOptions(
@@ -551,7 +566,8 @@ class SB3 {
 			block.getInput("VAR")?.connection?.connect(answer().outputConnection);
 			const ask = app.current.workspace.newBlock("ask");
 			const question = await this.input(data.inputs.QUESTION);
-			ask.getInput("QUESTION")?.connection?.connect(question!.outputConnection);
+			assert(question?.outputConnection && ask.outputConnection, BLOCK_FAILED);
+			ask.getInput("QUESTION")?.connection?.connect(question.outputConnection);
 			block.getInput("VALUE")?.connection?.connect(ask.outputConnection);
 			return block;
 		};
@@ -593,14 +609,16 @@ class SB3 {
 		this.transformers.sensing_mousey = this.reporter("mouseY");
 		this.transformers.sensing_setdragmode = data => {
 			const block = app.current.workspace.newBlock("set");
-			block.getInput("VAR")?.connection!.setShadowState({type: "draggable"});
+			block.getInput("VAR")?.connection?.setShadowState({type: "draggable"});
 			if (data.fields.DRAG_MODE[0] === "draggable") {
 				const trueBlock = app.current.workspace.newBlock("boolean");
 				trueBlock.setFieldValue("true", "BOOL");
+				assert(trueBlock.outputConnection, BLOCK_FAILED);
 				block.getInput("VALUE")?.connection?.connect(trueBlock.outputConnection);
 			} else if (data.fields.DRAG_MODE[0] === "not draggable") {
 				const falseBlock = app.current.workspace.newBlock("boolean");
 				falseBlock.setFieldValue("false", "BOOL");
+				assert(falseBlock.outputConnection, BLOCK_FAILED);
 				block.getInput("VALUE")?.connection?.connect(falseBlock.outputConnection);
 			}
 			return block;
@@ -617,12 +635,12 @@ class SB3 {
 		this.transformers.operator_divide = this.operator("arithmetics", "/");
 
 		this.transformers.operator_random = async data => {
-			const fromParam = app.current.workspace.newBlock("parameter");
-			fromParam.loadExtraState!({type: "number"});
+			const fromParam = ParameterBlock.createIn(app.current.workspace);
+			fromParam.loadExtraState({type: "number"});
 			fromParam.setFieldValue("__from__", "VAR");
 
-			const toParam = app.current.workspace.newBlock("parameter");
-			toParam.loadExtraState!({type: "number"});
+			const toParam = ParameterBlock.createIn(app.current.workspace);
+			toParam.loadExtraState({type: "number"});
 			toParam.setFieldValue("__to__", "VAR");
 
 			const multiply = app.current.workspace.newBlock("arithmetics");
@@ -640,10 +658,20 @@ class SB3 {
 			const one = app.current.workspace.newBlock("math_number");
 			one.setFieldValue("1", "NUM");
 
-			const returnBlock = app.current.workspace.newBlock("return");
-			returnBlock.loadExtraState!({output: "number"});
+			const returnBlock = ReturnBlock.createIn(app.current.workspace);
+			returnBlock.loadExtraState({output: "number"});
 
 			const random = app.current.workspace.newBlock("random");
+
+			assert(
+				random.outputConnection &&
+					subtract.outputConnection &&
+					multiply.outputConnection &&
+					floor.outputConnection &&
+					one.outputConnection &&
+					add.outputConnection,
+				BLOCK_FAILED,
+			);
 
 			// Connections
 			multiply.getInput("A")?.connection?.connect(random.outputConnection);
@@ -678,8 +706,8 @@ class SB3 {
 				returnBlock.getInput("VALUE")?.connection?.connect(add.outputConnection);
 			}
 
-			const block = app.current.workspace.newBlock("call");
-			block.loadExtraState!({
+			const block = CallBlock.createIn(app.current.workspace);
+			block.loadExtraState({
 				name,
 				params: ["number", "number"],
 				returnType: "number",
@@ -687,9 +715,9 @@ class SB3 {
 
 			const from = await this.input(data.inputs.FROM);
 			const to = await this.input(data.inputs.TO);
-
-			block.getInput("PARAM_0")?.connection?.connect(from!.outputConnection);
-			block.getInput("PARAM_1")?.connection?.connect(to!.outputConnection);
+			assert(from?.outputConnection && to?.outputConnection, BLOCK_FAILED);
+			block.getInput("PARAM_0")?.connection?.connect(from.outputConnection);
+			block.getInput("PARAM_1")?.connection?.connect(to.outputConnection);
 
 			return block;
 		};
@@ -717,11 +745,21 @@ class SB3 {
 
 			minus.setFieldValue("-", "OP");
 			one.setFieldValue("1", "NUM");
-			minus.getInput("A")?.connection?.connect(letter!.outputConnection);
+
+			assert(
+				letter?.outputConnection &&
+					one.outputConnection &&
+					string?.outputConnection &&
+					string.outputConnection &&
+					minus.outputConnection,
+				BLOCK_FAILED,
+			);
+
+			minus.getInput("A")?.connection?.connect(letter.outputConnection);
 			minus.getInput("B")?.connection?.connect(one.outputConnection);
 
 			block.getInput("INDEX")?.connection?.connect(minus.outputConnection);
-			block.getInput("ITERABLE")?.connection?.connect(string!.outputConnection);
+			block.getInput("ITERABLE")?.connection?.connect(string.outputConnection);
 
 			return block;
 		};
@@ -738,7 +776,8 @@ class SB3 {
 			const block = app.current.workspace.newBlock("math");
 			block.setFieldValue("round", "OP");
 			const value = await this.input(data.inputs.NUM);
-			block.getInput("NUM")?.connection?.connect(value!.outputConnection);
+			assert(value?.outputConnection, BLOCK_FAILED);
+			block.getInput("NUM")?.connection?.connect(value.outputConnection);
 			return block;
 		};
 		this.transformers.operator_mathop = async data => {
@@ -755,35 +794,40 @@ class SB3 {
 					const block = app.current.workspace.newBlock("math");
 					block.setFieldValue(data.fields.OPERATOR[0], "OP");
 					const value = await this.input(data.inputs.NUM);
-					block.getInput("NUM")?.connection?.connect(value!.outputConnection);
+					assert(value?.outputConnection, BLOCK_FAILED);
+					block.getInput("NUM")?.connection?.connect(value.outputConnection);
 					return block;
 				}
 				case "ceiling": {
 					const block = app.current.workspace.newBlock("math");
 					block.setFieldValue("ceil", "OP");
 					const value = await this.input(data.inputs.NUM);
-					block.getInput("NUM")?.connection?.connect(value!.outputConnection);
+					assert(value?.outputConnection, BLOCK_FAILED);
+					block.getInput("NUM")?.connection?.connect(value.outputConnection);
 					return block;
 				}
 				case "ln": {
 					const block = app.current.workspace.newBlock("math");
 					block.setFieldValue("log", "OP");
 					const value = await this.input(data.inputs.NUM);
-					block.getInput("NUM")?.connection?.connect(value!.outputConnection);
+					assert(value?.outputConnection, BLOCK_FAILED);
+					block.getInput("NUM")?.connection?.connect(value.outputConnection);
 					return block;
 				}
 				case "log": {
 					const block = app.current.workspace.newBlock("math");
 					block.setFieldValue("log10", "OP");
 					const value = await this.input(data.inputs.NUM);
-					block.getInput("NUM")?.connection?.connect(value!.outputConnection);
+					assert(value?.outputConnection, BLOCK_FAILED);
+					block.getInput("NUM")?.connection?.connect(value.outputConnection);
 					return block;
 				}
 				case "e ^": {
 					const block = app.current.workspace.newBlock("math");
 					block.setFieldValue("exp", "OP");
 					const value = await this.input(data.inputs.NUM);
-					block.getInput("NUM")?.connection?.connect(value!.outputConnection);
+					assert(value?.outputConnection, BLOCK_FAILED);
+					block.getInput("NUM")?.connection?.connect(value.outputConnection);
 					return block;
 				}
 				case "10 ^": {
@@ -792,8 +836,9 @@ class SB3 {
 					const value = await this.input(data.inputs.NUM);
 					const ten = app.current.workspace.newBlock("math_number");
 					ten.setFieldValue("10", "NUM");
+					assert(value?.outputConnection && ten.outputConnection, BLOCK_FAILED);
 					block.getInput("A")?.connection?.connect(ten.outputConnection);
-					block.getInput("B")?.connection?.connect(value!.outputConnection);
+					block.getInput("B")?.connection?.connect(value.outputConnection);
 					return block;
 				}
 				default:
@@ -807,8 +852,9 @@ class SB3 {
 			const block = app.current.workspace.newBlock("arithmetics");
 			const A = await this.input(data.inputs.STRING1);
 			const B = await this.input(data.inputs.STRING2);
-			block.getInput("A")?.connection?.connect(A!.outputConnection);
-			block.getInput("B")?.connection?.connect(B!.outputConnection);
+			assert(A?.outputConnection && B?.outputConnection, BLOCK_FAILED);
+			block.getInput("A")?.connection?.connect(A.outputConnection);
+			block.getInput("B")?.connection?.connect(B.outputConnection);
 
 			return block;
 		};
@@ -818,10 +864,11 @@ class SB3 {
 			async data => {
 				const block = app.current.workspace.newBlock(data.opcode.slice(5, -10));
 				const value = await this.input(data.inputs.VALUE);
-				block.getInput("VALUE")?.connection?.connect(value!.outputConnection);
+				assert(value?.outputConnection, BLOCK_FAILED);
+				block.getInput("VALUE")?.connection?.connect(value.outputConnection);
 
-				const variable = app.current.workspace.newBlock("parameter");
-				variable.loadExtraState!({isVariable: true});
+				const variable = ParameterBlock.createIn(app.current.workspace);
+				variable.loadExtraState({isVariable: true});
 				variable.setFieldValue(data.fields.VARIABLE[0], "VAR");
 
 				block.getInput("VAR")?.connection?.connect(variable.outputConnection);
@@ -842,11 +889,13 @@ class SB3 {
 		// Functions
 		this.transformers.procedures_definition = def => {
 			const data = this.target.blocks[def.inputs.custom_block[1] as string];
-			const name = data.mutation!.proccode.replace(/%[bns]/g, "()").trim();
-			const block = app.current.workspace.newBlock("function") as FunctionBlock;
-			block.params = JSON.parse(data.mutation!.argumentnames);
+			const paramTypes = data.mutation?.proccode.match(/%[bns]/g);
+			assert(data.mutation && paramTypes, "Invalid SB3");
+			const name = data.mutation.proccode.replace(/%[bns]/g, "()").trim();
+			const block = FunctionBlock.createIn(app.current.workspace);
+			block.params = JSON.parse(data.mutation.argumentnames);
 
-			const paramTypes = data.mutation!.proccode.match(/%[bns]/g);
+			assert(data.mutation, "Invalid SB3");
 
 			const types: Record<string, Check> = {
 				"%b": "boolean",
@@ -854,14 +903,14 @@ class SB3 {
 				"%s": ["string", "number"],
 			};
 
-			block.setFieldValue(escape(name), "NAME");
+			block.setFieldValue(this.escape(name), "NAME");
 
 			for (let i = 0; i < block.params.length; i++) {
-				const typed = app.current.workspace.newBlock("parameter");
-				typed.getInput("TYPE")?.connection!.setShadowState({
+				const typed = ParameterBlock.createIn(app.current.workspace);
+				typed.getInput("TYPE")?.connection?.setShadowState({
 					type: "type",
 					fields: {
-						PARAM: `${block.params[i]}:${types[paramTypes![i]]}`,
+						PARAM: `${block.params[i]}:${types[paramTypes[i]]}`,
 					},
 				});
 				block
@@ -872,14 +921,15 @@ class SB3 {
 			return block;
 		};
 		this.transformers.procedures_call = async data => {
-			const name = data.mutation!.proccode.replace(/%[nbs]/g, "()").trim();
-			const call = app.current.workspace.newBlock("call");
-			const types = (data.mutation!.proccode.match(/%[bns]/g) ?? []).map(e => ({
+			assert(data.mutation, "Invalid SB3");
+			const name = data.mutation.proccode.replace(/%[nbs]/g, "()").trim();
+			const call = CallBlock.createIn(app.current.workspace);
+			const types = (data.mutation.proccode.match(/%[bns]/g) ?? []).map(e => ({
 				type: e[1] === "s" ? ["string", "number"] : e[1] === "b" ? "boolean" : "number",
 			}));
-			const args: string[] = JSON.parse(data.mutation!.argumentids);
+			const args: string[] = JSON.parse(data.mutation.argumentids);
 
-			call.loadExtraState!({
+			call.loadExtraState({
 				name,
 				params: types,
 			});
@@ -889,21 +939,22 @@ class SB3 {
 				if (content) {
 					// Boolean inputs can be empty
 					const value = await this.input(content);
-					call.getInput(`PARAM_${i}`)?.connection?.connect(value!.outputConnection);
+					assert(value?.outputConnection, BLOCK_FAILED);
+					call.getInput(`PARAM_${i}`)?.connection?.connect(value.outputConnection);
 				}
 			}
 
 			return call;
 		};
 		this.transformers.argument_reporter_string_number = data => {
-			const block = app.current.workspace.newBlock("parameter");
-			block.setFieldValue(escape(data.fields.VALUE[0]), "VAR");
+			const block = ParameterBlock.createIn(app.current.workspace);
+			block.setFieldValue(this.escape(data.fields.VALUE[0]), "VAR");
 			return block;
 		};
 		this.transformers.argument_reporter_boolean = data => {
-			const block = app.current.workspace.newBlock("parameter");
-			block.loadExtraState!({type: "boolean"});
-			block.setFieldValue(escape(data.fields.VALUE[0]), "VAR");
+			const block = ParameterBlock.createIn(app.current.workspace);
+			block.loadExtraState({type: "boolean"});
+			block.setFieldValue(this.escape(data.fields.VALUE[0]), "VAR");
 			return block;
 		};
 	}
@@ -916,74 +967,89 @@ class SB3 {
 
 			const A = await this.input(data.inputs[`${input}1`]);
 			const B = await this.input(data.inputs[`${input}2`]);
-
-			block.getInput("A")?.connection?.connect(A!.outputConnection);
-			block.getInput("B")?.connection?.connect(B!.outputConnection);
+			assert(A?.outputConnection && B?.outputConnection, BLOCK_FAILED);
+			block.getInput("A")?.connection?.connect(A.outputConnection);
+			block.getInput("B")?.connection?.connect(B.outputConnection);
 
 			return block;
 		};
 	}
 
+	private async readZip(zip: JSZip): Promise<SB3.Project> {
+		try {
+			return JSON.parse((await zip.file("project.json")?.async("text")) ?? "Invalid");
+		} catch {
+			throw new Error("Invalid SB3 file");
+		}
+	}
+
 	private static async transform(this: SB3, zip: JSZip) {
-		const project: SB3.Project = JSON.parse(await zip.file("project.json")!.async("text"));
+		const project = await this.readZip(zip);
 		this.isProjectCompatible(project);
 		this.assetMap = {};
 
+		Blockly.Events.disable();
+		app.entities.length = 0;
 		for (const target of project.targets) {
 			this.isTargetCompatible(target);
-			app.current = target.isStage ? new Stage() : new Sprite(target.name);
-			this.target = target;
-			app.current.costumes = [];
-			for (const costume of target.costumes) {
-				const filename = `${costume.assetId}.${costume.dataFormat}`;
-				const name = costume.name
-					.replace(illegalRe, "_")
-					.replace(controlRe, "_")
-					.replace(reservedRe, "_");
-				app.current.costumes.push(
-					new File(
-						[await zip.file(filename)!.async("blob")],
+
+			const [currentCostume, ...costumes] = await Promise.all(
+				target.costumes.map(async costume => {
+					const filename = `${costume.assetId}.${costume.dataFormat}`;
+					const name = costume.name
+						.replace(illegalRe, "_")
+						.replace(controlRe, "_")
+						.replace(reservedRe, "_");
+					const file = zip.file(filename);
+					assert(file, "Invalid SB3 file");
+					return new EntityAsset(
+						[await file.async("blob")],
 						`${(this.assetMap[costume.name] = name)}.${costume.dataFormat}`,
 						{
 							type: `image/${costume.dataFormat}${costume.dataFormat === "svg" ? "+xml" : ""}`,
 						},
-					),
-				);
-			}
-			app.current.update();
-			app.current.sounds = [];
-			for (const sound of target.sounds) {
-				const filename = `${sound.assetId}.${sound.dataFormat}`;
-				app.current.sounds.push(
-					new File(
-						[await zip.file(filename)!.async("blob")],
+					);
+				}),
+			);
+
+			const sounds = await Promise.all(
+				target.sounds.map(async sound => {
+					const filename = `${sound.assetId}.${sound.dataFormat}`;
+					const file = zip.file(filename);
+					assert(file, "Invalid SB3 file");
+
+					return new EntityAsset(
+						[await file.async("blob")],
 						`${sound.name}.${sound.dataFormat}`,
 						{
 							type: `audio/${sound.dataFormat}`,
 						},
-					),
-				);
-			}
-			app.current.workspace.clear();
+					);
+				}),
+			);
+			app.current = new Entity(target.name, target.isStage, currentCostume);
+			app.current.costumes.push(...costumes);
+			this.target = target;
+			app.current.sounds.splice(0, app.current.sounds.length, ...sounds);
 			for (const id in target.variables) {
 				app.current.variables.push([target.variables[id][0], "any"]);
 			}
 
 			this.provided = {};
 
-			if (target.isStage) {
-				app.entities.unshift(app.current);
-				app.current.render(app.stagePanel);
-			} else {
-				app.addSprite(app.current as Sprite, false);
-			}
-
 			for (const block of Object.values(target.blocks)) {
 				if (block.topLevel) {
 					await this.block(block);
 				}
 			}
+
+			if (target.isStage) {
+				app.entities.unshift(app.current);
+			} else {
+				app.entities.push(app.current);
+			}
 		}
+		Blockly.Events.enable();
 	}
 
 	private isProjectCompatible(project: SB3.Project) {
@@ -991,13 +1057,15 @@ class SB3 {
 			if (project.extensions.length === 1 && project.extensions[0] === "pen") {
 				return;
 			}
-			throw "Scrap does not support extensions other than the pen extension.";
+			throw new SyntaxError(
+				"Scrap does not support extensions other than the pen extension.",
+			);
 		}
 	}
 
 	private isTargetCompatible(target: SB3.Target) {
 		if (Object.keys(target.lists).length) {
-			throw "Scrap does not support lists.";
+			throw new SyntaxError("Scrap does not support lists.");
 		}
 	}
 
@@ -1040,15 +1108,15 @@ class SB3 {
 				return block;
 			}
 			case 12: {
-				const block = app.current.workspace.newBlock("parameter");
-				block.loadExtraState!({isVariable: true});
+				const block = ParameterBlock.createIn(app.current.workspace);
+				block.loadExtraState({isVariable: true});
 				block.setFieldValue(data[1], "VAR");
 				block.setShadow(shadow === 1);
 				return block;
 			}
 		}
 
-		throw `Unknown input type: ${data[0]}`;
+		throw new ReferenceError(`Unknown input type: ${data[0]}`);
 	}
 
 	/**
@@ -1062,28 +1130,33 @@ class SB3 {
 			const block = app.current.workspace.newBlock(opcode ?? data.opcode);
 
 			if (extraState) {
-				block.loadExtraState!(extraState);
+				assert(
+					block.loadExtraState,
+					"Trying to load extra state on a block that doesn't accept it.",
+				);
+				block.loadExtraState(extraState);
 			}
 
 			for (const [name, input] of Object.entries(data.inputs)) {
-				const {connection} = block.getInput(name in inputs ? inputs[name][0] : name)!;
+				const blockInput = block.getInput(name in inputs ? inputs[name][0] : name);
 				const inner = await this.input(input, name in inputs ? inputs[name][1] : false);
-
+				assert(blockInput?.connection, "Invalid operation");
 				if (inner?.previousConnection) {
-					connection?.connect(inner.previousConnection);
+					blockInput.connection.connect(inner.previousConnection);
 				} else if (inner?.outputConnection) {
-					const didConnect = connection?.connect(inner.outputConnection);
+					const didConnect = blockInput.connection.connect(inner.outputConnection);
 
 					// Scratch is not strongly typed, so we need to convert the type
 					if (!didConnect) {
-						switch (connection!.getCheck()![0]) {
+						switch (blockInput.connection.getCheck()?.[0]) {
 							case "number": {
 								const block = app.current.workspace.newBlock("number");
 								block
 									.getInput("VALUE")
 									?.connection?.connect(inner.outputConnection);
+								assert(block.outputConnection, BLOCK_FAILED);
 
-								connection?.connect(block.outputConnection);
+								blockInput.connection?.connect(block.outputConnection);
 								break;
 							}
 							case "string": {
@@ -1091,17 +1164,23 @@ class SB3 {
 								block
 									.getInput("VALUE")
 									?.connection?.connect(inner.outputConnection);
+								assert(block.outputConnection, BLOCK_FAILED);
 
-								connection?.connect(block.outputConnection);
+								blockInput.connection?.connect(block.outputConnection);
 								break;
 							}
 							case "boolean": {
 								const block = app.current.workspace.newBlock("compare");
-								block.setFieldValue("==", "OP");
 
 								const trueBlock =
 									app.current.workspace.newBlock("iterables_string");
+
+								assert(
+									block.outputConnection && trueBlock.outputConnection,
+									BLOCK_FAILED,
+								);
 								trueBlock.setFieldValue("true", "TEXT");
+								block.setFieldValue("==", "OP");
 
 								block
 									.getInput("A")
@@ -1110,7 +1189,7 @@ class SB3 {
 									.getInput("B")
 									?.connection?.connect(inner.outputConnection);
 
-								connection?.connect(block.outputConnection);
+								blockInput.connection?.connect(block.outputConnection);
 								break;
 							}
 						}
@@ -1121,13 +1200,19 @@ class SB3 {
 		};
 	}
 
+	private getBlockInputValue(data: SB3.Block, field: string) {
+		const [, blockId] = data.inputs[field];
+		assert(typeof blockId === "string");
+		return this.target.blocks[blockId].fields[field][0];
+	}
+
 	private setter(kind: "set" | "change", type: string, input: string) {
 		return async (data: SB3.Block) => {
 			const block = app.current.workspace.newBlock(kind);
-			block.getInput("VAR")?.connection!.setShadowState({type});
+			block.getInput("VAR")?.connection?.setShadowState({type});
 			const value = await this.input(data.inputs[input]);
 
-			if (value) {
+			if (value?.outputConnection) {
 				block.getInput("VALUE")?.connection?.connect(value.outputConnection);
 			}
 			return block;
@@ -1139,15 +1224,18 @@ class SB3 {
 	}
 
 	private async block(data: SB3.Block, isInput?: boolean) {
+		let block: Blockly.Block;
+
 		if (data.opcode in this.transformers) {
-			var block = await this.transformers[data.opcode](data);
+			block = await this.transformers[data.opcode](data);
 		} else {
-			var block = await this.unknown(data.opcode, isInput ? "reporter" : "command");
+			block = await this.unknown(data.opcode, isInput ? "reporter" : "command");
 		}
 
 		if (data.next) {
 			const next = await this.block(this.target.blocks[data.next]);
-			block.nextConnection?.connect(next.previousConnection!);
+			assert(next.previousConnection && block.nextConnection, BLOCK_FAILED);
+			block.nextConnection.connect(next.previousConnection);
 		}
 
 		return new Promise<Blockly.Block>(resolve => {
@@ -1158,8 +1246,8 @@ class SB3 {
 	}
 
 	private unknown(opcode: string, shape: "reporter" | "command") {
-		const block = app.current.workspace.newBlock("unknown");
-		block.loadExtraState!({shape, opcode});
+		const block = UnknownBlock.createIn(app.current.workspace);
+		block.loadExtraState({shape, opcode});
 
 		return new Promise<Blockly.Block>(resolve => {
 			setTimeout(() => {
@@ -1170,35 +1258,35 @@ class SB3 {
 
 	/**
 	 * Some Scratch blocks do not have a corresponding block in Scrap.
-	 * However, it is sometimes possible to emulate the block using a function.
+	 * However, it is sometimes possible to emulate the block using a function IN USER CODE.
 	 * This is a helper function to create a function that can be used to emulate a block.
 	 */
-	private provide(_block: Blockly.Block, init: SB3.Provide) {
+	private provide(block: Blockly.Block, init: SB3.Provide) {
 		if (init.name in this.provided) {
-			_block.dispose(false);
+			block.dispose(false);
 			return this.provided[init.name];
 		}
 
 		const name = `scratch_${init.name}_${Date.now().toString(36)}`;
-		const block = app.current.workspace.newBlock("function");
-		block.setCommentText(init.comment);
-		block.setFieldValue(name, "NAME");
+		const functionBlock = FunctionBlock.createIn(app.current.workspace);
+		functionBlock.setCommentText(init.comment);
+		functionBlock.setFieldValue(name, "NAME");
 
-		block.loadExtraState!({
+		functionBlock.loadExtraState({
 			params: init.args.map(e => e.name),
 			returns: init.returns,
 		});
 
 		for (let i = 0; i < init.args.length; i++) {
-			block
+			functionBlock
 				.getInput(`PARAM_${i}`)
-				?.connection!.targetBlock()
+				?.connection?.targetBlock()
 				?.getInput("TYPE")
-				?.connection!.targetBlock()
+				?.connection?.targetBlock()
 				?.setFieldValue(init.args[i].type, "TYPE");
 		}
-
-		block.nextConnection?.connect(_block.previousConnection!);
+		assert(block.previousConnection, BLOCK_FAILED);
+		functionBlock.nextConnection?.connect(block.previousConnection);
 		return (this.provided[init.name] = name);
 	}
 
@@ -1221,14 +1309,16 @@ class SB3 {
 				const block = app.current.workspace.newBlock(type);
 				block.setFieldValue("index", "VALUE");
 
+				assert(one.outputConnection && block.outputConnection);
+
 				add.getInput("A")?.connection?.connect(one.outputConnection);
 				add.getInput("B")?.connection?.connect(block.outputConnection);
 
 				return add;
 			}
 
-			const block = app.current.workspace.newBlock("controls_if");
-			block.loadExtraState!({
+			const block = IfBlock.createIn(app.current.workspace);
+			block.loadExtraState({
 				hasElse: true,
 				elseIfCount: this.target.costumes.length - 1,
 			});
@@ -1241,30 +1331,37 @@ class SB3 {
 				const nameBlock = app.current.workspace.newBlock("iterables_string");
 
 				nameBlock.setFieldValue(this.assetMap[this.target.costumes[i].name], "TEXT");
+				assert(
+					assetBlock.outputConnection &&
+						nameBlock.outputConnection &&
+						equals.outputConnection,
+					BLOCK_FAILED,
+				);
 				equals.getInput("A")?.connection?.connect(assetBlock.outputConnection);
 				equals.getInput("B")?.connection?.connect(nameBlock.outputConnection);
 
 				block.getInput(`IF${i}`)?.connection?.connect(equals.outputConnection);
 
-				const returnBlock = app.current.workspace.newBlock("return");
-				returnBlock.loadExtraState!({
+				const returnBlock = ReturnBlock.createIn(app.current.workspace);
+				returnBlock.loadExtraState({
 					output: "string",
 				});
 
 				returnBlock
 					.getInput("VALUE")
-					?.connection!.targetBlock()!
-					.setFieldValue(this.target.costumes[i].name, "TEXT");
+					?.connection?.targetBlock()
+					?.setFieldValue(this.target.costumes[i].name, "TEXT");
 				block.getInput(`DO${i}`)?.connection?.connect(returnBlock.previousConnection);
 			}
 
 			const throwBlock = app.current.workspace.newBlock("throw");
-			throwBlock.getInput("ERROR")?.connection!.setShadowState({
+			throwBlock.getInput("ERROR")?.connection?.setShadowState({
 				type: "iterables_string",
 				fields: {
 					TEXT: "Invalid costume name",
 				},
 			});
+			assert(throwBlock.previousConnection, BLOCK_FAILED);
 			block.getInput("ELSE")?.connection?.connect(throwBlock.previousConnection);
 
 			const name = this.provide(block, {
@@ -1274,8 +1371,8 @@ class SB3 {
 				comment: "Returns the name of the asset before renaming.",
 			});
 
-			const call = app.current.workspace.newBlock("call");
-			call.loadExtraState!({
+			const call = CallBlock.createIn(app.current.workspace);
+			call.loadExtraState({
 				name,
 				params: [],
 				returnType: "string",
@@ -1283,6 +1380,31 @@ class SB3 {
 
 			return call;
 		};
+	}
+
+	/**
+	 * Escapes a string to make it a valid JavaScript identifier.
+	 *
+	 * Idea taken from:
+	 * https://github.com/smallhelm/to-js-identifier
+	 *
+	 * Which is licensed under the MIT license
+	 * (C) 2016 Small Helm LLC
+	 *
+	 * @param string String to escape.
+	 * @returns A valid JavaScript identifier.
+	 */
+	private escape(string: string) {
+		const result = string.replace(
+			/(^[^a-zA-Z_])|([^a-zA-Z_0-9])/g,
+			(bad: string) => `$${bad.charCodeAt(0)}$`,
+		);
+
+		if (reservedWordsInJs.includes(result)) {
+			return `$${result}$`;
+		}
+
+		return result;
 	}
 }
 

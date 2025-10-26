@@ -1,100 +1,150 @@
-import {dataURLToFile} from "@scrap/utils/dataURLToFile";
 import * as Blockly from "blockly/core";
 import type JSZip from "jszip";
 import * as path from "path";
 import type {Variable} from "./Variable";
-import click from "./assets/sounds/click.mp3?url&inline";
-import scrappy from "./assets/svgs/scrappy.svg?raw";
-import stage from "./assets/svgs/stage.svg?raw";
+import click from "../assets/sounds/click.mp3?url&inline";
+import scrappy from "../assets/svgs/scrappy.svg?raw";
+import stage from "../assets/svgs/stage.svg?raw";
+import BlocksToCode from "@scrap/code-transformers/blocksToCode";
+import * as SWC from "@scrap/utils/swc";
+import {EntityAsset} from "./EntityAsset.svelte";
+import {assert} from "@scrap/utils/assert";
+
+const scrappyAsset = new EntityAsset([scrappy], "Scrappy.svg", {type: "image/svg+xml"});
 
 export class Entity {
-	public current = 0;
-	public sounds = [dataURLToFile(click, "click.mp3")];
-	public init: {};
+	public currentCostume: EntityAsset;
+	public readonly sounds = $state([EntityAsset.fromDataURL(click, "click.mp3")]);
+	public init: Record<string, unknown>;
 
 	public name: string;
 	public readonly isStage: boolean;
-	public readonly costumes: File[];
-	public variables = $state<Variable[]>([]);
+	public readonly costumes: EntityAsset[];
+	public readonly variables = $state<Variable[]>([]);
 
-	public mode = $state<"code" | "blocks">("code");
+	public mode = $state<"code" | "blocks" | "costumes" | "sounds">("blocks");
 	public typescript = $state<string>();
 
-	private constructor(name: string, isStage: boolean, costume: File, init = {}) {
+	public constructor(name: string, isStage: boolean, costume: EntityAsset, init = {}) {
 		this.costumes = $state([costume]);
+		this.currentCostume = $state(costume);
 		this.init = $state(init);
 		this.name = $state(name);
 		this.isStage = isStage;
 	}
 
-	public static createSprite(name: string) {
-		const sprite = new this(
-			name,
-			false,
-			new File([scrappy], "Scrappy.svg", {type: "image/svg+xml"}),
-			{
-				x: 0,
-				y: 0,
-				direction: 90,
-				size: 100,
-				rotationStyle: 0,
-				visible: true,
-				draggable: false,
-			},
-		);
+	public static createSprite(name: string, asset = scrappyAsset) {
+		const sprite = new this(name, false, asset, {
+			x: 0,
+			y: 0,
+			direction: 90,
+			size: 100,
+			rotationStyle: 0,
+			visible: true,
+			draggable: false,
+		});
 		return sprite;
 	}
 
 	public static createStage() {
-		return new this("Stage", true, new File([stage], "Stage.svg", {type: "image/svg+xml"}));
+		return new this(
+			"Stage",
+			true,
+			new EntityAsset([stage], "Stage.svg", {type: "image/svg+xml"}),
+		);
 	}
 
 	/** Helper workspace for generating code. */
 	public readonly workspace = new Blockly.Workspace();
 
-	public get code() {
-		if (this.typescript !== undefined) {
-			return this.typescript;
-		}
-		return Blockly.serialization.workspaces.save(this.workspace);
+	private getFileURLs(
+		zip: JSZip | undefined | null,
+		urls: Record<string, string>,
+		file: EntityAsset,
+	) {
+		return {
+			...urls,
+			[file.name]: zip?.file(file.fullName, file.arrayBuffer())
+				? path.join(this.name, file.fullName)
+				: file.blobUrl,
+		};
 	}
 
-	public set code(value: Record<string, unknown> | string) {
-		if (typeof value === "string") {
-			this.typescript = value;
+	private blocksToCode?: BlocksToCode;
+
+	public generateProductionCode(zip?: JSZip) {
+		const typescript = this.generatePreviewCode(false);
+		const result = SWC.transform(typescript);
+		const body = this.blocksToCode?.prefixLines(result, "\t");
+		const reducer = this.getFileURLs.bind(this, zip?.folder(this.name));
+		const configuration = {
+			...this.init,
+			current: this.currentCostume.name,
+			images: this.costumes.reduce<Record<string, string>>(reducer, {}),
+			sounds: this.sounds.reduce<Record<string, string>>(reducer, {}),
+		};
+		const entity = `$[${JSON.stringify(this.name)}]`;
+		const init = `${entity} = new Scrap.${
+			this.isStage ? "Stage" : "Sprite"
+		}(${JSON.stringify(configuration, null, "\t")});`;
+		return `${init}\n${entity}.init(async self => {\n${body}});\n${
+			this.isStage ? "" : `${entity}.addTo($["Stage"])`
+		}\n`;
+	}
+
+	public generatePreviewCode(prettify: boolean) {
+		const codeGenerator = (this.blocksToCode ??= new BlocksToCode(this.variables));
+		codeGenerator.INDENT = prettify ? "\t" : "";
+		return this.typescript || codeGenerator.workspaceToCode(this.workspace);
+	}
+
+	public saveIntoZip(zip: JSZip) {
+		const folder = zip.folder(this.name);
+
+		function saveFile(file: EntityAsset) {
+			assert(folder, "Failed to create folder");
+			folder.file(file.fullName, file.arrayBuffer());
+			return file.fullName;
+		}
+
+		return {
+			name: this.name,
+			costumes: this.costumes.map(saveFile),
+			sounds: this.sounds.map(saveFile),
+			code: this.typescript ?? Blockly.serialization.workspaces.save(this.workspace),
+			currentCostume: this.costumes.indexOf(this.currentCostume),
+			variables: this.variables,
+			isStage: this.isStage,
+			init: this.init,
+		};
+	}
+
+	public static async loadFromState(zip: JSZip, state: ReturnType<Entity["saveIntoZip"]>) {
+		async function loadFile(fileName: string) {
+			const blob = await zip.file(path.join(state.name, fileName))?.async("blob");
+			assert(blob, "Couldn't load a file in the zip");
+			return new EntityAsset([blob], fileName, {type: blob.type});
+		}
+		const costumes = await Promise.all(state.costumes.map(loadFile));
+		const sounds = await Promise.all(state.sounds.map(loadFile));
+		const entity = new this(
+			state.name,
+			state.isStage,
+			costumes[state.currentCostume],
+			state.init,
+		);
+
+		entity.costumes.splice(0, entity.costumes.length, ...costumes);
+		entity.sounds.splice(0, entity.sounds.length, ...sounds);
+
+		if (typeof state.code === "string") {
+			entity.typescript = state.code;
 		} else {
-			delete this.typescript;
-			Blockly.serialization.workspaces.load(value, this.workspace, {
-				recordUndo: false,
-			});
-		}
-	}
-
-	/**
-	 * Get the URLs of the files.
-	 * If {@link zip} provided, the
-	 * files will be added to the zip.
-	 * If not, Blob URLs will be returned.
-	 */
-	public getURLs(type: "costumes" | "sounds", zip?: JSZip) {
-		if (!zip) {
-			// No zip provided
-			return this[type].reduce<Record<string, string>>(
-				(urls, file) => ({
-					...urls,
-					[path.parse(file.name).name]: URL.createObjectURL(file),
-				}),
-				{},
-			);
+			Blockly.serialization.workspaces.load(state.code, entity.workspace);
 		}
 
-		return this[type].reduce<Record<string, string>>((urls, file) => {
-			zip.file(file.name, file);
-			return {
-				...urls,
-				// Path to file in zip
-				[path.parse(file.name).name]: path.join(this.name, file.name),
-			};
-		}, {});
+		entity.variables.splice(0, entity.variables.length, ...state.variables);
+
+		return entity;
 	}
 }

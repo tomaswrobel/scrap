@@ -1,6 +1,6 @@
 <script lang="ts" module>
 	import type {SvelteHTMLElements} from "svelte/elements";
-	import {onclick} from "./Dialog.svelte";
+	import {escapeOnBackdrop} from "./Dialog.svelte";
 	import type {Tag} from "../../types/Tag";
 	import type {Snippet} from "svelte";
 	import * as Context from "$context";
@@ -66,7 +66,7 @@
 	style:left
 	style:top
 	onclose={clear}
-	{onclick}
+	onclick={escapeOnBackdrop}
 >
 	<div
 		bind:clientHeight={menuHeight}

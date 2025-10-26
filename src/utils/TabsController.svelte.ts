@@ -1,5 +1,5 @@
 import {SvelteSet} from "svelte/reactivity";
-import type { NonEmptyArray } from "./NonEmptyArray";
+import type {NonEmptyArray} from "./NonEmptyArray";
 
 export class TabsController<const ID extends string> {
 	public ids: ID[];

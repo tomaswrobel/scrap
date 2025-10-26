@@ -1,4 +1,7 @@
-export function bind<A extends any[], R, T>(
+import type {Method} from "@scrap/types/Method.ts";
+import type {SpreadParameters} from "@scrap/types/SpreadParameters.ts";
+
+export function bind<A extends SpreadParameters, R, T>(
 	value: Method<T, A, R>,
 	context: ClassMethodDecoratorContext<T, Method<T, A, R>>,
 ) {
@@ -10,8 +13,3 @@ export function bind<A extends any[], R, T>(
 		});
 	});
 }
-
-export type Method<This, Args extends unknown[], Return> = (
-	this: This,
-	...args: Args
-) => Return;

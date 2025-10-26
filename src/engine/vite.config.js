@@ -4,7 +4,7 @@ import {defineConfig} from "vite";
 export default defineConfig({
 	resolve: {
 		alias: {
-			"@scrap": resolve(import.meta.dirname, "./src"),
+			"@scrap": resolve(import.meta.dirname, ".."),
 		},
 	},
 	esbuild: {
@@ -12,9 +12,9 @@ export default defineConfig({
 	},
 	publicDir: false,
 	build: {
-		outDir: resolve(import.meta.dirname, "./public/engine"),
+		outDir: resolve(import.meta.dirname, "../../public/engine"),
 		lib: {
-			entry: [resolve(import.meta.dirname, "./src/engine/index.ts")],
+			entry: [resolve(import.meta.dirname, "./index.ts")],
 			fileName(_format, entryName) {
 				return `${entryName}.js`;
 			},

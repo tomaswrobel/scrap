@@ -7,6 +7,8 @@
 		primary: "btn-primary",
 		secondary: "btn-secondary",
 		accent: "btn-accent",
+		ghost: "btn-ghost",
+		fab: "btn-lg btn-circle",
 	});
 
 	export interface Props extends HTMLButtonAttributes {

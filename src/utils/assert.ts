@@ -9,3 +9,6 @@ export function assert(condition: unknown, thrown?: unknown): asserts condition 
 		throw thrown;
 	}
 }
+
+assert.ok = assert;
+export {assert as ok};

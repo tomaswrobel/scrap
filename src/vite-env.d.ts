@@ -1,6 +1,20 @@
 /// <reference types="svelte" />
 /// <reference types="vite/client" />
 
+declare interface ViteTypeOptions {
+	strictImportMetaEnv: true;
+}
+
+declare interface ImportMetaEnv {
+	VITE_BLOCKLY_MEDIA_PATH: string;
+}
+
+declare module "@scrap/compiler/pkg" {
+	export function parse(code: string): import("@swc/types").Module;
+	export function transform(code: string): string;
+	export function getVariables(code: string): import("@scrap/types/Variable").Variable[];
+}
+
 /**
  * Strongly typed
  */
@@ -24,8 +38,8 @@ declare module "*?shiki" {
 	import type {Component} from "svelte";
 	import type {HTMLAttributes} from "svelte/elements";
 
-	const Icon: Component<HTMLAttributes<HTMLDivElement>>;
-	export default Icon;
+	const Code: Component<HTMLAttributes<HTMLDivElement>>;
+	export default Code;
 }
 
 declare module "*&shiki" {

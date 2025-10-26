@@ -1,14 +1,15 @@
 <script lang="ts" module>
-	import type {HTMLAttributes, MouseEventHandler} from "svelte/elements";
-	import {on} from "svelte/events";
+	import type {HTMLAttributes, MouseEventHandler, HTMLInputAttributes} from "svelte/elements";
 	import Button from "./Button.svelte";
 	import type {Snippet} from "svelte";
+	import {event} from "@scrap/utils/event.ts";
 
 	/**
 	 * Map of input types to their options.
 	 */
 	export interface Inputs {
 		none: [boolean, Record<never, never>];
+		file: [FileList, FileOptions];
 		range: [number, NumberOptions];
 		number: [number, NumberOptions];
 		tel: [string, TextOptions];
@@ -23,14 +24,23 @@
 		toggle: [string[], SelectionOptions];
 	}
 
-	export type InputOptions<I extends keyof Inputs = keyof Inputs> = Inputs[I][1] & {
+	export interface CommonInputOptions {}
+
+	export type DialogOptions<I extends keyof Inputs = keyof Inputs> = {
 		type: I;
+		closeWhenBackdropClicked?: boolean;
+		inputOptions?: Inputs[I][1];
+		title?: string | Snippet;
 		value?: Inputs[I][0];
-		title?: string;
-		body?: string;
+		body?: string | Snippet;
 		cancelButton?: string | boolean | Snippet;
 		confirmButton?: string | boolean | Snippet;
 	};
+
+	export interface FileOptions {
+		accept?: string;
+		multiple?: boolean;
+	}
 
 	export interface NumberOptions {
 		min?: number;
@@ -54,7 +64,7 @@
 	}
 
 	export interface SelectionOptions {
-		options: Record<string, string>;
+		[x: string]: string;
 	}
 
 	export interface Props extends HTMLAttributes<HTMLDialogElement> {
@@ -66,41 +76,25 @@
 	function isInputType<I extends keyof Inputs>(
 		options: Record<"type", keyof Inputs>,
 		...inputs: I[]
-	): options is InputOptions<I> {
+	): options is DialogOptions<I> {
 		return inputs.includes(options.type as I);
 	}
 
-	export const onclick: MouseEventHandler<HTMLDialogElement> = event => {
+	export const escapeOnBackdrop: MouseEventHandler<HTMLDialogElement> = event => {
 		if (event.target === event.currentTarget) {
 			event.currentTarget.close();
 		}
 	};
+
+	const SAVE_VALUE = "dialog-save-value";
 </script>
 
 <script lang="ts">
 	let {element = $bindable(), class: customClass, ...attributes}: Props = $props();
-	let init = $state<InputOptions>();
-	let form = $state<HTMLFormElement>();
+	let options = $state<DialogOptions>();
 
 	export function close() {
-		if (element && form) {
-			const data = new FormData(form);
-			if (data.has("number")) {
-				const number = data.get("number") ?? "0";
-
-				if (typeof number === "string") {
-					element.close(number);
-				}
-			} else if (data.has("string")) {
-				element.close(JSON.stringify(data.get("string")));
-			} else if (data.has("array")) {
-				element.close(JSON.stringify(data.getAll("array")));
-			} else if (form.querySelector("input")) {
-				element.close("[]");
-			} else {
-				element.close("true");
-			}
-		}
+		element?.close(SAVE_VALUE);
 	}
 
 	export function cancel() {
@@ -111,38 +105,46 @@
 		return element ? element.open : false;
 	}
 
-	export function fire<I extends keyof Inputs>(options: InputOptions<I>) {
-		if (!element) {
-			throw new Error("Dialog element is not initialized.");
-		}
-
-		init = options;
-		element.showModal();
-
-		return new Promise<Inputs[I][0]>((resolve, reject) => {
-			if (typeof element !== "object") {
-				reject(new Error("Dialog element is not initialized."));
-				return;
+	export function fire<I extends keyof Inputs = "none">({
+		type = "none" as I,
+		...dialogOptions
+	}: Partial<DialogOptions<I>>) {
+		return new Promise<Inputs[I][0] | false>((resolve, reject) => {
+			if (!element) {
+				return reject("Dialog element is not initialized.");
 			}
+
+			if (isOpen()) {
+				return reject("Dialog is already open.");
+			}
+
+			options = {
+				type,
+				...dialogOptions,
+			};
+			element.showModal();
 
 			element.addEventListener(
 				"close",
 				function (this) {
-					resolve(JSON.parse(this.returnValue || "false") as Inputs[I][0]);
+					if (!options || !isInputType(options, options.type)) {
+						return;
+					}
+					resolve(
+						this.returnValue === SAVE_VALUE && (options.value ?? type === "none"),
+					);
 					this.returnValue = "";
+					options = undefined;
 				},
 				{once: true},
 			);
 		});
 	}
 
-	const uuid = $props.id();
-	$effect(() => on(window, "message", e => e.data === uuid && close()));
+	const id = $props.id();
 </script>
 
-<svelte:window onmessage={e => e.data === uuid && close()} />
-
-{#snippet buttonInit(value: string | true | Snippet, defaultValue: string)}
+{#snippet dialogPart(value: string | true | Snippet, defaultValue?: string)}
 	{#if typeof value === "function"}
 		{@render value()}
 	{:else if typeof value === "string"}
@@ -152,69 +154,103 @@
 	{/if}
 {/snippet}
 
-<dialog bind:this={element} {onclick} class={[customClass, "modal"]} {...attributes}>
-	<div class="modal-box">
-		<h3 class="text-lg font-bold empty:hidden">
-			{init?.title}
-		</h3>
-		<p class="py-4 empty:hidden">
-			{init?.body}
-		</p>
-		{#if init}
-			{#if isInputType(init, "select")}
-				<select class="select w-full" name="string">
-					{#each Object.entries(init.options) as [value, label] (value + label)}
+<dialog
+	bind:this={element}
+	class={[customClass, "modal"]}
+	{...attributes}
+	{id}
+	{@attach event(
+		"click",
+		(options?.closeWhenBackdropClicked ?? true) ? escapeOnBackdrop : () => {},
+	)}
+>
+	{#if options}
+		<div class="modal-box">
+			<h3 class="text-lg font-bold empty:hidden">
+				{options.title}
+			</h3>
+			{#if options.body}
+				<p class="py-4">
+					{@render dialogPart(options.body)}
+				</p>
+			{/if}
+			{#if isInputType(options, "select")}
+				<select class="select w-full" bind:value={options.value}>
+					{#each Object.entries(options.inputOptions ?? {}) as [value, label] (value + label)}
 						<option {value}>{label}</option>
 					{/each}
 				</select>
-			{:else if isInputType(init, "textarea")}
-				{@const {title: _0, body: _1, ...rest} = init}
-				<textarea class="textarea w-full" name="string" {...rest}></textarea>
-			{:else if isInputType(init, "checkbox", "radio", "toggle")}
+			{:else if isInputType(options, "textarea")}
+				<textarea
+					class="textarea w-full"
+					{...options.inputOptions}
+					bind:value={options.value}
+				></textarea>
+			{:else if isInputType(options, "checkbox", "toggle", "radio")}
+				{@const rest: HTMLInputAttributes = {class: options.type, name: id}}
 				<div class="flex flex-col gap-2">
-					{#each Object.entries(init.options) as [value, label] (value + label)}
+					{#each Object.entries(options.inputOptions ?? {}) as [value, label], i (value + label)}
 						<label class="flex gap-2">
-							<input
-								{value}
-								class={init.type}
-								type={init.type === "toggle" ? "checkbox" : init.type}
-								name={init.type === "radio" ? "string" : "array"}
-								checked={init.type === "radio"
-									? init.value === value
-									: init.value?.includes(value)}
-							/>
+							{#if options.type === "radio"}
+								<input
+									defaultChecked={!i}
+									{...rest}
+									{value}
+									type="radio"
+									bind:group={options.value}
+								/>
+							{:else}
+								<input
+									{...rest}
+									{value}
+									type="checkbox"
+									bind:group={options.value}
+								/>
+							{/if}
 							<span>{label}</span>
 						</label>
 					{/each}
 				</div>
-			{:else if isInputType(init, "number", "range")}
-				{@const {title: _0, body: _1, ...rest} = init}
+			{:else if isInputType(options, "number", "range")}
 				<input
-					name="number "
-					class={[init.type === "number" ? "input" : "range", "w-full"]}
-					{...rest}
+					{...options.inputOptions}
+					class={[{number: "number", range: "range"}[options.type], "w-full"]}
+					bind:value={() => options!.value, v => (options!.value = Number(v))}
 				/>
-			{:else if isInputType(init, "tel", "email", "search", "text", "password")}
-				{@const {pattern, ...props} = init}
+			{:else if isInputType(options, "tel", "email", "search", "text", "password")}
+				{@const {pattern, ...props} = options.inputOptions ?? {}}
 				<input
+					{...props}
 					class="input w-full"
 					pattern={pattern?.source}
-					{...props}
-					name="string"
+					bind:value={options.value}
+				/>
+			{:else if isInputType(options, "file")}
+				<input
+					type="file"
+					class="file-input w-full"
+					{...options.inputOptions}
+					bind:files={options.value}
 				/>
 			{/if}
-		{/if}
-		<form class="modal-action" action="javascript:postMessage('{uuid}')" bind:this={form}>
-			{#if init?.confirmButton !== false}
-				<Button variant="primary" formmethod="post">
-					{@render buttonInit(init?.confirmButton ?? true, "OK")}
-				</Button>
-			{/if}
-			{#if init?.cancelButton !== false}
-				<Button formmethod="dialog">
-					{@render buttonInit(init?.cancelButton ?? true, "Cancel")}
-				</Button>
-			{/if}
-		</form>
-	</div>
+
+			<form class="modal-action" action="javascript:{id}.close('{SAVE_VALUE}')">
+				{#if options.confirmButton !== false}
+					<Button
+						variant="primary"
+						formmethod="post"
+						type="submit"
+						disabled={!options.value && options?.type !== "none"}
+					>
+						{@render dialogPart(options?.confirmButton ?? true, "OK")}
+					</Button>
+				{/if}
+				{#if options.cancelButton !== false}
+					<Button formmethod="dialog" type="submit">
+						{@render dialogPart(options?.cancelButton ?? true, "Cancel")}
+					</Button>
+				{/if}
+			</form>
+		</div>
+	{/if}
 </dialog>

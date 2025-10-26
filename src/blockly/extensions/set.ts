@@ -14,7 +14,8 @@
  * when the variable is moved to the `set` block.
  */
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap} from "../types";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
+import {assert} from "@scrap/utils/assert.ts";
 
 export default function (this: Blockly.BlockSvg) {
 	this.onchange = function (event: Blockly.Events.Abstract) {
@@ -23,9 +24,12 @@ export default function (this: Blockly.BlockSvg) {
 			event.newParentId === this.id &&
 			this.workspace instanceof Blockly.WorkspaceSvg
 		) {
-			const input = this.getInput("VAR")!;
-			const block = input.connection!.targetBlock()!;
-			const value = this.getInput("VALUE")!;
+			const input = this.getInput("VAR");
+			const block = input?.connection?.targetBlock();
+			assert(block);
+
+			const value = this.getInput("VALUE");
+			assert(value?.connection);
 
 			const check = block.outputConnection
 				?.getCheck()
@@ -33,14 +37,14 @@ export default function (this: Blockly.BlockSvg) {
 			const type = check?.length === 1 ? check[0] : "any";
 
 			if (type in TypeToShadowMap) {
-				const thisBlock = value.connection!.targetBlock();
+				const thisBlock = value.connection.targetBlock();
 
 				if (
 					thisBlock &&
 					thisBlock.isShadow() &&
 					thisBlock.type !== TypeToShadowMap[type]
 				) {
-					value.connection!.setShadowState({
+					value.connection.setShadowState({
 						type: TypeToShadowMap[type],
 					});
 				}

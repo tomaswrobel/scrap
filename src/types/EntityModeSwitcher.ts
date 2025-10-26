@@ -8,7 +8,7 @@ export interface EntityModeSwitcher {
 }
 
 export declare namespace EntityModeSwitcher {
-	type Decorator = (
+	export type Decorator = (
 		from: EntityMode,
 		to: EntityMode,
 	) => (constructor: EntityModeSwitcher) => void;

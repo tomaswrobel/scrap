@@ -13,7 +13,9 @@
  * Property block is a block that returns a property of a sprite.
  * It's a dropdown with all the properties (and variables) of a sprite.
  */
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {app} from "@scrap/types/App.svelte.ts";
+import type {Check} from "@scrap/types/Check.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({
@@ -65,20 +67,26 @@ export default new CustomBlock({
 							return result;
 						},
 						value => {
+							let type: Check;
+
 							if (value === "draggable" || value === "visible") {
-								this.setOutput(true, ["boolean", "Variable"]);
+								type = "boolean";
 							} else if (value.startsWith("variables")) {
-								const sprite = app.entities.find(
+								const entity = app.entities.find(
 									e => e.name === this.getFieldValue("SPRITE"),
-								)!;
-								const [, type] = sprite.variables.find(
+								);
+								const variable = entity?.variables.find(
 									v => JSON.stringify(v[0]) === value.slice(10, -1),
-								)!;
-								this.setOutput(true, ["Variable"].concat(type));
+								);
+								if (!variable) {
+									return;
+								}
+								[, type] = variable;
 							} else {
-								this.setOutput(true, ["number", "Variable"]);
+								type = "undefined";
 							}
 
+							this.setOutput(true, ["Variable"].concat(type));
 							return undefined;
 						},
 					),
@@ -88,7 +96,10 @@ export default new CustomBlock({
 				.appendField<string>(
 					new Blockly.FieldDropdown(
 						() => app.entities.map<[string, string]>(e => [e.name, e.name]),
-						() => this.setFieldValue("volume", "PROPERTY"),
+						() => {
+							this.setFieldValue("volume", "PROPERTY");
+							return undefined;
+						},
 					),
 					"SPRITE",
 				);

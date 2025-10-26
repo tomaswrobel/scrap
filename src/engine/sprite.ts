@@ -1,3 +1,4 @@
+import {assert} from "@scrap/utils/assert.ts";
 import Costume from "./costume";
 import Costumes from "./costumes";
 import {event, method, paced} from "./decorators";
@@ -7,6 +8,7 @@ import type Stage from "./stage";
 import TextUI from "./textui";
 import {StopError} from "./utils";
 
+// oxlint-disable-next-line no-unsafe-declaration-merging
 class Sprite extends Entity {
 	element = document.createElement("div");
 	costumes = new Map<string, Costume>();
@@ -98,7 +100,8 @@ class Sprite extends Entity {
 	}
 
 	private updateCostume() {
-		const costume = this.costumes.get(this.current)!;
+		const costume = this.costumes.get(this.current);
+		assert(costume);
 
 		if (this.img.src !== costume.src) {
 			this.img.src = costume.src;
@@ -227,7 +230,7 @@ class Sprite extends Entity {
 		this.stage.flag.addEventListener(
 			"click",
 			() => {
-				fn(this);
+				void fn(this);
 				this.stage.toggleFlag(false);
 			},
 			{once: true, signal: this.abort.signal},
@@ -257,7 +260,7 @@ class Sprite extends Entity {
 
 		clone.variable = this.variable.bind(this);
 		clone.id = this.id;
-		clone.addTo(this.stage);
+		await clone.addTo(this.stage);
 
 		document.dispatchEvent(new CustomEvent("ScrapSpriteClone", {detail: clone}));
 	}
@@ -514,7 +517,7 @@ class Sprite extends Entity {
 		const index = costumes.indexOf(this.current);
 		const next = costumes[index + 1] ?? costumes[0];
 
-		this.switchCostumeTo(next);
+		await this.switchCostumeTo(next);
 	}
 
 	@method
@@ -631,7 +634,8 @@ class Sprite extends Entity {
 		}
 
 		return new Promise<void>((resolve, reject) => {
-			const costume = this.costumes.get(this.current)!;
+			const costume = this.costumes.get(this.current);
+			assert(costume);
 
 			this.stage.pen.save();
 			this.stage.pen.filter = this.toFilter();
@@ -798,11 +802,15 @@ class Sprite extends Entity {
 	}
 
 	get width() {
-		return this.costumes.get(this.current)!.width * (this.size / 100);
+		const costume = this.costumes.get(this.current);
+		assert(costume);
+		return costume.width * (this.size / 100);
 	}
 
 	get height() {
-		return this.costumes.get(this.current)!.height * (this.size / 100);
+		const costume = this.costumes.get(this.current);
+		assert(costume);
+		return costume.height * (this.size / 100);
 	}
 
 	[Symbol.toStringTag] = "Sprite";
@@ -813,7 +821,7 @@ class Sprite extends Entity {
 }
 
 declare namespace Sprite {
-	interface Init {
+	export interface Init {
 		draggable: boolean;
 		x: number;
 		y: number;
@@ -823,7 +831,7 @@ declare namespace Sprite {
 		rotationStyle: 0 | 1 | 2;
 	}
 
-	type Options = Partial<Init> & Entity.Options;
+	export type Options = Partial<Init> & Entity.Options;
 }
 
 interface Sprite extends Sprite.Init {

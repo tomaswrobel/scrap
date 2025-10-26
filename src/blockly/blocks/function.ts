@@ -22,7 +22,8 @@
  * So instead, Scrap uses its own function blocks, which
  * works similarly to legacy Blockly's procedure system.
  */
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {assert} from "@scrap/utils/assert.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
 
 const dom = Blockly.utils.xml.createElement("shadow");
@@ -85,27 +86,29 @@ export default new CustomBlock(
 
 		updateShape() {
 			let input = this.getInput("RETURNS");
+			let i: number;
 
 			if (input && !this.returns) {
 				this.removeInput("RETURNS");
 				input = null;
 			}
 
-			for (var i = 0; i < this.params.length; i++) {
+			for (i = 0; i < this.params.length; i++) {
 				const typed = this.getInput(`PARAM_${i}`);
 
 				if (!typed) {
 					const block = this.workspace.newBlock("typed");
-					block.getInput("TYPE")!.setShadowDom(dom);
+					block.getInput("TYPE")?.setShadowDom(dom);
 					block.setFieldValue(this.params[i], "PARAM");
 					block.initSvg?.();
 					block.render?.();
 
-					this.appendValueInput(`PARAM_${i}`).connection!.connect(
+					this.appendValueInput(`PARAM_${i}`).connection?.connect(
 						block.outputConnection,
 					);
 				} else {
-					const block = typed.connection!.targetBlock()!;
+					const block = typed.connection?.targetBlock();
+					assert(block);
 					const value = block.getFieldValue("PARAM");
 
 					block.setFieldValue(

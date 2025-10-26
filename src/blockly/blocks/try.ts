@@ -29,8 +29,8 @@
  * aware of the incorrect syntax.
  */
 import type * as Blockly from "blockly/core";
-import FieldParam from "../fields/field_param";
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {FieldParam} from "../fields/FieldParam";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 
 export default new CustomBlock(
 	{
@@ -84,17 +84,19 @@ export default new CustomBlock(
 			const containerBlock = workspace.newBlock("try");
 			containerBlock.initSvg();
 
+			let block: Blockly.BlockSvg;
+
 			if (this.catch) {
 				if (typeof this.catch === "string") {
-					var block = workspace.newBlock("catchVar");
+					block = workspace.newBlock("catchVar");
 					block.setFieldValue(this.catch, "ERROR");
 				} else {
-					var block = workspace.newBlock("catch");
+					block = workspace.newBlock("catch");
 				}
 				block.initSvg();
 				containerBlock.nextConnection.connect(block.previousConnection);
 			} else {
-				var block = containerBlock;
+				block = containerBlock;
 			}
 
 			if (this.finally) {

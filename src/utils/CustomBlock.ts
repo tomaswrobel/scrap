@@ -1,7 +1,9 @@
 import * as Blockly from "blockly/core";
+import {assert} from "./assert";
 
 export class CustomBlock<T extends object> {
 	public mutatorBlocks?: string[];
+	public name?: string;
 	public mixin: T;
 
 	constructor(mixin: ThisType<Blockly.BlockSvg & T> & T, mutatorBlocks?: string[]) {
@@ -15,9 +17,16 @@ export class CustomBlock<T extends object> {
 		} else {
 			Blockly.Extensions.registerMutator(name, this.mixin, undefined, this.mutatorBlocks);
 		}
+		this.name = name;
+	}
+
+	public createIn(workspace: Blockly.Workspace, id?: string) {
+		assert(this.name, "CustomBlock wasn't registered");
+		return workspace.newBlock(this.name, id) as Blockly.BlockSvg & T;
 	}
 }
 
 export declare namespace CustomBlock {
-	type Infer<T> = T extends CustomBlock<infer U> ? Blockly.BlockSvg & U : Blockly.Block;
+	export type Infer<T> =
+		T extends CustomBlock<infer U> ? Blockly.BlockSvg & U : Blockly.Block;
 }
