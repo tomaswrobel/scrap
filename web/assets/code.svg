@@ -1,0 +1,409 @@
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	viewBox="0 0 258.0801239013672 296.5"
+>
+	<style>
+		.blocklyIconGroup {
+			fill: #00f;
+			stroke: #fff;
+		}
+		.blocklyIconSymbol {
+			fill: #fff;
+		}
+		.blocklyText,
+		.blocklyFlyoutLabelText {
+			font: bold 12pt Geist;
+		}
+		.blocklyTextInputBubble textarea {
+			font-weight: normal;
+		}
+		.blocklyText {
+			fill: #fff;
+		}
+		.blocklyNonEditableField > rect:not(.blocklyDropdownRect),
+		.blocklyEditableField > rect:not(.blocklyDropdownRect) {
+			fill: #fff;
+		}
+		.blocklyNonEditableField > text,
+		.blocklyEditableField > text,
+		.blocklyNonEditableField > g > text,
+		.blocklyEditableField > g > text {
+			fill: #575e75;
+		}
+		.blocklyFlyoutLabelText {
+			fill: #575e75;
+		}
+		.blocklyText.blocklyBubbleText {
+			fill: #575e75;
+		}
+		.blocklyDraggable:not(.blocklyDisabled) .blocklyEditableField:not(.blocklyEditing):hover > rect,
+		.blocklyDraggable:not(.blocklyDisabled) .blocklyEditableField:not(.blocklyEditing):hover > .blocklyPath {
+			stroke: #fff;
+			stroke-width: 2;
+		}
+		.blocklyHtmlInput {
+			font-family: Geist;
+			font-weight: bold;
+			color: #575e75;
+		}
+		.blocklyDropdownText {
+			fill: #fff !important;
+		}
+		.blocklyWidgetDiv .blocklyMenuItem,
+		.blocklyDropDownDiv .blocklyMenuItem {
+			font-family: Geist;
+		}
+		.blocklyDropDownDiv .blocklyMenuItemContent {
+			color: #fff;
+		}
+		.blocklyHighlightedConnectionPath {
+			stroke: #fff200;
+		}
+		.blocklyDisabledPattern > .blocklyOutlinePath {
+			fill: var(--blocklyDisabledPattern);
+		}
+		.blocklyInsertionMarker > .blocklyPath {
+			fill-opacity: 0.2;
+			stroke: none;
+		}
+		.blocklySelected > .blocklyPath.blocklyPathSelected {
+			fill: none;
+			filter: var(--blocklySelectedGlowFilter);
+		}
+		.blocklyReplaceable > .blocklyPath {
+			filter: var(--blocklyReplacementGlowFilter);
+		}
+	</style>
+	<g xmlns="http://www.w3.org/2000/svg" class="whenFlag blocklyBlock Events blocklyDraggable">
+		<path
+			class="blocklyPath blocklyPassiveFocus"
+			id="blockly-qz"
+			stroke="#cc9900"
+			fill="#ffbf00"
+			d=" m 0,16.5  h 0  c 25,-22  71,-22  96,0  h 48.25614929199219 a 4 4 0 0,1 4,4  v 20.5  V 24.5  V 56.5  V 60.5  V 60.5 a 4 4 0 0,1 -4,4  h -96.25614929199219  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z&#10;"
+			tabindex="-1"
+		/>
+		<g id="x},$(C7`eU{qJyfYd.qt_field_blockly-r0" class="blocklyLabelField" transform="translate(8,30)">
+			<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">when</text>
+		</g>
+		<g
+			id="x},$(C7`eU{qJyfYd.qt_field_blockly-r1"
+			class="blocklyImageField"
+			transform="translate(56.160064697265625,28)"
+		>
+			<image
+				height="24px"
+				width="24px"
+				alt="flag"
+				xmlns:xlink="http://www.w3.org/1999/xlink"
+				xlink:href="data:image/svg+xml,%3c!--%20This%20file%20is%20a%20part%20of%20Scrap%20Native,%20an%20app%20for%20helping%20to%20migrate%20from%20block-based%20programming%20into%20text-based%20programming%20languages.%20You%20should%20have%20received%20a%20copy%20of%20the%20MIT%20License,%20if%20not,%20please%20visit%20https://opensource.org/licenses/MIT.%20To%20verify%20the%20code,%20visit%20the%20official%20repository%20at%20https://github.com/tomas-wrobel/scrap.%20Graphic%20design%20by%20Scratch,%20SVG%20code%20edited.%20--%3e%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016.63%2017.5'%20fill='%234cbf56'%20stroke='%2345993d'%20stroke-linecap='round'%20stroke-linejoin='round'%20%3e%3cpath%20d='M.75,2A6.44,6.44,0,0,1,8.44,2h0a6.44,6.44,0,0,0,7.69,0V12.4a6.44,6.44,0,0,1-7.69,0h0a6.44,6.44,0,0,0-7.69,0'%20/%3e%3cline%20x1='0.75'%20y1='16.75'%20x2='0.75'%20y2='0.75'%20stroke-width='1.5'%20/%3e%3c/svg%3e"
+			/>
+		</g>
+		<g
+			id="x},$(C7`eU{qJyfYd.qt_field_blockly-r2"
+			class="blocklyLabelField"
+			transform="translate(88.16006469726562,30)"
+		>
+			<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">clicked</text>
+		</g>
+		<path
+			id="x},$(C7`eU{qJyfYd.qt_connection_blockly-r3"
+			class="blocklyHighlightedConnectionPath"
+			style="display: none"
+			d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+			transform="translate(12, 64.5)"
+		/>
+		<g
+			class="penDown blocklyBlock Pen blocklyDraggable"
+			data-id="nniAaC@tIE:2i_`aPGn}"
+			transform="translate(0, 64.5)"
+		>
+			<path
+				class="blocklyPath"
+				id="blockly-2ug"
+				stroke="#0b8e69"
+				fill="#0fbd8c"
+				d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 35.61613464355469 a 4 4 0 0,1 4,4  v 8  V 40  V 44  V 44 a 4 4 0 0,1 -4,4  h -35.61613464355469  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z&#10;"
+				tabindex="-1"
+			/>
+			<g id="nniAaC@tIE:2i_`aPGn}_field_blockly-2uh" class="blocklyLabelField" transform="translate(8,13.5)">
+				<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">pen down</text>
+			</g>
+			<path
+				id="nniAaC@tIE:2i_`aPGn}_connection_blockly-2ui"
+				class="blocklyHighlightedConnectionPath"
+				style="display: none"
+				d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+				transform="translate(12, 0)"
+			/>
+			<path
+				id="nniAaC@tIE:2i_`aPGn}_connection_blockly-2uj"
+				class="blocklyHighlightedConnectionPath"
+				style="display: none"
+				d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+				transform="translate(12, 48)"
+			/>
+			<g
+				class="for blocklyBlock Controls blocklyDraggable"
+				data-id="kI-6ku~s6JQZRC-cG?Lm"
+				transform="translate(0, 48)"
+				style="display: block"
+			>
+				<path
+					class="blocklyPath"
+					id="blockly-1fg"
+					stroke="#cf8b17"
+					fill="#ffab19"
+					d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 206.0801239013672 a 4 4 0 0,1 4,4  v 8  V 40  V 44 a 4 4 0 0,1 -4,4  H 64  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,0 -4,4  v 40 a 4 4 0 0,0 4,4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  H 254.0801239013672 a 4 4 0 0,1 4,4  V 104  V 124 a 4 4 0 0,1 -4,4  h -206.0801239013672  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z&#10;"
+					tabindex="-1"
+				/>
+				<g
+					class="math_number blocklyBlock Operators blocklyShadow blocklyDraggable"
+					data-id="KJz-E};3JoW?X=A`jW0E"
+					transform="translate(138.30406188964844, 8)"
+					style="display: block"
+				>
+					<path
+						class="blocklyPath"
+						id="blockly-1fq"
+						stroke="#cf8b17"
+						fill="#fff"
+						d=" m 16,0  h 8 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  V 32  h -8 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z&#10;"
+					/>
+					<g
+						id="KJz-E};3JoW?X=A`jW0E_field_blockly-1fr"
+						class="blocklyField blocklyInputField blocklyNumberField blocklyEditableField"
+						transform="translate(13,5.5)"
+					>
+						<rect
+							rx="4"
+							ry="4"
+							x="0"
+							y="0"
+							height="21"
+							width="14"
+							class="blocklyFieldRect"
+							style="display: none"
+						/>
+						<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">1</text>
+					</g>
+				</g>
+				<g
+					class="math_number blocklyBlock Operators blocklyShadow blocklyDraggable"
+					data-id="BPO5xY;`Al=j.0NlHdHV"
+					transform="translate(209.48809814453125, 8)"
+					style="display: block"
+				>
+					<path
+						class="blocklyPath"
+						id="blockly-1ft"
+						stroke="#cf8b17"
+						fill="#fff"
+						d=" m 16,0  h 8.592025756835938 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  V 32  h -8.592025756835938 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z&#10;"
+					/>
+					<g
+						id="BPO5xY;`Al=j.0NlHdHV_field_blockly-1fu"
+						class="blocklyField blocklyInputField blocklyNumberField blocklyEditableField"
+						transform="translate(12,5.5)"
+					>
+						<rect
+							rx="4"
+							ry="4"
+							x="0"
+							y="0"
+							height="21"
+							width="16.592025756835938"
+							class="blocklyFieldRect"
+							style="display: none"
+						/>
+						<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">10</text>
+					</g>
+				</g>
+				<g id="kI-6ku~s6JQZRC-cG?Lm_field_blockly-1fi" class="blocklyLabelField" transform="translate(8,13.5)">
+					<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">for</text>
+				</g>
+				<g id="kI-6ku~s6JQZRC-cG?Lm_field_blockly-1fj" class="blocklyEditableField" transform="translate(48,8)">
+					<g class="parameter blocklyBlock Variables blocklyShadow" data-id="kg5A(q$Rx}j~EEt01RCR">
+						<path
+							class="blocklyPath"
+							id="blockly-1fw"
+							stroke="none"
+							fill="#ff8000"
+							d=" m 16,0  h 8 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  V 32  h -8 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z&#10;"
+						/>
+						<g
+							id="kg5A(q$Rx}j~EEt01RCR_field_blockly-1fx"
+							class="blocklyLabelField"
+							transform="translate(16,5.5)"
+						>
+							<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">
+								i
+							</text>
+						</g>
+					</g>
+				</g>
+				<g id="kI-6ku~s6JQZRC-cG?Lm_field_blockly-1fk" class="blocklyLabelField" transform="translate(96,13.5)">
+					<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">from</text>
+				</g>
+				<g
+					id="kI-6ku~s6JQZRC-cG?Lm_field_blockly-1fm"
+					class="blocklyLabelField"
+					transform="translate(186.30406188964844,13.5)"
+				>
+					<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">to</text>
+				</g>
+				<path
+					id="kI-6ku~s6JQZRC-cG?Lm_connection_blockly-1fo"
+					class="blocklyHighlightedConnectionPath"
+					style="display: none"
+					d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+					transform="translate(12, 0)"
+				/>
+				<path
+					id="kI-6ku~s6JQZRC-cG?Lm_connection_blockly-1fh"
+					class="blocklyHighlightedConnectionPath"
+					style="display: none"
+					d=" M 16,-16  h 8 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  h -8 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z"
+					transform="translate(138.30406188964844, 24)"
+				/>
+				<path
+					id="kI-6ku~s6JQZRC-cG?Lm_connection_blockly-1fl"
+					class="blocklyHighlightedConnectionPath"
+					style="display: none"
+					d=" M 16,-16  h 8.592025756835938 a 16 16 0 0,1 16,16  v 0 a 16 16 0 0,1 -16,16  h -8.592025756835938 a 16 16 0 0,1 -16,-16  v 0 a 16 16 0 0,1 16,-16 z"
+					transform="translate(209.48809814453125, 24)"
+				/>
+				<path
+					id="kI-6ku~s6JQZRC-cG?Lm_connection_blockly-1fn"
+					class="blocklyHighlightedConnectionPath"
+					style="display: none"
+					d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+					transform="translate(28, 48)"
+				/>
+				<path
+					id="kI-6ku~s6JQZRC-cG?Lm_connection_blockly-1fp"
+					class="blocklyHighlightedConnectionPath"
+					style="display: none"
+					d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+					transform="translate(12, 128)"
+				/>
+				<g
+					class="move blocklyBlock Motion blocklyDraggable"
+					data-id="dn28$O_Wz!PS~Ba$ks++"
+					transform="translate(16, 48)"
+					style="display: block"
+				>
+					<path
+						class="blocklyPath"
+						id="blockly-2kg"
+						stroke="#3373cc"
+						fill="#4c97ff"
+						d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 108.22416687011719 a 4 4 0 0,1 4,4  v 8  V 44  V 44 a 4 4 0 0,1 -4,4  h -108.22416687011719  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z&#10;"
+						tabindex="-1"
+					/>
+					<g
+						id="dn28$O_Wz!PS~Ba$ks++_field_blockly-2ki"
+						class="blocklyLabelField"
+						transform="translate(8,13.5)"
+					>
+						<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">
+							move
+						</text>
+					</g>
+					<g
+						id="dn28$O_Wz!PS~Ba$ks++_field_blockly-2kj"
+						class="blocklyLabelField"
+						transform="translate(111.74407958984375,13.5)"
+					>
+						<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">
+							steps
+						</text>
+					</g>
+					<path
+						id="dn28$O_Wz!PS~Ba$ks++_connection_blockly-2kk"
+						class="blocklyHighlightedConnectionPath"
+						style="display: none"
+						d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+						transform="translate(12, 0)"
+					/>
+					<path
+						id="dn28$O_Wz!PS~Ba$ks++_connection_blockly-2kh"
+						class="blocklyHighlightedConnectionPath"
+						style="display: none"
+						d=" M 20,-20  h 8 a 20 20 0 0,1 20,20  v 0 a 20 20 0 0,1 -20,20  h -8 a 20 20 0 0,1 -20,-20  v 0 a 20 20 0 0,1 20,-20 z"
+						transform="translate(55.74407958984375, 24)"
+					/>
+					<path
+						id="dn28$O_Wz!PS~Ba$ks++_connection_blockly-2kl"
+						class="blocklyHighlightedConnectionPath"
+						style="display: none"
+						d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+						transform="translate(12, 48)"
+					/>
+					<g
+						class="parameter blocklyBlock Variables blocklyDraggable"
+						data-id="sB;9APpfgyAe~$HlH.JV"
+						transform="translate(55.74407958984375, 4)"
+						style="display: block"
+					>
+						<path
+							class="blocklyPath"
+							id="blockly-2n1"
+							stroke="#db6e00"
+							fill="#ff8c1a"
+							d=" m 20,0  h 8 a 20 20 0 0,1 20,20  v 0 a 20 20 0 0,1 -20,20  V 40  h -8 a 20 20 0 0,1 -20,-20  v 0 a 20 20 0 0,1 20,-20 z&#10;"
+							tabindex="-1"
+						/>
+						<g
+							id="sB;9APpfgyAe~$HlH.JV_field_blockly-2n2"
+							class="blocklyLabelField"
+							transform="translate(20,9.5)"
+						>
+							<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">
+								i
+							</text>
+						</g>
+					</g>
+				</g>
+				<g
+					class="penUp blocklyBlock Pen blocklyDraggable"
+					data-id="2w:gw[^QnX=0Ryv.Y-xA"
+					transform="translate(0, 128)"
+				>
+					<path
+						class="blocklyPath"
+						id="blockly-32h"
+						stroke="#0b8e69"
+						fill="#0fbd8c"
+						d=" m 0,0  m 0,4 a 4 4 0 0,1 4,-4  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 14.192092895507812 a 4 4 0 0,1 4,4  v 8  V 40  V 44  V 44 a 4 4 0 0,1 -4,4  h -14.192092895507812  c -2,0  -3,1  -4,2  l -4,4  c -1,1  -2,2  -4,2  h -12  c -2,0  -3,-1  -4,-2  l -4,-4  c -1,-1  -2,-2  -4,-2  h -8 a 4 4 0 0,1 -4,-4 z&#10;"
+						tabindex="-1"
+					/>
+					<g
+						id="2w:gw[^QnX=0Ryv.Y-xA_field_blockly-32i"
+						class="blocklyLabelField"
+						transform="translate(8,13.5)"
+					>
+						<text class="blocklyText blocklyFieldText" dominant-baseline="central" x="0" y="10.5">
+							pen up
+						</text>
+					</g>
+					<path
+						id="2w:gw[^QnX=0Ryv.Y-xA_connection_blockly-32j"
+						class="blocklyHighlightedConnectionPath"
+						style="display: none"
+						d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+						transform="translate(12, 0)"
+					/>
+					<path
+						id="2w:gw[^QnX=0Ryv.Y-xA_connection_blockly-32k"
+						class="blocklyHighlightedConnectionPath"
+						style="display: none"
+						d=" m -8,0  h 8  c 2,0  3,1  4,2  l 4,4  c 1,1  2,2  4,2  h 12  c 2,0  3,-1  4,-2  l 4,-4  c 1,-1  2,-2  4,-2  h 8 "
+						transform="translate(12, 48)"
+					/>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

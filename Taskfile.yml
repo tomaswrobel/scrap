@@ -41,10 +41,11 @@ tasks:
   app:dev:
     desc: Serves the app
     cmds:
-      - pnpm vite
+      - pnpm astro dev
     sources:
       - public/**/*
       - src/**/*
+      - web/**/*
       - pnpm-lock.yaml
       - config/**/*
     generates:

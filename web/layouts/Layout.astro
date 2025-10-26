@@ -1,0 +1,21 @@
+---
+import "@scrap/css/app.css";
+import "@fontsource/geist";
+import "@fontsource/geist/600";
+import "@fontsource/geist/200";
+
+import Favicon from "@scrap/assets/svgs/icon.svg?url";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href={Favicon} />
+		<title>Scrap</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

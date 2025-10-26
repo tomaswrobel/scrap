@@ -1,5 +1,5 @@
 /// <reference types="svelte" />
-/// <reference types="vite/client" />
+/// <reference types="astro/client" />
 
 declare interface ViteTypeOptions {
 	strictImportMetaEnv: true;

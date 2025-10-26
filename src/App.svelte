@@ -192,7 +192,7 @@
 {/snippet}
 
 <main class="h-screen overflow-hidden bg-base-200 text-base-content flex flex-col">
-	<div class="navbar bg-base-100" style:zoom="80%">
+	<nav class="navbar bg-base-100" style:zoom="80%">
 		<div class="navbar-start">
 			<Dropdown>
 				{#snippet button()}
@@ -244,7 +244,7 @@
 			/>
 		</div>
 		<div class="navbar-end"></div>
-	</div>
+	</nav>
 	<div class="flex grow h-full">
 		<CodePanel>
 			<CostumeTab />

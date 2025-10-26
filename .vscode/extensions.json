@@ -1,3 +1,8 @@
 {
-	"recommendations": ["oxc.oxc-vscode", "esbenp.prettier-vscode", "rust-lang.rust-analyzer"]
+	"recommendations": [
+		"oxc.oxc-vscode",
+		"esbenp.prettier-vscode",
+		"rust-lang.rust-analyzer",
+		"astro-build.astro-vscode"
+	]
 }

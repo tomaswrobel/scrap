@@ -1,0 +1,30 @@
+import tailwindcss from "@tailwindcss/vite";
+import {resolve} from "node:path";
+import {defineConfig} from "astro/config";
+import {shikiPlugin} from "./config/vite/shikiPlugin";
+import {svgPlugin} from "./config/vite/svgPlugin";
+import wasm from "vite-plugin-wasm";
+import svelte from "@astrojs/svelte";
+import vercel from "@astrojs/vercel";
+
+export default defineConfig({
+	adapter: vercel(),
+	integrations: [svelte()],
+	srcDir: resolve(import.meta.dirname, "./web"),
+	publicDir: resolve(import.meta.dirname, "./public"),
+	outDir: resolve(import.meta.dirname, "./dist"),
+	vite: {
+		plugins: [wasm(), tailwindcss(), shikiPlugin(), svgPlugin("icon")],
+		resolve: {
+			alias: {
+				"$context": resolve(import.meta.dirname, "./src/utils/Context.ts"),
+				"@scrap": resolve(import.meta.dirname, "./src"),
+				"monaco-editor": resolve(import.meta.dirname, "node_modules/monaco-editor/esm/vs/editor/editor.main.js"),
+				"path": "path-browserify"
+			},
+		},
+		esbuild: { 
+			target: "ES2024",
+		},
+	},
+});

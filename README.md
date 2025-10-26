@@ -118,7 +118,7 @@ Scrap is still in its early stages of development.
 - [ ] **More Blocks** - Scrap currently supports only a limited number of blocks. More blocks will be added in the future to make Scrap more useful.
 
 - [ ] **More Features** - Scrap will be getting more features in the future, such as a better paint editor, and more.
-    - [x] Better paint editor was added via devforth's [Painterro](https://github.com/devforth/painterro) (Scrap X)
+    - [x] Better paint editor was added via devforth's [Painterro](https://github.com/devforth/painterro) (Scrap 8)
 
 - [ ] **More Resources** - Scrap will be getting more resources in the future, such as tutorials, guides, and more.
 
