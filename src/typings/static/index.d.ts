@@ -1,3 +1,4 @@
+// oxlint-disable no-shadow-restricted-names
 /**
  * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.
@@ -22,13 +23,13 @@ declare const Scrap: {
 	/**
 	 * Stops the project
 	 */
-	stop(): void;
+	stop(): never;
 
 	/**
 	 * Detects if project
 	 * runs in turbo mode
 	 */
-	readonly isTurbo: boolean;
+	isTurbo(): boolean;
 };
 
 interface Stage<Variables = {}, Sound = string> {
@@ -125,6 +126,14 @@ interface Stage<Variables = {}, Sound = string> {
 	 * Pauses the current script
 	 */
 	wait(seconds: number): void;
+
+	/**
+	 * Stops the other scripts in the stage / Sprite.
+	 *
+	 * When called in a function, it'll work as written in the place
+	 * where the function is called.
+	 */
+	stopOtherScripts(): never;
 
 	/**
 	 * This event gets invoked when any key gets pressed
@@ -510,7 +519,7 @@ interface Sprite<Variables = {}, Sound = string, Costume = string>
 	 * Shows the content in the sprite's speech bubble. The bubble looks like a cloud.
 	 * @param contents The content to show. Might be string, number, boolean, or any other type.
 	 */
-	think(contents: any): void;
+	think(contents: unknown): void;
 
 	/**
 	 * Shows the content in the sprite's speech bubble.
@@ -755,7 +764,14 @@ declare type Key =
 	| "x"
 	| "y"
 	| "z";
-declare type MouseEvent = "clicked" | "pressed" | "released" | "left" | "entered" | "moved" | "double-clicked";
+declare type MouseEvent =
+	| "clicked"
+	| "pressed"
+	| "released"
+	| "left"
+	| "entered"
+	| "moved"
+	| "double-clicked";
 
 // For TypeScript to work
 declare interface RegExp {}
@@ -821,7 +837,9 @@ declare interface String extends Iterable<string> {
  * Converts the value to a string
  * @param value any value
  */
-declare function String<const T>(value: T): T extends number | boolean | string ? `${T}` : string;
+declare function String<const T>(
+	value: T,
+): T extends number | boolean | string ? `${T}` : string;
 
 // Scrap's iterables
 declare interface Symbol {}

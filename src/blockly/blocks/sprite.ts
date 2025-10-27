@@ -17,7 +17,8 @@
  * Also, it has an option to select "self" which is
  * a reference to the sprite that the script is running
  */
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {app} from "@scrap/types/App.svelte.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({
@@ -31,7 +32,7 @@ export default new CustomBlock({
 					result[0] = ["self", "self"]; // Replace Stage with self
 					return result;
 				}),
-				"SPRITE"
+				"SPRITE",
 			);
 			// Dynamically set the style to the parent's style
 			this.onchange = () => {

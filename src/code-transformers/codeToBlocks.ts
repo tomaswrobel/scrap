@@ -16,29 +16,49 @@
  * generated in the same order as the code is written. This is done by
  * traversing the AST and creating blocks for each node.
  */
-import * as Blockly from "blockly/core";
+import {entityProperties} from "@scrap/blockly";
+import type {Entity} from "@scrap/types/Enity.svelte.ts";
+import type {Check} from "@scrap/types/Check.ts";
+import type {Variable} from "@scrap/types/Variable";
+import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
 import * as SWC from "@scrap/utils/swc";
-import type {Entity} from "@scrap/entity";
-import {properties, blockToCheck, ScrapTypes} from "@scrap/blockly";
+import * as Blockly from "blockly/core";
+import {ScrapTypes} from "@scrap/blockly/utils/ScrapTypes.ts";
+import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+
+import ArrayBlock from "@scrap/blockly/blocks/array.ts";
+import CallBlock from "@scrap/blockly/blocks/call.ts";
+import FunctionBlock from "@scrap/blockly/blocks/function.ts";
+import IfBlock from "@scrap/blockly/blocks/controls_if.ts";
+import type TryBlock from "@scrap/blockly/blocks/try.ts";
+import type ReturnBlock from "@scrap/blockly/blocks/return.ts";
+import TypeBlock from "@scrap/blockly/blocks/type.ts";
+import UnionBlock from "@scrap/blockly/blocks/union.ts";
+import ParameterBlock from "@scrap/blockly/blocks/parameter.ts";
+import {assert} from "@scrap/utils/assert.ts";
 
 class CodeToBlocks {
 	private connection?: Blockly.Connection | null;
+	public readonly workspace: Blockly.Workspace;
 	private readonly functions = new Map<string, CodeToBlocks.Function>();
 	private readonly variables: Variable[] = [];
 
-	private constructor(public readonly workspace: Blockly.Workspace) {}
-
-	public static async processEntity(e: Entity) {
-		const tree = await SWC.parse(e.code as string);
-
-		if (tree) {
-			const parser = new this(e.workspace);
-			tree.body.forEach(parser.parse, parser);
-			e.variables = parser.variables;
-		}
+	private constructor(workspace: Blockly.Workspace) {
+		this.workspace = workspace;
 	}
 
-	private block(type: string) {
+	public static async switch(e: Entity) {
+		if (!e.typescript) {
+			return;
+		}
+		e.workspace.clear();
+		const tree = SWC.parse(e.typescript);
+		const parser = new this(e.workspace);
+		tree.body.forEach(parser.parse, parser);
+		e.variables.splice(0, e.variables.length, ...parser.variables);
+	}
+
+	private block<T>(type: string) {
 		const block = this.workspace.newBlock(type);
 
 		if (this.connection) {
@@ -49,7 +69,7 @@ class CodeToBlocks {
 			}
 		}
 
-		return block;
+		return block as CustomBlock.Infer<T>;
 	}
 
 	private parseArguments(block: Blockly.Block, nodes: SWC.CallExpression["arguments"]) {
@@ -89,10 +109,10 @@ class CodeToBlocks {
 	}
 
 	private parse(node?: SWC.Node | null): void {
-		if (node)
+		if (node) {
 			switch (node.type) {
 				case "TsKeywordType": {
-					const block = this.block("type");
+					const block = this.block<typeof TypeBlock>("type");
 					block.setFieldValue(node.kind, "TYPE");
 					this.connection?.setShadowState({type: "type"});
 					break;
@@ -100,19 +120,19 @@ class CodeToBlocks {
 				case "TsArrayType": {
 					const block = this.block("generic");
 					block.setFieldValue("Array", "ITERABLE");
-					this.connection = block.getInput("TYPE")!.connection;
+					this.connection = block.getInput("TYPE")?.connection;
 					this.parse(node.elemType);
 					break;
 				}
 				case "TsUnionType": {
-					const block = this.block("union");
+					const block = this.block<typeof UnionBlock>("union");
 
-					block.loadExtraState!({
+					block.loadExtraState({
 						count: node.types.length,
 					});
 
 					for (let i = 0; i < node.types.length; i++) {
-						this.connection = block.getInput(`TYPE${i}`)!.connection;
+						this.connection = block.getInput(`TYPE${i}`)?.connection;
 						this.parse(node.types[i]);
 					}
 
@@ -120,16 +140,21 @@ class CodeToBlocks {
 				}
 				case "TsExpressionWithTypeArguments": {
 					if (node.expression.type === "Identifier") {
-						if (node.expression.value === "Array" || node.expression.value === "Iterable") {
+						if (
+							node.expression.value === "Array" ||
+							node.expression.value === "Iterable"
+						) {
 							const block = this.block("generic");
 							block.setFieldValue(node.expression.value, "ITERABLE");
-							this.connection = block.getInput("TYPE")!.connection;
+							this.connection = block.getInput("TYPE")?.connection;
 							this.parse(node.typeArguments?.params?.[0]);
 						} else if (node.expression.value === "Sprite") {
 							const block = this.block("type");
 							block.setFieldValue("Sprite", "TYPE");
 						} else {
-							throw new TypeError(`Type "${node.expression.value}" is not known generic`);
+							throw new TypeError(
+								`Type "${node.expression.value}" is not known generic`,
+							);
 						}
 					}
 					break;
@@ -160,13 +185,13 @@ class CodeToBlocks {
 				case "ConditionalExpression": {
 					const block = this.block("ternary");
 
-					this.connection = block.getInput("CONDITION")!.connection;
+					this.connection = block.getInput("CONDITION")?.connection;
 					this.parse(node.test);
 
-					this.connection = block.getInput("THEN")!.connection;
+					this.connection = block.getInput("THEN")?.connection;
 					this.parse(node.consequent);
 
-					this.connection = block.getInput("ELSE")!.connection;
+					this.connection = block.getInput("ELSE")?.connection;
 					this.parse(node.alternate);
 
 					this.connection = null;
@@ -186,8 +211,8 @@ class CodeToBlocks {
 						}
 						break;
 					} else if (SWC.isIdentifier(node.callee, "Array")) {
-						const block = this.block("array");
-						block.loadExtraState!({
+						const block = this.block<typeof ArrayBlock>("array");
+						block.loadExtraState({
 							items: node.arguments?.map(arg => {
 								if (arg.spread) {
 									return "iterable";
@@ -197,12 +222,14 @@ class CodeToBlocks {
 							}),
 						});
 
-						this.connection = block.getInput("TYPE")!.connection;
-						this.connection!.setShadowState({type: "type"});
+						this.connection = block.getInput("TYPE")?.connection;
+						assert(this.connection);
+
+						this.connection.setShadowState({type: "type"});
 						this.parse(node.typeArguments?.params[0]);
 
 						node.arguments?.forEach((arg, i) => {
-							this.connection = block.getInput(`ADD${i}`)!.connection;
+							this.connection = block.getInput(`ADD${i}`)?.connection;
 							this.parse(arg.expression);
 						});
 
@@ -237,11 +264,11 @@ class CodeToBlocks {
 					break;
 				}
 				case "ReturnStatement": {
-					const block = this.block("return");
+					const block = this.block<typeof ReturnBlock>("return");
 
 					if (node.argument) {
-						block.loadExtraState!({output: "any"});
-						this.connection = block.getInput("VALUE")!.connection;
+						block.loadExtraState({output: "any"});
+						this.connection = block.getInput("VALUE")?.connection;
 						this.parse(node.argument);
 					}
 
@@ -260,7 +287,7 @@ class CodeToBlocks {
 				}
 				case "ThrowStatement": {
 					const block = this.block("throw");
-					this.connection = block.getInput("ERROR")!.connection;
+					this.connection = block.getInput("ERROR")?.connection;
 					this.parse(node.argument);
 					this.connection = null;
 					break;
@@ -279,13 +306,13 @@ class CodeToBlocks {
 							throw new SyntaxError("Only simple identifiers are supported");
 						}
 
-						this.connection = block.getInput("VAR")!.connection;
+						this.connection = block.getInput("VAR")?.connection;
 						const typed = this.block("typed");
-						this.connection = typed.getInput("TYPE")!.connection;
+						this.connection = typed.getInput("TYPE")?.connection;
 						if (SWC.hasType(id)) {
 							typed.setFieldValue(
 								`${id.value}:${SWC.getType(id.typeAnnotation.typeAnnotation)}`,
-								"PARAM"
+								"PARAM",
 							);
 							this.parse(id.typeAnnotation.typeAnnotation);
 							this.connection?.targetBlock()?.setShadow(true);
@@ -296,7 +323,7 @@ class CodeToBlocks {
 							typed.setFieldValue(id.value, "PARAM");
 						}
 
-						this.connection = block.getInput("VALUE")!.connection;
+						this.connection = block.getInput("VALUE")?.connection;
 						this.parse(init);
 
 						this.connection = block.nextConnection;
@@ -304,9 +331,9 @@ class CodeToBlocks {
 					break;
 				}
 				case "TryStatement": {
-					const block = this.block("tryCatch");
+					const block = this.block<typeof TryBlock>("tryCatch");
 
-					this.connection = block.getInput("TRY")!.connection;
+					this.connection = block.getInput("TRY")?.connection;
 					this.parse(node.block);
 
 					if (node.handler && node.finalizer) {
@@ -316,15 +343,15 @@ class CodeToBlocks {
 							throw new SyntaxError("Only simple identifiers are supported");
 						}
 
-						block.loadExtraState!({
+						block.loadExtraState({
 							catch: param ? param.value : true,
 							finally: true,
 						});
 
-						this.connection = block.getInput("CATCH")!.connection;
+						this.connection = block.getInput("CATCH")?.connection;
 						this.parse(body);
 
-						this.connection = block.getInput("FINALLY")!.connection;
+						this.connection = block.getInput("FINALLY")?.connection;
 						this.parse(node.finalizer);
 					} else if (node.handler) {
 						const {param, body} = node.handler;
@@ -333,20 +360,20 @@ class CodeToBlocks {
 							throw new SyntaxError("Only simple identifiers are supported");
 						}
 
-						block.loadExtraState!({
+						block.loadExtraState({
 							catch: param ? param.value : true,
 							finally: false,
 						});
 
-						this.connection = block.getInput("CATCH")!.connection;
+						this.connection = block.getInput("CATCH")?.connection;
 						this.parse(body);
 					} else if (node.finalizer) {
-						block.loadExtraState!({
+						block.loadExtraState({
 							finally: true,
 							catch: false,
 						});
 
-						this.connection = block.getInput("FINALLY")!.connection;
+						this.connection = block.getInput("FINALLY")?.connection;
 						this.parse(node.finalizer);
 					}
 
@@ -355,11 +382,11 @@ class CodeToBlocks {
 					break;
 				}
 				case "IfStatement": {
-					const block = this.block("controls_if");
-					this.connection = block.getInput("IF0")!.connection;
+					const block = this.block<typeof IfBlock>("controls_if");
+					this.connection = block.getInput("IF0")?.connection;
 					this.parse(node.test);
 
-					this.connection = block.getInput("DO0")!.connection;
+					this.connection = block.getInput("DO0")?.connection;
 					this.parse(node.consequent);
 
 					const elseIfStatements: SWC.IfStatement[] = [];
@@ -370,21 +397,21 @@ class CodeToBlocks {
 
 					const hasElse = node.alternate?.type === "BlockStatement";
 
-					block.loadExtraState!({
+					block.loadExtraState({
 						elseIfCount: elseIfStatements.length,
 						hasElse,
 					});
 
 					for (let i = 0; i < elseIfStatements.length; i++) {
-						this.connection = block.getInput(`IF${i}`)!.connection;
+						this.connection = block.getInput(`IF${i}`)?.connection;
 						this.parse(elseIfStatements[i].test);
 
-						this.connection = block.getInput(`DO${i}`)!.connection;
+						this.connection = block.getInput(`DO${i}`)?.connection;
 						this.parse(elseIfStatements[i].consequent);
 					}
 
 					if (hasElse) {
-						this.connection = block.getInput("ELSE")!.connection;
+						this.connection = block.getInput("ELSE")?.connection;
 						this.parse(node.alternate);
 					}
 
@@ -395,10 +422,10 @@ class CodeToBlocks {
 				case "WhileStatement": {
 					const block = this.block("while");
 
-					this.connection = block.getInput("CONDITION")!.connection;
+					this.connection = block.getInput("CONDITION")?.connection;
 					this.parse(node.test);
 
-					this.connection = block.getInput("STACK")!.connection;
+					this.connection = block.getInput("STACK")?.connection;
 					this.parse(node.body);
 
 					this.connection = block.nextConnection;
@@ -411,17 +438,19 @@ class CodeToBlocks {
 					if (!init && !update && !test) {
 						// while true
 						const block = this.block("while");
-						this.connection = block.getInput("CONDITION")!.connection;
+						this.connection = block.getInput("CONDITION")?.connection;
 						this.block("boolean");
 
-						this.connection = block.getInput("STACK")!.connection;
+						this.connection = block.getInput("STACK")?.connection;
 						this.parse(node.body);
 
 						this.connection = block.nextConnection;
-					} else
+					} else {
 						try {
 							if (!init || !update) {
-								throw new SyntaxError("Only for loops with init and update are supported");
+								throw new SyntaxError(
+									"Only for loops with init and update are supported",
+								);
 							}
 
 							if (!test) {
@@ -429,7 +458,9 @@ class CodeToBlocks {
 							}
 
 							if (init.type !== "VariableDeclaration") {
-								throw new SyntaxError("Only variable declarations are supported");
+								throw new SyntaxError(
+									"Only variable declarations are supported",
+								);
 							}
 
 							if (test.type !== "BinaryExpression") {
@@ -437,7 +468,9 @@ class CodeToBlocks {
 							}
 
 							if (test.operator !== "<=") {
-								throw new SyntaxError("Only <= binary expressions are supported");
+								throw new SyntaxError(
+									"Only <= binary expressions are supported",
+								);
 							}
 
 							if (update.type !== "UpdateExpression") {
@@ -445,17 +478,23 @@ class CodeToBlocks {
 							}
 
 							if (update.operator !== "++") {
-								throw new SyntaxError("Only ++ update expressions are supported");
+								throw new SyntaxError(
+									"Only ++ update expressions are supported",
+								);
 							}
 
 							if (init.declarations.length !== 1) {
-								throw new SyntaxError("Only one variable declaration is supported");
+								throw new SyntaxError(
+									"Only one variable declaration is supported",
+								);
 							}
 
-							const {id, init: dec} = init.declarations[0];
+							const [{id, init: dec}] = init.declarations;
 
 							if (!dec) {
-								throw new SyntaxError("Only variable declarations with initializers are supported");
+								throw new SyntaxError(
+									"Only variable declarations with initializers are supported",
+								);
 							}
 
 							if (id.type !== "Identifier") {
@@ -468,7 +507,7 @@ class CodeToBlocks {
 
 							if (test.left.value !== id.value) {
 								throw new SyntaxError(
-									"Only for loops with the same variable in init and test are supported"
+									"Only for loops with the same variable in init and test are supported",
 								);
 							}
 
@@ -478,20 +517,20 @@ class CodeToBlocks {
 
 							if (update.argument.value !== id.value) {
 								throw new SyntaxError(
-									"Only for loops with the same variable in init and update are supported"
+									"Only for loops with the same variable in init and update are supported",
 								);
 							}
 
 							const block = this.block("for");
 							block.setFieldValue(`${id.value}:number`, "VAR");
 
-							this.connection = block.getInput("TO")!.connection;
+							this.connection = block.getInput("TO")?.connection;
 							this.parse(test.right);
 
-							this.connection = block.getInput("FROM")!.connection;
+							this.connection = block.getInput("FROM")?.connection;
 							this.parse(dec);
 
-							this.connection = block.getInput("STACK")!.connection;
+							this.connection = block.getInput("STACK")?.connection;
 							this.parse(body);
 
 							this.connection = block.nextConnection;
@@ -501,22 +540,23 @@ class CodeToBlocks {
 
 							const block = this.block("while");
 
-							this.connection = block.getInput("CONDITION")!.connection;
+							this.connection = block.getInput("CONDITION")?.connection;
 							this.parse(node.test);
 
-							this.connection = block.getInput("STACK")!.connection;
+							this.connection = block.getInput("STACK")?.connection;
 							this.parse(node.body);
 
 							this.connection = block.nextConnection;
 							this.parse(node.update);
 						}
+					}
 
 					break;
 				}
 				case "FunctionDeclaration": {
 					const params: string[] = [];
 
-					const block = this.workspace.newBlock("function");
+					const block = this.block<typeof FunctionBlock>("function");
 					block.setFieldValue(node.identifier.value, "NAME");
 
 					const types = new Array<SWC.TsType | null>();
@@ -535,7 +575,7 @@ class CodeToBlocks {
 						}
 					}
 
-					block.loadExtraState!({
+					block.loadExtraState({
 						params,
 						returns: node.returnType
 							? node.returnType.typeAnnotation.type === "TsKeywordType"
@@ -546,14 +586,19 @@ class CodeToBlocks {
 
 					types.forEach((type, i) => {
 						this.connection = block
-							.getInput(`PARAM_${i}`)!
-							.connection!.targetBlock()!
-							.getInput("TYPE")!.connection!;
+							.getInput(`PARAM_${i}`)
+							?.connection?.targetBlock()
+							?.getInput("TYPE")?.connection;
+
 						this.parse(type);
 					});
 
 					if ((this.connection = block.getInput("RETURNS")?.connection)) {
-						this.parse((node.returnType as SWC.TsTypeAnnotation).typeAnnotation);
+						assert(
+							node.returnType,
+							"[function] Mutator set return type, while there's none.",
+						);
+						this.parse(node.returnType.typeAnnotation);
 
 						this.functions.set(node.identifier.value, {
 							params,
@@ -576,12 +621,14 @@ class CodeToBlocks {
 					break;
 				}
 				case "ArrayExpression": {
-					const block = this.block("array");
+					const block = this.block<typeof ArrayBlock>("array");
 
-					this.connection = block.getInput("TYPE")!.connection;
-					this.connection!.setShadowState({type: "type"});
+					this.connection = block.getInput("TYPE")?.connection;
+					assert(this.connection);
 
-					block.loadExtraState!({
+					this.connection.setShadowState({type: "type"});
+
+					block.loadExtraState({
 						items: node.elements.map(element => {
 							if (element?.spread) {
 								return "iterable";
@@ -592,7 +639,7 @@ class CodeToBlocks {
 					});
 
 					node.elements.forEach((element, i) => {
-						this.connection = block.getInput(`ADD${i}`)!.connection;
+						this.connection = block.getInput(`ADD${i}`)?.connection;
 						this.parse(element?.expression);
 					});
 
@@ -606,58 +653,73 @@ class CodeToBlocks {
 							SWC.isIdentifier(node.callee.object, "window") &&
 							SWC.isProperty(node.callee, "alert", "prompt", "confirm")
 						) {
-							const block = this.block(SWC.getPropertyContents(node.callee.property));
-							this.connection = block.getInput("TEXT")!.connection!;
+							const block = this.block(
+								SWC.getPropertyContents(node.callee.property),
+							);
+							this.connection = block.getInput("TEXT")?.connection;
 							this.parse(node.arguments[0].expression);
 							this.connection = block.nextConnection;
 						} else if (SWC.isIdentifier(node.callee.object, "Color")) {
 							if (SWC.isProperty(node.callee, "fromHex")) {
 								const block = this.block("color");
 								if (node.arguments[0].expression.type === "StringLiteral") {
-									block.setFieldValue(node.arguments[0].expression.value, "COLOR");
+									block.setFieldValue(
+										node.arguments[0].expression.value,
+										"COLOR",
+									);
 								} else {
 									throw new SyntaxError("Only string literals are supported");
 								}
 							} else if (SWC.isProperty(node.callee, "fromRGB")) {
 								const block = this.block("rgb");
-								this.connection = block.getInput("RED")!.connection!;
+								this.connection = block.getInput("RED")?.connection;
 								this.parse(node.arguments[0].expression);
-								this.connection = block.getInput("GREEN")!.connection!;
+								this.connection = block.getInput("GREEN")?.connection;
 								this.parse(node.arguments[1].expression);
-								this.connection = block.getInput("BLUE")!.connection!;
+								this.connection = block.getInput("BLUE")?.connection;
 								this.parse(node.arguments[2].expression);
 							} else if (SWC.isProperty(node.callee, "random")) {
 								this.block("color_random");
 							}
 						} else if (
 							SWC.isIdentifier(node.callee.object, "Scrap") &&
-							SWC.isProperty(node.callee, "delete")
+							SWC.isProperty(node.callee, "stop")
 						) {
 							this.block("stop");
 							this.connection = null;
 						} else if (SWC.isProperty(node.callee, "getTime", "valueOf")) {
 							const block = this.block("number");
-							this.connection = block.getInput("VALUE")!.connection;
+							this.connection = block.getInput("VALUE")?.connection;
 							this.parse(node.callee.object);
 						} else if (SWC.isProperty(node.callee, "toString")) {
 							const block = this.block("string");
-							this.connection = block.getInput("VALUE")!.connection;
+							this.connection = block.getInput("VALUE")?.connection;
 							this.parse(node.callee.object);
 						} else if (SWC.isProperty(node.callee, "clone")) {
 							const block = this.block("clone");
-							this.connection = block.getInput("SPRITE")!.connection!;
+							this.connection = block.getInput("SPRITE")?.connection;
 							this.parse(node.callee.object);
 							this.connection = block.nextConnection;
-						} else if (SWC.isProperty(node.callee, "reverse", "includes", "indexOf", "slice")) {
-							const block = this.block(SWC.getPropertyContents(node.callee.property));
-							this.connection = block.getInput("ITERABLE")!.connection!;
+						} else if (
+							SWC.isProperty(
+								node.callee,
+								"reverse",
+								"includes",
+								"indexOf",
+								"slice",
+							)
+						) {
+							const block = this.block(
+								SWC.getPropertyContents(node.callee.property),
+							);
+							this.connection = block.getInput("ITERABLE")?.connection;
 							this.parse(node.callee.object);
 							this.parseArguments(block, node.arguments);
 						} else if (SWC.isProperty(node.callee, "join")) {
 							const block = this.block("join");
-							this.connection = block.getInput("ITERABLE")!.connection!;
+							this.connection = block.getInput("ITERABLE")?.connection;
 							this.parse(node.callee.object);
-							this.connection = block.getInput("SEPARATOR")!.connection!;
+							this.connection = block.getInput("SEPARATOR")?.connection;
 							this.parse(node.arguments[0].expression);
 						} else if (
 							SWC.isProperty(
@@ -668,18 +730,23 @@ class CodeToBlocks {
 								"getDay",
 								"getHours",
 								"getMinutes",
-								"getSeconds"
+								"getSeconds",
 							)
 						) {
 							const block = this.block("dateProperty");
-							block.setFieldValue(SWC.getPropertyContents(node.callee.property), "PROPERTY");
-							this.connection = block.getInput("DATE")!.connection!;
+							block.setFieldValue(
+								SWC.getPropertyContents(node.callee.property),
+								"PROPERTY",
+							);
+							this.connection = block.getInput("DATE")?.connection;
 							this.parse(node.callee.object);
 						} else if (
 							SWC.isIdentifier(node.callee.object, "self") &&
-							SWC.isProperty(node.callee, ...properties)
+							SWC.isProperty(node.callee, ...entityProperties)
 						) {
-							const block = this.block(SWC.getPropertyContents(node.callee.property));
+							const block = this.block(
+								SWC.getPropertyContents(node.callee.property),
+							);
 							this.parseArguments(block, node.arguments);
 						} else if (SWC.isIdentifier(node.callee.object, "Math")) {
 							if (
@@ -698,12 +765,15 @@ class CodeToBlocks {
 									"atan",
 									"log",
 									"log10",
-									"exp"
+									"exp",
 								)
 							) {
 								const block = this.block("math");
-								block.setFieldValue(SWC.getPropertyContents(node.callee.property), "OP");
-								this.connection = block.getInput("NUM")!.connection!;
+								block.setFieldValue(
+									SWC.getPropertyContents(node.callee.property),
+									"OP",
+								);
+								this.connection = block.getInput("NUM")?.connection;
 								this.parse(node.arguments[0].expression);
 							} else if (SWC.isProperty(node.callee, "random")) {
 								this.block("random");
@@ -715,10 +785,9 @@ class CodeToBlocks {
 						}
 					} else if (node.callee.type === "Identifier") {
 						if (this.functions.has(node.callee.value)) {
-							const block = this.workspace.newBlock("call");
+							const block = CallBlock.createIn(this.workspace);
 							block.setFieldValue(node.callee.value, "NAME");
-
-							block.loadExtraState!(this.functions.get(node.callee.value));
+							block.loadExtraState(this.functions.get(node.callee.value));
 
 							if (this.connection) {
 								if (block.previousConnection) {
@@ -729,21 +798,23 @@ class CodeToBlocks {
 							}
 
 							for (let i = 0; i < node.arguments.length; i++) {
-								this.connection = block.getInput(`PARAM_${i}`)!.connection;
+								this.connection = block.getInput(`PARAM_${i}`)?.connection;
 								this.parse(node.arguments[i].expression);
 							}
 
 							this.connection = block.nextConnection;
 						} else if (node.callee.value === "String") {
 							const block = this.block("string");
-							this.connection = block.getInput("VALUE")!.connection;
+							this.connection = block.getInput("VALUE")?.connection;
 							this.parse(node.arguments[0].expression);
 						} else if (node.callee.value === "Number") {
 							const block = this.block("number");
-							this.connection = block.getInput("VALUE")!.connection;
+							this.connection = block.getInput("VALUE")?.connection;
 							this.parse(node.arguments[0].expression);
 						} else {
-							throw new SyntaxError(`Function ${node.callee.value} used before definition`);
+							throw new SyntaxError(
+								`Function ${node.callee.value} used before definition`,
+							);
 						}
 					} else {
 						throw new SyntaxError("Unsupported function call");
@@ -757,61 +828,88 @@ class CodeToBlocks {
 
 					if (!SWC.hasSimpleProperty(node)) {
 						const block = this.block("item");
-						this.connection = block.getInput("INDEX")!.connection;
+						this.connection = block.getInput("INDEX")?.connection;
 						this.parse(node.property);
 
-						this.connection = block.getInput("ITERABLE")!.connection;
+						this.connection = block.getInput("ITERABLE")?.connection;
 						this.parse(node.object);
 					} else if (SWC.isIdentifier(node.property, "length")) {
 						const block = this.block("length");
-						this.connection = block.getInput("VALUE")!.connection;
+						this.connection = block.getInput("VALUE")?.connection;
 						this.parse(node.object);
-					} else if (SWC.isIdentifier(node.object, "self") && SWC.isProperty(node, ...properties)) {
+					} else if (
+						SWC.isIdentifier(node.object, "self") &&
+						SWC.isProperty(node, ...entityProperties)
+					) {
 						this.block(SWC.getPropertyContents(node.property));
-					} else if (SWC.is(node.object, "MemberExpression") && SWC.isProperty(node.object, "effects")) {
+					} else if (
+						SWC.is(node.object, "MemberExpression") &&
+						SWC.isProperty(node.object, "effects")
+					) {
 						if (SWC.isIdentifier(node.object.object, "self")) {
 							const block = this.block("effect");
-							block.setFieldValue(SWC.getPropertyContents(node.property), "EFFECT");
+							block.setFieldValue(
+								SWC.getPropertyContents(node.property),
+								"EFFECT",
+							);
 						} else if (
 							SWC.is(node.object.object, "MemberExpression") &&
 							SWC.isIdentifier(node.object.object.object, "$")
 						) {
 							if (!SWC.hasSimpleProperty(node.object.object)) {
-								throw new SyntaxError("Only simple identifiers and string literals are supported");
+								throw new SyntaxError(
+									"Only simple identifiers and string literals are supported",
+								);
 							}
 
 							const block = this.block("property");
-							block.setFieldValue(SWC.getPropertyContents(node.object.object.property), "SPRITE");
-							block.setFieldValue(`effects.${SWC.getPropertyContents(node.property)}`, "PROPERTY");
+							block.setFieldValue(
+								SWC.getPropertyContents(node.object.object.property),
+								"SPRITE",
+							);
+							block.setFieldValue(
+								`effects.${SWC.getPropertyContents(node.property)}`,
+								"PROPERTY",
+							);
 						} else {
 							throw new SyntaxError("Unsupported object");
 						}
 					} else if (SWC.is(node.object, "MemberExpression")) {
 						if (SWC.isProperty(node.object, "variables")) {
 							if (SWC.isIdentifier(node.object.object, "self")) {
-								const block = this.workspace.newBlock("parameter");
+								const block = ParameterBlock.createIn(this.workspace);
 								const variable = this.variables.find(
-									([name]) => name === SWC.getPropertyContents(node.property)
+									([name]) => name === SWC.getPropertyContents(node.property),
 								);
-								block.loadExtraState!({
+								block.loadExtraState({
 									isVariable: true,
 									type: variable ? variable[1] : "any",
 								});
-								block.setFieldValue(SWC.getPropertyContents(node.property), "VAR");
-								this.connection?.connect(block.outputConnection!);
+								block.setFieldValue(
+									SWC.getPropertyContents(node.property),
+									"VAR",
+								);
+								this.connection?.connect(block.outputConnection);
 							} else if (
 								SWC.is(node.object.object, "MemberExpression") &&
 								SWC.isIdentifier(node.object.object.object, "$")
 							) {
 								if (!SWC.hasSimpleProperty(node.object.object)) {
-									throw new SyntaxError("Only simple identifiers and string literals are supported");
+									throw new SyntaxError(
+										"Only simple identifiers and string literals are supported",
+									);
 								}
 
 								const block = this.block("property");
-								block.setFieldValue(SWC.getPropertyContents(node.object.object.property), "SPRITE");
 								block.setFieldValue(
-									`variables[${JSON.stringify(SWC.getPropertyContents(node.property))}]`,
-									"PROPERTY"
+									SWC.getPropertyContents(node.object.object.property),
+									"SPRITE",
+								);
+								block.setFieldValue(
+									`variables[${JSON.stringify(
+										SWC.getPropertyContents(node.property),
+									)}]`,
+									"PROPERTY",
 								);
 							} else {
 								throw new SyntaxError("Unsupported object");
@@ -819,7 +917,10 @@ class CodeToBlocks {
 						} else if (SWC.isProperty(node.object, "costume", "backdrop")) {
 							const type = SWC.getPropertyContents(node.object);
 							const prop = SWC.getPropertyContents(node.property);
-							if (type === "backdrop" || SWC.isIdentifier(node.object.object, "self")) {
+							if (
+								type === "backdrop" ||
+								SWC.isIdentifier(node.object.object, "self")
+							) {
 								if (prop === "all") {
 									this.block(`${type}.all`);
 								} else {
@@ -831,10 +932,15 @@ class CodeToBlocks {
 								SWC.isIdentifier(node.object.object.object, "$")
 							) {
 								if (!SWC.hasSimpleProperty(node.object.object)) {
-									throw new SyntaxError("Only simple identifiers and string literals are supported");
+									throw new SyntaxError(
+										"Only simple identifiers and string literals are supported",
+									);
 								}
 								const block = this.block("property");
-								block.setFieldValue(SWC.getPropertyContents(node.object.object.property), "SPRITE");
+								block.setFieldValue(
+									SWC.getPropertyContents(node.object.object.property),
+									"SPRITE",
+								);
 								block.setFieldValue(`${type}.${prop}`, "PROPERTY");
 							} else {
 								throw new SyntaxError("Unsupported object");
@@ -850,17 +956,25 @@ class CodeToBlocks {
 								"penSize",
 								"penColor",
 								"visible",
-								"draggable"
+								"draggable",
 							)
 						) {
 							if (SWC.isIdentifier(node.object.object, "$")) {
 								if (!SWC.hasSimpleProperty(node.object)) {
-									throw new SyntaxError("Only simple identifiers and string literals are supported");
+									throw new SyntaxError(
+										"Only simple identifiers and string literals are supported",
+									);
 								}
 
 								const block = this.block("property");
-								block.setFieldValue(SWC.getPropertyContents(node.object.property), "SPRITE");
-								block.setFieldValue(SWC.getPropertyContents(node.property), "PROPERTY");
+								block.setFieldValue(
+									SWC.getPropertyContents(node.object.property),
+									"SPRITE",
+								);
+								block.setFieldValue(
+									SWC.getPropertyContents(node.property),
+									"PROPERTY",
+								);
 							} else {
 								throw new SyntaxError("Unsupported object");
 							}
@@ -882,7 +996,10 @@ class CodeToBlocks {
 						} else if (node.object.value === "Math") {
 							if (SWC.isProperty(node, "PI", "E")) {
 								const block = this.block("constant");
-								block.setFieldValue(`Math.${SWC.getPropertyContents(node.property)}`, "CONSTANT");
+								block.setFieldValue(
+									`Math.${SWC.getPropertyContents(node.property)}`,
+									"CONSTANT",
+								);
 							} else {
 								throw new SyntaxError("Unsupported Math constant");
 							}
@@ -904,9 +1021,9 @@ class CodeToBlocks {
 						case "**": {
 							const block = this.block("arithmetics");
 							block.setFieldValue(node.operator, "OP");
-							this.connection = block.getInput("A")!.connection;
+							this.connection = block.getInput("A")?.connection;
 							this.parse(node.left);
-							this.connection = block.getInput("B")!.connection;
+							this.connection = block.getInput("B")?.connection;
 							this.parse(node.right);
 							break;
 						}
@@ -920,9 +1037,9 @@ class CodeToBlocks {
 						case ">=": {
 							const block = this.block("compare");
 							block.setFieldValue(node.operator.slice(0, 2), "OP");
-							this.connection = block.getInput("A")!.connection;
+							this.connection = block.getInput("A")?.connection;
 							this.parse(node.left);
-							this.connection = block.getInput("B")!.connection;
+							this.connection = block.getInput("B")?.connection;
 							this.parse(node.right);
 							break;
 						}
@@ -930,9 +1047,9 @@ class CodeToBlocks {
 						case "||": {
 							const block = this.block("operation");
 							block.setFieldValue(node.operator, "OP");
-							this.connection = block.getInput("A")!.connection;
+							this.connection = block.getInput("A")?.connection;
 							this.parse(node.left);
-							this.connection = block.getInput("B")!.connection;
+							this.connection = block.getInput("B")?.connection;
 							this.parse(node.right);
 							break;
 						}
@@ -945,11 +1062,13 @@ class CodeToBlocks {
 				case "UpdateExpression": {
 					const block = this.block("change");
 
-					this.connection = block.getInput("VAR")!.connection!;
+					this.connection = block.getInput("VAR")?.connection;
+					assert(this.connection);
+
 					this.connection.setShadowState({type: "x"});
 					this.parse(node.argument);
 
-					block.getInput("VALUE")!.connection!.setShadowState({
+					block.getInput("VALUE")?.connection?.setShadowState({
 						type: "math_number",
 						fields: {
 							NUM: node.operator === "--" ? -1 : 1,
@@ -961,7 +1080,7 @@ class CodeToBlocks {
 				case "UnaryExpression": {
 					if (node.operator === "!") {
 						const block = this.block("not");
-						this.connection = block.getInput("BOOL")!.connection;
+						this.connection = block.getInput("BOOL")?.connection;
 						this.parse(node.argument);
 					} else if (node.operator === "-") {
 						if (node.argument.type === "NumericLiteral") {
@@ -970,15 +1089,15 @@ class CodeToBlocks {
 						} else {
 							const block = this.block("arithmetics");
 							block.setFieldValue("-", "OP");
-							block.getInput("A")!.connection!.setShadowState({
+							block.getInput("A")?.connection?.setShadowState({
 								type: "math_number",
 							});
-							this.connection = block.getInput("B")!.connection;
+							this.connection = block.getInput("B")?.connection;
 							this.parse(node.argument);
 						}
 					} else if (node.operator === "+") {
 						const block = this.block("number");
-						this.connection = block.getInput("VALUE")!.connection;
+						this.connection = block.getInput("VALUE")?.connection;
 						this.parse(node.argument);
 					} else {
 						throw new SyntaxError("Unsupported operator");
@@ -986,26 +1105,36 @@ class CodeToBlocks {
 					break;
 				}
 				case "AssignmentExpression": {
-					if (node.left.type !== "Identifier" && node.left.type !== "MemberExpression") {
-						throw new SyntaxError("Only simple identifiers and member expressions are supported");
+					if (
+						node.left.type !== "Identifier" &&
+						node.left.type !== "MemberExpression"
+					) {
+						throw new SyntaxError(
+							"Only simple identifiers and member expressions are supported",
+						);
 					}
+
+					let block: Blockly.Block, argument: SWC.Expression;
 
 					switch (node.operator) {
 						case "=": {
-							var block = this.block("set");
-							var argument = node.right;
+							block = this.block("set");
+							argument = node.right;
 							break;
 						}
 						case "+=": {
-							var block = this.block("change");
-							var argument = node.right;
+							block = this.block("change");
+							argument = node.right;
 							break;
 						}
 						default: {
-							var block = this.block("set");
-							var argument: SWC.Expression = {
+							block = this.block("set");
+							argument = {
 								type: "BinaryExpression",
-								operator: node.operator.slice(0, -1) as SWC.BinaryExpression["operator"],
+								operator: node.operator.slice(
+									0,
+									-1,
+								) as SWC.BinaryExpression["operator"],
 								left: node.left,
 								right: node.right,
 								span: {start: 0, end: 0, ctxt: 0},
@@ -1013,11 +1142,13 @@ class CodeToBlocks {
 						}
 					}
 
-					this.connection = block.getInput("VAR")!.connection!;
-					this.connection.setShadowState({type: "x"});
-					this.parse(node.left)!;
+					this.connection = block.getInput("VAR")?.connection;
+					assert(this.connection);
 
-					this.connection = block.getInput("VALUE")!.connection;
+					this.connection.setShadowState({type: "x"});
+					this.parse(node.left);
+
+					this.connection = block.getInput("VALUE")?.connection;
 					this.parse(argument);
 					this.connection = block.nextConnection;
 
@@ -1043,10 +1174,10 @@ class CodeToBlocks {
 					const block = this.block("foreach");
 					block.setFieldValue(id.value, "VAR");
 
-					this.connection = block.getInput("ITERABLE")!.connection;
+					this.connection = block.getInput("ITERABLE")?.connection;
 					this.parse(right);
 
-					this.connection = block.getInput("DO")!.connection;
+					this.connection = block.getInput("DO")?.connection;
 					this.parse(body);
 
 					this.connection = block.nextConnection;
@@ -1060,12 +1191,12 @@ class CodeToBlocks {
 					} else if (node.value === "Infinity" || node.value === "NaN") {
 						this.block("constant").setFieldValue(node.value, "CONSTANT");
 					} else {
-						const block = this.workspace.newBlock("parameter");
-						block.loadExtraState!({
+						const block = ParameterBlock.createIn(this.workspace);
+						block.loadExtraState({
 							isVariable: false,
 							type: "any",
 						});
-						this.connection?.connect(block.outputConnection!);
+						this.connection?.connect(block.outputConnection);
 						block.setFieldValue(node.value, "VAR");
 					}
 					break;
@@ -1074,7 +1205,10 @@ class CodeToBlocks {
 					if (node.id.value === "Variables") {
 						for (const property of node.body.body) {
 							if (property.type === "TsPropertySignature") {
-								if (property.key.type === "StringLiteral" || property.key.type === "Identifier") {
+								if (
+									property.key.type === "StringLiteral" ||
+									property.key.type === "Identifier"
+								) {
 									this.variables.push([
 										SWC.getPropertyContents(property.key),
 										SWC.getType(property.typeAnnotation?.typeAnnotation),
@@ -1093,9 +1227,12 @@ class CodeToBlocks {
 				}
 				default:
 					throw new SyntaxError(
-						`Unsupported node type ${node.type}. Type must be one of void${ScrapTypes.join(", ")}`
+						`Unsupported node type ${
+							node.type
+						}. Type must be one of void${ScrapTypes.join(", ")}`,
 					);
 			}
+		}
 	}
 }
 

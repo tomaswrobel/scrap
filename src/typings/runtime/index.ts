@@ -1,3 +1,4 @@
+// oxlint-disable no-unused-vars
 /**
  * This file is a part of Scrap, an app for helping to migrate
  * from block-based programming into text-based programming languages.

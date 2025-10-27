@@ -23,9 +23,11 @@
  * will remove its value input (return;) and serve like
  * the Scratch's "stop this script" block.
  */
+import type {Check} from "@scrap/types/Check.ts";
+import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap, blockToCheck} from "../types";
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
 
 export type ReturnBlockOutput = Check | false;
 
@@ -50,12 +52,12 @@ export default new CustomBlock({
 			const input = this.getInput("VALUE");
 
 			if (input) {
-				const block = input.connection!.targetBlock();
+				const block = input.connection?.targetBlock();
 				this.removeInput("VALUE");
 				if (block?.isShadow()) {
 					block.dispose(false);
 					this.addValue(state.output, null);
-				} else {
+				} else if (block) {
 					this.addValue(state.output, block);
 				}
 			} else {
@@ -83,23 +85,22 @@ export default new CustomBlock({
 		}
 
 		const input = this.appendValueInput("VALUE").setCheck(check);
+		let type = "any";
 
 		if (typeof check === "string") {
-			var type = check;
+			type = check;
 		} else if (check.length === 1) {
-			var type = check[0];
-		} else {
-			var type = "any";
+			[type] = check;
 		}
 
 		if (type in TypeToShadowMap) {
-			input.connection!.setShadowState({
+			input.connection?.setShadowState({
 				type: TypeToShadowMap[type],
 			});
 		}
 
-		if (block && input.connection) {
-			block.outputConnection!.connect(input.connection);
+		if (block?.outputConnection && input.connection) {
+			block.outputConnection.connect(input.connection);
 		}
 	},
 
@@ -109,16 +110,16 @@ export default new CustomBlock({
 		}
 
 		if (typeof check1 === "string" && typeof check2 === "object") {
-			return check2.indexOf(check1) !== -1;
+			return check2.includes(check1);
 		}
 
 		if (typeof check1 === "object" && typeof check2 === "string") {
-			return check1.indexOf(check2) !== -1;
+			return check1.includes(check2);
 		}
 
 		if (typeof check1 === "object" && typeof check2 === "object") {
 			if (check1.length === check2.length) {
-				return check1.every(p => check2.indexOf(p) !== -1);
+				return check1.every(p => check2.includes(p));
 			}
 		}
 

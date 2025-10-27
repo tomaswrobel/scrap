@@ -1,11 +1,9 @@
 {
-    "compilerOptions": {
-        "noLib": true,
-        "composite": true
-    },
-    "files": [
-        "index.d.ts",
-        "runtime.d.ts",
-        "example.ts",
-    ]
+	"compilerOptions": {
+		"noLib": true,
+		"composite": true,
+		"types": [],
+		"typeRoots": []
+	},
+	"files": ["index.d.ts", "runtime.d.ts", "example.ts"]
 }

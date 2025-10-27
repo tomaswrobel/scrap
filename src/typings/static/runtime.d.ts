@@ -18,7 +18,7 @@
 /**
  * Reference to the current sprite (stage)
  */
-declare const self: Stage<{}>;
+declare const self: Stage;
 
 /**
  * Sprite database
@@ -30,9 +30,9 @@ declare const self: Stage<{}>;
  * ```
  */
 declare const $: {
-	[x: string]: Sprite<{}>;
+	[x: string]: Sprite;
 } & {
-	Stage: Stage<{}>;
+	Stage: Stage;
 };
 
 declare type Backdrop = never;

@@ -1,0 +1,34 @@
+{
+	"extends": "@tsconfig/svelte/tsconfig.json",
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+		"module": "ESNext",
+		"allowJs": true,
+		"checkJs": true,
+		"target": "ES2024",
+		"lib": ["ES2024"],
+		"types": [],
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+
+		/* Linting */
+		"strict": true,
+		"erasableSyntaxOnly": true,
+		"noImplicitOverride": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+
+		/* Vite */
+		"paths": {
+			"@scrap/*": ["./src/*"],
+			"path": ["./node_modules/path-browserify"]
+		}
+	},
+	"include": ["src"],
+	"exclude": ["src/typings", "src/compiler", "src/assets/web"]
+}

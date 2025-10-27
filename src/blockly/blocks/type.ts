@@ -23,9 +23,12 @@
  * the return type of the function.
  */
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap, ScrapTypes} from "../types";
-import {CustomBlock} from "@scrap/utils/CustomBlock";
-import type ArrayBlock from "./array";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import type ArrayBlock from "./array.ts";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
+import {ScrapTypes} from "../utils/ScrapTypes.ts";
+import {assert} from "@scrap/utils/assert.ts";
+import ReturnBlock from "./return.ts";
 
 export default new CustomBlock({
 	init() {
@@ -45,18 +48,21 @@ export default new CustomBlock({
 					const parentOfParent = parent.getParent();
 
 					if (parent.type === "typed") {
-						const param = parent.getField("PARAM")!;
+						const param = parent.getField("PARAM");
+						assert(param);
 
 						param.setValue(`${param.getText()}:${type}`);
 						param.markDirty();
 
 						if (parentOfParent?.type === "variable") {
-							const input = parentOfParent.getInput("VALUE")!;
+							const input = parentOfParent.getInput("VALUE");
+							assert(input?.connection);
+
 							input.connection?.targetBlock()?.dispose(false);
 							input.setCheck(type);
 
 							if (type in TypeToShadowMap) {
-								input.connection!.setShadowState({
+								input.connection.setShadowState({
 									type: TypeToShadowMap[type],
 								});
 							}
@@ -73,20 +79,24 @@ export default new CustomBlock({
 						}
 					}
 
-					if (parent.type === "function") {
-						for (const block of parent.getDescendants(false)) {
-							if (block.type === "return") {
-								block.loadExtraState!({
-									output: type,
-								});
-							}
+					if (parent.type !== "function") {
+						return type;
+					}
+
+					for (const block of parent.getDescendants(false)) {
+						if (block.type !== "return") {
+							continue;
 						}
+
+						(block as CustomBlock.Infer<typeof ReturnBlock>).loadExtraState({
+							output: type,
+						});
 					}
 
 					return type;
-				}
+				},
 			),
-			"TYPE"
+			"TYPE",
 		);
 	},
 });

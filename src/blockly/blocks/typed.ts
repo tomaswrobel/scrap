@@ -18,11 +18,12 @@
  * and the immovability of the block help to blend it in with the
  * parent block.
  */
+import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {FieldIdentifier} from "../fields/FieldIdentifier.ts";
+import {FieldParam} from "../fields/FieldParam.ts";
 import * as Blockly from "blockly/core";
-import FieldParam from "../fields/field_param";
-import FieldIdentifier from "../fields/field_identifier";
-import {blockToCheck} from "../types";
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {assert} from "@scrap/utils/assert.ts";
 
 export default new CustomBlock({
 	init() {
@@ -78,13 +79,13 @@ export default new CustomBlock({
 				if (e instanceof Blockly.Events.BlockMove && e.blockId) {
 					if (e.newParentId === this.id) {
 						const type = this.getInput("TYPE")?.connection?.targetBlock();
-						const input = block.getInput("VALUE")!;
-						input.connection!.targetBlock()?.dispose(false);
+						const input = block.getInput("VALUE");
+						assert(input?.connection);
+						input.connection.targetBlock()?.dispose(false);
 						input.setCheck(blockToCheck(type));
 
 						if (type?.type === "type") {
-							const field = type.getField("TYPE")!;
-							field.markDirty();
+							type.getField("TYPE")?.markDirty();
 						}
 					}
 					if (e.oldParentId === this.id) {
@@ -92,13 +93,13 @@ export default new CustomBlock({
 							return;
 						}
 						const type = this.getInput("TYPE")?.connection?.targetBlock();
-						const input = block.getInput("VALUE")!;
-						input.connection!.targetBlock()?.dispose(false);
+						const input = block.getInput("VALUE");
+						assert(input?.connection);
+						input.connection.targetBlock()?.dispose(false);
 						input.setCheck(blockToCheck(type));
 						observed = e.blockId;
 						if (type?.type === "type") {
-							const field = type.getField("TYPE")!;
-							field.markDirty();
+							type.getField("TYPE")?.markDirty();
 						}
 					}
 				}

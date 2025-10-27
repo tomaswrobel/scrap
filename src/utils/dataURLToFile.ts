@@ -18,15 +18,14 @@
  */
 export function dataURLToFile(dataURL: string, filename: string) {
 	const parts = dataURL.split(";");
-	const mimeType = parts[0].split(":")[1];
-	const base64Data = parts[1].split(",")[1];
+	const [, type] = parts[0].split(":");
+	const [, base64Data] = parts[1].split(",");
 	const binaryString = window.atob(base64Data);
-	const len = binaryString.length;
-	const bytes = new Uint8Array(len);
+	const bytes = new Uint8Array(binaryString.length);
 
-	for (let i = 0; i < len; i++) {
+	for (let i = 0; i < bytes.length; i++) {
 		bytes[i] = binaryString.charCodeAt(i);
 	}
 
-	return new File([bytes], filename, {type: mimeType});
+	return new File([bytes], filename, {type});
 }

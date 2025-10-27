@@ -10,13 +10,14 @@
  * @copyright Microsoft Corporation 2025
  * @fileoverview Just remapped imports.
  */
-import {initialize} from "monaco-editor/esm/vs/editor/editor.worker";
-import {TypeScriptWorker, create} from "./tsWorker";
-import ts from "typescript";
+import type {worker} from "monaco-editor";
+import {initialize} from "@monaco-editor/worker";
+import {TypeScriptWorker} from "./TypeScriptWorker";
+
+export function create(ctx: worker.IWorkerContext, createData: TypeScriptWorker.CreateData) {
+	return new TypeScriptWorker(ctx, createData);
+}
 
 self.onmessage = () => {
-	// ignore the first message
 	initialize(create);
 };
-
-export {TypeScriptWorker, create, initialize, ts};

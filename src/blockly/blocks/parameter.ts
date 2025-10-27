@@ -15,10 +15,10 @@
  * - a variable getter
  * - a block created by FieldParam, see fields/field_param.ts
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
-import Dialog from "@scrap/utils/dialog";
+import {app} from "@scrap/types/App.svelte.ts";
+import type {Check} from "@scrap/types/Check.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import type {ContextMenuRegistry} from "blockly/core";
-
 
 export default new CustomBlock({
 	type_: "any" as Check | null,
@@ -55,57 +55,29 @@ export default new CustomBlock({
 
 	customContextMenu(options: ContextMenuRegistry.LegacyContextMenuOption[]) {
 		if (this.isInFlyout && this.isVariable_) {
-			options.push(
-				{
-					text: "Delete variable",
-					enabled: true,
-					callback: async () => {
-						if (
-							await Dialog.scrap.fire({
-								input: "none",
-								title: "Delete Variable",
-								body: "Are you sure you want to delete this variable?",
-								cancelButtonHTML: "No",
-								confirmButtonHTML: "Yes",
-							})
-						) {
-							app.current.variables = app.current.variables.filter(
-								([name]) => name !== this.getFieldValue("VAR")
-							);
+			options.push({
+				text: "Delete variable",
+				enabled: true,
+				callback: async () => {
+					if (
+						await app.dialog.fire({
+							title: "Delete Variable",
+							body: "Are you sure you want to delete this variable?",
+							cancelButton: "No",
+							confirmButton: "Yes",
+						})
+					) {
+						const index = app.current.variables.findIndex(
+							([name]) => name === this.getFieldValue("VAR"),
+						);
+
+						if (index !== -1) {
+							app.current.variables.splice(index, 1);
 							this.workspace.refreshToolboxSelection();
 						}
-					},
+					}
 				},
-				{
-					text: "Info",
-					enabled: true,
-					callback: () => {
-						const body = document.createElement("table");
-						const name = this.getFieldValue("VAR");
-
-						body.innerHTML = `
-							<tr>
-								<td style="text-align:left;">Name:</td>
-								<td>${name}</td>
-							</tr>
-							<tr>
-								<td style="text-align:left;">Type:</td>
-								<td>${([] as string[]).concat(this.type_ || "any").join(" or ")}</td>
-							</tr>
-							<tr>
-								<td style="text-align:left;">Constant:</td>
-								<td>${this.isConstant_ ? "Yes" : "No"}</td>
-							</tr>
-						`;
-
-						Dialog.scrap.fire({
-							input: "none",
-							title: "Variable Info",
-							body,
-						});
-					},
-				}
-			);
+			});
 		}
 	},
 });

@@ -1,18 +1,15 @@
-# Vite
-dist/
+# Node
+node_modules
 
-# Astro
+# Build
+dist
 .astro
-web/dist/
+.vercel
+src/compiler/target
+src/compiler/pkg
 
-# PNPM
-.pnpm/
-node_modules/
+# Ignored .env files
+*.local
 
-# Tauri
-src-tauri/target/
-src-tauri/icons/
-src-tauri/gen/
-
-# Log files
-*.log
+# Taskfile
+.task

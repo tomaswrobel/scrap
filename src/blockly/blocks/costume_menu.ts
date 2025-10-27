@@ -14,7 +14,8 @@
  * It should be always a shadow block, as it's used in the
  * switch-costume-to block.
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {app} from "@scrap/types/App.svelte.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
 import * as path from "path";
 
@@ -24,16 +25,16 @@ export default new CustomBlock({
 		this.setOutput(true, "string");
 
 		this.appendDummyInput().appendField<string>(
-			new Blockly.FieldDropdown(() =>
-				app.current.costumes.map<[string, string]>(e => {
+			new Blockly.FieldDropdown(() => {
+				return app.current.costumes.map<Blockly.MenuOption>(e => {
 					const {name} = path.parse(e.name);
 					if (name.length > 12) {
 						return [`${name.slice(0, 12)}...`, name];
 					}
 					return [name, name];
-				})
-			),
-			"NAME"
+				});
+			}),
+			"NAME",
 		);
-	}
+	},
 });

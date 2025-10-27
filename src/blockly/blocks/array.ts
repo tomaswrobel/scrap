@@ -16,9 +16,11 @@
  * are either strings or arrays - they are expanded
  * into multiple items (via JavaScript's spread operator).
  */
+import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap, blockToCheck} from "../types";
-import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
+import type {Check} from "@scrap/types/Check.ts";
 
 export default new CustomBlock(
 	{
@@ -87,20 +89,29 @@ export default new CustomBlock(
 		 */
 		updateShape(check: Check) {
 			// Remove inputs
-			for (let i = 0; this.removeInput(`ADD${i}`, true); i++);
+			for (let i = 0; this.removeInput(`ADD${i}`, true); i++) {
+				// Execution done by the condition
+			}
 
 			// Add new inputs.
 			for (let i = 0; i < this.items.length; i++) {
-				const input = this.appendValueInput(`ADD${i}`).setAlign(Blockly.inputs.Align.RIGHT);
+				const input = this.appendValueInput(`ADD${i}`).setAlign(
+					Blockly.inputs.Align.RIGHT,
+				);
 				if (this.items[i] === "iterable") {
 					input.setCheck("Iterable");
 					input.appendField("...");
 				} else {
 					input.setCheck(check);
-					const type = typeof check === "string" ? check : check.length === 1 ? check[0] : "any";
+					const type =
+						typeof check === "string"
+							? check
+							: check.length === 1
+								? check[0]
+								: "any";
 
 					if (type in TypeToShadowMap) {
-						input.connection!.setShadowState({
+						input.connection?.setShadowState({
 							type: TypeToShadowMap[type],
 						});
 					}
@@ -109,14 +120,18 @@ export default new CustomBlock(
 		},
 
 		onchange(e: Blockly.Events.Abstract) {
-			if (e instanceof Blockly.Events.BlockMove && e.blockId && e.newParentId === this.id) {
-				const block = this.workspace.getBlockById(e.blockId)!;
-				if (block.type === "type") {
+			if (
+				e instanceof Blockly.Events.BlockMove &&
+				e.blockId &&
+				e.newParentId === this.id
+			) {
+				const block = this.workspace.getBlockById(e.blockId);
+				if (block?.type === "type") {
 					block.setShadow(true);
 					this.updateShape(blockToCheck(block));
 				}
 			}
 		},
 	},
-	["array_item_single", "array_item_iterable"]
+	["array_item_single", "array_item_iterable"],
 );

@@ -10,147 +10,84 @@
  * @copyright Microsoft Corporation 2025
  * @fileoverview Just remapped imports.
  */
-import {WorkerManager} from "./workerManager";
-import type {TypeScriptWorker} from "./tsWorker";
-import type {LanguageServiceDefaults} from "./typescript";
-import * as languageFeatures from "./languageFeatures";
-import type {IDisposable, Uri} from "monaco-editor";
-import {languages} from "monaco-editor";
+import type {languages, Uri} from "monaco-editor";
+import {CodeActionAdaptor} from "./features/CodeActionAdapter.ts";
+import {DefinitionAdapter} from "./features/DefinitionAdapter.ts";
+import {DiagnosticsAdapter} from "./features/DiagnosticsAdapter.ts";
+import {DocumentHighlightAdapter} from "./features/DocumentHighlightAdapter.ts";
+import {FormatAdapter} from "./features/FormatAdapter.ts";
+import {FormatOnTypeAdapter} from "./features/FormatOnTypeAdapter.ts";
+import {InlayHintsAdapter} from "./features/InlayHintsAdapter.ts";
+import {LibFiles} from "./features/LibFiles.ts";
+import {OutlineAdapter} from "./features/OutlineAdapter.ts";
+import {QuickInfoAdapter} from "./features/QuickInfoAdapter.ts";
+import {ReferenceAdapter} from "./features/ReferenceAdapter.ts";
+import {RenameAdapter} from "./features/RenameAdapter.ts";
+import {SignatureHelpAdapter} from "./features/SignatureHelpAdapter.ts";
+import {SuggestAdapter} from "./features/SuggestAdapter.ts";
+import type {MonacoEditorLanguage} from "./MonacoEditorLanguage.ts";
+import type {TypeScriptWorker} from "./TypeScriptWorker.ts";
+import {WorkerManager} from "./WorkerManager.ts";
 
-let javaScriptWorker: (...uris: Uri[]) => Promise<TypeScriptWorker>;
-let typeScriptWorker: (...uris: Uri[]) => Promise<TypeScriptWorker>;
+export type TypeScriptMode = (...uris: Uri[]) => Promise<TypeScriptWorker>;
 
-export function setupTypeScript(defaults: LanguageServiceDefaults): void {
-	typeScriptWorker = setupMode(defaults, "typescript");
-}
+const workers: Partial<Record<MonacoEditorLanguage, TypeScriptMode>> = {};
 
-export function setupJavaScript(defaults: LanguageServiceDefaults): void {
-	javaScriptWorker = setupMode(defaults, "javascript");
-}
-
-export function getJavaScriptWorker(): Promise<(...uris: Uri[]) => Promise<TypeScriptWorker>> {
-	return new Promise((resolve, reject) => {
-		if (!javaScriptWorker) {
-			return reject("JavaScript not registered!");
+export function getWorker(language: MonacoEditorLanguage) {
+	return new Promise<TypeScriptMode>((resolve, reject) => {
+		if (workers[language]) {
+			resolve(workers[language]);
 		}
-
-		resolve(javaScriptWorker);
+		reject(new Error(`Worker for "${language}" not registered!`));
 	});
 }
 
-export function getTypeScriptWorker(): Promise<(...uris: Uri[]) => Promise<TypeScriptWorker>> {
-	return new Promise((resolve, reject) => {
-		if (!typeScriptWorker) {
-			return reject("TypeScript not registered!");
-		}
+export function setupLanguage(
+	language: MonacoEditorLanguage,
+	defaults: languages.typescript.LanguageServiceDefaults,
+) {
+	const client = new WorkerManager(language, defaults);
+	const libFiles = new LibFiles(client.worker);
 
-		resolve(typeScriptWorker);
-	});
-}
-
-function setupMode(defaults: LanguageServiceDefaults, modeId: string): (...uris: Uri[]) => Promise<TypeScriptWorker> {
-	const disposables: IDisposable[] = [];
-	const providers: IDisposable[] = [];
-
-	const client = new WorkerManager(modeId, defaults);
-	disposables.push(client);
-
-	const worker = (...uris: Uri[]): Promise<TypeScriptWorker> => {
-		return client.getLanguageServiceWorker(...uris);
-	};
-
-	const libFiles = new languageFeatures.LibFiles(worker);
-
-	function registerProviders(): void {
-		const {modeConfiguration} = defaults;
-
-		disposeAll(providers);
-
-		if (modeConfiguration.completionItems) {
-			providers.push(
-				languages.registerCompletionItemProvider(modeId, new languageFeatures.SuggestAdapter(worker))
-			);
-		}
-		if (modeConfiguration.signatureHelp) {
-			providers.push(
-				languages.registerSignatureHelpProvider(modeId, new languageFeatures.SignatureHelpAdapter(worker))
-			);
-		}
-		if (modeConfiguration.hovers) {
-			providers.push(languages.registerHoverProvider(modeId, new languageFeatures.QuickInfoAdapter(worker)));
-		}
-		if (modeConfiguration.documentHighlights) {
-			providers.push(
-				languages.registerDocumentHighlightProvider(
-					modeId,
-					new languageFeatures.DocumentHighlightAdapter(worker)
-				)
-			);
-		}
-		if (modeConfiguration.definitions) {
-			providers.push(
-				languages.registerDefinitionProvider(modeId, new languageFeatures.DefinitionAdapter(libFiles, worker))
-			);
-		}
-		if (modeConfiguration.references) {
-			providers.push(
-				languages.registerReferenceProvider(modeId, new languageFeatures.ReferenceAdapter(libFiles, worker))
-			);
-		}
-		if (modeConfiguration.documentSymbols) {
-			providers.push(
-				languages.registerDocumentSymbolProvider(modeId, new languageFeatures.OutlineAdapter(worker))
-			);
-		}
-		if (modeConfiguration.rename) {
-			providers.push(
-				languages.registerRenameProvider(modeId, new languageFeatures.RenameAdapter(libFiles, worker))
-			);
-		}
-		if (modeConfiguration.documentRangeFormattingEdits) {
-			providers.push(
-				languages.registerDocumentRangeFormattingEditProvider(
-					modeId,
-					new languageFeatures.FormatAdapter(worker)
-				)
-			);
-		}
-		if (modeConfiguration.onTypeFormattingEdits) {
-			providers.push(
-				languages.registerOnTypeFormattingEditProvider(modeId, new languageFeatures.FormatOnTypeAdapter(worker))
-			);
-		}
-		if (modeConfiguration.codeActions) {
-			providers.push(
-				languages.registerCodeActionProvider(modeId, new languageFeatures.CodeActionAdaptor(worker))
-			);
-		}
-		if (modeConfiguration.inlayHints) {
-			providers.push(
-				languages.registerInlayHintsProvider(modeId, new languageFeatures.InlayHintsAdapter(worker))
-			);
-		}
-		if (modeConfiguration.diagnostics) {
-			providers.push(new languageFeatures.DiagnosticsAdapter(libFiles, defaults, modeId, worker));
-		}
+	if (defaults.modeConfiguration.completionItems) {
+		client.addAdapter(SuggestAdapter);
+	}
+	if (defaults.modeConfiguration.signatureHelp) {
+		client.addAdapter(SignatureHelpAdapter);
+	}
+	if (defaults.modeConfiguration.hovers) {
+		client.addAdapter(QuickInfoAdapter);
+	}
+	if (defaults.modeConfiguration.documentHighlights) {
+		client.addAdapter(DocumentHighlightAdapter);
+	}
+	if (defaults.modeConfiguration.definitions) {
+		client.addAdapter(DefinitionAdapter, libFiles);
+	}
+	if (defaults.modeConfiguration.references) {
+		client.addAdapter(ReferenceAdapter, libFiles);
+	}
+	if (defaults.modeConfiguration.documentSymbols) {
+		client.addAdapter(OutlineAdapter);
+	}
+	if (defaults.modeConfiguration.rename) {
+		client.addAdapter(RenameAdapter, libFiles);
+	}
+	if (defaults.modeConfiguration.documentRangeFormattingEdits) {
+		client.addAdapter(FormatAdapter);
+	}
+	if (defaults.modeConfiguration.onTypeFormattingEdits) {
+		client.addAdapter(FormatOnTypeAdapter);
+	}
+	if (defaults.modeConfiguration.codeActions) {
+		client.addAdapter(CodeActionAdaptor);
+	}
+	if (defaults.modeConfiguration.inlayHints) {
+		client.addAdapter(InlayHintsAdapter);
+	}
+	if (defaults.modeConfiguration.diagnostics) {
+		client.addAdapter(DiagnosticsAdapter, libFiles, defaults);
 	}
 
-	registerProviders();
-
-	disposables.push(asDisposable(providers));
-
-	return worker;
+	workers[language] = client.worker;
 }
-
-function asDisposable(disposables: IDisposable[]): IDisposable {
-	return {dispose: () => disposeAll(disposables)};
-}
-
-function disposeAll(disposables: IDisposable[]) {
-	while (disposables.length) {
-		disposables.pop()!.dispose();
-	}
-}
-
-export {WorkerManager} from "./workerManager";
-export * from "./languageFeatures";

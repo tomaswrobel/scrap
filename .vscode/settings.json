@@ -1,72 +1,21 @@
-/**
- * This file is a part of Scrap, an app for helping to migrate
- * from block-based programming into text-based programming languages.
- *
- * You should have received a copy of the MIT License, if not, please
- * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomaswrobel/scrap.
- *
- * @license MIT
- * @copyright Tomáš Wróbel 2025
- * @fileoverview Visual Studio Code settings for Scrap.
- */
 {
-	// Set TypeScript SDK to the one in node_modules
+	"tailwindCSS.classAttributes": ["class", "class:list"],
+	"tailwindCSS.classFunctions": ["tw", "tw.map"],
 	"typescript.tsdk": "node_modules/typescript/lib",
-	"typescript.enablePromptUseWorkspaceTsdk": true,
-	// ESLint settings
-	"eslint.enable": true,
-	"eslint.format.enable": false,
-	"eslint.onIgnoredFiles": "off",
-	"eslint.runtime": "node",
-	"eslint.useFlatConfig": true,
-	// Set Prettier settings to match Scrap's style
-	"prettier.arrowParens": "avoid",
-	"prettier.bracketSpacing": false,
-	"prettier.quoteProps": "consistent",
-	// Tab configuration
-	"editor.detectIndentation": false,
-	"editor.insertSpaces": false,
-	"editor.tabSize": 4,
-	"prettier.useTabs": true,
-	"prettier.tabWidth": 4,
-	"prettier.printWidth": 120,
-	// YAML needs to be 2 spaces
-	"[yaml][github-actions-workflow]": {
-		"editor.insertSpaces": true,
-		"prettier.tabWidth": 2,
-		"editor.tabSize": 2,
-		"prettier.useTabs": false,
-		"editor.autoIndent": "advanced",
-		"editor.detectIndentation": false
+	"yaml.schemas": {
+		"https://taskfile.dev/schema.json": [
+			"Taskfile.{yml,yaml}",
+			"taskfile.{yml,yaml}",
+			"Taskfile.dist.{yml,yaml}",
+			"taskfile.dist.{yml,yaml}"
+		]
 	},
-	// Set the default formatters
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"[rust]": {
-		"editor.defaultFormatter": "rust-lang.rust-analyzer"
-	},
-	"[toml]": {
-		"editor.defaultFormatter": "tamasfe.even-better-toml"
-	},
-	// JSON files association
 	"files.associations": {
-		"*.json": "jsonc",
-		".*rc": "jsonc",
-		"*.svg": "html",
-		"package.json": "json"
+		"*.css": "tailwindcss"
 	},
-	// JSON Schemas for LiTScript
-	"json.schemas": [
-		{
-			"fileMatch": ["/litconfig.json"],
-			"url": "../node_modules/litscript/schemas/litsconfig-schema.json"
-		},
-		{
-			"fileMatch": ["/src-trauri/capabilities/*.json"],
-			"url": "../src-trauri/gen/schemas/desktop-schema.json"
-		}
-	],
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+	"svelte.plugin.typescript.enable": true,
+	"svelte.enable-ts-plugin": true,
+	"oxc.typeAware": true,
+	"rust-analyzer.linkedProjects": ["./src/compiler/Cargo.toml"]
 }

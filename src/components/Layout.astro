@@ -1,0 +1,29 @@
+---
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview Layout component.
+ * @copyright Tomáš Wróbel 2025
+ */
+import "@scrap/css/app.css";
+import Favicon from "@scrap/assets/svgs/icon.svg?url";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href={Favicon} />
+		<title>Scrap</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

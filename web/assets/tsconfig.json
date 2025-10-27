@@ -1,7 +1,0 @@
-{
-	"compilerOptions": {
-		"noLib": true,
-		"types": ["../../src/typings/static/index.d.ts"]
-	},
-	"files": ["code.ts", "scrap.d.ts"]
-}

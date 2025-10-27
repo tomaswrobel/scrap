@@ -12,20 +12,23 @@
  *
  * This extension adds a dropdown with all the variables to the block.
  */
+import {app} from "@scrap/types/App.svelte.ts";
+import {assert} from "@scrap/utils/assert.ts";
 import * as Blockly from "blockly/core";
 
 export default function (this: Blockly.Block) {
-	const input = this.getInput("DUMMY")!;
+	const input = this.getInput("DUMMY");
+	assert(input);
 
 	const menu = new Blockly.FieldDropdown(() => {
-		const variables: [string, string][] = [];
+		const variables: Blockly.MenuOption[] = [];
 
 		for (const [name] of app.current.variables) {
 			variables.push([name, name]);
 		}
 
 		if (app.current.name !== "Stage") {
-			for (const [name] of app.entities[0].variables) {
+			for (const [name] of app.stage.variables) {
 				variables.push([name, name]);
 			}
 		}

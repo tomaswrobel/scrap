@@ -1,0 +1,127 @@
+# https://taskfile.dev
+
+version: "3"
+
+dotenv:
+  - .env
+  - .env.local
+
+tasks:
+  compiler:build:
+    desc: Builds the compiler
+    dir: src/compiler
+    env:
+      RUSTFLAGS: --cfg getrandom_backend="wasm_js"
+    cmds:
+      - wasm-pack build --out-name index
+    sources:
+      - src/compiler/src/*
+      - src/compiler/Cargo.*
+    generates:
+      - src/compiler/pkg
+
+  app:build:
+    desc: Builds the app
+    cmds:
+      - yarn astro build
+    sources:
+      - public/**/*
+      - src/**/*
+      - yarn-lock.yaml
+      - config/**/*
+    generates:
+      - dist/
+
+  app:dev:
+    desc: Serves the app
+    cmds:
+      - yarn astro dev
+    sources:
+      - public/**/*
+      - src/**/*
+      - web/**/*
+      - yarn-lock.yaml
+      - config/**/*
+    generates:
+      - dist/
+
+  blockly:media-copy:
+    requires:
+      vars:
+        - PUBLIC_BLOCKLY_MEDIA_PATH
+    desc: Copies the Blockly Media into /public
+    cmds:
+      - rm -rf public/$PUBLIC_BLOCKLY_MEDIA_PATH
+      - cp -r node_modules/blockly/media public/$PUBLIC_BLOCKLY_MEDIA_PATH
+      - echo "*" > public/$PUBLIC_BLOCKLY_MEDIA_PATH/.gitignore
+    sources:
+      - node_modules/blockly/media/*
+    generates:
+      - public/{{.PUBLIC_BLOCKLY_MEDIA_PATH}}/*
+
+  intro:
+    vars:
+      APP_VERSION:
+        sh: >
+          node -e '
+            const package = require("./package.json");
+            console.log(package.version);
+          '
+      APP_NAME:
+        sh: >
+          node -e '
+            const package = require("./package.json");
+            console.log(package.displayName || package.name);
+          '
+    cmds:
+      - echo "{{.APP_NAME}} v{{.APP_VERSION}} starting..."
+    silent: true
+
+  engine:build:
+    desc: Builds the Scrap Engine
+    cmds:
+      - rm -rf public/engine
+      - yarn vite build --config=src/engine/vite.config.js
+      - echo "*" > public/engine/.gitignore
+    sources:
+      - src/engine/*.{css,ts,js}
+    generates:
+      - public/engine/*
+
+  build:
+    desc: Builds the app to the production
+    cmds:
+      - task: intro
+      - task: compiler:build
+      - task: engine:build
+      - task: blockly:media-copy
+      - task: app:build
+
+  dev:
+    desc: Runs the app
+    cmds:
+      - task: intro
+      - task: compiler:build
+      - task: engine:build
+      - task: blockly:media-copy
+      - task: app:dev
+
+  check:
+    desc: Checks the code
+    cmds:
+      - yarn oxlint --type-aware
+      - yarn astro check
+      - yarn prettier . --check
+      - yarn svelte-check --tsconfig ./tsconfig.app.json
+      - yarn svelte-check --tsconfig ./tsconfig.node.json
+
+  fix:
+    desc: Tries to fix as much code as possible
+    cmds:
+      - yarn oxlint --fix
+      - yarn prettier . --write
+
+  test:
+    desc: Runs tests
+    cmds:
+      - yarn tsx --test ./**/*.test.ts

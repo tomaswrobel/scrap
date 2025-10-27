@@ -1,0 +1,47 @@
+---
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview Feature component.
+ * @copyright Tomáš Wróbel 2025
+ */
+import type {HTMLAttributes} from "astro/types";
+
+export interface Props extends HTMLAttributes<"li"> {
+	title: string;
+	note: string;
+}
+
+const {
+	"class:list": customClasses,
+	"class": customClass,
+	title,
+	note,
+	...props
+}: Props = Astro.props;
+---
+
+<li {...props} class:list={[customClasses, customClass, "list-row"]}>
+	<div>
+		<div class="size-10 rounded-box bg-primary flex items-center justify-center">
+			<slot name="icon" />
+		</div>
+	</div>
+	<div class="sm:contents flex flex-col gap-4">
+		<div>
+			<h3>{title}</h3>
+			<div class="text-xs uppercase font-semibold opacity-60">
+				{note}
+			</div>
+		</div>
+		<div class="sm:max-w-xs">
+			<slot name="description" />
+		</div>
+	</div>
+</li>

@@ -1,0 +1,42 @@
+name: Vercel Production Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  push:
+    branches:
+      - trunk
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Task
+        uses: go-task/setup-task@v1
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          target: wasm32-unknown-unknown
+      - name: Install Node
+        uses: actions/setup-node@v6
+        with:
+          cache: "yarn"
+          node-version-file: ".nvmrc"
+      - name: Install front-end dependencies
+        run: yarn install --frozen-lockfile
+      - name: Checking the code
+        run: task check
+      - name: Install Wasm dependencies
+        env:
+          RUSTFLAGS: '--cfg getrandom_backend="wasm_js"'
+        run: cargo install wasm-pack wasm-bindgen-cli
+      - name: Build
+        env:
+          RUSTFLAGS: '--cfg getrandom_backend="wasm_js"'
+        run: task build
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

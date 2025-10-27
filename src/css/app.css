@@ -1,0 +1,71 @@
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview App's styles
+ * @copyright Tomáš Wróbel 2025
+ */
+@import "tailwindcss";
+@import "@fontsource/geist/400";
+@import "@fontsource/geist/600";
+
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+	name: "scrap";
+	default: true;
+	prefersdark: true;
+	color-scheme: "dark";
+	--color-base-100: oklch(14.076% 0.004 285.822);
+	--color-base-200: oklch(20.219% 0.004 308.229);
+	--color-base-300: oklch(23.219% 0.004 308.229);
+	--color-base-content: oklch(87% 0.006 286.286);
+	--color-primary: oklch(100% 0 0);
+	--color-primary-content: oklch(20% 0 0);
+	--color-secondary: oklch(27.581% 0.064 261.069);
+	--color-secondary-content: oklch(85.516% 0.012 261.069);
+	--color-accent: oklch(36.674% 0.051 338.825);
+	--color-accent-content: oklch(87.334% 0.01 338.825);
+	--color-neutral: oklch(24.27% 0.057 59.825);
+	--color-neutral-content: oklch(93.203% 0.089 90.861);
+	--color-info: oklch(79.061% 0.121 237.133);
+	--color-info-content: oklch(15.812% 0.024 237.133);
+	--color-success: oklch(78.119% 0.192 132.154);
+	--color-success-content: oklch(15.623% 0.038 132.154);
+	--color-warning: oklch(86.127% 0.136 102.891);
+	--color-warning-content: oklch(17.225% 0.027 102.891);
+	--color-error: oklch(71.753% 0.176 22.568);
+	--color-error-content: oklch(14.35% 0.035 22.568);
+	--radius-selector: 1rem;
+	--radius-field: 0;
+	--radius-box: 1rem;
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+	--border: 1px;
+	--depth: 0;
+	--noise: 0;
+}
+
+.tabs {
+	--radius-field: 1rem;
+}
+
+:root {
+	color-scheme: dark;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+svg[display="none"] {
+	display: none;
+}
+
+@utility inline-code {
+	@apply text-sm font-mono border border-current bg-base-100 py-0.5 px-1 rounded;
+}

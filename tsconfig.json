@@ -1,44 +1,9 @@
-/**
- * This file is a part of Scrap, an app for helping to migrate
- * from block-based programming into text-based programming languages.
- *
- * You should have received a copy of the MIT License, if not, please
- * visit https://opensource.org/licenses/MIT. To verify the code, visit
- * the official repository at https://github.com/tomaswrobel/scrap.
- *
- * @license MIT
- * @copyright Tomáš Wróbel 2025
- * @fileoverview TypeScript configuration file.
- */
 {
-	"compilerOptions": {
-		"target": "ES2017",
-		"lib": ["ES2017", "DOM", "DOM.Iterable"],
-		"experimentalDecorators": true,
-		"useDefineForClassFields": true,
-		"types": ["astro/client"],
-		"skipLibCheck": true,
-
-		// Bundler mode
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true,
-		"esModuleInterop": false,
-		"module": "Preserve",
-		"allowJs": true,
-		"checkJs": true,
-		"noEmit": true,
-
-		// Linting
-		"strict": true,
-		"noImplicitOverride": true,
-		"verbatimModuleSyntax": true,
-
-		"paths": {
-			"@scrap/*": ["./src/*"]
-		}
-	},
-	"include": ["src", "*.config.js", "web"],
-	"exclude": ["src/typings", "**/assets/**"],
-	"references": [{"path": "./src/typings/static/tsconfig.json"}, {"path": "./src/typings/runtime/tsconfig.json"}]
+	"files": [],
+	"references": [
+		{"path": "./tsconfig.app.json"},
+		{"path": "./tsconfig.node.json"},
+		{"path": "./src/typings/runtime/tsconfig.json"},
+		{"path": "./src/typings/static/tsconfig.json"}
+	]
 }

@@ -14,7 +14,8 @@
  * should be always a shadow block, as it's used in
  * the play-sound block.
  */
-import { CustomBlock } from "@scrap/utils/CustomBlock";
+import {app} from "@scrap/types/App.svelte.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
 import * as Blockly from "blockly/core";
 import * as path from "path";
 
@@ -36,7 +37,7 @@ export default new CustomBlock({
 					return [name, name];
 				});
 			}),
-			"NAME"
+			"NAME",
 		);
 	},
 });
