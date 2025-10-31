@@ -29,6 +29,8 @@ jobs:
       - name: Install Wasm dependencies
         run: npm install -g wasm-pack && cargo install -f wasm-bindgen-cli
       - name: Build
+        env:
+          RUSTFLAGS: '--cfg getrandom_backend="wasm_js"'
         run: task build
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
