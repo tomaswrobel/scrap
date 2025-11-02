@@ -53,7 +53,7 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 	private getClient() {
 		return (this.client ??= (async () => {
 			this.webWorker = editor.createWebWorker<TypeScriptWorker>({
-				moduleId: new URL("./tsWorker.ts", import.meta.url).href,
+				moduleId: new URL("./TypeScriptWorker.ts", import.meta.url).href,
 				label: this.modeId,
 
 				keepIdleModels: true,

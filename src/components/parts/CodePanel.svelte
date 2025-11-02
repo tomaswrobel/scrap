@@ -45,11 +45,11 @@
 		}
 	}
 
-	async function switchToCodeTab() {
+	function switchToCodeTab() {
 		if (app.current.mode === "code") {
 			return;
 		}
-		app.current.typescript = await app.current.generatePreviewCode(true);
+		app.current.typescript = app.current.generatePreviewCode(true);
 		app.current.mode = "code";
 	}
 </script>

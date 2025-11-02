@@ -14,7 +14,7 @@
 	import type {Entity} from "@scrap/types/Enity.svelte.ts";
 	import {Blockly, spriteToolbox, stageToolbox, theme} from "@scrap/blockly";
 	import type {HTMLAttributes} from "svelte/elements";
-	import {createVariableCategory} from "@scrap/blockly/utils/createVariableCategory";
+	import {createVariableCategory} from "@scrap/blockly/utils/createVariableCategory.ts";
 	import {app} from "@scrap/types/App.svelte.ts";
 
 	export interface Props extends HTMLAttributes<HTMLDivElement> {
