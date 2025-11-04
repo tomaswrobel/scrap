@@ -391,8 +391,9 @@ class CodeToBlocks {
 
 					const elseIfStatements: SWC.IfStatement[] = [];
 
-					while (node.alternate && node.alternate.type === "IfStatement") {
+					while (node.alternate?.type === "IfStatement") {
 						elseIfStatements.push(node.alternate);
+						node = node.alternate;
 					}
 
 					const hasElse = node.alternate?.type === "BlockStatement";
