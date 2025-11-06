@@ -21,25 +21,16 @@ import PaletteIcon from "@material-symbols/svg-400/rounded/palette.svg";
 import HTMLIcon from "@material-symbols/svg-400/rounded/html.svg";
 import GlobeIcon from "@material-symbols/svg-400/rounded/globe.svg";
 import Demo from "@scrap/components/parts/CodePanel.svelte";
-import Button from "@scrap/components/controls/Button.svelte";
 import ScrapLogo from "@scrap/assets/svgs/scrap.svg";
 import Feature from "../components/Feature.astro";
+import Navbar from "@scrap/components/Navbar.astro";
 ---
 
 <Layout
 	title="Scrap – Visual Programming Editor for All Creators"
 	description="Scrap is a revolutionary visual programming editor that combines intuitive block-based coding with the full power of TypeScript. Perfect for creators of all levels."
 >
-	<nav class="fixed top-0 navbar bg-base-100 z-120">
-		<div class="navbar-start">
-			<Button variant="ghost" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-				<ScrapLogo aria-label="Scrap" class="h-8" />
-			</Button>
-		</div>
-		<div class="navbar-end pr-2">
-			<a href="/app" class="btn btn-primary">Run</a>
-		</div>
-	</nav>
+    <Navbar />
 	<header class="hero bg-base-200 min-h-screen">
 		<div class="hero-content text-center">
 			<div class="max-w-lg">

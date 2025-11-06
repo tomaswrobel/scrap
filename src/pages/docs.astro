@@ -1,0 +1,28 @@
+---
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview /app route
+ * @copyright SeirCheese 2025
+ */
+import Layout from "@scrap/components/Layout.astro";
+
+import MoveCodeExample from "@scrap/assets/web/docs/move/move.ts?shiki";
+import MoveBlockSvgImage from "@scrap/assets/web/docs/move/move.svg";
+import Navbar from "@scrap/components/Navbar.astro";
+---
+<Layout>
+    <Navbar />
+    <section>
+        <h2>Motion</h2>
+        <h3>Move</h3>
+        <MoveBlockSvgImage />
+        <MoveCodeExample client:visible />
+    </section>
+</Layout>

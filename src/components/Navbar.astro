@@ -1,0 +1,16 @@
+---
+import ScrapLogo from "@scrap/assets/svgs/scrap.svg";
+import Button from "@scrap/components/controls/Button.svelte";
+---
+
+<nav class="fixed top-0 navbar bg-base-100 z-120">
+	<div class="navbar-start">
+		<Button variant="ghost" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+			<ScrapLogo aria-label="Scrap" class="h-8" />
+		</Button>
+		<a class="btn btn-ghost" href="/docs">Docs</a>
+	</div>
+	<div class="navbar-end pr-2">
+		<a href="/app" class="btn btn-primary">Run</a>
+	</div>
+</nav>
