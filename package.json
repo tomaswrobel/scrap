@@ -31,6 +31,7 @@
 		"oxlint": "^1.24.0",
 		"oxlint-tsgolint": "^0.3.0",
 		"prettier": "^3.6.2",
+		"prettier-plugin-astro": "^0.14.1",
 		"prettier-plugin-svelte": "^3.4.0",
 		"rollup": "^4.52.5",
 		"shiki": "^3.13.0",
@@ -41,29 +42,6 @@
 		"typescript": "^5.9.3",
 		"vite": "^7.1.12",
 		"vite-plugin-wasm": "^3.5.0"
-	},
-	"prettier": {
-		"arrowParens": "avoid",
-		"useTabs": true,
-		"bracketSpacing": false,
-		"tabWidth": 4,
-		"printWidth": 96,
-		"quoteProps": "consistent",
-		"plugins": [
-			"prettier-plugin-svelte"
-		],
-		"overrides": [
-			{
-				"files": [
-					"*.yml",
-					"*.yaml"
-				],
-				"options": {
-					"useTabs": false,
-					"tabWidth": 2
-				}
-			}
-		]
 	},
 	"dependencies": {
 		"@blockly/field-angle": "^6.0.3",
@@ -84,5 +62,45 @@
 		"semver-parser": "^4.1.8",
 		"wavesurfer.js": "^7.11.0"
 	},
-	"packageManager": "yarn@1.22.0"
+	"packageManager": "yarn@1.22.0",
+	"prettier": {
+		"arrowParens": "avoid",
+		"useTabs": true,
+		"bracketSpacing": false,
+		"tabWidth": 4,
+		"printWidth": 96,
+		"quoteProps": "consistent",
+		"plugins": [
+			"prettier-plugin-svelte",
+			"prettier-plugin-astro"
+		],
+		"overrides": [
+			{
+				"files": [
+					"*.yml",
+					"*.yaml"
+				],
+				"options": {
+					"useTabs": false,
+					"tabWidth": 2
+				}
+			},
+			{
+				"files": [
+					"*.astro"
+				],
+				"options": {
+					"parser": "astro"
+				}
+			},
+			{
+				"files": [
+					".svelte"
+				],
+				"options": {
+					"parser": "svelte"
+				}
+			}
+		]
+	}
 }

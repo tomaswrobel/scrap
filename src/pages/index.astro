@@ -14,7 +14,7 @@
 import Layout from "@scrap/components/Layout.astro";
 import TypeScript from "@scrap/assets/web/typescript.ts?shiki";
 import Blocks from "@scrap/assets/web/blocks.svg";
-import {author, repository} from "../../package.json";
+import {repository} from "../../package.json";
 import BoltIcon from "@material-symbols/svg-400/rounded/bolt-fill.svg";
 import SyncAltIcon from "@material-symbols/svg-400/rounded/sync_alt.svg";
 import PaletteIcon from "@material-symbols/svg-400/rounded/palette.svg";
@@ -24,13 +24,14 @@ import Demo from "@scrap/components/parts/CodePanel.svelte";
 import ScrapLogo from "@scrap/assets/svgs/scrap.svg";
 import Feature from "../components/Feature.astro";
 import Navbar from "@scrap/components/Navbar.astro";
+import Footer from "@scrap/components/Footer.astro";
 ---
 
 <Layout
 	title="Scrap – Visual Programming Editor for All Creators"
 	description="Scrap is a revolutionary visual programming editor that combines intuitive block-based coding with the full power of TypeScript. Perfect for creators of all levels."
 >
-    <Navbar />
+	<Navbar />
 	<header class="hero bg-base-200 min-h-screen">
 		<div class="hero-content text-center">
 			<div class="max-w-lg">
@@ -173,22 +174,5 @@ import Navbar from "@scrap/components/Navbar.astro";
 			</p>
 		</div>
 	</section>
-	<footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
-		<div>
-			<p>
-				&copy; {new Date().getFullYear()}
-				<a class="link" href={author.url} target="_blank" rel="noopener"
-					>{author.name}</a
-				>. Under the
-				<a
-					class="link"
-					href="https://opensource.org/license/mit"
-					target="_blank"
-					rel="noopener"
-				>
-					MIT License
-				</a>.
-			</p>
-		</div>
-	</footer>
+	<Footer />
 </Layout>

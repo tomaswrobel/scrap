@@ -12,17 +12,58 @@
  * @copyright SeirCheese 2025
  */
 import Layout from "@scrap/components/Layout.astro";
-
-import MoveCodeExample from "@scrap/assets/web/docs/move/move.ts?shiki";
-import MoveBlockSvgImage from "@scrap/assets/web/docs/move/move.svg";
+import ScrapLogo from "@scrap/assets/svgs/scrap.svg";
 import Navbar from "@scrap/components/Navbar.astro";
+import type {SvgComponent} from "astro/types";
+import Footer from "@scrap/components/Footer.astro";
+
+type CodeComponent = (props: astroHTML.JSX.HTMLAttributes) => astroHTML.JSX.Element;
+
+const images = import.meta.glob<SvgComponent>("../assets/web/docs/**/*.svg", {
+	eager: true,
+	import: "default",
+});
+
+const examples = import.meta.glob<CodeComponent>("../assets/web/docs/**/*.ts", {
+	eager: true,
+	import: "default",
+	query: "?shiki",
+});
+
+const categories: Record<string, [string, SvgComponent, CodeComponent?][] | undefined> = {};
+
+for (const [key, value] of Object.entries(images)) {
+	const [category, name] = key.slice("../assets/web/docs/".length).split("/");
+	(categories[category] ??= []).push([name, value]);
+}
+
+for (const [key, value] of Object.entries(examples)) {
+	const [category, name] = key.slice("../assets/web/docs/".length).split("/");
+	const data = categories[category]?.find(([n]) => n === name);
+	if (data?.length === 2) {
+		data.push(value);
+	}
+}
 ---
+
 <Layout>
-    <Navbar />
-    <section>
-        <h2>Motion</h2>
-        <h3>Move</h3>
-        <MoveBlockSvgImage />
-        <MoveCodeExample client:visible />
-    </section>
+	<Navbar />
+	<div class="navbar"></div>
+	<section class="flex flex-col gap-4 p-4 bg-base-200">
+		{
+			Object.entries(categories).map(([category, items]) => (
+				<div class="flex flex-col gap-4">
+					<h2 class="capitalize text-3xl font-bold mb-8">{category}</h2>
+					{items?.map(([name, BlockImage, CodeExample]) => (
+						<section class="flex flex-col gap-4 mb-8">
+							<h3 class="text-2xl mb-2">{name}</h3>
+							{CodeExample && <CodeExample />}
+							<BlockImage style="zoom: 0.5" />
+						</section>
+					))}
+				</div>
+			))
+		}
+	</section>
+	<Footer />
 </Layout>
