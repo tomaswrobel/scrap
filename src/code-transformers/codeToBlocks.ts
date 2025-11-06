@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @copyright Tomáš Wróbel 2025
- * @fileoverview Typescript → Blocks
+ * @fileoverview Typescript → Blockszt
  *
  * This file is responsible for transforming TypeScript code into Blockly
  * blocks. It uses SWC to parse the code and Blockly to generate the
@@ -390,17 +390,16 @@ class CodeToBlocks {
 					this.parse(node.consequent);
 
 					const elseIfStatements: SWC.IfStatement[] = [];
+					let {alternate} = node;
 
-					while (node.alternate?.type === "IfStatement") {
-						elseIfStatements.push(node.alternate);
-						node = node.alternate;
+					while (alternate?.type === "IfStatement") {
+						elseIfStatements.push(alternate);
+						({alternate} = alternate);
 					}
-
-					const hasElse = node.alternate?.type === "BlockStatement";
 
 					block.loadExtraState({
 						elseIfCount: elseIfStatements.length,
-						hasElse,
+						hasElse: !!alternate,
 					});
 
 					for (let i = 0; i < elseIfStatements.length; i++) {
@@ -411,9 +410,9 @@ class CodeToBlocks {
 						this.parse(elseIfStatements[i].consequent);
 					}
 
-					if (hasElse) {
+					if (alternate) {
 						this.connection = block.getInput("ELSE")?.connection;
-						this.parse(node.alternate);
+						this.parse(alternate);
 					}
 
 					this.connection = block.nextConnection;
