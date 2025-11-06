@@ -15,10 +15,11 @@ tasks:
     cmds:
       - wasm-pack build --out-name index
     sources:
-      - src/compiler/src/*
-      - src/compiler/Cargo.*
+      - ./src/*
+      - ./Cargo.toml
+      - ./Cargo.lock
     generates:
-      - src/compiler/pkg
+      - ./pkg/*
 
   app:build:
     desc: Builds the app

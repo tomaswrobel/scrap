@@ -15,6 +15,7 @@
 	import CodePanel from "@scrap/components/parts/CodePanel.svelte";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";
 	import Home from "@material-symbols/svg-400/rounded/home.svg?icon";
+	import DeveloperGuide from "@material-symbols/svg-400/rounded/developer_guide.svg?icon";
 	import ScrapLogo from "@scrap/assets/svgs/scrap.svg?icon";
 	import Commit from "@material-symbols/svg-400/rounded/commit.svg?icon";
 	import Button from "@scrap/components/controls/Button.svelte";
@@ -196,7 +197,7 @@
 {/snippet}
 
 <main class="h-screen overflow-hidden bg-base-200 text-base-content flex flex-col">
-	<nav class="navbar bg-base-100" style:zoom="80%">
+	<nav class="navbar bg-base-100">
 		<div class="navbar-start">
 			<Dropdown>
 				{#snippet button()}
@@ -206,13 +207,19 @@
 				{/snippet}
 				{#snippet content()}
 					<li>
-						<a href="/">
+						<a href="/" class="leading-5">
 							<Home class="size-5 fill-current" />
 							Homepage
 						</a>
 					</li>
 					<li>
-						<a href={packageJSON.repository.url}>
+						<a href="/docs" class="leading-5">
+							<DeveloperGuide class="size-5 fill-current" />
+							Docs
+						</a>
+					</li>
+					<li>
+						<a href={packageJSON.repository.url} class="leading-5">
 							<Commit class="size-5 fill-current" />
 							Repository
 						</a>
@@ -221,7 +228,7 @@
 			</Dropdown>
 			<Dropdown>
 				{#snippet button()}
-					<Button variant="ghost" class="text-lg">File</Button>
+					<Button variant="ghost">File</Button>
 				{/snippet}
 				{#snippet content()}
 					<li>

@@ -1,0 +1,25 @@
+---
+import ScrapLogo from "@scrap/assets/svgs/scrap.svg";
+
+const scrollToTopOptions: ScrollToOptions = {
+	top: 0,
+	behavior: "smooth",
+};
+
+const homepageHref =
+	Astro.url.pathname !== "/"
+		? "/"
+		: `javascript:this.scrollTo(${JSON.stringify(scrollToTopOptions)})`;
+---
+
+<nav class="fixed top-0 navbar bg-base-100 z-120">
+	<div class="navbar-start">
+		<a href={homepageHref} class="btn btn-ghost">
+			<ScrapLogo aria-label="Scrap" class="h-8" />
+		</a>
+		<a class="btn btn-ghost" href="/docs">Docs</a>
+	</div>
+	<div class="navbar-end pr-2">
+		<a href="/app" class="btn btn-primary">Run</a>
+	</div>
+</nav>

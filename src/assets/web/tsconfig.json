@@ -3,5 +3,5 @@
 		"noLib": true,
 		"types": ["../../typings/static/index.d.ts"]
 	},
-	"files": ["typescript.ts", "scrap.d.ts"]
+	"include": ["typescript.ts", "scrap.d.ts", "docs/**/*.ts"]
 }
