@@ -14,8 +14,8 @@
 	import type {Snippet} from "svelte";
 	import type {HTMLAttributes} from "svelte/elements";
 	import Close from "@material-symbols/svg-400/rounded/close.svg?icon";
-	import Button from "./controls/Button.svelte";
 	import {app} from "@scrap/types/App.svelte.ts";
+	import Button from "@juvofy/lib/components/actions/Button";
 
 	export interface NamableItem {
 		name: string;

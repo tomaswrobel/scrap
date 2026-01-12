@@ -11,7 +11,7 @@
 	 * @fileoverview Output panel component.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import Button from "@scrap/components/controls/Button.svelte";
+	import Button from "@juvofy/lib/components/actions/Button";
 	import {documentToString} from "@scrap/utils/documentToString.ts";
 	import {app} from "@scrap/types/App.svelte.ts";
 	import MediaList from "@scrap/components/MediaList.svelte";
@@ -119,16 +119,14 @@
 >
 	<div class="h-10 gap-2 flex items-center cursor-auto">
 		<Button
-			class="btn-square btn-sm cursor-pointer"
-			variant="ghost"
+			class="btn-square btn-sm cursor-pointer btn-ghost"
 			onclick={() =>
 				iframe && (iframe.srcdoc = getHTML(STATIC_ENGINE_JS, STATIC_ENGINE_CSS))}
 		>
 			<PlayIcon class="size-4 fill-current" />
 		</Button>
 		<Button
-			class="btn-square btn-sm cursor-pointer"
-			variant="ghost"
+			class="btn-square btn-sm cursor-pointer btn-ghost"
 			onclick={() => iframe?.contentWindow?.postMessage("STOP", "*")}
 		>
 			<Stop class="size-4 fill-current" />

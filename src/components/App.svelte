@@ -18,7 +18,7 @@
 	import DeveloperGuide from "@material-symbols/svg-400/rounded/developer_guide.svg?icon";
 	import ScrapLogo from "@scrap/assets/svgs/scrap.svg?icon";
 	import Commit from "@material-symbols/svg-400/rounded/commit.svg?icon";
-	import Button from "@scrap/components/controls/Button.svelte";
+	import Button from "@juvofy/lib/components/actions/Button";
 	import SoundTab from "@scrap/components/parts/SoundTab.svelte";
 	import CostumeTab from "@scrap/components/parts/CostumeTab.svelte";
 	import OutputPanel, {saveIntoZip} from "@scrap/components/parts/OutputPanel.svelte";
@@ -29,10 +29,11 @@
 	import {assert} from "@scrap/utils/assert";
 	import {Entity} from "@scrap/types/Enity.svelte";
 	import {EntityAsset} from "@scrap/types/EntityAsset.svelte";
-	import SpeedDial from "@scrap/components/controls/SpeedDial.svelte";
-	import Dropdown from "@scrap/components/controls/Dropdown.svelte";
+	import SpeedDial from "@juvofy/lib/components/actions/SpeedDial";
+	import Dropdown from "@juvofy/lib/components/actions/Dropdown";
 	import Screw from "@material-symbols/svg-400/rounded/home_improvement_and_tools-fill.svg?icon";
 	import SB3 from "@scrap/code-transformers/sb3.ts";
+	import type {Snippet} from "svelte";
 
 	async function uploadNewEntity() {
 		const result = await app.dialog.fire({
@@ -103,7 +104,7 @@
 		try {
 			const filelist = await app.dialog.fire({
 				type: "file",
-				body: selectScrapFile,
+				body: selectScrapFile as Snippet,
 				inputOptions: {
 					accept: ".scrap",
 				},
@@ -148,7 +149,7 @@
 		try {
 			const filelist = await app.dialog.fire({
 				type: "file",
-				body: selectSB3File,
+				body: selectSB3File as Snippet,
 				inputOptions: {
 					accept: ".sb3",
 				},
@@ -200,8 +201,8 @@
 	<nav class="navbar bg-base-100">
 		<div class="navbar-start">
 			<Dropdown>
-				{#snippet button()}
-					<Button variant="ghost">
+				{#snippet button({popover})}
+					<Button class="btn-ghost" {@attach popover}>
 						<ScrapLogo class="h-8" />
 					</Button>
 				{/snippet}
@@ -227,8 +228,8 @@
 				{/snippet}
 			</Dropdown>
 			<Dropdown>
-				{#snippet button()}
-					<Button variant="ghost">File</Button>
+				{#snippet button({popover})}
+					<Button class="btn-ghost" {@attach popover}>File</Button>
 				{/snippet}
 				{#snippet content()}
 					<li>
@@ -263,10 +264,18 @@
 		</CodePanel>
 		<OutputPanel />
 		<SpeedDial>
-			<Button variant="fab" onclick={uploadNewEntity} title="Upload new costume">
+			<Button
+				class="btn-lg btn-circle"
+				onclick={uploadNewEntity}
+				title="Upload new costume"
+			>
 				<Upload class="w-6 fill-current" />
 			</Button>
-			<Button variant="fab" onclick={createNewScrappy} title="Add new Scrappy sprite">
+			<Button
+				class="btn-lg btn-circle"
+				onclick={createNewScrappy}
+				title="Add new Scrappy sprite"
+			>
 				<Screw class="w-6 fill-current" />
 			</Button>
 		</SpeedDial>
