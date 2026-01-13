@@ -327,8 +327,10 @@ interface Stage<Variables = {}, Sound = string> {
 	readonly height: number;
 }
 
-interface Sprite<Variables = {}, Sound = string, Costume = string>
-	extends Stage<Variables & typeof $.Stage.variables, Sound> {
+interface Sprite<Variables = {}, Sound = string, Costume = string> extends Stage<
+	Variables & typeof $.Stage.variables,
+	Sound
+> {
 	/**
 	 * If the pen is down, sprite draws lines when it moves.
 	 */
