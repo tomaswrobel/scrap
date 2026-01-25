@@ -57,7 +57,7 @@
 		"daisyui": "^5.5.14",
 		"file-saver": "^2.0.5",
 		"jszip": "^3.10.1",
-		"monaco-editor": "^0.55.1",
+		"monaco-editor": "0.54",
 		"painterro": "^1.2.92",
 		"path-browserify-esm": "^1.0.6",
 		"semver-parser": "^4.1.8",
