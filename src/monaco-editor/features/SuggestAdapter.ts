@@ -1,8 +1,8 @@
 import {languages, Range, type editor, type Position, type Uri} from "monaco-editor";
 import ts from "typescript";
-import {Adapter} from "./Adapter.ts";
-import {Kind} from "./Kind.ts";
-import {tagToString} from "./tagToString.ts";
+import {Adapter} from "./Adapter";
+import {Kind} from "./Kind";
+import {tagToString} from "./tagToString";
 
 @Adapter.providedBy(languages.registerCompletionItemProvider)
 export class SuggestAdapter extends Adapter implements languages.CompletionItemProvider {

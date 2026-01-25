@@ -10,8 +10,8 @@
  * @fileoverview SWC node name map
  * @copyright Tomáš Wróbel 2025
  */
-import {ScrapTypes} from "@scrap/blockly/utils/ScrapTypes.ts";
-import type {Check} from "@scrap/types/Check.ts";
+import {ScrapTypes} from "@scrap/blockly/utils/ScrapTypes";
+import type {Check} from "@scrap/types/Check";
 import type * as SWC from "@swc/types";
 
 export interface NodeNameMap {

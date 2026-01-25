@@ -1,5 +1,5 @@
-import type {Method} from "@scrap/types/Method.ts";
-import type {SpreadParameters} from "@scrap/types/SpreadParameters.ts";
+import type {Method} from "@scrap/types/Method";
+import type {SpreadParameters} from "@juvofy/lib/utils/SpreadParameters";
 
 export function bind<A extends SpreadParameters, R, T>(
 	value: Method<T, A, R>,

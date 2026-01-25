@@ -13,9 +13,9 @@
  * Property block is a block that returns a property of a sprite.
  * It's a dropdown with all the properties (and variables) of a sprite.
  */
-import {app} from "@scrap/types/App.svelte.ts";
-import type {Check} from "@scrap/types/Check.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {app} from "@scrap/types/App.svelte";
+import type {Check} from "@scrap/types/Check";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({

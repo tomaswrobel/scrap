@@ -14,17 +14,17 @@
  * Where noted, some parts are directly copied
  * from Blockly's JavaScript generator.
  */
-import type ArrayBlock from "@scrap/blockly/blocks/array.ts";
-import type CallBlock from "@scrap/blockly/blocks/call.ts";
-import type FunctionBlock from "@scrap/blockly/blocks/function.ts";
-import type ParameterBlock from "@scrap/blockly/blocks/parameter.ts";
-import type TryBlock from "@scrap/blockly/blocks/try.ts";
-import type UnionBlock from "@scrap/blockly/blocks/union.ts";
-import type UnknownBlock from "@scrap/blockly/blocks/unknown.ts";
-import {Order} from "@scrap/types/Order.ts";
+import type ArrayBlock from "@scrap/blockly/blocks/array";
+import type CallBlock from "@scrap/blockly/blocks/call";
+import type FunctionBlock from "@scrap/blockly/blocks/function";
+import type ParameterBlock from "@scrap/blockly/blocks/parameter";
+import type TryBlock from "@scrap/blockly/blocks/try";
+import type UnionBlock from "@scrap/blockly/blocks/union";
+import type UnknownBlock from "@scrap/blockly/blocks/unknown";
+import {Order} from "@scrap/types/Order";
 import type {Variable} from "@scrap/types/Variable";
-import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
-import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs.ts";
+import type {CustomBlock} from "@scrap/utils/CustomBlock";
+import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs";
 import * as Blockly from "blockly/core";
 
 type BlockCallback<T extends Blockly.Block> = (

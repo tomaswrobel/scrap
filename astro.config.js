@@ -14,7 +14,6 @@ export default defineConfig({
 		plugins: [wasm(), tailwindcss(), shikiPlugin(), svgPlugin("icon")],
 		resolve: {
 			alias: {
-				"$context": resolve(import.meta.dirname, "./src/utils/Context.ts"),
 				"@scrap": resolve(import.meta.dirname, "./src"),
 				"monaco-editor": resolve(
 					import.meta.dirname,

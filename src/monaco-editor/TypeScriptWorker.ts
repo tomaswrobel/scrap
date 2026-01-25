@@ -29,9 +29,9 @@ import ts from "typescript";
  */
 function fileNameIsLib(resource: Uri | string): boolean {
 	if (typeof resource === "string") {
-		return resource === "file:///lib.d.ts";
+		return resource === "file:///lib.d";
 	}
-	return resource.path === "/lib.d.ts";
+	return resource.path === "/lib.d";
 }
 
 /**
@@ -368,7 +368,7 @@ export class TypeScriptWorker
 	}
 
 	public getDefaultLibFileName() {
-		return "lib.d.ts";
+		return "lib.d";
 	}
 
 	public getScriptKind?(fileName: string): ts.ScriptKind {
@@ -394,7 +394,7 @@ export class TypeScriptWorker
 	}
 
 	public isDefaultLibFileName(fileName: string): boolean {
-		return fileName === "lib.d.ts";
+		return fileName === "lib.d";
 	}
 
 	public readFile(path: string): string | undefined {

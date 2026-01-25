@@ -1,5 +1,5 @@
 import {languages, type editor, type Position} from "monaco-editor";
-import {FormatBaseAdapter} from "./FormatBaseAdapter.ts";
+import {FormatBaseAdapter} from "./FormatBaseAdapter";
 
 @FormatBaseAdapter.providedBy(languages.registerOnTypeFormattingEditProvider)
 export class FormatOnTypeAdapter

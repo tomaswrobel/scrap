@@ -13,8 +13,8 @@
  * This mutator is taken from Blockly's built-in controls_if block.
  * The original isn't used only because of bundle size.
  */
-import {assert} from "@scrap/utils/assert";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {assert} from "@juvofy/lib/utils/assert";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export interface IfExtraState {

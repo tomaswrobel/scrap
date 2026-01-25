@@ -1,5 +1,5 @@
 import * as Blockly from "blockly/core";
-import {assert} from "./assert";
+import {assert} from "@juvofy/lib/utils/assert";
 
 export class CustomBlock<T extends object> {
 	public mutatorBlocks?: string[];

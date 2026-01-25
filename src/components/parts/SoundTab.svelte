@@ -16,7 +16,7 @@
 	import type {Attachment} from "svelte/attachments";
 	import WaveSurfer from "wavesurfer.js";
 	import MediaList from "../MediaList.svelte";
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {app} from "@scrap/types/App.svelte";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";
 	import Button from "@juvofy/lib/components/actions/Button";
 	import Tab from "@juvofy/lib/components/navigation/Tab";

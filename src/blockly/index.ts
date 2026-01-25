@@ -11,7 +11,7 @@
  * @fileoverview @scrap/blockly entry point.
  */
 import BlocksToCode from "@scrap/code-transformers/blocksToCode";
-import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import type {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 import {Order} from "blockly/javascript";
 import * as En from "blockly/msg/en";

@@ -10,7 +10,7 @@
  * @copyright Microsoft Corporation 2025
  * @fileoverview Just remapped imports.
  */
-import {bind} from "@scrap/utils/bind.ts";
+import {bind} from "@scrap/utils/bind";
 import type {IDisposable, languages, Uri} from "monaco-editor";
 import {editor} from "monaco-editor";
 import type {Adapter} from "./features/Adapter.js";

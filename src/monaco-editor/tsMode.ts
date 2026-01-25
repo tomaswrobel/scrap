@@ -11,23 +11,23 @@
  * @fileoverview Just remapped imports.
  */
 import type {languages, Uri} from "monaco-editor";
-import {CodeActionAdaptor} from "./features/CodeActionAdapter.ts";
-import {DefinitionAdapter} from "./features/DefinitionAdapter.ts";
-import {DiagnosticsAdapter} from "./features/DiagnosticsAdapter.ts";
-import {DocumentHighlightAdapter} from "./features/DocumentHighlightAdapter.ts";
-import {FormatAdapter} from "./features/FormatAdapter.ts";
-import {FormatOnTypeAdapter} from "./features/FormatOnTypeAdapter.ts";
-import {InlayHintsAdapter} from "./features/InlayHintsAdapter.ts";
-import {LibFiles} from "./features/LibFiles.ts";
-import {OutlineAdapter} from "./features/OutlineAdapter.ts";
-import {QuickInfoAdapter} from "./features/QuickInfoAdapter.ts";
-import {ReferenceAdapter} from "./features/ReferenceAdapter.ts";
-import {RenameAdapter} from "./features/RenameAdapter.ts";
-import {SignatureHelpAdapter} from "./features/SignatureHelpAdapter.ts";
-import {SuggestAdapter} from "./features/SuggestAdapter.ts";
-import type {MonacoEditorLanguage} from "./MonacoEditorLanguage.ts";
-import type {TypeScriptWorker} from "./TypeScriptWorker.ts";
-import {WorkerManager} from "./WorkerManager.ts";
+import {CodeActionAdaptor} from "./features/CodeActionAdapter";
+import {DefinitionAdapter} from "./features/DefinitionAdapter";
+import {DiagnosticsAdapter} from "./features/DiagnosticsAdapter";
+import {DocumentHighlightAdapter} from "./features/DocumentHighlightAdapter";
+import {FormatAdapter} from "./features/FormatAdapter";
+import {FormatOnTypeAdapter} from "./features/FormatOnTypeAdapter";
+import {InlayHintsAdapter} from "./features/InlayHintsAdapter";
+import {LibFiles} from "./features/LibFiles";
+import {OutlineAdapter} from "./features/OutlineAdapter";
+import {QuickInfoAdapter} from "./features/QuickInfoAdapter";
+import {ReferenceAdapter} from "./features/ReferenceAdapter";
+import {RenameAdapter} from "./features/RenameAdapter";
+import {SignatureHelpAdapter} from "./features/SignatureHelpAdapter";
+import {SuggestAdapter} from "./features/SuggestAdapter";
+import type {MonacoEditorLanguage} from "./MonacoEditorLanguage";
+import type {TypeScriptWorker} from "./TypeScriptWorker";
+import {WorkerManager} from "./WorkerManager";
 
 export type TypeScriptMode = (...uris: Uri[]) => Promise<TypeScriptWorker>;
 

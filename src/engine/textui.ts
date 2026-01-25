@@ -10,7 +10,7 @@
  * @fileoverview Engine's sspeech bubble
  * @copyright Tomáš Wróbel 2025
  */
-import {assert} from "@scrap/utils/assert";
+import {assert} from "@juvofy/lib/utils/assert";
 import type Sprite from "./sprite";
 import {bind} from "@scrap/utils/bind";
 

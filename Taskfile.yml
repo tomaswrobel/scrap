@@ -36,6 +36,8 @@ tasks:
   app:dev:
     desc: Serves the app
     cmds:
+      - rm -rf ./node_modules/.vite
+      - rm -rf ./node_modules/.vite-temp
       - yarn astro dev
     sources:
       - public/**/*

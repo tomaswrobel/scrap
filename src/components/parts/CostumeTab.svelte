@@ -11,7 +11,7 @@
 	 * @fileoverview Costumes tab component.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {app} from "@scrap/types/App.svelte";
 	import Tab from "@juvofy/lib/components/navigation/Tab";
 	import Brush from "@material-symbols/svg-400/rounded/brush-fill.svg?icon";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";

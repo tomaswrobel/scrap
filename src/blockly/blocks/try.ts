@@ -30,7 +30,7 @@
  */
 import type * as Blockly from "blockly/core";
 import {FieldParam} from "../fields/FieldParam";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 
 export default new CustomBlock(
 	{

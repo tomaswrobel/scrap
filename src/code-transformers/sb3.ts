@@ -10,19 +10,19 @@
  * @fileoverview Scratch converter
  * @copyright Tomáš Wróbel 2025
  */
-import FunctionBlock from "@scrap/blockly/blocks/function.ts";
-import IfBlock from "@scrap/blockly/blocks/controls_if.ts";
+import FunctionBlock from "@scrap/blockly/blocks/function";
+import IfBlock from "@scrap/blockly/blocks/controls_if";
 import * as Blockly from "blockly/core";
 import type JSZip from "jszip";
-import {app} from "@scrap/types/App.svelte.ts";
-import {assert} from "@scrap/utils/assert.ts";
+import {app} from "@scrap/types/App.svelte";
+import {assert} from "@juvofy/lib/utils/assert";
 import {Entity} from "@scrap/types/Enity.svelte";
 import {EntityAsset} from "@scrap/types/EntityAsset.svelte";
-import ParameterBlock from "@scrap/blockly/blocks/parameter.ts";
-import ReturnBlock from "@scrap/blockly/blocks/return.ts";
-import CallBlock from "@scrap/blockly/blocks/call.ts";
+import ParameterBlock from "@scrap/blockly/blocks/parameter";
+import ReturnBlock from "@scrap/blockly/blocks/return";
+import CallBlock from "@scrap/blockly/blocks/call";
 import type {Check} from "@scrap/types/Check";
-import UnknownBlock from "@scrap/blockly/blocks/unknown.ts";
+import UnknownBlock from "@scrap/blockly/blocks/unknown";
 import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs";
 
 const BLOCK_FAILED = "Block init failed.";

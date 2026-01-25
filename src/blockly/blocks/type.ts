@@ -23,12 +23,12 @@
  * the return type of the function.
  */
 import * as Blockly from "blockly/core";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
-import type ArrayBlock from "./array.ts";
-import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
-import {ScrapTypes} from "../utils/ScrapTypes.ts";
-import {assert} from "@scrap/utils/assert.ts";
-import ReturnBlock from "./return.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
+import type ArrayBlock from "./array";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap";
+import {ScrapTypes} from "../utils/ScrapTypes";
+import {assert} from "@juvofy/lib/utils/assert";
+import ReturnBlock from "./return";
 
 export default new CustomBlock({
 	init() {

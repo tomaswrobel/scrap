@@ -16,11 +16,11 @@
  * are either strings or arrays - they are expanded
  * into multiple items (via JavaScript's spread operator).
  */
-import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {blockToCheck} from "@scrap/utils/blockToCheck";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
-import type {Check} from "@scrap/types/Check.ts";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap";
+import type {Check} from "@scrap/types/Check";
 
 export default new CustomBlock(
 	{

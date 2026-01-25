@@ -11,11 +11,11 @@
 	 * @fileoverview Blockly workspace component.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import type {Entity} from "@scrap/types/Enity.svelte.ts";
+	import type {Entity} from "@scrap/types/Enity.svelte";
 	import {Blockly, spriteToolbox, stageToolbox, theme} from "@scrap/blockly";
 	import type {HTMLAttributes} from "svelte/elements";
-	import {createVariableCategory} from "@scrap/blockly/utils/createVariableCategory.ts";
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {createVariableCategory} from "@scrap/blockly/utils/createVariableCategory";
+	import {app} from "@scrap/types/App.svelte";
 
 	export interface Props extends HTMLAttributes<HTMLDivElement> {
 		entity: Entity;

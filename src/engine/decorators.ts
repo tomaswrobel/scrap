@@ -10,7 +10,7 @@
  * @fileoverview Common Entity's decorators
  * @copyright Tomáš Wróbel 2025
  */
-import type {SpreadParameters} from "@scrap/types/SpreadParameters.ts";
+import type {SpreadParameters} from "@juvofy/lib/utils/SpreadParameters";
 import Entity from "./entity";
 import {StopError} from "./utils";
 

@@ -1,7 +1,7 @@
 import {languages, type editor} from "monaco-editor";
 import type ts from "typescript";
-import {Adapter} from "./Adapter.ts";
-import {Kind} from "./Kind.ts";
+import {Adapter} from "./Adapter";
+import {Kind} from "./Kind";
 
 @Adapter.providedBy(languages.registerDocumentSymbolProvider)
 export class OutlineAdapter extends Adapter implements languages.DocumentSymbolProvider {

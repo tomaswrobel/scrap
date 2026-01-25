@@ -11,7 +11,7 @@
 	 * @fileoverview Code panel component. Shows Blocks and Code tabs, but allows to accept environment-specific tabs as well. Full IDE includes Painterro and Sound editor, while Demo does not.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {app} from "@scrap/types/App.svelte";
 	import CodeToBlocks from "@scrap/code-transformers/codeToBlocks";
 	import BlocklyWorkspace from "@scrap/components/BlocklyWorkspace.svelte";
 	import MonacoEditor from "@scrap/components/MonacoEditor.svelte";

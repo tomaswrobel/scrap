@@ -1,6 +1,6 @@
 import {languages, type editor, type Position} from "monaco-editor";
 import ts from "typescript";
-import {Adapter} from "./Adapter.ts";
+import {Adapter} from "./Adapter";
 
 @Adapter.providedBy(languages.registerDocumentHighlightProvider)
 export class DocumentHighlightAdapter

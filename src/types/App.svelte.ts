@@ -11,7 +11,7 @@
  * @copyright Tomáš Wróbel 2025
  */
 import type Dialog from "@juvofy/lib/components/actions/Dialog";
-import {Entity} from "@scrap/types/Enity.svelte.ts";
+import {Entity} from "@scrap/types/Enity.svelte";
 
 export class App {
 	public turboExecution = $state(false);

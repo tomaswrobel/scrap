@@ -1,7 +1,7 @@
 import {languages, Uri, type editor, type Position} from "monaco-editor";
 import type {TypeScriptMode} from "../tsMode";
-import {Adapter} from "./Adapter.ts";
-import type {LibFiles} from "./LibFiles.ts";
+import {Adapter} from "./Adapter";
+import type {LibFiles} from "./LibFiles";
 
 @Adapter.providedBy(languages.registerDefinitionProvider)
 export class DefinitionAdapter extends Adapter {

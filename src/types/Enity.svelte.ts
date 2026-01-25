@@ -20,7 +20,7 @@ import stage from "../assets/svgs/stage.svg?raw";
 import BlocksToCode from "@scrap/code-transformers/blocksToCode";
 import * as SWC from "@scrap/utils/swc";
 import {EntityAsset} from "./EntityAsset.svelte";
-import {assert} from "@scrap/utils/assert";
+import {assert} from "@juvofy/lib/utils/assert";
 import {ConnectionChecker} from "@scrap/blockly/plugins/ConnectionChecker";
 
 const scrappyAsset = new EntityAsset([scrappy], "Scrappy.svg", {type: "image/svg+xml"});

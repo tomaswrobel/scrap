@@ -12,14 +12,14 @@
 	 * @copyright Tomáš Wróbel 2025
 	 */
 	import Button from "@juvofy/lib/components/actions/Button";
-	import {documentToString} from "@scrap/utils/documentToString.ts";
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {documentToString} from "@scrap/utils/documentToString";
+	import {app} from "@scrap/types/App.svelte";
 	import MediaList from "@scrap/components/MediaList.svelte";
 	import PlayIcon from "@material-symbols/svg-400/rounded/play_arrow-fill.svg?icon";
 	import Stop from "@material-symbols/svg-400/sharp/stop-fill.svg?icon";
 	import type {HTMLAttributes} from "svelte/elements";
-	import {tw} from "@scrap/utils/tw.ts";
-	import {event} from "@scrap/utils/event.ts";
+	import {tw} from "@juvofy/lib/utils/tw";
+	import {event} from "@juvofy/lib/utils/event";
 	import type JSZip from "jszip";
 
 	const STATIC_ENGINE_JS = "/engine/index.js";

@@ -11,10 +11,10 @@
  * @copyright Tomáš Wróbel 2025
  */
 import type * as Blockly from "blockly/core";
-import {app} from "@scrap/types/App.svelte.ts";
-import type {Variable} from "@scrap/types/Variable.ts";
-import {TypeToShadowMap} from "./TypeToShadowMap.ts";
-import {ScrapTypes} from "./ScrapTypes.ts";
+import {app} from "@scrap/types/App.svelte";
+import type {Variable} from "@scrap/types/Variable";
+import {TypeToShadowMap} from "./TypeToShadowMap";
+import {ScrapTypes} from "./ScrapTypes";
 
 export function createVariableCategory(workspace: Blockly.WorkspaceSvg) {
 	workspace.registerButtonCallback("createVariableButton", async () => {

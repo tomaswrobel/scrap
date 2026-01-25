@@ -11,7 +11,7 @@
 	 * @fileoverview App component.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {app} from "@scrap/types/App.svelte";
 	import CodePanel from "@scrap/components/parts/CodePanel.svelte";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";
 	import Home from "@material-symbols/svg-400/rounded/home.svg?icon";
@@ -26,13 +26,13 @@
 	import {saveAs} from "file-saver";
 	import JSZip from "jszip";
 	import * as SemVer from "semver-parser";
-	import {assert} from "@scrap/utils/assert";
+	import {assert} from "@juvofy/lib/utils/assert";
 	import {Entity} from "@scrap/types/Enity.svelte";
 	import {EntityAsset} from "@scrap/types/EntityAsset.svelte";
 	import SpeedDial from "@juvofy/lib/components/actions/SpeedDial";
 	import Dropdown from "@juvofy/lib/components/actions/Dropdown";
 	import Screw from "@material-symbols/svg-400/rounded/home_improvement_and_tools-fill.svg?icon";
-	import SB3 from "@scrap/code-transformers/sb3.ts";
+	import SB3 from "@scrap/code-transformers/sb3";
 	import type {Snippet} from "svelte";
 
 	async function uploadNewEntity() {

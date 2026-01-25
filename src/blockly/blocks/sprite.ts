@@ -17,8 +17,8 @@
  * Also, it has an option to select "self" which is
  * a reference to the sprite that the script is running
  */
-import {app} from "@scrap/types/App.svelte.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {app} from "@scrap/types/App.svelte";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({

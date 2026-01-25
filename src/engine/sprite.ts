@@ -10,7 +10,7 @@
  * @fileoverview Engine's Sprite
  * @copyright Tomáš Wróbel 2025
  */
-import {assert} from "@scrap/utils/assert.ts";
+import {assert} from "@juvofy/lib/utils/assert";
 import Costume from "./costume";
 import Costumes from "./costumes";
 import {event, method, paced} from "./decorators";

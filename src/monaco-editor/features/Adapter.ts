@@ -1,6 +1,6 @@
 import type {editor, IDisposable, IRange} from "monaco-editor";
 import type {TextSpan} from "typescript";
-import type {TypeScriptMode} from "../tsMode.ts";
+import type {TypeScriptMode} from "../tsMode";
 
 export abstract class Adapter {
 	protected worker: TypeScriptMode;

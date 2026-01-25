@@ -13,8 +13,8 @@
  * This extension adds a context menu item to rename the variable
  * in the `for` block.
  */
-import {app} from "@scrap/types/App.svelte.ts";
-import {assert} from "@scrap/utils/assert.ts";
+import {app} from "@scrap/types/App.svelte";
+import {assert} from "@juvofy/lib/utils/assert";
 import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs";
 import * as Blockly from "blockly/core";
 

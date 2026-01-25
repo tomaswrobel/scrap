@@ -1,4 +1,5 @@
 {
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
 	"rules": {
 		// Make code pretty
 		"curly": "error",
@@ -46,5 +47,6 @@
 				"no-unused-vars": "off"
 			}
 		}
-	]
+	],
+	"ignorePatterns": ["**/assets/**"]
 }
