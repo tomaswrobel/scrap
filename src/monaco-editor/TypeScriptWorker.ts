@@ -347,7 +347,7 @@ export class TypeScriptWorker
 		if (model) {
 			// a true editor model
 			return model.getValue();
-		} else if (fileName === "lib.d.ts") {
+		} else if (fileName === "lib.d") {
 			// default lib
 			return defaultLib;
 		}
