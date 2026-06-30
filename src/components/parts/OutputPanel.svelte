@@ -21,6 +21,7 @@
 	import {tw} from "@juvofy/lib/utils/tw";
 	import {event} from "@juvofy/lib/utils/event";
 	import type JSZip from "jszip";
+	import {untrack} from "svelte";
 
 	const STATIC_ENGINE_JS = "/engine/index.js";
 	const STATIC_ENGINE_CSS = "/engine/index.css";
@@ -142,7 +143,9 @@
 		width={app.size}
 		data-turbo={app.turboExecution}
 		class="border-0 aspect-4/3 cursor-auto"
-		srcdoc={globalThis.window && getHTML(STATIC_ENGINE_JS, STATIC_ENGINE_CSS)}
+		srcdoc={untrack(
+			() => globalThis.window && getHTML(STATIC_ENGINE_JS, STATIC_ENGINE_CSS),
+		)}
 		onload={e => {
 			const {contentWindow} = e.currentTarget as HTMLIFrameElement;
 

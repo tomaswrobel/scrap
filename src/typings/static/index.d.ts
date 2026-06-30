@@ -325,6 +325,11 @@ interface Stage<Variables = {}, Sound = string> {
 	 * * The height of the sprite is the height of the costume.
 	 */
 	readonly height: number;
+
+	/**
+	 * Clears lines drawn by all sprites (and stamps).
+	 */
+	penClear(): void;
 }
 
 interface Sprite<Variables = {}, Sound = string, Costume = string> extends Stage<
@@ -551,11 +556,6 @@ interface Sprite<Variables = {}, Sound = string, Costume = string> extends Stage
 	ask(contents: any): string;
 
 	/**
-	 * Clears lines drawn by all sprites (and stamps).
-	 */
-	penClear(): void;
-
-	/**
 	 * Draws the current sprite as a stamp.
 	 * Stamps are not affected by the pen size or color.
 	 * Also, stamps are not sprites, so they cannot be interacted with.
@@ -767,13 +767,7 @@ declare type Key =
 	| "y"
 	| "z";
 declare type MouseEvent =
-	| "clicked"
-	| "pressed"
-	| "released"
-	| "left"
-	| "entered"
-	| "moved"
-	| "double-clicked";
+	"clicked" | "pressed" | "released" | "left" | "entered" | "moved" | "double-clicked";
 
 // For TypeScript to work
 declare interface RegExp {}

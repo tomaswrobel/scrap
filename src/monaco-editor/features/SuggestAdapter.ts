@@ -3,9 +3,20 @@ import ts from "typescript";
 import {Adapter} from "./Adapter";
 import {Kind} from "./Kind";
 import {tagToString} from "./tagToString";
+import type {LibFiles} from "./LibFiles";
+import type {TypeScriptMode} from "../tsMode";
+import {assert} from "@juvofy/lib/utils/assert";
 
 @Adapter.providedBy(languages.registerCompletionItemProvider)
 export class SuggestAdapter extends Adapter implements languages.CompletionItemProvider {
+	private readonly libFiles?: LibFiles;
+
+	constructor(libFiles?: LibFiles, worker?: TypeScriptMode) {
+		assert(worker);
+		super(worker);
+		this.libFiles = libFiles;
+	}
+
 	public get triggerCharacters(): string[] {
 		return ["."];
 	}
@@ -24,6 +35,11 @@ export class SuggestAdapter extends Adapter implements languages.CompletionItemP
 		);
 		const resource = model.uri;
 		const offset = model.getOffsetAt(position);
+
+		// Ensure lib files (typings) are loaded so the language service can resolve types
+		if (this.libFiles) {
+			await this.libFiles.ensureFetched();
+		}
 
 		const worker = await this.worker(resource);
 

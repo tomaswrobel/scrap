@@ -23,11 +23,9 @@ export default defineConfig({
 					import.meta.dirname,
 					"node_modules/monaco-editor/esm/vs/editor/editor.worker.js",
 				),
+				"painterro": resolve(import.meta.dirname, "node_modules/painterro/js/main.js"),
 				"path": "path-browserify",
 			},
-		},
-		esbuild: {
-			target: "ES2024",
 		},
 	},
 });

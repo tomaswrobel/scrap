@@ -23,6 +23,7 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 
 	private webWorker?: editor.MonacoWebWorker<TypeScriptWorker>;
 	private client?: Promise<TypeScriptWorker>;
+	private registeredAdapters = new Set<Function>();
 
 	constructor(modeId: string, defaults: languages.typescript.LanguageServiceDefaults) {
 		this.modeId = modeId;
@@ -90,6 +91,12 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 		adapter: Adapter.Constructor<A, T>,
 		...args: A
 	) {
-		this.disposables.push(new adapter(...args, this.worker).register(this.modeId));
+		if (this.registeredAdapters.has(adapter)) {
+			return;
+		}
+		this.registeredAdapters.add(adapter);
+		const instance = new adapter(...args, this.worker);
+		const registration = instance.register(this.modeId);
+		this.disposables.push(registration);
 	}
 }

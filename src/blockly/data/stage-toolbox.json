@@ -212,6 +212,10 @@
 				"gap": 40
 			},
 			{
+				"kind": "block",
+				"type": "penClear"
+			},
+			{
 				"kind": "sep"
 			}
 		]

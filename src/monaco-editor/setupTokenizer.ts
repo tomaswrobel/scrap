@@ -49,6 +49,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				"nextBackdrop",
 				"show",
 				"hide",
+				"clearEffects",
 				"goForward",
 				"goBackward",
 				"goToFront",

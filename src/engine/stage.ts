@@ -226,6 +226,11 @@ export default class Stage extends Entity {
 	}
 
 	@method
+	async penClear() {
+		this.pen.clearRect(0, 0, this.width, this.height);
+	}
+
+	@method
 	async isKeyPressed(key: string) {
 		if (key === "any") {
 			return Boolean(this.keys.length);

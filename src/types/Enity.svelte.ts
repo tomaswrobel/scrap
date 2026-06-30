@@ -89,7 +89,7 @@ export class Entity {
 
 	public generateProductionCode(zip?: JSZip) {
 		const typescript = this.generatePreviewCode(false);
-		const result = SWC.transform(typescript);
+		const result = SWC.transform(typescript) ?? "";
 		const body = this.blocksToCode?.prefixLines(result, "\t");
 		const reducer = this.getFileURLs.bind(this, zip?.folder(this.name));
 		const configuration = {
