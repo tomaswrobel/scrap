@@ -11,7 +11,7 @@ declare interface ImportMetaEnv {
 
 declare module "@scrap/compiler/pkg" {
 	export function parse(code: string): import("@swc/types").Module;
-	export function transform(code: string): string;
+	export function transform(code: string): string | null;
 	export function getVariables(code: string): import("@scrap/types/Variable").Variable[];
 }
 

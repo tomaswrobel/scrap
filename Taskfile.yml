@@ -87,7 +87,7 @@ tasks:
       - yarn vite build --config=src/engine/vite.config.js
       - echo "*" > public/engine/.gitignore
     sources:
-      - src/engine/*.{css,ts,js}
+      - src/engine/*
     generates:
       - public/engine/*
 

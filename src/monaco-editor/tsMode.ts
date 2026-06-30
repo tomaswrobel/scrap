@@ -46,11 +46,16 @@ export function setupLanguage(
 	language: MonacoEditorLanguage,
 	defaults: languages.typescript.LanguageServiceDefaults,
 ) {
+	// Avoid setting up the language multiple times (prevents duplicate providers)
+	if (workers[language]) {
+		return;
+	}
+
 	const client = new WorkerManager(language, defaults);
 	const libFiles = new LibFiles(client.worker);
 
 	if (defaults.modeConfiguration.completionItems) {
-		client.addAdapter(SuggestAdapter);
+		client.addAdapter(SuggestAdapter, libFiles);
 	}
 	if (defaults.modeConfiguration.signatureHelp) {
 		client.addAdapter(SignatureHelpAdapter);

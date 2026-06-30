@@ -45,9 +45,23 @@ export class LibFiles {
 		}
 	}
 
+	// Ensure lib files are fetched at least once. Useful for features that need
+	// typings (completions, signature help) before any diagnostics/related-info
+	// triggers fetchLibFilesIfNecessary.
+	public async ensureFetched(): Promise<void> {
+		await (this.fetchLibFilesPromise ??= this.fetchLibFiles());
+	}
+
 	private async fetchLibFiles() {
 		const worker = await this.worker();
 		this.libFiles = await worker.getLibFiles();
 		this.hasFetchedLibFiles = true;
+		// create editor models for each lib file so the worker can sync them
+		for (const fileName in this.libFiles) {
+			const uri = Uri.file(`/${fileName}`);
+			if (!editor.getModel(uri)) {
+				editor.createModel(this.libFiles[fileName], "typescript", uri);
+			}
+		}
 	}
 }

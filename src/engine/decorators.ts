@@ -18,15 +18,17 @@ import {StopError} from "./utils";
  * This decorator is used to decorate methods of the Entity class,
  * which should be used directly by the user. The execution of the
  * method is delayed by 33 ms, just like in the Scratch project.
- * @param method The method to decorate.
- * @param _context The context of the method.
- * @returns Decorated method.
  */
 export function paced<A extends SpreadParameters, T, E extends Entity>(
-	fn: (this: E, ...args: A) => Promise<T>,
-	_context: ClassMethodDecoratorContext<E, typeof fn>,
-) {
-	return async function (this: E, ...args: A) {
+	_target: object,
+	_key: string | symbol,
+	descriptor: TypedPropertyDescriptor<(this: E, ...args: A) => Promise<T>>,
+): TypedPropertyDescriptor<(this: E, ...args: A) => Promise<T>> {
+	const fn = descriptor.value;
+	if (!fn) {
+		return descriptor;
+	}
+	descriptor.value = async function (this: E, ...args: A) {
 		return new Promise<T>((resolve, reject) => {
 			const controller = new AbortController();
 
@@ -47,6 +49,7 @@ export function paced<A extends SpreadParameters, T, E extends Entity>(
 			);
 		});
 	};
+	return descriptor;
 }
 
 const STOP = Symbol("STOP");
@@ -54,15 +57,17 @@ const STOP = Symbol("STOP");
 /**
  * This decorator is used to decorate methods of the Entity class,
  * which should be used directly by the user.
- * @param method The method to decorate.
- * @param _context The context of the method.
- * @returns Decorated method.
  */
 export function method<A extends SpreadParameters, T, E extends Entity>(
-	fn: (this: E, ...args: A) => Promise<T>,
-	_context: ClassMethodDecoratorContext<E, typeof fn>,
-) {
-	return async function (this: E, ...args: A) {
+	_target: object,
+	_key: string | symbol,
+	descriptor: TypedPropertyDescriptor<(this: E, ...args: A) => Promise<T>>,
+): TypedPropertyDescriptor<(this: E, ...args: A) => Promise<T>> {
+	const fn = descriptor.value;
+	if (!fn) {
+		return descriptor;
+	}
+	descriptor.value = async function (this: E, ...args: A) {
 		const controller = new AbortController();
 
 		const result = await Promise.race([
@@ -88,21 +93,23 @@ export function method<A extends SpreadParameters, T, E extends Entity>(
 
 		return result;
 	};
+	return descriptor;
 }
 
 /**
  * This decorator is used to decorate events of the Entity class,
  * which should be used directly by the user.
- *
- * @param method The method to decorate.
- * @param _context The context of the method.
- * @returns Decorated method.
  */
 export function event<A extends [...SpreadParameters, Entity.Callback], E extends Entity>(
-	fn: (this: E, ...args: A) => Promise<void>,
-	_context: ClassMethodDecoratorContext<E, typeof fn>,
-) {
-	return async function (this: E, ...args: A) {
+	_target: object,
+	_key: string | symbol,
+	descriptor: TypedPropertyDescriptor<(this: E, ...args: A) => Promise<void>>,
+): TypedPropertyDescriptor<(this: E, ...args: A) => Promise<void>> {
+	const fn = descriptor.value;
+	if (!fn) {
+		return descriptor;
+	}
+	descriptor.value = async function (this: E, ...args: A) {
 		const originalCallback = args.pop() as Entity.Callback;
 		const newCallback: Entity.Callback = async () => {
 			const self = this.createSelf();
@@ -130,4 +137,5 @@ export function event<A extends [...SpreadParameters, Entity.Callback], E extend
 
 		return fn.apply(this, args);
 	};
+	return descriptor;
 }

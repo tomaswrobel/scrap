@@ -17,6 +17,7 @@
 		"noEmit": true,
 
 		/* Linting */
+		"experimentalDecorators": true,
 		"strict": true,
 		"erasableSyntaxOnly": true,
 		"noImplicitOverride": true,

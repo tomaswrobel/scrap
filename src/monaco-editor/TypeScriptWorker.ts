@@ -43,11 +43,19 @@ function fileNameIsLib(resource: Uri | string): boolean {
  * @param value A TypedPropertyDescriptor
  */
 function withScrapDiagnostics<T extends TypeScriptWorker>(
-	this: void,
-	value: (this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>,
-	_context: ClassMethodDecoratorContext<T, typeof value>,
-): typeof value {
-	return async function (fileName: string) {
+	_target: object,
+	_key: string | symbol,
+	descriptor: TypedPropertyDescriptor<
+		(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+	>,
+): TypedPropertyDescriptor<
+	(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+> {
+	const {value} = descriptor;
+	if (!value) {
+		return descriptor;
+	}
+	descriptor.value = async function (fileName: string) {
 		await new Promise(resolve => setTimeout(resolve, 0));
 		const diagnostics = await value.call(this, fileName);
 		const program = this.languageService.getProgram();
@@ -258,11 +266,19 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 }
 
 function clearFiles<T extends TypeScriptWorker>(
-	this: void,
-	value: (this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>,
-	_context: ClassMethodDecoratorContext<T, typeof value>,
-): typeof value {
-	return async function (fileName) {
+	_target: object,
+	_key: string | symbol,
+	descriptor: TypedPropertyDescriptor<
+		(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+	>,
+): TypedPropertyDescriptor<
+	(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+> {
+	const {value} = descriptor;
+	if (!value) {
+		return descriptor;
+	}
+	descriptor.value = async function (fileName) {
 		const diagnostics = await value.call(this, fileName);
 
 		if (diagnostics.length === 0) {
