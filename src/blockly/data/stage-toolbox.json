@@ -175,7 +175,7 @@
 		"contents": [
 			{
 				"kind": "block",
-				"type": "color_sliders"
+				"type": "color"
 			},
 			{
 				"kind": "block",

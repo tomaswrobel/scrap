@@ -13,7 +13,7 @@
 export const TypeToShadowMap: Record<string, string> = {
 	number: "math_number",
 	string: "iterables_string",
-	Color: "color_sliders",
+	Color: "color",
 	Sprite: "sprite",
 	Date: "date",
 	any: "text_or_number",
