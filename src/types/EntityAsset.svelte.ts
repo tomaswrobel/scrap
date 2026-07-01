@@ -42,15 +42,19 @@ export class EntityAsset implements File {
 		this.blobUrl = URL.createObjectURL(this.blob);
 	}
 
+	public bytes(): Promise<Uint8Array> {
+		return this.blob.bytes();
+	}
+
+	public stream(): ReadableStream<Uint8Array> {
+		return this.blob.stream();
+	}
+
 	public replaceWith(fileBits: BlobPart[], type = this.type) {
 		URL.revokeObjectURL(this.blobUrl);
 		this.blob = new Blob(fileBits, {type});
 		this.blobUrl = URL.createObjectURL(this.blob);
 		this.lastModified = Date.now();
-	}
-
-	public bytes(): Promise<Uint8Array<ArrayBuffer>> {
-		return this.blob.bytes();
 	}
 
 	public arrayBuffer(): Promise<ArrayBuffer> {
@@ -59,10 +63,6 @@ export class EntityAsset implements File {
 
 	public slice(start?: number, end?: number, contentType?: string): Blob {
 		return this.blob.slice(start, end, contentType);
-	}
-
-	public stream(): ReadableStream<Uint8Array<ArrayBuffer>> {
-		return this.blob.stream();
 	}
 
 	public text(): Promise<string> {

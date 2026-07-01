@@ -147,7 +147,7 @@ For more info, you can take a look at the [blog post](https://tomaswrobel.dev/bl
 
 **[Devforth](https://devfoth.io)**: Their Painterro changed the way how to paint in Scrap. Its paint editor was feature-lack, and had many performance issues even Rust couldn't solve. Sometimes, it's great to leave things for professional.
 
-**Microsoft**: Scrap is written in **TypeScript**. The same language you can code with inside Scrap with the help of **Monaco Edtior**. It doesn't use any framework. I use **Visual Studio Code** as my code editor. I develop with the help of **GitHub**, and its Copilot. Also, I use **GitHub Actions** to automate the build and deployment process. The resulting code is hosted on **GitHub Pages**.
+**Microsoft**: Scrap is written in **TypeScript**. The same language you can code with inside Scrap with the help of **Monaco Edtior**. I use **Visual Studio Code** as my code editor. I develop with the help of **GitHub**, and its Copilot. Also, I use **GitHub Actions** to automate the build and deployment process. The resulting code is hosted on **GitHub Pages**.
 
 **Google**: Scrap wouldn't be possible without **Blockly**. (In fact, Scratch relies on Blockly too.) When I used to develop at school, I used a **Chromebok** to take notes and, when the teacher isn't looking, to code Scrap.
 

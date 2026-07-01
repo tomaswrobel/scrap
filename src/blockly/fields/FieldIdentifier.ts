@@ -11,8 +11,8 @@
  * @fileoverview Custom Blockly field for valid JS identifier.
  */
 import * as Blockly from "blockly/core";
-import {registerField} from "../utils/registerField.ts";
-import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs.ts";
+import {registerField} from "../utils/registerField";
+import {reservedWordsInJs} from "@scrap/utils/reservedWordsInJs";
 
 @registerField("field_identifier")
 export class FieldIdentifier extends Blockly.FieldTextInput {

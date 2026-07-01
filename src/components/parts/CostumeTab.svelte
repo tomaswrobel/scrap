@@ -11,17 +11,15 @@
 	 * @fileoverview Costumes tab component.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import {app} from "@scrap/types/App.svelte.ts";
-	import Tab from "../controls/Tab.svelte";
-	import Add from "@material-symbols/svg-400/rounded/add.svg?icon";
+	import {app} from "@scrap/types/App.svelte";
+	import Tab from "@juvofy/lib/components/navigation/Tab";
 	import Brush from "@material-symbols/svg-400/rounded/brush-fill.svg?icon";
-	import Close from "@material-symbols/svg-400/rounded/close.svg?icon";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";
 	import {EntityAsset} from "@scrap/types/EntityAsset.svelte";
 	import MediaList from "../MediaList.svelte";
 	import Painterro from "../Painterro.svelte";
-	import SpeedDial from "@scrap/components/controls/SpeedDial.svelte";
-	import Button from "../controls/Button.svelte";
+	import SpeedDial from "@juvofy/lib/components/actions/SpeedDial";
+	import Button from "@juvofy/lib/components/actions/Button";
 
 	async function uploadNewCostume() {
 		const result = await app.dialog.fire({
@@ -90,11 +88,15 @@
 		</div>
 	</div>
 	<SpeedDial class="end-[unset] left-8">
-		<Button variant="fab" onclick={uploadNewCostume} title="Upload">
+		<Button class="btn-lg btn-circle" onclick={uploadNewCostume} title="Upload">
 			<Upload class="w-6 fill-current" />
 		</Button>
 
-		<Button variant="fab" onclick={createNewEmptyCostume} title="Create empty costume">
+		<Button
+			class="btn-lg btn-circle"
+			onclick={createNewEmptyCostume}
+			title="Create empty costume"
+		>
 			<Brush class="w-6 fill-current" />
 		</Button>
 	</SpeedDial>

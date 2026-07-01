@@ -10,7 +10,7 @@
  * @fileoverview Engine's Entities (sprite / stage)
  * @copyright Tomáš Wróbel 2025
  */
-import {assert} from "@scrap/utils/assert";
+import {assert} from "@juvofy/lib/utils/assert";
 import {event, method} from "./decorators";
 import Messages from "./messages";
 import Timer from "./timer";

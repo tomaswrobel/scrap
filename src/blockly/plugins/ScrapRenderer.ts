@@ -20,7 +20,7 @@
  * is that the `typed` block is just a container for the `type` block
  * and `parameter` field, so it should not be
  */
-import {assert} from "@scrap/utils/assert.ts";
+import {assert} from "@juvofy/lib/utils/assert";
 import * as Blockly from "blockly/core";
 
 export class ScrapRenderer extends Blockly.zelos.Renderer {

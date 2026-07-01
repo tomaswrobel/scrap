@@ -22,8 +22,8 @@
  * So instead, Scrap uses its own function blocks, which
  * works similarly to legacy Blockly's procedure system.
  */
-import {assert} from "@scrap/utils/assert.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {assert} from "@juvofy/lib/utils/assert";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 const dom = Blockly.utils.xml.createElement("shadow");

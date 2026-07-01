@@ -1,7 +1,7 @@
 import {languages, type editor, type Position} from "monaco-editor";
-import type {TypeScriptMode} from "../tsMode.ts";
-import {Adapter} from "./Adapter.ts";
-import type {LibFiles} from "./LibFiles.ts";
+import type {TypeScriptMode} from "../tsMode";
+import {Adapter} from "./Adapter";
+import type {LibFiles} from "./LibFiles";
 
 @Adapter.providedBy(languages.registerRenameProvider)
 export class RenameAdapter extends Adapter implements languages.RenameProvider {

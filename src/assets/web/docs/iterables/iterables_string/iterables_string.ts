@@ -1,0 +1,2 @@
+// A piece of text
+"";

@@ -1,0 +1,21 @@
+---
+import {author} from "../../package.json";
+---
+
+<footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+	<div>
+		<p>
+			&copy; {new Date().getFullYear()}
+			<a class="link" href={author.url} target="_blank" rel="noopener">{author.name}</a>.
+			Under the
+			<a
+				class="link"
+				href="https://opensource.org/license/mit"
+				target="_blank"
+				rel="noopener"
+			>
+				MIT License
+			</a>.
+		</p>
+	</div>
+</footer>

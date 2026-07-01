@@ -35,10 +35,10 @@
  * * Parameters are of a specific type.
  * * Corresponding shadow blocks are used inside the parameters.
  */
-import type {Check} from "@scrap/types/Check.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
-import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
-import {assert} from "@scrap/utils/assert.ts";
+import type {Check} from "@scrap/types/Check";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap";
+import {assert} from "@juvofy/lib/utils/assert";
 
 export interface CallExtraState {
 	params?: Check[];

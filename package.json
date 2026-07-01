@@ -2,7 +2,7 @@
 	"name": "scrap",
 	"displayName": "Scrap",
 	"private": true,
-	"version": "8.0.1",
+	"version": "7.0.0",
 	"license": "MIT",
 	"type": "module",
 	"author": {
@@ -15,33 +15,62 @@
 		"url": "https://github.com/tomaswrobel/scrap"
 	},
 	"devDependencies": {
-		"@astrojs/check": "^0.9.5",
-		"@astrojs/svelte": "^7.2.0",
-		"@astrojs/vercel": "^9.0.0",
-		"@sveltejs/vite-plugin-svelte": "^6.2.1",
+		"@astrojs/check": "0.9.9",
+		"@astrojs/svelte": "9.0.0",
+		"@astrojs/vercel": "11.0.0",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@swc/types": "^0.1.25",
-		"@tailwindcss/vite": "^4.1.16",
-		"@tsconfig/svelte": "^5.0.5",
+		"@tailwindcss/vite": "^4.1.18",
+		"@tsconfig/svelte": "^5.0.6",
 		"@types/common-tags": "^1.8.4",
 		"@types/file-saver": "^2.0.7",
-		"@types/node": "^24.9.1",
-		"astro": "^5.15.1",
-		"fast-xml-parser": "^5.3.0",
+		"@types/node": "^25.0.6",
+		"astro": "7.0.3",
+		"fast-xml-parser": "^5.3.3",
 		"jiti": "^2.6.1",
-		"oxlint": "^1.24.0",
-		"oxlint-tsgolint": "^0.3.0",
-		"prettier": "^3.6.2",
-		"prettier-plugin-svelte": "^3.4.0",
-		"rollup": "^4.52.5",
-		"shiki": "^3.13.0",
-		"svelte": "^5.41.4",
-		"svelte-check": "^4.3.3",
-		"tailwindcss": "^4.1.16",
-		"tsx": "^4.20.6",
-		"typescript": "^5.9.3",
-		"vite": "^7.1.12",
+		"oxlint": "^1.72.0",
+		"oxlint-tsgolint": "^0.11.0",
+		"patch-package": "^8.0.1",
+		"postinstall-postinstall": "^2.1.0",
+		"prettier": "^3.7.4",
+		"prettier-plugin-astro": "^0.14.1",
+		"prettier-plugin-svelte": "^3.4.1",
+		"rollup": "^4.55.1",
+		"shiki": "^3.21.0",
+		"svelte": "^5.56.4",
+		"svelte-check": "^4.3.5",
+		"tailwindcss": "^4.1.18",
+		"tsx": "^4.21.0",
+		"typescript": "5.8.2",
+		"vite": "^7.3.1",
 		"vite-plugin-wasm": "^3.5.0"
 	},
+	"dependencies": {
+		"@blockly/field-angle": "^6.0.7",
+		"@blockly/field-colour-hsv-sliders": "^6.0.10",
+		"@blockly/field-date": "^10.0.7",
+		"@fontsource/geist": "^5.2.8",
+		"@juvofy/lib": "github:Juvofy/base",
+		"@material-symbols/svg-400": "^0.40.2",
+		"@swc/wasm": "^1.15.8",
+		"blockly": "^12.3.1",
+		"clsx": "^2.1.1",
+		"common-tags": "^1.8.2",
+		"daisyui": "^5.5.14",
+		"file-saver": "^2.0.5",
+		"ismobilejs": "^1.1.1",
+		"jszip": "^3.10.1",
+		"lodash": "^4.18.1",
+		"monaco-editor": "0.54",
+		"painterro": "^1.2.92",
+		"path-browserify-esm": "^1.0.6",
+		"semver-parser": "^4.1.8",
+		"wavesurfer.js": "^7.12.1"
+	},
+	"scripts": {
+		"postinstall": "patch-package"
+	},
+	"packageManager": "yarn@1.22.22",
 	"prettier": {
 		"arrowParens": "avoid",
 		"useTabs": true,
@@ -50,7 +79,8 @@
 		"printWidth": 96,
 		"quoteProps": "consistent",
 		"plugins": [
-			"prettier-plugin-svelte"
+			"prettier-plugin-svelte",
+			"prettier-plugin-astro"
 		],
 		"overrides": [
 			{
@@ -62,27 +92,23 @@
 					"useTabs": false,
 					"tabWidth": 2
 				}
+			},
+			{
+				"files": [
+					"*.astro"
+				],
+				"options": {
+					"parser": "astro"
+				}
+			},
+			{
+				"files": [
+					".svelte"
+				],
+				"options": {
+					"parser": "svelte"
+				}
 			}
 		]
-	},
-	"dependencies": {
-		"@blockly/field-angle": "^6.0.3",
-		"@blockly/field-colour-hsv-sliders": "^6.0.5",
-		"@blockly/field-date": "^10.0.3",
-		"@fontsource/geist": "^5.2.8",
-		"@material-symbols/svg-400": "^0.38.0",
-		"@swc/wasm": "^1.13.21",
-		"blockly": "^12.3.1",
-		"clsx": "^2.1.1",
-		"common-tags": "^1.8.2",
-		"daisyui": "^5.3.9",
-		"file-saver": "^2.0.5",
-		"jszip": "^3.10.1",
-		"monaco-editor": "^0.54.0",
-		"painterro": "^1.2.92",
-		"path-browserify-esm": "^1.0.6",
-		"semver-parser": "^4.1.8",
-		"wavesurfer.js": "^7.11.0"
-	},
-	"packageManager": "yarn@1.22.0"
+	}
 }

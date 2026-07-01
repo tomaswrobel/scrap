@@ -8,7 +8,7 @@
  *
  * @license MIT
  * @copyright Tomáš Wróbel 2025
- * @fileoverview Typescript → Blocks
+ * @fileoverview Typescript → Blockszt
  *
  * This file is responsible for transforming TypeScript code into Blockly
  * blocks. It uses SWC to parse the code and Blockly to generate the
@@ -17,25 +17,25 @@
  * traversing the AST and creating blocks for each node.
  */
 import {entityProperties} from "@scrap/blockly";
-import type {Entity} from "@scrap/types/Enity.svelte.ts";
-import type {Check} from "@scrap/types/Check.ts";
+import type {Entity} from "@scrap/types/Enity.svelte";
+import type {Check} from "@scrap/types/Check";
 import type {Variable} from "@scrap/types/Variable";
-import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
+import {blockToCheck} from "@scrap/utils/blockToCheck";
 import * as SWC from "@scrap/utils/swc";
 import * as Blockly from "blockly/core";
-import {ScrapTypes} from "@scrap/blockly/utils/ScrapTypes.ts";
-import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {ScrapTypes} from "@scrap/blockly/utils/ScrapTypes";
+import type {CustomBlock} from "@scrap/utils/CustomBlock";
 
-import ArrayBlock from "@scrap/blockly/blocks/array.ts";
-import CallBlock from "@scrap/blockly/blocks/call.ts";
-import FunctionBlock from "@scrap/blockly/blocks/function.ts";
-import IfBlock from "@scrap/blockly/blocks/controls_if.ts";
-import type TryBlock from "@scrap/blockly/blocks/try.ts";
-import type ReturnBlock from "@scrap/blockly/blocks/return.ts";
-import TypeBlock from "@scrap/blockly/blocks/type.ts";
-import UnionBlock from "@scrap/blockly/blocks/union.ts";
-import ParameterBlock from "@scrap/blockly/blocks/parameter.ts";
-import {assert} from "@scrap/utils/assert.ts";
+import ArrayBlock from "@scrap/blockly/blocks/array";
+import CallBlock from "@scrap/blockly/blocks/call";
+import FunctionBlock from "@scrap/blockly/blocks/function";
+import IfBlock from "@scrap/blockly/blocks/controls_if";
+import type TryBlock from "@scrap/blockly/blocks/try";
+import type ReturnBlock from "@scrap/blockly/blocks/return";
+import TypeBlock from "@scrap/blockly/blocks/type";
+import UnionBlock from "@scrap/blockly/blocks/union";
+import ParameterBlock from "@scrap/blockly/blocks/parameter";
+import {assert} from "@juvofy/lib/utils/assert";
 
 class CodeToBlocks {
 	private connection?: Blockly.Connection | null;
@@ -390,16 +390,16 @@ class CodeToBlocks {
 					this.parse(node.consequent);
 
 					const elseIfStatements: SWC.IfStatement[] = [];
+					let {alternate} = node;
 
-					while (node.alternate && node.alternate.type === "IfStatement") {
-						elseIfStatements.push(node.alternate);
+					while (alternate?.type === "IfStatement") {
+						elseIfStatements.push(alternate);
+						({alternate} = alternate);
 					}
-
-					const hasElse = node.alternate?.type === "BlockStatement";
 
 					block.loadExtraState({
 						elseIfCount: elseIfStatements.length,
-						hasElse,
+						hasElse: !!alternate,
 					});
 
 					for (let i = 0; i < elseIfStatements.length; i++) {
@@ -410,9 +410,9 @@ class CodeToBlocks {
 						this.parse(elseIfStatements[i].consequent);
 					}
 
-					if (hasElse) {
+					if (alternate) {
 						this.connection = block.getInput("ELSE")?.connection;
-						this.parse(node.alternate);
+						this.parse(alternate);
 					}
 
 					this.connection = block.nextConnection;

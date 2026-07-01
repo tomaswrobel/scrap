@@ -317,7 +317,7 @@
 		"style": "Sensing"
 	},
 	{
-		"type": "color_sliders",
+		"type": "color",
 		"message0": "%1",
 		"args0": [
 			{

@@ -11,13 +11,14 @@
 	 * @fileoverview App component.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {app} from "@scrap/types/App.svelte";
 	import CodePanel from "@scrap/components/parts/CodePanel.svelte";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";
 	import Home from "@material-symbols/svg-400/rounded/home.svg?icon";
+	import DeveloperGuide from "@material-symbols/svg-400/rounded/developer_guide.svg?icon";
 	import ScrapLogo from "@scrap/assets/svgs/scrap.svg?icon";
 	import Commit from "@material-symbols/svg-400/rounded/commit.svg?icon";
-	import Button from "@scrap/components/controls/Button.svelte";
+	import Button from "@juvofy/lib/components/actions/Button";
 	import SoundTab from "@scrap/components/parts/SoundTab.svelte";
 	import CostumeTab from "@scrap/components/parts/CostumeTab.svelte";
 	import OutputPanel, {saveIntoZip} from "@scrap/components/parts/OutputPanel.svelte";
@@ -25,13 +26,14 @@
 	import {saveAs} from "file-saver";
 	import JSZip from "jszip";
 	import * as SemVer from "semver-parser";
-	import {assert} from "@scrap/utils/assert";
+	import {assert} from "@juvofy/lib/utils/assert";
 	import {Entity} from "@scrap/types/Enity.svelte";
 	import {EntityAsset} from "@scrap/types/EntityAsset.svelte";
-	import SpeedDial from "@scrap/components/controls/SpeedDial.svelte";
-	import Dropdown from "@scrap/components/controls/Dropdown.svelte";
+	import SpeedDial from "@juvofy/lib/components/actions/SpeedDial";
+	import Dropdown from "@juvofy/lib/components/actions/Dropdown";
 	import Screw from "@material-symbols/svg-400/rounded/home_improvement_and_tools-fill.svg?icon";
-	import SB3 from "@scrap/code-transformers/sb3.ts";
+	import SB3 from "@scrap/code-transformers/sb3";
+	import type {Snippet} from "svelte";
 
 	async function uploadNewEntity() {
 		const result = await app.dialog.fire({
@@ -102,7 +104,7 @@
 		try {
 			const filelist = await app.dialog.fire({
 				type: "file",
-				body: selectScrapFile,
+				body: selectScrapFile as Snippet,
 				inputOptions: {
 					accept: ".scrap",
 				},
@@ -147,7 +149,7 @@
 		try {
 			const filelist = await app.dialog.fire({
 				type: "file",
-				body: selectSB3File,
+				body: selectSB3File as Snippet,
 				inputOptions: {
 					accept: ".sb3",
 				},
@@ -196,23 +198,29 @@
 {/snippet}
 
 <main class="h-screen overflow-hidden bg-base-200 text-base-content flex flex-col">
-	<nav class="navbar bg-base-100" style:zoom="80%">
+	<nav class="navbar bg-base-100">
 		<div class="navbar-start">
 			<Dropdown>
-				{#snippet button()}
-					<Button variant="ghost">
+				{#snippet button({popover})}
+					<Button class="btn-ghost" {@attach popover}>
 						<ScrapLogo class="h-8" />
 					</Button>
 				{/snippet}
 				{#snippet content()}
 					<li>
-						<a href="/">
+						<a href="/" class="leading-5">
 							<Home class="size-5 fill-current" />
 							Homepage
 						</a>
 					</li>
 					<li>
-						<a href={packageJSON.repository.url}>
+						<a href="/docs" class="leading-5">
+							<DeveloperGuide class="size-5 fill-current" />
+							Docs
+						</a>
+					</li>
+					<li>
+						<a href={packageJSON.repository.url} class="leading-5">
 							<Commit class="size-5 fill-current" />
 							Repository
 						</a>
@@ -220,8 +228,8 @@
 				{/snippet}
 			</Dropdown>
 			<Dropdown>
-				{#snippet button()}
-					<Button variant="ghost" class="text-lg">File</Button>
+				{#snippet button({popover})}
+					<Button class="btn-ghost" {@attach popover}>File</Button>
 				{/snippet}
 				{#snippet content()}
 					<li>
@@ -256,10 +264,18 @@
 		</CodePanel>
 		<OutputPanel />
 		<SpeedDial>
-			<Button variant="fab" onclick={uploadNewEntity} title="Upload new costume">
+			<Button
+				class="btn-lg btn-circle"
+				onclick={uploadNewEntity}
+				title="Upload new costume"
+			>
 				<Upload class="w-6 fill-current" />
 			</Button>
-			<Button variant="fab" onclick={createNewScrappy} title="Add new Scrappy sprite">
+			<Button
+				class="btn-lg btn-circle"
+				onclick={createNewScrappy}
+				title="Add new Scrappy sprite"
+			>
 				<Screw class="w-6 fill-current" />
 			</Button>
 		</SpeedDial>

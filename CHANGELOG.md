@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Publish the code standard
 
-## [8.0.0] - 2025-10-27
+## [8.0.0] - 2026-06-30
 
 ### Changed
 
@@ -24,12 +24,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     - Front-end rewritten to Svelte
     - Redesign to deliver cleaner, darker mode via [daisyui](https://daisyui.com/)
     - For now, no native app – Rust is now fully accessible via WASM
+- Docs
 
 ### Added
 
 - "Stop my other scripts" block – **SB3 compatibility increased about 80 %**
 
-## [7.0.0] - 2025-08-14
+### Fixed
+
+- Many instabilities after Monaco / TypeScript update
+- README.md was outdated
+
+## [7.0.0] - 2025-08-17
 
 ### Changed
 

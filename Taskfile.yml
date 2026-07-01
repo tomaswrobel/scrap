@@ -15,10 +15,11 @@ tasks:
     cmds:
       - wasm-pack build --out-name index
     sources:
-      - src/compiler/src/*
-      - src/compiler/Cargo.*
+      - ./src/*
+      - ./Cargo.toml
+      - ./Cargo.lock
     generates:
-      - src/compiler/pkg
+      - ./pkg/*
 
   app:build:
     desc: Builds the app
@@ -35,6 +36,8 @@ tasks:
   app:dev:
     desc: Serves the app
     cmds:
+      - rm -rf ./node_modules/.vite
+      - rm -rf ./node_modules/.vite-temp
       - yarn astro dev
     sources:
       - public/**/*
@@ -84,7 +87,7 @@ tasks:
       - yarn vite build --config=src/engine/vite.config.js
       - echo "*" > public/engine/.gitignore
     sources:
-      - src/engine/*.{css,ts,js}
+      - src/engine/*
     generates:
       - public/engine/*
 
@@ -109,7 +112,7 @@ tasks:
   check:
     desc: Checks the code
     cmds:
-      - yarn oxlint --type-aware
+      - yarn oxlint
       - yarn astro check
       - yarn prettier . --check
       - yarn svelte-check --tsconfig ./tsconfig.app.json

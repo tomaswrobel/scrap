@@ -20,7 +20,7 @@
  * 	- Using Modern DOM API
  */
 import * as Blockly from "blockly/core";
-import {registerField} from "../utils/registerField.ts";
+import {registerField} from "../utils/registerField";
 
 @registerField("field_string")
 export class FieldString extends Blockly.FieldTextInput {

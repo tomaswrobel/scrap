@@ -10,7 +10,7 @@
  * @copyright Microsoft Corporation 2025
  * @fileoverview Just remapped imports.
  */
-import {bind} from "@scrap/utils/bind.ts";
+import {bind} from "@scrap/utils/bind";
 import type {IDisposable, languages, Uri} from "monaco-editor";
 import {editor} from "monaco-editor";
 import type {Adapter} from "./features/Adapter.js";
@@ -23,6 +23,7 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 
 	private webWorker?: editor.MonacoWebWorker<TypeScriptWorker>;
 	private client?: Promise<TypeScriptWorker>;
+	private registeredAdapters = new Set<Function>();
 
 	constructor(modeId: string, defaults: languages.typescript.LanguageServiceDefaults) {
 		this.modeId = modeId;
@@ -53,7 +54,7 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 	private getClient() {
 		return (this.client ??= (async () => {
 			this.webWorker = editor.createWebWorker<TypeScriptWorker>({
-				moduleId: new URL("./tsWorker.ts", import.meta.url).href,
+				moduleId: new URL("./TypeScriptWorker.ts", import.meta.url).href,
 				label: this.modeId,
 
 				keepIdleModels: true,
@@ -90,6 +91,12 @@ export class WorkerManager implements IDisposable, Iterable<IDisposable> {
 		adapter: Adapter.Constructor<A, T>,
 		...args: A
 	) {
-		this.disposables.push(new adapter(...args, this.worker).register(this.modeId));
+		if (this.registeredAdapters.has(adapter)) {
+			return;
+		}
+		this.registeredAdapters.add(adapter);
+		const instance = new adapter(...args, this.worker);
+		const registration = instance.register(this.modeId);
+		this.disposables.push(registration);
 	}
 }

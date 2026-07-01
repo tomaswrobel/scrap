@@ -18,12 +18,12 @@
  * and the immovability of the block help to blend it in with the
  * parent block.
  */
-import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
-import {FieldIdentifier} from "../fields/FieldIdentifier.ts";
-import {FieldParam} from "../fields/FieldParam.ts";
+import {blockToCheck} from "@scrap/utils/blockToCheck";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
+import {FieldIdentifier} from "../fields/FieldIdentifier";
+import {FieldParam} from "../fields/FieldParam";
 import * as Blockly from "blockly/core";
-import {assert} from "@scrap/utils/assert.ts";
+import {assert} from "@juvofy/lib/utils/assert";
 
 export default new CustomBlock({
 	init() {

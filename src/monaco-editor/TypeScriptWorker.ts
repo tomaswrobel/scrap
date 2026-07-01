@@ -29,9 +29,9 @@ import ts from "typescript";
  */
 function fileNameIsLib(resource: Uri | string): boolean {
 	if (typeof resource === "string") {
-		return resource === "file:///lib.d.ts";
+		return resource === "file:///lib.d";
 	}
-	return resource.path === "/lib.d.ts";
+	return resource.path === "/lib.d";
 }
 
 /**
@@ -43,11 +43,19 @@ function fileNameIsLib(resource: Uri | string): boolean {
  * @param value A TypedPropertyDescriptor
  */
 function withScrapDiagnostics<T extends TypeScriptWorker>(
-	this: void,
-	value: (this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>,
-	_context: ClassMethodDecoratorContext<T, typeof value>,
-): typeof value {
-	return async function (fileName: string) {
+	_target: object,
+	_key: string | symbol,
+	descriptor: TypedPropertyDescriptor<
+		(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+	>,
+): TypedPropertyDescriptor<
+	(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+> {
+	const {value} = descriptor;
+	if (!value) {
+		return descriptor;
+	}
+	descriptor.value = async function (fileName: string) {
 		await new Promise(resolve => setTimeout(resolve, 0));
 		const diagnostics = await value.call(this, fileName);
 		const program = this.languageService.getProgram();
@@ -255,14 +263,23 @@ function withScrapDiagnostics<T extends TypeScriptWorker>(
 
 		return diagnostics;
 	};
+	return descriptor;
 }
 
 function clearFiles<T extends TypeScriptWorker>(
-	this: void,
-	value: (this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>,
-	_context: ClassMethodDecoratorContext<T, typeof value>,
-): typeof value {
-	return async function (fileName) {
+	_target: object,
+	_key: string | symbol,
+	descriptor: TypedPropertyDescriptor<
+		(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+	>,
+): TypedPropertyDescriptor<
+	(this: T, fileName: string) => Promise<languages.typescript.Diagnostic[]>
+> {
+	const {value} = descriptor;
+	if (!value) {
+		return descriptor;
+	}
+	descriptor.value = async function (fileName) {
 		const diagnostics = await value.call(this, fileName);
 
 		if (diagnostics.length === 0) {
@@ -283,6 +300,7 @@ function clearFiles<T extends TypeScriptWorker>(
 			];
 		}, []);
 	};
+	return descriptor;
 }
 
 export class TypeScriptWorker
@@ -347,7 +365,7 @@ export class TypeScriptWorker
 		if (model) {
 			// a true editor model
 			return model.getValue();
-		} else if (fileName === "lib.d.ts") {
+		} else if (fileName === "lib.d") {
 			// default lib
 			return defaultLib;
 		}
@@ -368,7 +386,7 @@ export class TypeScriptWorker
 	}
 
 	public getDefaultLibFileName() {
-		return "lib.d.ts";
+		return "lib.d";
 	}
 
 	public getScriptKind?(fileName: string): ts.ScriptKind {
@@ -394,7 +412,7 @@ export class TypeScriptWorker
 	}
 
 	public isDefaultLibFileName(fileName: string): boolean {
-		return fileName === "lib.d.ts";
+		return fileName === "lib.d";
 	}
 
 	public readFile(path: string): string | undefined {

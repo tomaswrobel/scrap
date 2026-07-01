@@ -11,21 +11,21 @@
 	 * @fileoverview Code panel component. Shows Blocks and Code tabs, but allows to accept environment-specific tabs as well. Full IDE includes Painterro and Sound editor, while Demo does not.
 	 * @copyright Tomáš Wróbel 2025
 	 */
+	import {app} from "@scrap/types/App.svelte";
+	import CodeToBlocks from "@scrap/code-transformers/codeToBlocks";
+	import BlocklyWorkspace from "@scrap/components/BlocklyWorkspace.svelte";
+	import MonacoEditor from "@scrap/components/MonacoEditor.svelte";
+	import type {HTMLAttributes} from "svelte/elements";
+	import Dialog from "@juvofy/lib/components/actions/Dialog";
+	import Tab from "@juvofy/lib/components/navigation/Tab";
+	import Tabs from "@juvofy/lib/components/navigation/Tabs";
+
 	export interface Props extends HTMLAttributes<HTMLDivElement> {
 		isDemo?: boolean;
 	}
 </script>
 
 <script lang="ts">
-	import {app} from "@scrap/types/App.svelte.ts";
-	import CodeToBlocks from "@scrap/code-transformers/codeToBlocks";
-	import BlocklyWorkspace from "@scrap/components/BlocklyWorkspace.svelte";
-	import Tab from "@scrap/components/controls/Tab.svelte";
-	import Tabs from "@scrap/components/controls/Tabs.svelte";
-	import MonacoEditor from "@scrap/components/MonacoEditor.svelte";
-	import type {HTMLAttributes} from "svelte/elements";
-	import Dialog from "../controls/Dialog.svelte";
-
 	const {children, class: customClass, isDemo = false, ...props}: Props = $props();
 	let invalid = $state(false);
 
@@ -45,11 +45,11 @@
 		}
 	}
 
-	async function switchToCodeTab() {
+	function switchToCodeTab() {
 		if (app.current.mode === "code") {
 			return;
 		}
-		app.current.typescript = await app.current.generatePreviewCode(true);
+		app.current.typescript = app.current.generatePreviewCode(true);
 		app.current.mode = "code";
 	}
 </script>

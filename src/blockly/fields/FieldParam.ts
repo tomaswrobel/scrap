@@ -19,11 +19,11 @@
  * Values are stored in the format "name:type".
  * Text is stored in the format "name".
  */
-import type {Check} from "@scrap/types/Check.ts";
+import type {Check} from "@scrap/types/Check";
 import * as Blockly from "blockly/core";
-import {registerField} from "../utils/registerField.ts";
-import type {CustomBlock} from "@scrap/utils/CustomBlock.ts";
-import ParameterBlock from "../blocks/parameter.ts";
+import {registerField} from "../utils/registerField";
+import type {CustomBlock} from "@scrap/utils/CustomBlock";
+import ParameterBlock from "../blocks/parameter";
 
 @registerField("field_param")
 export class FieldParam extends Blockly.Field<string> {

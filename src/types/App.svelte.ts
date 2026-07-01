@@ -10,8 +10,8 @@
  * @fileoverview App's global state
  * @copyright Tomáš Wróbel 2025
  */
-import type Dialog from "@scrap/components/controls/Dialog.svelte";
-import {Entity} from "@scrap/types/Enity.svelte.ts";
+import type Dialog from "@juvofy/lib/components/actions/Dialog";
+import {Entity} from "@scrap/types/Enity.svelte";
 
 export class App {
 	public turboExecution = $state(false);

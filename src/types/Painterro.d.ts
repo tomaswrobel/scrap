@@ -104,10 +104,7 @@ declare module "painterro" {
 		fixMobilePageReloader?: boolean;
 		language?: string;
 		how_to_paste_actions?: (
-			| "replace_all"
-			| "paste_over"
-			| "extend_right"
-			| "extend_down"
+			"replace_all" | "paste_over" | "extend_right" | "extend_down"
 		)[];
 		replaceAllOnEmptyBackground?: boolean;
 		hideByEsc?: boolean;
@@ -144,8 +141,5 @@ declare module "painterro" {
 		redo: () => void;
 	}
 
-	/**
-	 * Hlavní funkce Painterro, která inicializuje a vrací instanci.
-	 */
 	export default function Painterro(options?: PainterroOptions): PainterroInstance;
 }

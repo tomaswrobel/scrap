@@ -15,9 +15,9 @@
  * - a variable getter
  * - a block created by FieldParam, see fields/field_param.ts
  */
-import {app} from "@scrap/types/App.svelte.ts";
-import type {Check} from "@scrap/types/Check.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {app} from "@scrap/types/App.svelte";
+import type {Check} from "@scrap/types/Check";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import type {ContextMenuRegistry} from "blockly/core";
 
 export default new CustomBlock({

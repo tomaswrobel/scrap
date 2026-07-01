@@ -16,11 +16,11 @@
 	import type {Attachment} from "svelte/attachments";
 	import WaveSurfer from "wavesurfer.js";
 	import MediaList from "../MediaList.svelte";
-	import {app} from "@scrap/types/App.svelte.ts";
-	import Tab from "../controls/Tab.svelte";
+	import {app} from "@scrap/types/App.svelte";
 	import Upload from "@material-symbols/svg-400/rounded/upload.svg?icon";
-	import SpeedDial from "@scrap/components/controls/SpeedDial.svelte";
-	import Button from "../controls/Button.svelte";
+	import Button from "@juvofy/lib/components/actions/Button";
+	import Tab from "@juvofy/lib/components/navigation/Tab";
+	import SpeedDial from "@juvofy/lib/components/actions/SpeedDial";
 
 	function attachWavesurfer(sound: EntityAsset): Attachment<HTMLDivElement> {
 		return function (container) {
@@ -74,7 +74,7 @@
 
 <Tab label="Sounds" id="sounds">
 	<SpeedDial class="end-[unset] left-8">
-		<Button variant="fab" onclick={uploadNewSound}>
+		<Button class="btn-lg btn-circle" onclick={uploadNewSound}>
 			<Upload class="w-6 fill-current" />
 		</Button>
 	</SpeedDial>

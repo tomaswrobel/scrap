@@ -11,16 +11,17 @@
 	 * @fileoverview Output panel component.
 	 * @copyright Tomáš Wróbel 2025
 	 */
-	import Button from "@scrap/components/controls/Button.svelte";
-	import {documentToString} from "@scrap/utils/documentToString.ts";
-	import {app} from "@scrap/types/App.svelte.ts";
+	import Button from "@juvofy/lib/components/actions/Button";
+	import {documentToString} from "@scrap/utils/documentToString";
+	import {app} from "@scrap/types/App.svelte";
 	import MediaList from "@scrap/components/MediaList.svelte";
 	import PlayIcon from "@material-symbols/svg-400/rounded/play_arrow-fill.svg?icon";
 	import Stop from "@material-symbols/svg-400/sharp/stop-fill.svg?icon";
 	import type {HTMLAttributes} from "svelte/elements";
-	import {tw} from "@scrap/utils/tw.ts";
-	import {event} from "@scrap/utils/event.ts";
+	import {tw} from "@juvofy/lib/utils/tw";
+	import {event} from "@juvofy/lib/utils/event";
 	import type JSZip from "jszip";
+	import {untrack} from "svelte";
 
 	const STATIC_ENGINE_JS = "/engine/index.js";
 	const STATIC_ENGINE_CSS = "/engine/index.css";
@@ -119,16 +120,14 @@
 >
 	<div class="h-10 gap-2 flex items-center cursor-auto">
 		<Button
-			class="btn-square btn-sm cursor-pointer"
-			variant="ghost"
+			class="btn-square btn-sm cursor-pointer btn-ghost"
 			onclick={() =>
 				iframe && (iframe.srcdoc = getHTML(STATIC_ENGINE_JS, STATIC_ENGINE_CSS))}
 		>
 			<PlayIcon class="size-4 fill-current" />
 		</Button>
 		<Button
-			class="btn-square btn-sm cursor-pointer"
-			variant="ghost"
+			class="btn-square btn-sm cursor-pointer btn-ghost"
 			onclick={() => iframe?.contentWindow?.postMessage("STOP", "*")}
 		>
 			<Stop class="size-4 fill-current" />
@@ -144,7 +143,9 @@
 		width={app.size}
 		data-turbo={app.turboExecution}
 		class="border-0 aspect-4/3 cursor-auto"
-		srcdoc={globalThis.window && getHTML(STATIC_ENGINE_JS, STATIC_ENGINE_CSS)}
+		srcdoc={untrack(
+			() => globalThis.window && getHTML(STATIC_ENGINE_JS, STATIC_ENGINE_CSS),
+		)}
 		onload={e => {
 			const {contentWindow} = e.currentTarget as HTMLIFrameElement;
 

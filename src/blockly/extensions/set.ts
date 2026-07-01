@@ -14,8 +14,8 @@
  * when the variable is moved to the `set` block.
  */
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
-import {assert} from "@scrap/utils/assert.ts";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap";
+import {assert} from "@juvofy/lib/utils/assert";
 
 export default function (this: Blockly.BlockSvg) {
 	this.onchange = function (event: Blockly.Events.Abstract) {

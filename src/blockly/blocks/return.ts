@@ -23,11 +23,11 @@
  * will remove its value input (return;) and serve like
  * the Scratch's "stop this script" block.
  */
-import type {Check} from "@scrap/types/Check.ts";
-import {blockToCheck} from "@scrap/utils/blockToCheck.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import type {Check} from "@scrap/types/Check";
+import {blockToCheck} from "@scrap/utils/blockToCheck";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
-import {TypeToShadowMap} from "../utils/TypeToShadowMap.ts";
+import {TypeToShadowMap} from "../utils/TypeToShadowMap";
 
 export type ReturnBlockOutput = Check | false;
 

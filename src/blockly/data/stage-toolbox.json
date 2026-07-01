@@ -175,7 +175,7 @@
 		"contents": [
 			{
 				"kind": "block",
-				"type": "color_sliders"
+				"type": "color"
 			},
 			{
 				"kind": "block",
@@ -210,6 +210,10 @@
 			{
 				"kind": "sep",
 				"gap": 40
+			},
+			{
+				"kind": "block",
+				"type": "penClear"
 			},
 			{
 				"kind": "sep"

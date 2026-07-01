@@ -680,7 +680,7 @@
 		"contents": [
 			{
 				"kind": "block",
-				"type": "color_sliders"
+				"type": "color"
 			},
 			{
 				"kind": "block",
@@ -780,7 +780,7 @@
 				"inputs": {
 					"VALUE": {
 						"shadow": {
-							"type": "color_sliders"
+							"type": "color"
 						}
 					},
 					"VAR": {
@@ -1060,7 +1060,7 @@
 				"inputs": {
 					"COLOR": {
 						"shadow": {
-							"type": "color_sliders"
+							"type": "color"
 						}
 					}
 				}

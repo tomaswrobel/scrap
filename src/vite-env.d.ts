@@ -11,19 +11,8 @@ declare interface ImportMetaEnv {
 
 declare module "@scrap/compiler/pkg" {
 	export function parse(code: string): import("@swc/types").Module;
-	export function transform(code: string): string;
+	export function transform(code: string): string | null;
 	export function getVariables(code: string): import("@scrap/types/Variable").Variable[];
-}
-
-/**
- * Strongly typed
- */
-declare module "$context" {
-	// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-	interface Map {}
-
-	function get<K extends keyof Map>(key: K): Map[K];
-	function set<K extends keyof Map>(key: K, value: Map[K]): void;
 }
 
 declare module "*?icon" {

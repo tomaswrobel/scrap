@@ -19,9 +19,6 @@ export default defineConfig({
 			"@scrap": resolve(import.meta.dirname, ".."),
 		},
 	},
-	esbuild: {
-		target: "ES2024",
-	},
 	publicDir: false,
 	build: {
 		outDir: resolve(import.meta.dirname, "../../public/engine"),

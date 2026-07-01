@@ -1,4 +1,4 @@
-import {bind} from "@scrap/utils/bind.ts";
+import {bind} from "@scrap/utils/bind";
 import {
 	editor,
 	MarkerSeverity,
@@ -8,9 +8,9 @@ import {
 	type languages,
 } from "monaco-editor";
 import {DiagnosticCategory, flattenDiagnosticMessageText} from "typescript";
-import type {TypeScriptMode} from "../tsMode.ts";
-import {Adapter} from "./Adapter.ts";
-import type {LibFiles} from "./LibFiles.ts";
+import type {TypeScriptMode} from "../tsMode";
+import {Adapter} from "./Adapter";
+import type {LibFiles} from "./LibFiles";
 
 export class DiagnosticsAdapter extends Adapter implements IDisposable {
 	private disposables: IDisposable[] = [];

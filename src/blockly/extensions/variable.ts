@@ -12,8 +12,8 @@
  *
  * This extension adds a dropdown with all the variables to the block.
  */
-import {app} from "@scrap/types/App.svelte.ts";
-import {assert} from "@scrap/utils/assert.ts";
+import {app} from "@scrap/types/App.svelte";
+import {assert} from "@juvofy/lib/utils/assert";
 import * as Blockly from "blockly/core";
 
 export default function (this: Blockly.Block) {

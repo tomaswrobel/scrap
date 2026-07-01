@@ -1,7 +1,7 @@
 import {languages, type editor, type Range} from "monaco-editor";
 import type ts from "typescript";
-import {Adapter} from "./Adapter.ts";
-import {FormatBaseAdapter} from "./FormatBaseAdapter.ts";
+import {Adapter} from "./Adapter";
+import {FormatBaseAdapter} from "./FormatBaseAdapter";
 
 @Adapter.providedBy(languages.registerCodeActionProvider)
 export class CodeActionAdaptor

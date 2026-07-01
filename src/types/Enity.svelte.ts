@@ -20,7 +20,8 @@ import stage from "../assets/svgs/stage.svg?raw";
 import BlocksToCode from "@scrap/code-transformers/blocksToCode";
 import * as SWC from "@scrap/utils/swc";
 import {EntityAsset} from "./EntityAsset.svelte";
-import {assert} from "@scrap/utils/assert";
+import {assert} from "@juvofy/lib/utils/assert";
+import {ConnectionChecker} from "@scrap/blockly/plugins/ConnectionChecker";
 
 const scrappyAsset = new EntityAsset([scrappy], "Scrappy.svg", {type: "image/svg+xml"});
 
@@ -43,6 +44,8 @@ export class Entity {
 		this.init = $state(init);
 		this.name = $state(name);
 		this.isStage = isStage;
+
+		this.workspace.connectionChecker = new ConnectionChecker();
 	}
 
 	public static createSprite(name: string, asset = scrappyAsset) {
@@ -86,7 +89,7 @@ export class Entity {
 
 	public generateProductionCode(zip?: JSZip) {
 		const typescript = this.generatePreviewCode(false);
-		const result = SWC.transform(typescript);
+		const result = SWC.transform(typescript) ?? "";
 		const body = this.blocksToCode?.prefixLines(result, "\t");
 		const reducer = this.getFileURLs.bind(this, zip?.folder(this.name));
 		const configuration = {

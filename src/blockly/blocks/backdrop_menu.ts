@@ -14,8 +14,8 @@
  * It should be always a shadow block, as it's used in the
  * switch-backdrop-to block.
  */
-import {app} from "@scrap/types/App.svelte.ts";
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {app} from "@scrap/types/App.svelte";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 import * as path from "path";
 

@@ -1,0 +1,62 @@
+---
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview /docs route
+ * @copyright SeirCheese 2025
+ */
+import Layout from "@scrap/components/Layout.astro";
+import Navbar from "@scrap/components/Navbar.astro";
+import Footer from "@scrap/components/Footer.astro";
+import DocBlock from "@scrap/components/DocBlock.svelte";
+import {buildDocsCategories} from "@scrap/blockly/docs";
+
+type CodeComponent = (props: astroHTML.JSX.HTMLAttributes) => astroHTML.JSX.Element;
+
+const examples = import.meta.glob<CodeComponent>("../assets/web/docs/**/*.ts", {
+	eager: true,
+	import: "default",
+	query: "?shiki",
+});
+
+// Index the curated code examples by "<category>/<name>".
+const codeByKey: Record<string, CodeComponent | undefined> = {};
+for (const [path, value] of Object.entries(examples)) {
+	const [category, name] = path.slice("../assets/web/docs/".length).split("/");
+	codeByKey[`${category}/${name}`] = value;
+}
+
+const categories = buildDocsCategories();
+---
+
+<Layout>
+	<Navbar />
+	<div class="navbar"></div>
+	<section class="flex flex-col gap-4 p-4 bg-base-200">
+		{
+			categories.map(category => (
+				<div class="flex flex-col gap-4">
+					<h2 class="capitalize text-3xl font-bold mb-8">{category.name}</h2>
+					{category.blocks.map(block => {
+						const CodeExample =
+							codeByKey[`${category.name.toLowerCase()}/${block.name}`];
+						return (
+							<section class="flex flex-col gap-4 mb-8">
+								<h3 class="text-2xl mb-2">{block.name}</h3>
+								{CodeExample && <CodeExample />}
+								<DocBlock blockState={block.state} client:only="svelte" />
+							</section>
+						);
+					})}
+				</div>
+			))
+		}
+	</section>
+	<Footer />
+</Layout>

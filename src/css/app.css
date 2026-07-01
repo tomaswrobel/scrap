@@ -13,6 +13,8 @@
 @import "tailwindcss";
 @import "@fontsource/geist/400";
 @import "@fontsource/geist/600";
+@source "../../node_modules/@juvofy/lib";
+@import "@juvofy/lib/app.tw.css";
 
 @plugin "daisyui";
 @plugin "daisyui/theme" {
@@ -56,10 +58,6 @@
 
 :root {
 	color-scheme: dark;
-}
-
-* {
-	box-sizing: border-box;
 }
 
 svg[display="none"] {

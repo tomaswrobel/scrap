@@ -14,13 +14,13 @@
 	import Worker from "@scrap/monaco-editor/ts.worker.ts?worker";
 	import {editor, Uri} from "monaco-editor";
 	import lib from "@scrap/typings/runtime/index.ts?raw";
-	import type {Entity} from "@scrap/types/Enity.svelte.ts";
+	import type {Entity} from "@scrap/types/Enity.svelte";
 	import type {HTMLAttributes} from "svelte/elements";
-	import {app} from "@scrap/types/App.svelte.ts";
+	import {app} from "@scrap/types/App.svelte";
 	import {onDestroy} from "svelte";
 	import path from "path";
-	import type {Variable} from "@scrap/types/Variable.ts";
-	import {setupLanguage} from "@scrap/monaco-editor/setupLanguage.ts";
+	import type {Variable} from "@scrap/types/Variable";
+	import {setupLanguage} from "@scrap/monaco-editor/setupLanguage";
 
 	globalThis.MonacoEnvironment = {
 		getWorker: () => new Worker(),
@@ -59,7 +59,7 @@
 <script lang="ts">
 	let {entity, invalid = $bindable(false), ...props}: Props = $props();
 	const main = editor.createModel(
-		entity.typescript ?? "",
+		(() => entity.typescript ?? "")(),
 		"typescript",
 		Uri.file("/script.ts"),
 	);

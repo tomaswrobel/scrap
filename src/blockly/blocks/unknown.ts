@@ -18,7 +18,7 @@
  * blocks, each with a different shape, but those would need
  * different names. This way, we can reuse the same block.
  */
-import {CustomBlock} from "@scrap/utils/CustomBlock.ts";
+import {CustomBlock} from "@scrap/utils/CustomBlock";
 
 const COMMENT = `This is a Scrap-incompatible 
 block imported from Scratch. 
