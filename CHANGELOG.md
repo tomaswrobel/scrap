@@ -15,6 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Publish the code standard
 
+## [8.0.1] - 2026-08-31
+
+### Fixed
+
+- If / Else / Else if is now correctly generated from code
+
 ## [8.0.0] - 2026-06-30
 
 ### Changed
@@ -1008,7 +1014,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomaswrobel/scrap/compare/v8.0.0...HEAD
+[unreleased]: https://github.com/tomaswrobel/scrap/compare/v8.0.1...HEAD
+[8.0.1]: https://githb.com/tomaswrobel/scrap/realeases/tag/v8.0.1
 [8.0.0]: https://githb.com/tomaswrobel/scrap/realeases/tag/v8.0.0
 [7.0.0]: https://githb.com/tomaswrobel/scrap/realeases/tag/v7.0.0
 [6.3.0]: https://github.com/tomaswrobel/scrap/releases/tag/v6.3.0

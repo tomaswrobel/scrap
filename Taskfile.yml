@@ -113,7 +113,7 @@ tasks:
     desc: Checks the code
     cmds:
       - yarn oxlint
-      - yarn astro check
+      - yarn astro check --tsconfig ./tsconfig.app.json
       - yarn prettier . --check
       - yarn svelte-check --tsconfig ./tsconfig.app.json
       - yarn svelte-check --tsconfig ./tsconfig.node.json

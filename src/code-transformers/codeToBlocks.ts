@@ -47,15 +47,16 @@ class CodeToBlocks {
 		this.workspace = workspace;
 	}
 
-	public static async switch(e: Entity) {
-		if (!e.typescript) {
+	public static async switch(entity: Entity) {
+		if (!entity.typescript) {
 			return;
 		}
-		e.workspace.clear();
-		const tree = SWC.parse(e.typescript);
-		const parser = new this(e.workspace);
+		entity.workspace.clear();
+		entity.workspace.clearUndo();
+		const tree = SWC.parse(entity.typescript);
+		const parser = new this(entity.workspace);
 		tree.body.forEach(parser.parse, parser);
-		e.variables.splice(0, e.variables.length, ...parser.variables);
+		entity.variables.splice(0, entity.variables.length, ...parser.variables);
 	}
 
 	private block<T>(type: string) {
@@ -403,10 +404,10 @@ class CodeToBlocks {
 					});
 
 					for (let i = 0; i < elseIfStatements.length; i++) {
-						this.connection = block.getInput(`IF${i}`)?.connection;
+						this.connection = block.getInput(`IF${i + 1}`)?.connection;
 						this.parse(elseIfStatements[i].test);
 
-						this.connection = block.getInput(`DO${i}`)?.connection;
+						this.connection = block.getInput(`DO${i + 1}`)?.connection;
 						this.parse(elseIfStatements[i].consequent);
 					}
 
