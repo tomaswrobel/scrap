@@ -23,13 +23,7 @@ declare module "*?icon" {
 	export default Icon;
 }
 
-declare module "*?shiki" {
-	import type {Component} from "svelte";
-	import type {HTMLAttributes} from "svelte/elements";
-
-	const Code: Component<HTMLAttributes<HTMLDivElement>>;
-	export default Code;
-}
+declare module "*?shiki";
 
 declare module "*&shiki" {
 	export {default} from "?shiki";

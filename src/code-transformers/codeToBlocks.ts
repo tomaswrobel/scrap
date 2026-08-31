@@ -47,15 +47,16 @@ class CodeToBlocks {
 		this.workspace = workspace;
 	}
 
-	public static async switch(e: Entity) {
-		if (!e.typescript) {
+	public static async switch(entity: Entity) {
+		if (!entity.typescript) {
 			return;
 		}
-		e.workspace.clear();
-		const tree = SWC.parse(e.typescript);
-		const parser = new this(e.workspace);
+		entity.workspace.clear();
+		entity.workspace.clearUndo();
+		const tree = SWC.parse(entity.typescript);
+		const parser = new this(entity.workspace);
 		tree.body.forEach(parser.parse, parser);
-		e.variables.splice(0, e.variables.length, ...parser.variables);
+		entity.variables.splice(0, entity.variables.length, ...parser.variables);
 	}
 
 	private block<T>(type: string) {
@@ -383,10 +384,10 @@ class CodeToBlocks {
 				}
 				case "IfStatement": {
 					const block = this.block<typeof IfBlock>("controls_if");
-					this.connection = block.getInput("IF0")?.connection;
+					this.connection = block.getInput("IF1")?.connection;
 					this.parse(node.test);
 
-					this.connection = block.getInput("DO0")?.connection;
+					this.connection = block.getInput("DO1")?.connection;
 					this.parse(node.consequent);
 
 					const elseIfStatements: SWC.IfStatement[] = [];
@@ -402,7 +403,7 @@ class CodeToBlocks {
 						hasElse: !!alternate,
 					});
 
-					for (let i = 0; i < elseIfStatements.length; i++) {
+					for (let i = 1; i <= elseIfStatements.length; i++) {
 						this.connection = block.getInput(`IF${i}`)?.connection;
 						this.parse(elseIfStatements[i].test);
 
