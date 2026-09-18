@@ -1,0 +1,207 @@
+{
+	"description": "Move and rotate sprites around the stage.",
+	"blockStyles": {
+		"colourPrimary": "#4C97FF",
+		"colourSecondary": "#4280D7",
+		"colourTertiary": "#3373CC"
+	},
+	"blocks": {
+		"motion_angle": {
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_angle",
+					"name": "VALUE"
+				}
+			],
+			"output": "number"
+		},
+		"move": {
+			"inputsInline": true,
+			"message0": "move %1 steps",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "STEPS",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"turnLeft": {
+			"inputsInline": true,
+			"message0": "turn left %1 degress",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "DEGREES",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"turnRight": {
+			"inputsInline": true,
+			"message0": "turn right %1 degress",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "DEGREES",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"pointInDirection": {
+			"inputsInline": true,
+			"message0": "point in direction %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "DIRECTION",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"pointTowards": {
+			"inputsInline": true,
+			"message0": "point towards %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "SPRITE",
+					"check": "Sprite"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"pointTo": {
+			"inputsInline": true,
+			"message0": "point to x: %1 y: %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "X",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "Y",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"goTo": {
+			"inputsInline": true,
+			"message0": "go to x: %1 y: %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "X",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "Y",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"goTowards": {
+			"inputsInline": true,
+			"message0": "go towards %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "SPRITE",
+					"check": "Sprite"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"glide": {
+			"inputsInline": true,
+			"message0": "glide %1 secs to x: %2 y: %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "SECS",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "X",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "Y",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"x": {
+			"inputsInline": true,
+			"message0": "x position",
+			"output": ["number", "Variable"]
+		},
+		"y": {
+			"inputsInline": true,
+			"message0": "y position",
+			"output": ["number", "Variable"]
+		},
+		"direction": {
+			"inputsInline": true,
+			"message0": "direction",
+			"output": "number"
+		},
+		"rotationStyle": {
+			"inputsInline": true,
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "STYLE",
+					"options": [
+						["all around", "all around"],
+						["left-right", "left-right"],
+						["don't rotate", "don't rotate"]
+					]
+				}
+			],
+			"output": "string"
+		},
+		"setRotationStyle": {
+			"inputsInline": true,
+			"message0": "set rotation style %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "STYLE",
+					"check": ["string", "number"]
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"ifOnEdgeBounce": {
+			"message0": "if on edge, bounce",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		}
+	}
+}

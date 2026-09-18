@@ -31,9 +31,10 @@ import {assert} from "@juvofy/lib/utils/assert";
 import ReturnBlock from "./return";
 
 export default new CustomBlock({
+	category: "operators",
+
 	init() {
 		this.setOutput(true, "type");
-		this.setStyle("Operators");
 
 		this.appendDummyInput().appendField<string>(
 			new Blockly.FieldDropdown(
@@ -70,7 +71,9 @@ export default new CustomBlock({
 					}
 
 					if (parent.type === "array") {
-						(parent as CustomBlock.Infer<typeof ArrayBlock>).updateShape(type);
+						(parent as unknown as CustomBlock.Infer<typeof ArrayBlock>).updateShape(
+							type,
+						);
 					}
 
 					if (parent.type === "function" || parentOfParent?.type === "function") {

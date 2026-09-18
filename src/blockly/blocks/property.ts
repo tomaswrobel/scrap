@@ -19,9 +19,10 @@ import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({
+	category: "sensing",
+
 	init() {
 		this.setOutput(true, ["number", "Variable"]);
-		this.setStyle("Sensing");
 		if (this.workspace instanceof Blockly.WorkspaceSvg) {
 			this.appendDummyInput()
 				.appendField<string>(

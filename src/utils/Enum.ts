@@ -1,5 +1,5 @@
 export interface EnumConstructor {
-	new <const T extends Enum.Object>(object: T): T;
+	make<const T extends Enum.Object>(object: T): Readonly<T>;
 
 	keys<T extends Enum.Object>(enumObject: T): (keyof T)[];
 	values<T extends Enum.Object>(enumObject: T): T[keyof T][];
@@ -11,4 +11,9 @@ export declare namespace Enum {
 	export type Infer<T extends Enum.Object> = T[keyof T];
 }
 
-export const Enum = Object as EnumConstructor;
+export const Enum: EnumConstructor = {
+	make: Object.freeze,
+	keys: Object.keys,
+	values: Object.values,
+	entries: Object.entries,
+};

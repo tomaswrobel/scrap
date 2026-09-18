@@ -32,9 +32,10 @@ import {TypeToShadowMap} from "../utils/TypeToShadowMap";
 export type ReturnBlockOutput = Check | false;
 
 export default new CustomBlock({
+	category: "functions",
+
 	init() {
 		this.inputsInline = true;
-		this.setStyle("Functions");
 		this.appendDummyInput().appendField("return");
 		this.setPreviousStatement(true, "any");
 	},

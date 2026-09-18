@@ -50,7 +50,7 @@
 		"@blockly/field-colour-hsv-sliders": "^6.0.10",
 		"@blockly/field-date": "^10.0.7",
 		"@fontsource/geist": "^5.2.8",
-		"@juvofy/lib": "github:Juvofy/base",
+		"@juvofy/lib": "github:Juvofy/base#v1.3.0",
 		"@material-symbols/svg-400": "^0.40.2",
 		"@swc/wasm": "^1.15.8",
 		"blockly": "^12.3.1",

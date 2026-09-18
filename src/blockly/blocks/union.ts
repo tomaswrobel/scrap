@@ -18,12 +18,12 @@ import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({
+	category: "operators",
 	count: 2,
 
 	init() {
 		this.inputsInline = true;
 		this.setOutput(true, "type");
-		this.setStyle("Operators");
 		this.setMutator(new Blockly.icons.MutatorIcon(["union:type"], this));
 		this.updateShape(); // That's why it is a dynamic block
 	},

@@ -1,0 +1,265 @@
+{
+	"description": "Control the flow of your program: conditionals, loops, error handling, and sprite cloning.",
+	"blockStyles": {
+		"colourPrimary": "#FFAB19",
+		"colourSecondary": "#EC9C13",
+		"colourTertiary": "#CF8B17"
+	},
+	"blocks": {
+		"controls_if_if": {
+			"message0": "%{BKY_CONTROLS_IF_IF_TITLE_IF}",
+			"nextStatement": "any",
+			"enableContextMenu": false,
+			"tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}"
+		},
+		"controls_if_elseif": {
+			"message0": "%{BKY_CONTROLS_IF_ELSEIF_TITLE_ELSEIF}",
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"enableContextMenu": false,
+			"tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}"
+		},
+		"controls_if_else": {
+			"message0": "%{BKY_CONTROLS_IF_ELSE_TITLE_ELSE}",
+			"previousStatement": "any",
+			"enableContextMenu": false,
+			"tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}"
+		},
+		"wait": {
+			"inputsInline": true,
+			"message0": "wait %1 seconds",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "SECS",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"for": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for",
+			"inputsInline": true,
+			"message0": "for %1 from %2 to %3",
+			"args0": [
+				{
+					"type": "field_param",
+					"name": "VAR"
+				},
+				{
+					"type": "input_value",
+					"name": "FROM",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "TO",
+					"check": "number"
+				}
+			],
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "STACK",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"while": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/while",
+			"inputsInline": true,
+			"message0": "while %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "CONDITION",
+					"check": "boolean"
+				}
+			],
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "STACK",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"doWhile": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/do...while",
+			"inputsInline": true,
+			"message0": "do",
+			"message1": "%1 while %2",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "STACK",
+					"check": "any"
+				},
+				{
+					"type": "input_value",
+					"name": "CONDITION",
+					"check": "boolean"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"ternary": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_operator",
+			"inputsInline": true,
+			"message0": "if %1 ? %2 else %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "CONDITION",
+					"check": "boolean"
+				},
+				{
+					"type": "input_value",
+					"name": "THEN",
+					"check": "any"
+				},
+				{
+					"type": "input_value",
+					"name": "ELSE",
+					"check": "any"
+				}
+			],
+			"output": "any"
+		},
+		"break": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/break",
+			"inputsInline": true,
+			"message0": "break",
+			"previousStatement": "any"
+		},
+		"continue": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/continue",
+			"inputsInline": true,
+			"message0": "continue",
+			"previousStatement": "any"
+		},
+		"controls_if": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else",
+			"inputsInline": true,
+			"message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "IF0",
+					"check": "boolean"
+				}
+			],
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "DO0",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"suppressPrefixSuffix": true,
+			"mutator": "controls_if"
+		},
+		"try": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch",
+			"message0": "try",
+			"nextStatement": ["catch", "finally"]
+		},
+		"catch": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch",
+			"message0": "catch",
+			"nextStatement": "finally",
+			"previousStatement": "catch"
+		},
+		"catchVar": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch",
+			"message0": "catch %1",
+			"args0": [
+				{
+					"type": "field_identifier",
+					"name": "ERROR",
+					"value": "error"
+				}
+			],
+			"nextStatement": "finally",
+			"previousStatement": "catch"
+		},
+		"finally": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch",
+			"message0": "finally",
+			"previousStatement": "finally"
+		},
+		"tryCatch": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch",
+			"inputsInline": true,
+			"message0": "try",
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "TRY",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"mutator": "try"
+		},
+		"throw": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw",
+			"inputsInline": true,
+			"message0": "throw %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "ERROR",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any"
+		},
+		"whenCloned": {
+			"inputsInline": true,
+			"message0": "when I start as a clone",
+			"nextStatement": "any"
+		},
+		"clone": {
+			"inputsInline": true,
+			"message0": "clone %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "SPRITE",
+					"check": "Sprite"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"delete": {
+			"inputsInline": true,
+			"message0": "delete",
+			"args0": [],
+			"previousStatement": "any"
+		},
+		"stop": {
+			"message0": "stop all scripts",
+			"previousStatement": "any"
+		},
+		"stopOtherScripts": {
+			"message0": "stop my other scripts",
+			"args0": [],
+			"previousStatement": "any"
+		}
+	}
+}

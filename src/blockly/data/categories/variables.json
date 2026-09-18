@@ -1,0 +1,47 @@
+{
+	"description": "Show variables on stage and work with function parameters.",
+	"blockStyles": {
+		"colourPrimary": "#FF8C1A",
+		"colourSecondary": "#FF8000",
+		"colourTertiary": "#DB6E00"
+	},
+	"blocks": {
+		"showVariable": {
+			"message0": "show variable %1",
+			"args0": [
+				{
+					"type": "input_dummy",
+					"name": "DUMMY"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"extensions": ["variable"],
+			"inputsInline": true
+		},
+		"hideVariable": {
+			"message0": "hide variable %1",
+			"args0": [
+				{
+					"type": "input_dummy",
+					"name": "DUMMY"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"extensions": ["variable"],
+			"inputsInline": true
+		},
+		"parameter": {
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_label_serializable",
+					"name": "VAR"
+				}
+			],
+			"mutator": "parameter",
+			"output": "any"
+		}
+	}
+}

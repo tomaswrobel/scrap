@@ -1,0 +1,43 @@
+{
+	"description": "Play and control sound effects and music.",
+	"blockStyles": {
+		"colourPrimary": "#CF63CF",
+		"colourSecondary": "#C94FC9",
+		"colourTertiary": "#BD42BD"
+	},
+	"blocks": {
+		"playSound": {
+			"message0": "play sound %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "SOUND",
+					"check": "string"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"playSoundUntilDone": {
+			"message0": "play sound %1 until done",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "SOUND",
+					"check": "string"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"volume": {
+			"message0": "volume",
+			"output": ["number", "Variable"]
+		},
+		"stopSounds": {
+			"message0": "stop my sounds",
+			"previousStatement": "any",
+			"nextStatement": "any"
+		}
+	}
+}

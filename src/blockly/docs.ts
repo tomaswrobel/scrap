@@ -17,20 +17,46 @@
 import spriteToolbox from "./data/sprite-toolbox.json";
 import stageToolbox from "./data/stage-toolbox.json";
 import type * as Blockly from "blockly";
+import type {Category} from "./category.ts";
+import {assert} from "@juvofy/lib/utils/assert";
+
+const categoryStylesByPath = import.meta.glob<Category>("./data/categories/*.json", {
+	eager: true,
+	import: "default",
+});
+
+const categoryStyles: Record<string, Category> = {};
+for (const [path, style] of Object.entries(categoryStylesByPath)) {
+	const match = path.match(/([^/]+)\.json$/);
+	assert(match);
+	categoryStyles[match[1]] = style;
+}
 
 export interface DocBlock {
 	/** Stable, human-readable, unique-per-category identifier. */
 	name: string;
 	state: Blockly.serialization.blocks.State;
+	/** Link to the MDN page documenting the underlying JS/Web API, if any. */
+	mdn?: string;
 }
 
 export interface DocCategory {
 	name: string;
+	slug: string;
+	/** A short summary of what this category of blocks is for. */
+	description: string;
+	/** The category's primary block colour, used for the sidebar's colour bubble. */
+	colour: string;
 	blocks: DocBlock[];
 }
 
 function capitalize(value: string) {
 	return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+/** Turns a category name (e.g. "My Blocks") into a URL-safe slug (e.g. "my-blocks"). */
+export function slugify(name: string): string {
+	return name.toLowerCase().replace(/\s+/g, "-");
 }
 
 const ARITHMETICS: Record<string, string> = {
@@ -105,7 +131,14 @@ export function buildDocsCategories(): DocCategory[] {
 			const categoryName = String(category.name);
 			let entry = byName.get(categoryName);
 			if (!entry) {
-				const docCategory: DocCategory = {name: categoryName, blocks: []};
+				const slug = slugify(categoryName);
+				const docCategory: DocCategory = {
+					name: categoryName,
+					slug,
+					description: categoryStyles[slug]?.description ?? "",
+					colour: categoryStyles[slug]?.blockStyles.colourPrimary ?? "#575E75",
+					blocks: [],
+				};
 				entry = {category: docCategory, used: new Set()};
 				byName.set(categoryName, entry);
 				order.push(docCategory);
@@ -135,7 +168,8 @@ export function buildDocsCategories(): DocCategory[] {
 				if ("extraState" in item) {
 					state.extraState = item.extraState;
 				}
-				entry.category.blocks.push({name, state});
+				const mdn = categoryStyles[entry.category.slug]?.blocks[item.type]?.helpUrl;
+				entry.category.blocks.push({name, state, mdn});
 			}
 		}
 	}

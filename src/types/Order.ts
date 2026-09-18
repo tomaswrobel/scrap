@@ -12,7 +12,7 @@
  */
 import {Enum} from "@scrap/utils/Enum";
 
-export const Order = new Enum({
+export const Order = Enum.make({
 	ATOMIC: 0, // 0 "" ...
 	NEW: 1.1, // new
 	MEMBER: 1.2, // . []

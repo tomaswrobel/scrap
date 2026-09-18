@@ -1,0 +1,253 @@
+{
+	"description": "Do math, compare values, combine booleans, and work with text and random numbers.",
+	"blockStyles": {
+		"colourPrimary": "#59C059",
+		"colourSecondary": "#46B946",
+		"colourTertiary": "#389438"
+	},
+	"blocks": {
+		"math_number": {
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_number",
+					"name": "NUM"
+				}
+			],
+			"output": "number"
+		},
+		"text_or_number": {
+			"inputsInline": true,
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "VALUE",
+					"text": "0"
+				}
+			],
+			"output": "any"
+		},
+		"arithmetics": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_operators",
+			"inputsInline": true,
+			"message0": "%1 %2 %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "A",
+					"check": ["number", "string"]
+				},
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						["+", "+"],
+						["-", "-"],
+						["*", "*"],
+						["/", "/"],
+						["**", "**"],
+						["mod", "%"]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "B",
+					"check": ["number", "string"]
+				}
+			],
+			"output": "number"
+		},
+		"compare": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality",
+			"inputsInline": true,
+			"message0": "%1 %2 %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "A",
+					"check": ["number", "string"]
+				},
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						["=", "=="],
+						["≠", "!="],
+						["<", "<"],
+						["≤", "<="],
+						[">", ">"],
+						["≥", ">="]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "B",
+					"check": ["number", "string"]
+				}
+			],
+			"output": "boolean"
+		},
+		"operation": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND",
+			"inputsInline": true,
+			"message0": "%1 %2 %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "A",
+					"check": "boolean"
+				},
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						["and", "&&"],
+						["or", "||"]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "B",
+					"check": "boolean"
+				}
+			],
+			"output": "boolean"
+		},
+		"not": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_NOT",
+			"inputsInline": true,
+			"message0": "not %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "BOOL",
+					"check": "boolean"
+				}
+			],
+			"output": "boolean"
+		},
+		"boolean": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+			"inputsInline": true,
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "BOOL",
+					"options": [
+						["true", "true"],
+						["false", "false"]
+					]
+				}
+			],
+			"output": "boolean"
+		},
+		"random": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random",
+			"message0": "random",
+			"output": "number"
+		},
+		"math": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math",
+			"inputsInline": true,
+			"message0": "%1 of %2",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "OP",
+					"options": [
+						["abs", "abs"],
+						["round", "round"],
+						["floor", "floor"],
+						["ceiling", "ceil"],
+						["sqrt", "sqrt"],
+						["sin", "sin"],
+						["cos", "cos"],
+						["tan", "tan"],
+						["asin", "asin"],
+						["acos", "acos"],
+						["atan", "atan"],
+						["ln", "log"],
+						["log", "log10"],
+						["e ^", "exp"]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "NUM",
+					"check": "number"
+				}
+			],
+			"output": "number"
+		},
+		"constant": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math",
+			"inputsInline": true,
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "CONSTANT",
+					"options": [
+						["π", "Math.PI"],
+						["e", "Math.E"],
+						["∞", "Infinity"],
+						["NaN", "NaN"]
+					]
+				}
+			],
+			"output": "number"
+		},
+		"string": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+			"inputsInline": true,
+			"message0": "convert %1 to string",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "any"
+				}
+			],
+			"output": "string"
+		},
+		"number": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+			"inputsInline": true,
+			"message0": "convert %1 to number",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "any"
+				}
+			],
+			"output": "number"
+		},
+		"generic": {
+			"message0": "%1 of %2",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "ITERABLE",
+					"options": [
+						["array", "Array"],
+						["iterable", "Iterable"]
+					]
+				},
+				{
+					"type": "input_value",
+					"name": "TYPE",
+					"check": "type"
+				}
+			],
+			"output": "type"
+		},
+		"union:type": {
+			"message0": "type",
+			"nextStatement": "any",
+			"previousStatement": "any"
+		}
+	}
+}

@@ -26,8 +26,9 @@ import * as Blockly from "blockly/core";
 import {assert} from "@juvofy/lib/utils/assert";
 
 export default new CustomBlock({
+	category: "functions",
+
 	init() {
-		this.setStyle("Functions");
 		this.setOutput(true);
 		this.setMovable(false);
 		this.setOutputShape(3); // Square

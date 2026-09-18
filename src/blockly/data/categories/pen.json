@@ -1,0 +1,87 @@
+{
+	"description": "Draw on the stage with a virtual pen: colour, size, and stamping.",
+	"blockStyles": {
+		"colourPrimary": "#0fBD8C",
+		"colourSecondary": "#0DA57A",
+		"colourTertiary": "#0B8E69"
+	},
+	"blocks": {
+		"color": {
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_colour_hsv_sliders",
+					"name": "COLOR",
+					"colour": "#ff0000"
+				}
+			],
+			"output": "Color"
+		},
+		"rgb": {
+			"inputsInline": true,
+			"message0": "RGB %1 %2 %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "RED",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "GREEN",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "BLUE",
+					"check": "number"
+				}
+			],
+			"output": "Color"
+		},
+		"color_random": {
+			"message0": "random color",
+			"output": "Color"
+		},
+		"penClear": {
+			"inputsInline": true,
+			"message0": "clear",
+			"args0": [],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"penDown": {
+			"inputsInline": true,
+			"message0": "pen down",
+			"args0": [],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"penUp": {
+			"inputsInline": true,
+			"message0": "pen up",
+			"args0": [],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"stamp": {
+			"inputsInline": true,
+			"message0": "stamp",
+			"args0": [],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"penSize": {
+			"message0": "pen size",
+			"output": ["number", "Variable"]
+		},
+		"penColor": {
+			"message0": "pen color",
+			"output": ["Color", "Variable"]
+		},
+		"isPenDown": {
+			"message0": "is pen down?",
+			"output": ["boolean", "Variable"]
+		}
+	}
+}

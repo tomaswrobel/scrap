@@ -1,0 +1,91 @@
+---
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview /docs/[category]: reference page for a single block category.
+ * @copyright SeirCheese 2025
+ */
+import DocsLayout from "@scrap/components/DocsLayout.astro";
+import DocBlock from "@scrap/components/DocBlock.svelte";
+import {buildDocsCategories} from "@scrap/blockly/docs";
+
+export async function getStaticPaths() {
+	return buildDocsCategories().map(category => ({
+		params: {category: category.slug},
+		props: {category},
+	}));
+}
+
+type CodeComponent = (props: astroHTML.JSX.HTMLAttributes) => astroHTML.JSX.Element;
+
+const examples = import.meta.glob<CodeComponent>("../../assets/web/docs/**/*.ts", {
+	eager: true,
+	import: "default",
+	query: "?shiki",
+});
+
+// Index the curated code examples by "<category>/<name>".
+const codeByKey: Record<string, CodeComponent | undefined> = {};
+for (const [path, value] of Object.entries(examples)) {
+	const [category, name] = path.slice("../../assets/web/docs/".length).split("/");
+	codeByKey[`${category}/${name}`] = value;
+}
+
+const {category} = Astro.props;
+---
+
+<DocsLayout active={category.slug}>
+	<div class="breadcrumbs text-sm" slot="header">
+		<ul>
+			<li><a href="/docs">Docs</a></li>
+			<li>{category.name}</li>
+		</ul>
+	</div>
+	<div class="mb-4">
+		<h1 class="text-4xl font-bold capitalize">{category.name}</h1>
+		{
+			category.description && (
+				<p class="text-base-content/70 mt-2 max-w-prose">{category.description}</p>
+			)
+		}
+	</div>
+	<div class="join join-vertical bg-base-100 rounded-box w-full">
+		{
+			category.blocks.map((block: any) => {
+				const CodeExample = codeByKey[`${category.name.toLowerCase()}/${block.name}`];
+				return (
+					<details
+						name={`docs-${category.slug}`}
+						class="collapse collapse-arrow border-base-300 border join-item"
+					>
+						<summary class="collapse-title text-lg font-medium">
+							{block.name}
+						</summary>
+						<div class="collapse-content">
+							<div class="flex flex-col gap-4 pt-2">
+								{CodeExample && <CodeExample />}
+								<DocBlock blockState={block.state} client:only="svelte" />
+								{block.mdn && (
+									<a
+										href={block.mdn}
+										target="_blank"
+										rel="noopener"
+										class="link link-primary text-sm self-start"
+									>
+										View on MDN ↗
+									</a>
+								)}
+							</div>
+						</div>
+					</details>
+				);
+			})
+		}
+	</div>
+</DocsLayout>

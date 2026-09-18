@@ -8,55 +8,35 @@
  * the official repository at https://github.com/tomaswrobel/scrap.
  *
  * @license MIT
- * @fileoverview /docs route
+ * @fileoverview /docs overview: one card per block category.
  * @copyright SeirCheese 2025
  */
-import Layout from "@scrap/components/Layout.astro";
-import Navbar from "@scrap/components/Navbar.astro";
-import Footer from "@scrap/components/Footer.astro";
-import DocBlock from "@scrap/components/DocBlock.svelte";
+import DocsLayout from "@scrap/components/DocsLayout.astro";
+import DocsCategoryCard from "@scrap/components/DocsCategoryCard.svelte";
 import {buildDocsCategories} from "@scrap/blockly/docs";
-
-type CodeComponent = (props: astroHTML.JSX.HTMLAttributes) => astroHTML.JSX.Element;
-
-const examples = import.meta.glob<CodeComponent>("../assets/web/docs/**/*.ts", {
-	eager: true,
-	import: "default",
-	query: "?shiki",
-});
-
-// Index the curated code examples by "<category>/<name>".
-const codeByKey: Record<string, CodeComponent | undefined> = {};
-for (const [path, value] of Object.entries(examples)) {
-	const [category, name] = path.slice("../assets/web/docs/".length).split("/");
-	codeByKey[`${category}/${name}`] = value;
-}
 
 const categories = buildDocsCategories();
 ---
 
-<Layout>
-	<Navbar />
-	<div class="navbar"></div>
-	<section class="flex flex-col gap-4 p-4 bg-base-200">
+<DocsLayout>
+	<Fragment slot="header">
+		<h1 class="text-4xl font-bold">Block reference</h1>
+		<p class="text-base-content/70 mt-2 max-w-prose">
+			Every block available in Scrap, grouped by category. Pick a category to see each
+			block along with an example.
+		</p>
+	</Fragment>
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 		{
 			categories.map(category => (
-				<div class="flex flex-col gap-4">
-					<h2 class="capitalize text-3xl font-bold mb-8">{category.name}</h2>
-					{category.blocks.map(block => {
-						const CodeExample =
-							codeByKey[`${category.name.toLowerCase()}/${block.name}`];
-						return (
-							<section class="flex flex-col gap-4 mb-8">
-								<h3 class="text-2xl mb-2">{block.name}</h3>
-								{CodeExample && <CodeExample />}
-								<DocBlock blockState={block.state} client:only="svelte" />
-							</section>
-						);
-					})}
-				</div>
+				<DocsCategoryCard
+					name={category.name}
+					slug={category.slug}
+					description={category.description}
+					colour={category.colour}
+					count={category.blocks.length}
+				/>
 			))
 		}
-	</section>
-	<Footer />
-</Layout>
+	</div>
+</DocsLayout>

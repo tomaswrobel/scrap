@@ -1,0 +1,130 @@
+{
+	"description": "Declare variables and reusable functions, and call them with arguments.",
+	"blockStyles": {
+		"colourPrimary": "#FF6680",
+		"colourSecondary": "#FF4D6A",
+		"colourTertiary": "#FF3355"
+	},
+	"blocks": {
+		"set": {
+			"inputsInline": true,
+			"message0": "set %1 to %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "VAR",
+					"check": "Variable"
+				},
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"extensions": ["set"]
+		},
+		"variable": {
+			"message0": "%1 %2 = %3",
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"inputsInline": true,
+			"args0": [
+				{
+					"type": "field_label_serializable",
+					"name": "kind"
+				},
+				{
+					"type": "input_value",
+					"name": "VAR"
+				},
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "any"
+				}
+			]
+		},
+		"change": {
+			"inputsInline": true,
+			"message0": "change %1 by %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "VAR",
+					"check": "Variable"
+				},
+				{
+					"type": "input_value",
+					"name": "VALUE",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"function_header": {
+			"message0": "function's parameters",
+			"nextStatement": "any"
+		},
+		"text_or_number_param": {
+			"inputsInline": true,
+			"message0": "Scratch parameter %1",
+			"args0": [
+				{
+					"type": "field_input",
+					"name": "NAME"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"function_param": {
+			"inputsInline": true,
+			"message0": "parameter %1",
+			"args0": [
+				{
+					"type": "field_identifier",
+					"name": "NAME",
+					"value": "param"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"function_returns": {
+			"message0": "returns",
+			"previousStatement": "any"
+		},
+		"function": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function",
+			"inputsInline": true,
+			"message0": "function %1",
+			"args0": [
+				{
+					"type": "field_identifier",
+					"name": "NAME",
+					"check": "String"
+				}
+			],
+			"nextStatement": "any",
+			"mutator": "function"
+		},
+		"call": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Function_call",
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_label",
+					"name": "NAME",
+					"text": "foo"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"mutator": "call",
+			"inputsInline": true
+		}
+	}
+}

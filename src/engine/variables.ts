@@ -12,7 +12,7 @@
  */
 import {Enum} from "@scrap/utils/Enum";
 
-export const VariableType = new Enum({
+export const VariableType = Enum.make({
 	Any: "any",
 	Number: "number",
 	String: "string",

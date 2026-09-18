@@ -20,9 +20,10 @@ import * as Blockly from "blockly/core";
 import * as path from "path";
 
 export default new CustomBlock({
+	category: "sounds",
+
 	init() {
 		this.setOutput(true, "string");
-		this.setStyle("Sounds");
 
 		this.appendDummyInput().appendField<string>(
 			new Blockly.FieldDropdown(() => {

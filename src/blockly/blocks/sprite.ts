@@ -22,9 +22,10 @@ import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
 export default new CustomBlock({
+	category: "variables",
+
 	init() {
 		this.setOutput(true, "Sprite");
-		this.setStyle("Variables");
 		if (this.workspace instanceof Blockly.WorkspaceSvg) {
 			this.appendDummyInput().appendField<string>(
 				new Blockly.FieldDropdown(() => {

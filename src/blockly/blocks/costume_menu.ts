@@ -20,8 +20,9 @@ import * as Blockly from "blockly/core";
 import * as path from "path";
 
 export default new CustomBlock({
+	category: "looks",
+
 	init() {
-		this.setStyle("Looks");
 		this.setOutput(true, "string");
 
 		this.appendDummyInput().appendField<string>(

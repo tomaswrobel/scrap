@@ -1,0 +1,202 @@
+{
+	"description": "Create, read, and transform arrays and strings.",
+	"blockStyles": {
+		"colourPrimary": "#FF661A",
+		"colourSecondary": "#FF5500",
+		"colourTertiary": "#E64D00"
+	},
+	"blocks": {
+		"array_item_single": {
+			"message0": "single item",
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"array_item_iterable": {
+			"message0": "spread iterable",
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"array_items": {
+			"message0": "items",
+			"nextStatement": "any"
+		},
+		"iterables_string": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+			"inputsInline": true,
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_string",
+					"name": "TEXT",
+					"text": ""
+				}
+			],
+			"output": "string"
+		},
+		"array": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+			"align": "RIGHT",
+			"inputsInline": false,
+			"message0": "create array of %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "TYPE",
+					"check": "type"
+				}
+			],
+			"mutator": "array",
+			"output": "Array",
+			"extraState": {
+				"items": ["single", "single", "single"]
+			}
+		},
+		"length": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/length",
+			"inputsInline": true,
+			"message0": "length of %1",
+			"args0": [
+				{
+					"name": "ITERABLE",
+					"type": "input_value",
+					"check": "Iterable"
+				}
+			],
+			"output": "number"
+		},
+		"reverse": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse",
+			"inputsInline": true,
+			"message0": "reverse array %1",
+			"args0": [
+				{
+					"name": "ITERABLE",
+					"type": "input_value",
+					"check": "Array"
+				}
+			],
+			"output": "Array"
+		},
+		"join": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join",
+			"inputsInline": true,
+			"message0": "join %1 with %2",
+			"args0": [
+				{
+					"name": "ITERABLE",
+					"type": "input_value",
+					"check": "Array"
+				},
+				{
+					"name": "SEPARATOR",
+					"type": "input_value",
+					"check": "string"
+				}
+			],
+			"output": ["string"]
+		},
+		"includes": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes",
+			"inputsInline": true,
+			"message0": "%1 includes %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "ITERABLE",
+					"check": "Iterable"
+				},
+				{
+					"type": "input_value",
+					"name": "ITEM",
+					"check": "any"
+				}
+			],
+			"output": "boolean"
+		},
+		"slice": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice",
+			"inputsInline": true,
+			"message0": "slice %1 from %2 to %3",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "ITERABLE",
+					"check": "Iterable"
+				},
+				{
+					"type": "input_value",
+					"name": "START",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "TO",
+					"check": "number"
+				}
+			],
+			"output": "Iterable"
+		},
+		"item": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+			"inputsInline": true,
+			"message0": "item %1 of %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "INDEX",
+					"check": "number"
+				},
+				{
+					"type": "input_value",
+					"name": "ITERABLE",
+					"check": "Iterable"
+				}
+			],
+			"output": ["any", "Variable"]
+		},
+		"indexOf": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf",
+			"inputsInline": true,
+			"message0": "in %1 find index of %2",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "ITERABLE",
+					"check": "Iterable"
+				},
+				{
+					"type": "input_value",
+					"name": "ITEM"
+				}
+			],
+			"output": "any"
+		},
+		"foreach": {
+			"helpUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach",
+			"inputsInline": true,
+			"message0": "for each %1 in %2",
+			"args0": [
+				{
+					"type": "field_param",
+					"name": "VAR",
+					"var": "item"
+				},
+				{
+					"type": "input_value",
+					"name": "ITERABLE",
+					"check": "Iterable"
+				}
+			],
+			"message1": "%1",
+			"args1": [
+				{
+					"type": "input_statement",
+					"name": "DO",
+					"check": "any"
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		}
+	}
+}

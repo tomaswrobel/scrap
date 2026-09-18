@@ -12,8 +12,11 @@
  * The tokenizer is created by Microsoft, I only mapped identifiers
  * to Scrap blocks. For that, I created a new theme on my own.
  */
+import {categories} from "@scrap/blockly";
 import {languages} from "monaco-editor";
 import type {MonacoEditorLanguage} from "./MonacoEditorLanguage";
+
+const getBlockNamesFromConfig = (category: string) => Object.keys(categories[category].blocks);
 
 export function setupTokenizer(language: MonacoEditorLanguage) {
 	languages.registerTokensProviderFactory(language, {
@@ -21,55 +24,14 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 			// Set defaultToken to invalid to see what you do not tokenize yet
 			defaultToken: "invalid",
 			tokenPostfix: ".ts",
-			motion: [
-				"move",
-				"turnLeft",
-				"turnRight",
-				"pointInDirection",
-				"pointTowards",
-				"pointTo",
-				"goTo",
-				"goTowards",
-				"glide",
-				"x",
-				"y",
-				"direction",
-				"setRotationStyle",
-				"ifOnEdgeBounce",
-			],
-			looks: [
-				"sayWait",
-				"say",
-				"think",
-				"thinkWait",
-				"switchCostumeTo",
-				"nextCostume",
-				"switchBackdropToWait",
-				"switchBackdropTo",
-				"nextBackdrop",
-				"show",
-				"hide",
-				"clearEffects",
-				"goForward",
-				"goBackward",
-				"goToFront",
-				"goToBack",
-				"visible",
-				"size",
-			],
-			sounds: ["playSound", "playSoundUntilDone", "volume", "stopSounds"],
-			pen: ["penClear", "penDown", "penUp", "isPenDown", "stamp", "penSize", "penColor"],
-			events: [
-				"whenFlag",
-				"whenBackdropChangesTo",
-				"whenKeyPressed",
-				"whenTimerElapsed",
-				"whenMouse",
-				"whenLoaded",
-				"broadcastMessage",
-				"whenReceiveMessage",
-				"broadcastMessageWait",
-			],
+			// The `costume.all`/`backdrop.all` blocks compile to nested member
+			// access (`self.costume.all`), so they are matched by a dedicated
+			// rule below rather than being valid identifiers on their own.
+			motion: getBlockNamesFromConfig("motion"),
+			looks: getBlockNamesFromConfig("looks").filter(name => !name.includes(".")),
+			sounds: getBlockNamesFromConfig("sounds"),
+			pen: getBlockNamesFromConfig("pen"),
+			events: getBlockNamesFromConfig("events"),
 			flow: [
 				"if",
 				"else",
@@ -85,20 +47,9 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 			],
 			controls: ["wait", "delete", "clone", "stop", "whenCloned", "stopOtherScripts"],
 			sensing: [
-				"isTouching",
-				"isTouchingBackdropColor",
-				"isTouchingEdge",
-				"isTouchingMouse",
-				"distanceTo",
-				"ask",
-				"isKeyPressed",
-				"mouseDown",
-				"mouseX",
-				"mouseY",
-				"draggable",
-				"getTimer",
-				"resetTimer",
-				// Date
+				...getBlockNamesFromConfig("sensing"),
+				// Date getters are dropdown options of the "dateProperty" block,
+				// not block types on their own.
 				"getFullYear",
 				"getTime",
 				"getMonth",
@@ -107,14 +58,6 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				"getHours",
 				"getMinutes",
 				"getSeconds",
-				// Window
-				"alert",
-				"confirm",
-				"prompt",
-				"isTurbo",
-				// size
-				"width",
-				"height",
 			],
 			math: [
 				"abs",
@@ -149,7 +92,7 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				"Boolean",
 				"toString",
 			],
-			iterables: ["length", "reverse", "join", "includes", "indexOf", "slice"],
+			iterables: getBlockNamesFromConfig("iterables"),
 			functions: [
 				"function",
 				"call",

@@ -1,0 +1,130 @@
+{
+	"description": "React to things happening: the project starting, key presses, clicks, timers, and messages between sprites.",
+	"blockStyles": {
+		"colourPrimary": "#FFBF00",
+		"colourSecondary": "#E6AC00",
+		"colourTertiary": "#CC9900"
+	},
+	"blocks": {
+		"whenFlag": {
+			"inputsInline": true,
+			"message0": "when %1 clicked",
+			"args0": [
+				{
+					"type": "field_flag",
+					"name": "flag"
+				}
+			],
+			"nextStatement": "any"
+		},
+		"whenLoaded": {
+			"message0": "when loaded",
+			"nextStatement": "any"
+		},
+		"whenBackdropChangesTo": {
+			"inputsInline": true,
+			"message0": "when backdrop changes to %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "BACKDROP",
+					"check": "string"
+				}
+			],
+			"nextStatement": "any"
+		},
+		"whenKeyPressed": {
+			"inputsInline": true,
+			"message0": "when %1 key pressed",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "KEY",
+					"check": "string"
+				}
+			],
+			"nextStatement": "any"
+		},
+		"whenTimerElapsed": {
+			"inputsInline": true,
+			"message0": "when timer > %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "TIMER",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any"
+		},
+		"event": {
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "EVENT",
+					"options": [
+						["clicked", "clicked"],
+						["double-clicked", "double-clicked"],
+						["pressed", "pressed"],
+						["released", "released"],
+						["left", "left"],
+						["entered", "entered"],
+						["moved", "moved"]
+					]
+				}
+			],
+			"output": "string"
+		},
+		"whenMouse": {
+			"inputsInline": true,
+			"message0": "when mouse has %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"check": "string",
+					"name": "EVENT"
+				}
+			],
+			"nextStatement": "any"
+		},
+		"whenReceiveMessage": {
+			"inputsInline": true,
+			"message0": "when I receive %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"check": "string",
+					"name": "MESSAGE"
+				}
+			],
+			"nextStatement": "any"
+		},
+		"broadcastMessage": {
+			"inputsInline": true,
+			"message0": "broadcast %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"check": "string",
+					"name": "MESSAGE"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"broadcastMessageWait": {
+			"inputsInline": true,
+			"message0": "broadcast %1 and wait",
+			"args0": [
+				{
+					"type": "input_value",
+					"check": "string",
+					"name": "MESSAGE"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		}
+	}
+}

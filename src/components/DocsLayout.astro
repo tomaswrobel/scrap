@@ -1,0 +1,42 @@
+---
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview Shared shell for /docs and /docs/[category]: navbar, footer
+ * and the category sidebar, with a slot for the page-specific content.
+ * @copyright Tomáš Wróbel 2025
+ */
+import Layout from "@scrap/components/Layout.astro";
+import Navbar from "@scrap/components/Navbar.astro";
+import Footer from "@scrap/components/Footer.astro";
+import DocsSidebar from "@scrap/components/DocsSidebar.astro";
+import {buildDocsCategories} from "@scrap/blockly/docs";
+
+interface Props {
+	active?: string;
+}
+
+const {active}: Props = Astro.props;
+const categories = buildDocsCategories();
+---
+
+<Layout>
+	<Navbar />
+	<div class="navbar"></div>
+	<section class="flex flex-col gap-6 p-4 md:p-8 bg-base-200 min-h-screen">
+		<slot name="header" />
+		<div class="flex gap-8 items-start">
+			<DocsSidebar categories={categories} active={active} />
+			<div class="flex-1 flex flex-col gap-4">
+				<slot />
+			</div>
+		</div>
+	</section>
+	<Footer />
+</Layout>

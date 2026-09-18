@@ -16,7 +16,7 @@
  * generated in the same order as the code is written. This is done by
  * traversing the AST and creating blocks for each node.
  */
-import {entityProperties} from "@scrap/blockly";
+import {entityPropertiesAndMethods} from "@scrap/blockly";
 import type {Entity} from "@scrap/types/Enity.svelte";
 import type {Check} from "@scrap/types/Check";
 import type {Variable} from "@scrap/types/Variable";
@@ -743,7 +743,7 @@ class CodeToBlocks {
 							this.parse(node.callee.object);
 						} else if (
 							SWC.isIdentifier(node.callee.object, "self") &&
-							SWC.isProperty(node.callee, ...entityProperties)
+							SWC.isProperty(node.callee, ...entityPropertiesAndMethods)
 						) {
 							const block = this.block(
 								SWC.getPropertyContents(node.callee.property),
@@ -840,7 +840,7 @@ class CodeToBlocks {
 						this.parse(node.object);
 					} else if (
 						SWC.isIdentifier(node.object, "self") &&
-						SWC.isProperty(node, ...entityProperties)
+						SWC.isProperty(node, ...entityPropertiesAndMethods)
 					) {
 						this.block(SWC.getPropertyContents(node.property));
 					} else if (

@@ -1,0 +1,72 @@
+---
+/**
+ * This file is a part of Scrap, an app for helping to migrate
+ * from block-based programming into text-based programming languages.
+ *
+ * You should have received a copy of the MIT License, if not, please
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomaswrobel/scrap.
+ *
+ * @license MIT
+ * @fileoverview Sidebar navigation shared by /docs and /docs/[category].
+ * Mirrors the look of the IDE's own toolbox category list: a colour
+ * bubble per category, plus a house icon for the "Home" entry.
+ * @copyright Tomáš Wróbel 2025
+ */
+import type {DocCategory} from "@scrap/blockly/docs";
+import HomeIcon from "@material-symbols/svg-400/rounded/home.svg";
+
+interface Props {
+	categories: DocCategory[];
+	active?: string;
+}
+
+const {categories, active}: Props = Astro.props;
+---
+
+<ul class="menu w-56 shrink-0 sticky top-20 self-start bg-base-100 rounded-box">
+	<li class="menu-title">Categories</li>
+	<li class={active === undefined ? "menu-active" : undefined}>
+		<a href="/docs" aria-current={active === undefined ? "page" : undefined}>
+			<HomeIcon class="size-5 fill-current" />
+			Home
+		</a>
+	</li>
+	{
+		categories.map(category => (
+			<li>
+				<a
+					href={`/docs/${category.slug}`}
+					class={active === category.slug ? "menu-active" : undefined}
+					aria-current={active === category.slug ? "page" : undefined}
+				>
+					<span class="categoryBubble" style={{backgroundColor: category.colour}} />
+					{category.name}
+				</a>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.categoryBubble {
+		display: inline-block;
+		position: relative;
+		border-radius: 100%;
+		width: 1.1rem;
+		height: 1.1rem;
+		flex-shrink: 0;
+	}
+
+	.categoryBubble::after {
+		all: inherit;
+		content: "";
+		position: absolute;
+		filter: brightness(0.6);
+		top: 0;
+		left: 0;
+		transform: scale(1.1);
+		transform-origin: center;
+		z-index: -1;
+	}
+</style>

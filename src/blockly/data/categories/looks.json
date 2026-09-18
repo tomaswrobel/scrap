@@ -1,0 +1,230 @@
+{
+	"description": "Change how sprites and the stage look: costumes, backdrops, visibility, size, and speech bubbles.",
+	"blockStyles": {
+		"colourPrimary": "#9966FF",
+		"colourSecondary": "#855CD6",
+		"colourTertiary": "#774DCB"
+	},
+	"blocks": {
+		"sayWait": {
+			"inputsInline": true,
+			"message0": "say %1 for %2 seconds",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "MESSAGE",
+					"check": "any"
+				},
+				{
+					"type": "input_value",
+					"name": "SECS",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"say": {
+			"inputsInline": true,
+			"message0": "say %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "MESSAGE",
+					"check": "any"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"thinkWait": {
+			"inputsInline": true,
+			"message0": "think %1 for %2 seconds",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "MESSAGE",
+					"check": "any"
+				},
+				{
+					"type": "input_value",
+					"name": "SECS",
+					"check": "number"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"think": {
+			"inputsInline": true,
+			"message0": "think %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "MESSAGE",
+					"check": "any"
+				}
+			],
+			"nextStatement": "any",
+			"previousStatement": "any"
+		},
+		"effect": {
+			"message0": "%1",
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "EFFECT",
+					"options": [
+						["color effect", "color"],
+						["ghost effect", "ghost"],
+						["grayscale effect", "grayscale"],
+						["brightness effect", "brightness"]
+					]
+				}
+			],
+			"output": ["number", "Variable"]
+		},
+		"switchCostumeTo": {
+			"inputsInline": true,
+			"message0": "switch costume to %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "COSTUME",
+					"check": ["string", "number"]
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"nextCostume": {
+			"inputsInline": true,
+			"message0": "next costume",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		},
+		"switchBackdropToWait": {
+			"message0": "switch backdrop to %1 and wait",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "BACKDROP",
+					"check": ["string", "number"]
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"inputsInline": true
+		},
+		"switchBackdropTo": {
+			"message0": "switch backdrop to %1",
+			"args0": [
+				{
+					"type": "input_value",
+					"name": "COSTUME",
+					"check": ["string", "number"]
+				}
+			],
+			"previousStatement": "any",
+			"nextStatement": "any"
+		},
+		"nextBackdrop": {
+			"message0": "next backdrop",
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"args0": []
+		},
+		"show": {
+			"inputsInline": true,
+			"message0": "show",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		},
+		"hide": {
+			"inputsInline": true,
+			"message0": "hide",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		},
+		"goForward": {
+			"message0": "go one layer forwards",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		},
+		"goBackward": {
+			"message0": "go one layer backwards",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		},
+		"goToFront": {
+			"message0": "go to front",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		},
+		"goToBack": {
+			"message0": "go to back",
+			"nextStatement": "any",
+			"previousStatement": "any",
+			"args0": []
+		},
+		"visible": {
+			"inputsInline": true,
+			"message0": "visible",
+			"output": "boolean"
+		},
+		"size": {
+			"inputsInline": true,
+			"message0": "size",
+			"output": ["number", "Variable"]
+		},
+		"costume": {
+			"message0": "costume %1",
+			"output": ["string", "number", "Variable"],
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "VALUE",
+					"options": [
+						["name", "name"],
+						["index", "index"]
+					]
+				}
+			]
+		},
+		"backdrop": {
+			"message0": "backdrop %1",
+			"output": ["string", "number", "Variable"],
+			"args0": [
+				{
+					"type": "field_dropdown",
+					"name": "VALUE",
+					"options": [
+						["name", "name"],
+						["index", "index"]
+					]
+				}
+			]
+		},
+		"costume.all": {
+			"message0": "all costumes",
+			"output": "Array"
+		},
+		"backdrop.all": {
+			"message0": "all backdrops",
+			"output": "Array"
+		},
+		"clearEffects": {
+			"inputsInline": true,
+			"message0": "clear effects",
+			"previousStatement": "any",
+			"nextStatement": "any",
+			"args0": []
+		}
+	}
+}
