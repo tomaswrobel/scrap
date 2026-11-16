@@ -16,7 +16,7 @@
  * generated in the same order as the code is written. This is done by
  * traversing the AST and creating blocks for each node.
  */
-import {entityPropertiesAndMethods} from "@scrap/blockly";
+import {entityPropertiesAndMethods, getToolboxShadows} from "@scrap/blockly";
 import type {Entity} from "@scrap/types/Enity.svelte";
 import type {Check} from "@scrap/types/Check";
 import type {Variable} from "@scrap/types/Variable";
@@ -36,6 +36,11 @@ import TypeBlock from "@scrap/blockly/blocks/type";
 import UnionBlock from "@scrap/blockly/blocks/union";
 import ParameterBlock from "@scrap/blockly/blocks/parameter";
 import {assert} from "@juvofy/lib/utils/assert";
+
+type ShadowState = Blockly.serialization.blocks.State;
+
+/** Generic shadows that literals become when no menu shadow fits. */
+const genericShadows = ["math_number", "iterables_string", "text_or_number"];
 
 class CodeToBlocks {
 	private connection?: Blockly.Connection | null;
@@ -109,7 +114,38 @@ class CodeToBlocks {
 		}
 	}
 
+	private toolboxShadows(connection = this.connection) {
+		const input = connection?.getParentInput();
+		return input ? getToolboxShadows(input.getSourceBlock().type, input.name) : new Set<string>();
+	}
+
+	/** Turns the block attached to `connection` into a shadow, if it has no inputs. */
+	private makeShadow(connection: Blockly.Connection) {
+		const target = connection.targetBlock();
+		if (target && !target.isShadow() && target.inputList.every(input => !input.connection)) {
+			const {id: _, ...state} = Blockly.serialization.blocks.save(target, {
+				addCoordinates: false,
+				addNextBlocks: false,
+			}) as ShadowState;
+			target.dispose(false);
+			connection.setShadowState(state);
+		}
+	}
+
 	private parse(node?: OXC.Node | null): void {
+		const {connection} = this;
+    this.parseNode(node);
+    if (!connection) {
+      return;
+		}
+		// Blocks the toolbox offers as shadows (colors, dates...) stay shadows.
+		const type = connection.targetBlock()?.type;
+		if (type && this.toolboxShadows(connection).has(type)) {
+			this.makeShadow(connection);
+		}
+	}
+
+	private parseNode(node?: OXC.Node | null): void {
 		if (node) {
 			switch (node.type) {
 				case "TSArrayType": {
@@ -221,6 +257,29 @@ class CodeToBlocks {
 					throw new SyntaxError("Unknown class");
 				}
 				case "Literal": {
+					if (typeof node.value === "number" || typeof node.value === "string") {
+						const restored = [...this.toolboxShadows()].some(type => {
+							if (genericShadows.includes(type)) {
+								return false;
+							}
+							this.connection?.setShadowState({type});
+							const shadow = this.connection?.targetBlock();
+							// Only menus of the literal's own type (not e.g. Color from a string)
+							if (!shadow?.outputConnection?.getCheck()?.includes(typeof node.value)) {
+								return false;
+							}
+							const field = shadow.inputList
+								.flatMap(input => input.fieldRow)
+								.find(field => field.name);
+							// Dropdowns ignore unknown values, then fall back to a generic shadow
+							field?.setValue(node.value);
+							return field?.getValue() === node.value;
+						});
+						if (restored) {
+							break;
+						}
+					}
+
 					if (typeof node.value === "number") {
 						this.connection?.setShadowState({
 							type: "math_number",
@@ -406,6 +465,19 @@ class CodeToBlocks {
 
 					this.connection = block.getInput("STACK")?.connection;
 					this.parse(node.body);
+
+					this.connection = block.nextConnection;
+
+					break;
+				}
+				case "DoWhileStatement": {
+					const block = this.block("doWhile");
+
+					this.connection = block.getInput("STACK")?.connection;
+					this.parse(node.body);
+
+					this.connection = block.getInput("CONDITION")?.connection;
+					this.parse(node.test);
 
 					this.connection = block.nextConnection;
 
@@ -634,6 +706,11 @@ class CodeToBlocks {
 							this.connection = block.getInput("TEXT")?.connection;
 							this.parse(node.arguments[0]);
 							this.connection = block.nextConnection;
+						} else if (
+							OXC.isIdentifier(node.callee.object, "Scrap") &&
+							OXC.isProperty(node.callee, "isTurbo")
+						) {
+							this.block("isTurbo");
 						} else if (OXC.isIdentifier(node.callee.object, "Color")) {
 							if (OXC.isProperty(node.callee, "fromHex")) {
 								const block = this.block("color");
@@ -807,7 +884,7 @@ class CodeToBlocks {
 						this.parse(node.object);
 					} else if (OXC.isIdentifier(node.property, "length")) {
 						const block = this.block("length");
-						this.connection = block.getInput("VALUE")?.connection;
+						this.connection = block.getInput("ITERABLE")?.connection;
 						this.parse(node.object);
 					} else if (
 						OXC.isIdentifier(node.object, "self") &&
@@ -925,6 +1002,8 @@ class CodeToBlocks {
 								"size",
 								"direction",
 								"volume",
+								"width",
+								"height",
 								"penSize",
 								"penColor",
 								"visible",
@@ -950,6 +1029,8 @@ class CodeToBlocks {
 							} else {
 								throw new SyntaxError("Unsupported object");
 							}
+						} else {
+							throw new SyntaxError("Unsupported sprite property");
 						}
 					} else if (OXC.is(node.object, "Identifier")) {
 						if (node.object.name === "$") {
@@ -1035,11 +1116,13 @@ class CodeToBlocks {
 				case "UpdateExpression": {
 					const block = this.block("change");
 
-					this.connection = block.getInput("VAR")?.connection;
-					assert(this.connection);
+					const variable = block.getInput("VAR")?.connection;
+					assert(variable);
 
-					this.connection.setShadowState({type: "x"});
+					variable.setShadowState({type: "x"});
+					this.connection = variable;
 					this.parse(node.argument);
+					this.makeShadow(variable);
 
 					block.getInput("VALUE")?.connection?.setShadowState({
 						type: "math_number",
@@ -1048,6 +1131,7 @@ class CodeToBlocks {
 						},
 					});
 
+					this.connection = block.nextConnection;
 					break;
 				}
 				case "UnaryExpression": {
@@ -1116,11 +1200,13 @@ class CodeToBlocks {
 						}
 					}
 
-					this.connection = block.getInput("VAR")?.connection;
-					assert(this.connection);
+					const variable = block.getInput("VAR")?.connection;
+					assert(variable);
 
-					this.connection.setShadowState({type: "x"});
+					variable.setShadowState({type: "x"});
+					this.connection = variable;
 					this.parse(node.left);
+					this.makeShadow(variable);
 
 					this.connection = block.getInput("VALUE")?.connection;
 					this.parse(argument);

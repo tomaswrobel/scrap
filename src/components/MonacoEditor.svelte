@@ -12,6 +12,7 @@
 	 * @copyright Tomáš Wróbel 2025
 	 */
 	import Worker from "@scrap/monaco-editor/ts.worker.ts?worker";
+	import EditorWorker from "@scrap/monaco-editor/editor.worker.ts?worker";
 	import {editor, Uri} from "monaco-editor";
 	import lib from "@scrap/typings/runtime/index.ts?raw";
 	import type {Entity} from "@scrap/types/Enity.svelte";
@@ -23,7 +24,8 @@
 	import {setupLanguage} from "@scrap/monaco-editor/setupLanguage";
 
 	globalThis.MonacoEnvironment = {
-		getWorker: () => new Worker(),
+		// Monaco's own editor worker expects no createData handshake
+		getWorker: (_, label) => (label === "editorWorkerService" ? new EditorWorker() : new Worker()),
 	};
 
 	setupLanguage("typescript");

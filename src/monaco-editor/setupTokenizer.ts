@@ -532,10 +532,5 @@ export function setupTokenizer(language: MonacoEditorLanguage) {
 				},
 			},
 		});
-		languages.typescript.typescriptDefaults.setCompilerOptions({
-			target: languages.typescript.ScriptTarget.ES2015,
-			noEmit: true,
-			strict: true,
-		});
 	});
 }

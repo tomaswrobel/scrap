@@ -981,6 +981,16 @@ declare const Date: {
 
 declare const Math: {
 	/**
+	 * The ratio of a circle's circumference to its diameter (π ≈ 3.14159)
+	 */
+	readonly PI: number;
+
+	/**
+	 * Euler's number, the base of natural logarithms (e ≈ 2.71828)
+	 */
+	readonly E: number;
+
+	/**
 	 * Returns a random number between 0 (inclusive) and 1 (exclusive)
 	 */
 	random(): number;
