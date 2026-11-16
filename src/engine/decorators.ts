@@ -30,6 +30,10 @@ export function paced<A extends SpreadParameters, T, E extends Entity>(
 	}
 	descriptor.value = async function (this: E, ...args: A) {
 		return new Promise<T>((resolve, reject) => {
+			if (this.isStopped()) {
+				return reject(new StopError());
+			}
+
 			const controller = new AbortController();
 
 			const timeout = window.setTimeout(() => {
@@ -37,16 +41,11 @@ export function paced<A extends SpreadParameters, T, E extends Entity>(
 				resolve(fn.apply(this, args));
 			}, this.pace);
 
-			window.addEventListener(
-				"message",
-				e => {
-					if (e.data === "STOP") {
-						window.clearTimeout(timeout);
-						reject(new StopError());
-					}
-				},
-				{signal: controller.signal},
-			);
+			this.onStop(controller.signal, () => {
+				controller.abort();
+				window.clearTimeout(timeout);
+				reject(new StopError());
+			});
 		});
 	};
 	return descriptor;
@@ -68,20 +67,16 @@ export function method<A extends SpreadParameters, T, E extends Entity>(
 		return descriptor;
 	}
 	descriptor.value = async function (this: E, ...args: A) {
+		if (this.isStopped()) {
+			throw new StopError();
+		}
+
 		const controller = new AbortController();
 
 		const result = await Promise.race([
 			fn.apply(this, args),
 			new Promise<typeof STOP>(resolve =>
-				window.addEventListener(
-					"message",
-					e => {
-						if (e.data === "STOP") {
-							resolve(STOP);
-						}
-					},
-					{signal: controller.signal},
-				),
+				this.onStop(controller.signal, () => resolve(STOP)),
 			),
 		]);
 
@@ -117,17 +112,7 @@ export function event<A extends [...SpreadParameters, Entity.Callback], E extend
 
 			await Promise.race([
 				originalCallback(self),
-				new Promise<void>(resolve => {
-					this.stopController.addEventListener(
-						"stop",
-						e => {
-							if ((e as CustomEvent<Entity>).detail !== self) {
-								resolve();
-							}
-						},
-						{signal: controller.signal},
-					);
-				}),
+				self.untilStoppedByOther(controller.signal),
 			]);
 
 			controller.abort();

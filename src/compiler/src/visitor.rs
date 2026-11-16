@@ -193,6 +193,37 @@ impl VisitMut for JavaScript {
                                 },
                             );
                         }
+                    } else if let Expr::Member(member) = &*expression {
+                        // Event callbacks get their own `self`, so the engine
+                        // can tell scripts apart (e.g. for `stopOtherScripts`).
+                        let is_event = matches!(&*member.obj, Expr::Ident(obj) if obj.sym == "self")
+                            && get_property(member).is_some_and(|p| p.starts_with("when"));
+
+                        if let (true, Some(last)) = (is_event, call.args.last_mut()) {
+                            let pat = Pat::Ident(BindingIdent {
+                                id: Ident {
+                                    span: DUMMY_SP,
+                                    sym: "self".into(),
+                                    optional: false,
+                                    ..Default::default()
+                                },
+                                type_ann: None,
+                            });
+
+                            match &mut *last.expr {
+                                Expr::Arrow(arrow) if arrow.params.is_empty() => {
+                                    arrow.params.push(pat);
+                                }
+                                Expr::Fn(fn_expr) if fn_expr.function.params.is_empty() => {
+                                    fn_expr.function.params.push(Param {
+                                        span: DUMMY_SP,
+                                        decorators: vec![],
+                                        pat,
+                                    });
+                                }
+                                _ => {}
+                            }
+                        }
                     }
                 }
 

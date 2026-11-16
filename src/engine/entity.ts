@@ -32,6 +32,9 @@ const toEvent = {
 	"double-clicked": "dblclick",
 };
 
+/** Scripts (their `self`) stopped by `stopOtherScripts`. */
+const stopped = new WeakSet<Entity>();
+
 const backdrops = new Messages();
 const messages = new Messages();
 const timer = new Timer();
@@ -495,6 +498,34 @@ abstract class Entity {
 
 	public createSelf(): this {
 		return Object.create(this);
+	}
+
+	/** Whether this script (its `self`) was stopped by `stopOtherScripts`. */
+	public isStopped() {
+		return stopped.has(this);
+	}
+
+	/** Resolves (and marks this `self` stopped) once another script calls `stopOtherScripts`. */
+	public untilStoppedByOther(signal: AbortSignal) {
+		return new Promise<void>(resolve => {
+			this.stopController.addEventListener(
+				"stop",
+				e => {
+					if ((e as CustomEvent<Entity>).detail !== this) {
+						stopped.add(this);
+						resolve();
+					}
+				},
+				{signal},
+			);
+		});
+	}
+
+	/** Calls `cb` when the project stops or when the script owning this `self` gets stopped. */
+	public onStop(signal: AbortSignal, cb: VoidFunction) {
+		window.addEventListener("message", e => e.data === "STOP" && cb(), {signal});
+		// The `event` listener runs first (registered earlier), so `stopped` is up to date.
+		this.stopController.addEventListener("stop", () => this.isStopped() && cb(), {signal});
 	}
 
 	public stopOtherScripts() {
