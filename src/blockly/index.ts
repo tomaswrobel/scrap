@@ -17,6 +17,8 @@ import * as En from "blockly/msg/en";
 import type {BlockDefinition, Category} from "./category.ts";
 import miscBlocks from "./data/blocks.json";
 import baseTheme from "./data/theme.json";
+import spriteToolbox from "./data/sprite-toolbox.json";
+import stageToolbox from "./data/stage-toolbox.json";
 import {pathMapToFilenameMap} from "@scrap/utils/pathMapToFilenameMap.ts";
 import {registerBlock} from "./registerBlock.ts";
 
@@ -115,6 +117,31 @@ export const theme = {
 	),
 };
 
-export {default as spriteToolbox} from "./data/sprite-toolbox.json";
-export {default as stageToolbox} from "./data/stage-toolbox.json";
+const toolboxShadows = new Map<string, Set<string>>();
+
+for (const category of [...spriteToolbox, ...stageToolbox]) {
+	for (const item of ("contents" in category ? category.contents : []) as {
+		type?: string;
+		inputs?: Record<string, {shadow?: Blockly.serialization.blocks.State}>;
+	}[]) {
+		for (const [name, {shadow}] of Object.entries(item.inputs ?? {})) {
+			const key = `${item.type}.${name}`;
+			if (shadow) {
+				toolboxShadows.set(
+					key,
+					(toolboxShadows.get(key) ?? new Set()).add(shadow.type),
+				);
+			}
+		}
+	}
+}
+
+/**
+ * Shadow block types the toolbox puts into the given input of the given block type.
+ */
+export function getToolboxShadows(blockType: string, inputName: string): ReadonlySet<string> {
+	return toolboxShadows.get(`${blockType}.${inputName}`) ?? new Set();
+}
+
+export {spriteToolbox, stageToolbox};
 export {Blockly};

@@ -338,7 +338,7 @@ BlocksToCode.register("controls_if", function (block, ts) {
 
 BlocksToCode.register("foreach", function (block, ts) {
 	const item = block.getFieldValue("VAR");
-	const iterable = ts.valueToCode(block, "ITERABLE", Order.NONE) || "[]";
+	const iterable = ts.valueToCode(block, "ITERABLE", Order.NONE) || "new Array()";
 	return `for (const ${item} of ${iterable}) {\n${ts.statementToCode(block, "DO")}}\n`;
 });
 
@@ -362,7 +362,7 @@ BlocksToCode.register<typeof ArrayBlock>("array", (block, ts) => {
 	for (let i = 0; i < block.items.length; i++) {
 		const item = block.items[i];
 		if (item === "iterable") {
-			items.push(`...${ts.valueToCode(block, `ADD${i}`, Order.NONE) || "[]"}`);
+			items.push(`...${ts.valueToCode(block, `ADD${i}`, Order.NONE) || "new Array()"}`);
 		} else {
 			items.push(ts.valueToCode(block, `ADD${i}`, Order.NONE) || "null");
 		}
@@ -374,36 +374,36 @@ BlocksToCode.register<typeof ArrayBlock>("array", (block, ts) => {
 });
 
 BlocksToCode.register("length", function (block, ts) {
-	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "new Array()";
 	return [`${array}.length`, Order.MEMBER];
 });
 
 BlocksToCode.register("reverse", function (block, ts) {
-	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "new Array()";
 	return [`${array}.reverse()`, Order.MEMBER];
 });
 
 BlocksToCode.register("join", function (block, ts) {
-	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "new Array()";
 	const separator = ts.valueToCode(block, "SEPARATOR", Order.NONE) || '""';
 	return [`${array}.join(${separator})`, Order.MEMBER];
 });
 
 BlocksToCode.register("includes", function (block, ts) {
-	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "new Array()";
 	const item = ts.valueToCode(block, "ITEM", Order.NONE) || "null";
 	return [`${array}.includes(${item})`, Order.MEMBER];
 });
 
 BlocksToCode.register("slice", function (block, ts) {
-	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "new Array()";
 	const start = ts.valueToCode(block, "START", Order.NONE) || "0";
 	const end = ts.valueToCode(block, "TO", Order.NONE) || "0";
 	return [`${array}.slice(${start}, ${end})`, Order.MEMBER];
 });
 
 BlocksToCode.register("indexOf", function (block, ts) {
-	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "new Array()";
 	const item = ts.valueToCode(block, "ITEM", Order.NONE) || "null";
 	return [`${array}.indexOf(${item})`, Order.MEMBER];
 });
@@ -622,7 +622,7 @@ BlocksToCode.register("random", function () {
 
 BlocksToCode.register("item", function (block, ts) {
 	const index = ts.valueToCode(block, "INDEX", Order.NONE) || "0";
-	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "[]";
+	const array = ts.valueToCode(block, "ITERABLE", Order.MEMBER) || "new Array()";
 	return [`${array}[${index}]`, Order.MEMBER];
 });
 

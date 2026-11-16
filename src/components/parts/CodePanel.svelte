@@ -35,8 +35,8 @@
 		}
 		if (invalid) {
 			app.dialog.fire({
-				title: "Cannot switch to Code tab",
-				body: "Please fix the errors in your code before switching to the Code tab.",
+				title: "Cannot switch to Blocks tab",
+				body: "Please fix the errors in your code before switching to the Blocks tab.",
 			});
 		} else {
 			await CodeToBlocks.switch(app.current);

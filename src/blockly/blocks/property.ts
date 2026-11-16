@@ -18,8 +18,57 @@ import type {Check} from "@scrap/types/Check";
 import {CustomBlock} from "@scrap/utils/CustomBlock";
 import * as Blockly from "blockly/core";
 
+function propertyOptions(spriteName: string) {
+	const result: [string, string][] = [
+		["width", "width"],
+		["height", "height"],
+		["volume", "volume"],
+		["color effect", "effects.color"],
+		["ghost effect", "effects.ghost"],
+		["grayscale effect", "effects.grayscale"],
+		["brightness effect", "effects.brightness"],
+	];
+
+	const sprite = app.entities.find(e => e.name === spriteName);
+
+	if (!sprite) {
+		return result;
+	}
+
+	if (sprite.name !== "Stage") {
+		result.unshift(
+			["x", "x"],
+			["y", "y"],
+			["size", "size"],
+			["direction", "direction"],
+			["pen size", "penSize"],
+			["pen color", "penColor"],
+			["visible", "visible"],
+			["draggable", "draggable"],
+			["costume name", "costume.name"],
+			["costume index", "costume.index"],
+		);
+	}
+
+	for (const [name] of sprite.variables) {
+		result.push([name, `variables[${JSON.stringify(name)}]`]);
+	}
+
+	return result;
+}
+
 export default new CustomBlock({
 	category: "sensing",
+
+	// Fields load in order (PROPERTY before SPRITE), but PROPERTY's options depend on SPRITE.
+	// Extra state loads before fields, so SPRITE is set first.
+	saveExtraState() {
+		return {sprite: this.getFieldValue("SPRITE")};
+	},
+
+	loadExtraState(state: {sprite: string}) {
+		this.setFieldValue(state.sprite, "SPRITE");
+	},
 
 	init() {
 		this.setOutput(true, ["number", "Variable"]);
@@ -27,46 +76,7 @@ export default new CustomBlock({
 			this.appendDummyInput()
 				.appendField<string>(
 					new Blockly.FieldDropdown(
-						() => {
-							const result: [string, string][] = [
-								["width", "width"],
-								["height", "height"],
-								["volume", "volume"],
-								["color effect", "effects.color"],
-								["ghost effect", "effects.ghost"],
-								["grayscale effect", "effects.grayscale"],
-								["brightness effect", "effects.brightness"],
-							];
-
-							const sprite = app.entities.find(
-								e => e.name === this.getFieldValue("SPRITE"),
-							);
-
-							if (!sprite) {
-								return result;
-							}
-
-							if (sprite.name !== "Stage") {
-								result.unshift(
-									["x", "x"],
-									["y", "y"],
-									["size", "size"],
-									["direction", "direction"],
-									["pen size", "penSize"],
-									["pen color", "penColor"],
-									["visible", "visible"],
-									["draggable", "draggable"],
-									["costume name", "costume.name"],
-									["costume index", "costume.index"],
-								);
-							}
-
-							for (const [name] of sprite.variables) {
-								result.push([name, `variables[${JSON.stringify(name)}]`]);
-							}
-
-							return result;
-						},
+						() => propertyOptions(this.getFieldValue("SPRITE")),
 						value => {
 							let type: Check;
 
@@ -83,8 +93,12 @@ export default new CustomBlock({
 									return;
 								}
 								[, type] = variable;
+							} else if (value === "penColor") {
+								type = "Color";
+							} else if (value === "costume.name") {
+								type = "string";
 							} else {
-								type = "undefined";
+								type = "number";
 							}
 
 							this.setOutput(true, ["Variable"].concat(type));
@@ -97,8 +111,11 @@ export default new CustomBlock({
 				.appendField<string>(
 					new Blockly.FieldDropdown(
 						() => app.entities.map<[string, string]>(e => [e.name, e.name]),
-						() => {
-							this.setFieldValue("volume", "PROPERTY");
+						value => {
+							const property = this.getFieldValue("PROPERTY");
+							if (!propertyOptions(value).some(([, v]) => v === property)) {
+								this.setFieldValue("volume", "PROPERTY");
+							}
 							return undefined;
 						},
 					),
