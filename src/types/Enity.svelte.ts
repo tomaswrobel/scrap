@@ -18,7 +18,7 @@ import click from "../assets/sounds/click.mp3?url&inline";
 import scrappy from "../assets/svgs/scrappy.svg?raw";
 import stage from "../assets/svgs/stage.svg?raw";
 import BlocksToCode from "@scrap/code-transformers/blocksToCode";
-import * as SWC from "@scrap/utils/swc";
+import * as OXC from "@scrap/utils/oxc";
 import {EntityAsset} from "./EntityAsset.svelte";
 import {assert} from "@juvofy/lib/utils/assert";
 import {ConnectionChecker} from "@scrap/blockly/plugins/ConnectionChecker";
@@ -89,7 +89,7 @@ export class Entity {
 
 	public generateProductionCode(zip?: JSZip) {
 		const typescript = this.generatePreviewCode(false);
-		const result = SWC.transform(typescript) ?? "";
+		const result = OXC.transform(typescript) ?? "";
 		const body = this.blocksToCode?.prefixLines(result, "\t");
 		const reducer = this.getFileURLs.bind(this, zip?.folder(this.name));
 		const configuration = {

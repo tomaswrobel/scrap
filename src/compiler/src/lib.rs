@@ -13,32 +13,26 @@
 use serde::Serialize;
 use serde_wasm_bindgen::Serializer;
 use wasm_bindgen::prelude::*;
-mod swc_utils;
+mod oxc_utils;
 mod visitor;
 
 #[wasm_bindgen]
 pub fn parse(code: String) -> JsValue {
-    let serializer = Serializer::json_compatible();
-
-    return swc_utils::parse(code).map_or(JsValue::null(), |parsed| {
-        parsed.serialize(&serializer).unwrap()
-    });
+    return oxc_utils::parse(&code)
+        .and_then(|json| js_sys::JSON::parse(&json).ok())
+        .unwrap_or(JsValue::NULL);
 }
 
 #[wasm_bindgen]
 pub fn transform(code: String) -> JsValue {
-    let serializer = Serializer::json_compatible();
-
-    return swc_utils::transform(code).map_or(JsValue::null(), |parsed| {
-        parsed.serialize(&serializer).unwrap()
-    });
+    return oxc_utils::transform(&code).map_or(JsValue::NULL, JsValue::from);
 }
 
 #[wasm_bindgen(js_name = getVariables)]
 pub fn get_variables(code: String) -> JsValue {
     let serializer = Serializer::json_compatible();
 
-    return swc_utils::get_variables(code).map_or(JsValue::null(), |parsed| {
+    return oxc_utils::get_variables(&code).map_or(JsValue::NULL, |parsed| {
         parsed.serialize(&serializer).unwrap()
     });
 }

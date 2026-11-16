@@ -39,7 +39,7 @@ type BlockCallback<T extends Blockly.Block> = (
  * runnable JavaScript, but it is not.
  *
  * 1. ScrapScript must get rid of types.
- * 2. Must go through process in SWC.transform
+ * 2. Must go through process in OXC.transform
  * 3. The code gets warped in a code like:
  * ```js
  * var $ = {};
