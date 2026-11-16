@@ -5,15 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [8.1.0] - 2026-11-16
 
 ### Changed
 
 - Using oxc instead of swc as it is faster
+- Block definitions are split into per-category files instead of one big `blocks.json`
 
 ### Added
 
 - Publish the code standard
+- Docs: a separate page for each block category, with a sidebar
+
+### Fixed
+
+- "Stop my other scripts" block
+- Blocks <-> code round-trip
+- Monaco lib loading
+- Footer spacing and whitespace on the home page
 
 ## [8.0.1] - 2026-08-31
 
@@ -1014,11 +1023,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Reserved words are no longer in Generator's constructor.
 
-[unreleased]: https://github.com/tomaswrobel/scrap/compare/v8.0.1...HEAD
-[8.0.1]: https://githb.com/tomaswrobel/scrap/realeases/tag/v8.0.1
-[8.0.0]: https://githb.com/tomaswrobel/scrap/realeases/tag/v8.0.0
-[7.0.0]: https://githb.com/tomaswrobel/scrap/realeases/tag/v7.0.0
+[unreleased]: https://github.com/tomaswrobel/scrap/compare/v8.1.0...HEAD
+[8.1.0]: https://github.com/tomaswrobel/scrap/releases/tag/v8.1.0
+[8.0.1]: https://github.com/tomaswrobel/scrap/releases/tag/v8.0.1
+[8.0.0]: https://github.com/tomaswrobel/scrap/releases/tag/v8.0.0
+[7.0.0]: https://github.com/tomaswrobel/scrap/releases/tag/v7.0.0
 [6.3.0]: https://github.com/tomaswrobel/scrap/releases/tag/v6.3.0
+[6.2.2]: https://github.com/tomaswrobel/scrap/releases/tag/v6.2.2
 [6.2.1]: https://github.com/tomaswrobel/scrap/releases/tag/v6.2.1
 [6.2.0]: https://github.com/tomaswrobel/scrap/releases/tag/v6.2.0
 [6.1.2]: https://github.com/tomaswrobel/scrap/releases/tag/v6.1.2
@@ -1058,7 +1069,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [4.0.0]: https://github.com/tomaswrobel/scrap/releases/tag/v4.0.0
 [3.6.0]: https://github.com/tomaswrobel/scrap/releases/tag/v3.6.0
 [3.5.0]: https://github.com/tomaswrobel/scrap/releases/tag/v3.5.0
-[3.4.2]: https://github.com/tomaswrobel/scrap/releases/tag/v3.4.2
 [3.4.1]: https://github.com/tomaswrobel/scrap/releases/tag/v3.4.1
 [3.4.0]: https://github.com/tomaswrobel/scrap/releases/tag/v3.4.0
 [3.3.0]: https://github.com/tomaswrobel/scrap/releases/tag/v3.3.0
@@ -1099,7 +1109,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [2.3.0]: https://github.com/tomaswrobel/scrap/releases/tag/v2.3.0
 [2.2.0]: https://github.com/tomaswrobel/scrap/releases/tag/v2.2.0
 [2.1.0]: https://github.com/tomaswrobel/scrap/releases/tag/v2.1.0
-[2.1.1]: https://github.com/tomaswrobel/scrap/releases/tag/v2.1.1
 [2.0.2]: https://github.com/tomaswrobel/scrap/releases/tag/v2.0.2
 [2.0.1]: https://github.com/tomaswrobel/scrap/releases/tag/v2.0.1
 [2.0.0]: https://github.com/tomaswrobel/scrap/releases/tag/v2.0.0
